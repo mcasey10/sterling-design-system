@@ -424,8 +424,9 @@ async function poolTab(kit: Kit, lib: Library, body: FrameNode, poolGrid: Compon
     Range: `Showing 1–${PAGE_SIZE} of ${POOL_VIEW.total} pool loans${filterCount(POOL_VIEW.filters.length)}`,
     Page: `Page 1 of ${pages(POOL_VIEW.total)}`,
   });
-  checkFill(area, grid);
+  // Check the grid fills its area only once the side panel exists; until then the area spans the panel's columns too.
   await poolPanel(kit, lib, body);
+  checkFill(area, grid);
 }
 
 // ------------------------------------------------------------ Add loans tab
@@ -474,8 +475,9 @@ async function addTab(kit: Kit, lib: Library, body: FrameNode, candidateGrid: Co
     Range: `Showing 1–${PAGE_SIZE} of ${CANDIDATE_VIEW.total} candidates${filterCount(CANDIDATE_VIEW.filters.length)}`,
     Page: `Page 1 of ${pages(CANDIDATE_VIEW.total)}`,
   });
-  checkFill(area, grid);
+  // Check the grid fills its area only once the side panel exists; until then the area spans the panel's columns too.
   await addPanel(kit, lib, body);
+  checkFill(area, grid);
 }
 
 // ------------------------------------------------------------ Screens
