@@ -4,13 +4,14 @@
 // Row height and cell padding are bound to the Density collection, so switching a frame's
 // Density mode resizes the whole grid.
 
-import { Kit, size, color, density, space, configureFrame, setSize, truncate, untruncate, doc, widthOf, bindFill } from "../../core/helpers";
+import { Kit, size, color, density, space, configureFrame, setSize, truncate, untruncate, widthOf, bindFill } from "../../core/helpers";
 import {
   ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, ensureProp, prune, tintIcon,
   variantOf, setProps, nested, reference, ensureComponent, ensureFocusRing,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { warn } from "../../core/log";
+import { describe } from "../docRegistry";
 
 // ------------------------------------------------------------ Datasets
 
@@ -89,15 +90,7 @@ const SORT_ICONS: Record<string, string> = { none: "sort", asc: "arrow-up", desc
 export function headerCellSpec(kit: Kit, deps: GridDeps): ComponentSetSpec {
   return {
     name: "Grid/HeaderCell",
-    description: doc(
-      "Sort (none / asc / desc) × Align (left / right) × State (default / hover / focus). Label and Show sort are " +
-        "component properties. The label fills the cell and truncates at its width; the sort icon sits at the cell edge " +
-        "(right edge for left-aligned headers, left edge for right-aligned ones so the label lines up with the numbers). " +
-        "Height follows Density → row/height.",
-      "labeling a grid column; use Align = right for numeric columns so headers line up with the numbers.",
-      "the column can't be sorted — turn Show sort off rather than using a different header.",
-      { guidelines: ["Data display", "Accessibility"], patterns: ["Filters, grid, and bulk actions"] }
-    ),
+    description: describe("Grid/HeaderCell"),
     variants: combos({ Sort: ["none", "asc", "desc"], Align: ["left", "right"], State: ["default", "hover", "focus"] }),
     columnProp: "State",
 
@@ -171,16 +164,7 @@ const DIRECTIONS: Record<string, { icon: string; ink: string }> = {
 export function bodyCellSpec(kit: Kit, deps: GridDeps): ComponentSetSpec {
   return {
     name: "Grid/BodyCell",
-    description: doc(
-      "Type (text / numeric / gain / loss / chip / checkbox) × State (default / hover / selected / selected-hover / focus / " +
-        "warning / warning-focus / error / error-focus). Numeric, gain and loss cells are right-aligned in the Numeric style and " +
-        "never truncate (size the column instead); text values truncate. Gain and loss add ▲ / ▼ and finance/gain / loss — type " +
-        "the sign in Value (+1.25%, −0.80%). Warning and error add a border and an icon, so they never rely on color alone. " +
-        "Chip and Checkbox are exposed nested instances; swap the Chip to Chip/Side for buy / sell.",
-      "building custom rows or tables from individual cells, or overriding one cell's state (e.g. a value that breaks a rule).",
-      "you need a whole row — use Grid/Row, which keeps cell widths and states consistent.",
-      { guidelines: ["Data display", "States", "Accessibility", "Color"] }
-    ),
+    description: describe("Grid/BodyCell"),
     variants: combos({
       Type: ["text", "numeric", "gain", "loss", "chip", "checkbox"],
       State: CELL_STATES,
@@ -425,13 +409,7 @@ export async function buildSkeletonRow(
 ): Promise<ComponentNode> {
   const comp = ensureComponent(
     page, parent, index, "Grid/Skeleton row",
-    doc(
-      "Loading placeholder with the grid's column widths: surface/skeleton bars, numeric bars right-aligned. Show label " +
-        "adds a \"Loading rows…\" label (Label text property) — turn it on for the first row. Mark the grid aria-busy in code.",
-      "rows are loading: stack 3–5 under the header, matching the expected row count.",
-      "a load takes under ~300 ms (show nothing), or the load failed or returned nothing (use Grid/Empty state).",
-      { guidelines: ["Accessibility"], patterns: ["Loading, empty, and error states"] }
-    )
+    describe("Grid/Skeleton row")
   );
   configureFrame(comp, { direction: "HORIZONTAL" });
   const labelColumn = data.columns.filter((c) => c.type === "text").sort((a, b) => b.width - a.width)[0]?.key;
@@ -496,14 +474,7 @@ const EMPTY_TONES: Record<string, { icon: string; ink: string; title: string; me
 export function emptyStateSpec(kit: Kit, deps: { icons: IconIndex; button: ComponentSetNode }, width: number): ComponentSetSpec {
   return {
     name: "Grid/Empty state",
-    description: doc(
-      "Shown in place of grid rows. Tone (neutral / critical): neutral for no results or nothing yet, critical for a load " +
-        "error (icon and title say so, not just color). Title and Message are text layers — override the copy; swap the icon " +
-        "from the instance. Show action toggles the exposed Action button (Clear filters / Retry).",
-      "a grid has no rows to show — filters match nothing, nothing exists yet, or loading failed.",
-      "rows are still loading (use Grid/Skeleton row), or only some rows have problems (flag those cells).",
-      { guidelines: ["Accessibility"], patterns: ["Loading, empty, and error states"] }
-    ),
+    description: describe("Grid/Empty state"),
     variants: combos({ Tone: ["neutral", "critical"] }),
     columnProp: "Tone",
 
@@ -550,13 +521,7 @@ export async function buildPagination(
 ): Promise<ComponentNode> {
   const comp = ensureComponent(
     page, parent, index, "Grid/Pagination",
-    doc(
-      "Footer under the grid. Range and Page are text properties; Previous and Next are exposed Button instances, " +
-        "so their State (e.g. disabled on the first or last page) is set from this component's panel.",
-      "a grid shows one page of a larger result set.",
-      "all rows fit on screen, or the list scrolls continuously — omit pagination.",
-      { patterns: ["Filters, grid, and bulk actions"] }
-    )
+    describe("Grid/Pagination")
   );
   configureFrame(comp, {
     direction: "HORIZONTAL",

@@ -1,21 +1,15 @@
 // Chip/Filter — removable filter chip. State (default / hover / pressed / focus).
 // Properties: Label (text), Show remove (boolean, shows the x icon).
 
-import { Kit, size, color, density, space, configureFrame, setSize, truncate, doc } from "../../core/helpers";
+import { Kit, size, color, density, space, configureFrame, setSize, truncate } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference, ensureFocusRing } from "../../core/ensure";
 import type { IconIndex } from "../icons";
+import { describe } from "../docRegistry";
 
 export function filterChipSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   return {
     name: "Chip/Filter",
-    description:
-      doc(
-      "Applied filter, State (default / hover / pressed / focus). Label and Show remove are component properties; labels " +
-        "longer than 240px truncate. Height follows Density → control/height-sm.",
-      "summarizing filters already applied to a view, with a way to remove each one.",
-      "showing a record's status (use Chip/Status), or offering filters to apply (use inputs and selects in a filters panel).",
-      { guidelines: ["Accessibility"], patterns: ["Filters, grid, and bulk actions"] }
-    ),
+    description: describe("Chip/Filter"),
     variants: combos({ State: ["default", "hover", "pressed", "focus"] }),
     columnProp: "State",
 

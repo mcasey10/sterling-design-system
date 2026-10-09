@@ -3,21 +3,16 @@
 // Label is a plain text layer (overridable), not a text property: a text property has one default
 // across the set, which would make the Sell variant read "Buy".
 
-import { Kit, color, space, configureFrame, doc } from "../../core/helpers";
+import { Kit, color, space, configureFrame } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureText, prune } from "../../core/ensure";
+import { describe } from "../docRegistry";
 
 const LABELS: Record<string, string> = { buy: "Buy", sell: "Sell" };
 
 export function sideChipSpec(kit: Kit): ComponentSetSpec {
   return {
     name: "Chip/Side",
-    description: doc(
-      "Side (buy / sell) of an order or trade. The label carries the meaning; override it with B / S in tight columns. " +
-        "Colors: finance/<side>-subtle background, finance/<side>-strong text.",
-      "showing the side of an order, trade, or position in a grid cell or ticket header (swap a Type = chip cell's Chip to this).",
-      "showing gain or loss (use a gain / loss cell), or as a Buy / Sell action (use Controls/Button).",
-      { guidelines: ["Color", "Accessibility"] }
-    ),
+    description: describe("Chip/Side"),
     variants: combos({ Side: ["buy", "sell"] }),
     columnProp: "Side",
 

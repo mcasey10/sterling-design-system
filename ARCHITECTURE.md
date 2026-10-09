@@ -66,7 +66,8 @@ sterling-design-system/
 │       │   ├── libraryLoader.ts  Reads an existing library without changing it (used by Build example)
 │       │   ├── docRegistry.ts    ONE TABLE: every published component's description,
 │       │   │                     usage note, and documentation link
-│       │   ├── checks.ts         Library checks (descriptions, doc links, variables)
+│       │   ├── docLinks.ts       Turns registry targets into documentation links (after docs pages are drawn)
+│       │   ├── checks.ts         Library checks (descriptions, doc links, hidden Primitives)
 │       │   ├── compositions.ts   Reusable layouts used by Patterns and the example
 │       │   │                     (filter panel, view toolbar, side-panel card)
 │       │   ├── icons.ts          Icon/* glyphs
@@ -312,19 +313,31 @@ Each **Build example** run starts with these, and failures appear in the notific
 
 ## 8. Documentation links
 
-Every published component has a **description** (one sentence) and a **documentation link**,
-both from one table: `plugin/src/library/docRegistry.ts`. Each entry names its target as a
-place (for example "Guidelines › Data display" or "Patterns › Bulk action bar"), not a URL.
-At build time the plugin turns that into a link to the frame in this file. Later, an entry
-can point to a Storybook URL instead, without touching the components.
+Every published component's documentation comes from one table,
+`plugin/src/library/docRegistry.ts`. Each entry has:
+
+| Field | Shown where |
+|---|---|
+| `description`: exactly one sentence | The component's Figma description: Assets panel hover and Dev Mode |
+| `details`: variants, properties, rules | The usage note under the component on the Components page |
+| `use` / `dont` | The usage note, and the Component usage table on the Guidelines page |
+| `docs`: where the full guidance lives | The component's documentation link, and the usage note's "Full guidance" line |
+
+`docs` names a place (for example "Guidelines › Data display" or "Patterns › Form layout"),
+not a URL. At the end of each Build library run, after the Guidelines and Patterns pages are
+redrawn (their frames get new IDs), the plugin turns it into a link to that frame in this file.
+Later, an entry can point to a Storybook URL instead, without touching the components.
+Descriptions are for people: no check or build logic parses them.
 
 Every published variable in Color, Spacing, Size, and Density has a description from
 `tokens.json`. Primitives are hidden from publishing and from property pickers, so designers
 reach for semantic tokens.
 
 **Library checks** (run by Build library; failures show as "library checks: N FAILED"):
-a published component without a description or doc link fails, a published variable without
-a description fails, and a visible Primitive fails.
+a published component with no registry entry, no description, a description that isn't exactly
+one sentence, or no documentation link fails; a registry entry with no matching component fails;
+a visible Primitive fails. A published variable without a description will fail too, once the
+variable descriptions are in `tokens.json`.
 
 Components whose names start with `_` (`_Demo/*`, `_Example/*`) are hidden from publishing,
 so they don't need entries.

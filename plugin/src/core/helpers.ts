@@ -358,57 +358,23 @@ export function numericColumnWidth(longestValue: string, opts: { icon?: boolean 
   return Math.ceil((longestValue.length * 7.5 + 24 + (opts.icon ? 16 : 0)) / 8) * 8;
 }
 
-/** Component description with use / don't-use guidance. */
-export function doc(
-  summary: string,
-  use: string,
-  dont: string,
-  refs: { guidelines?: GuidelineSection[]; patterns?: PatternName[] } = {}
-): string {
-  let out = `${summary}\n\nUse when: ${use}\nDon't use when: ${dont}`;
-  if (refs.guidelines?.length) out += `\n${GUIDELINES_PREFIX}${refs.guidelines.join(" · ")}`;
-  if (refs.patterns?.length) out += `\n${PATTERNS_PREFIX}${refs.patterns.join(" · ")}`;
-  return out;
+/**
+ * Description with use / don't-use guidance, for the hidden demo components on the Component architecture
+ * page. Published components take their one-sentence description from library/docRegistry.ts instead.
+ */
+export function doc(summary: string, use: string, dont: string): string {
+  return `${summary}\n\nUse when: ${use}\nDon't use when: ${dont}`;
 }
 
 /** Sections of the Guidelines page; each is a frame named "Guideline/<section>". */
-export type GuidelineSection = "Principles" | "Accessibility" | "Data display" | "Naming" | "States" | "Color";
+export type GuidelineSection =
+  | "Principles" | "Accessibility" | "Data display" | "Naming" | "States" | "Color" | "Icons" | "Component usage";
 /** Patterns on the Patterns page; each is a frame named "Pattern/<name>". */
 export type PatternName = "Filters, grid, and bulk actions" | "Form layout" | "Loading, empty, and error states";
 
-const GUIDELINES_PREFIX = "Guidelines: ";
-const PATTERNS_PREFIX = "Patterns: ";
-
-/** Page links for descriptions, set once per run when the file key is available (see code.ts). */
-export const docLinks: { guidelines?: string; patterns?: string } = {};
-
-function escapeMarkdown(s: string) {
-  return s.replace(/([\\`*_[\]<>#])/g, "\\$1");
-}
-
-/**
- * Writes a component description. When page links are known, the "Guidelines:" and "Patterns:" lines
- * link to those pages (descriptionMarkdown); otherwise the description stays plain text. Writes only
- * when the visible text differs, so reruns don't churn.
- */
+/** Writes a component description, only when it differs, so reruns don't churn. */
 export function setDescription(node: ComponentNode | ComponentSetNode, text: string) {
-  const links = docLinks.guidelines || docLinks.patterns;
-  if (!links || !(text.includes(GUIDELINES_PREFIX) || text.includes(PATTERNS_PREFIX))) {
-    if (node.description !== text) node.description = text;
-    return;
-  }
-  const markdown = text
-    .split("\n")
-    .map((line) => {
-      for (const [prefix, url] of [[GUIDELINES_PREFIX, docLinks.guidelines], [PATTERNS_PREFIX, docLinks.patterns]] as const) {
-        if (url && line.startsWith(prefix)) return `${escapeMarkdown(prefix)}[${escapeMarkdown(line.slice(prefix.length))}](${url})`;
-      }
-      return escapeMarkdown(line);
-    })
-    .join("\n");
-  if (node.getPluginData("descriptionMarkdown") === markdown && node.description === text) return;
-  node.descriptionMarkdown = markdown;
-  node.setPluginData("descriptionMarkdown", markdown);
+  if (node.description !== text) node.description = text;
 }
 
 /** A width bound to the Size scale when a matching step exists (e.g. 40 → size/40), else the literal. */

@@ -1,7 +1,7 @@
 // Guidelines page: Sterling's design principles and rules — accessibility, data display, naming,
-// states, and color — with do / don't pairs built from Sterling instances. Domain-neutral.
+// states, color, icons, and component usage — with do / don't pairs built from Sterling instances. Domain-neutral.
 // Documentation only, so it is rebuilt on each run (at the same position). Each section is a frame
-// named "Guideline/<section>"; component descriptions point here ("Guidelines: …").
+// named "Guideline/<section>"; components' documentation links point here (library/docLinks.ts).
 
 import { tokens } from "../../core/tokens";
 import { COLLECTIONS } from "../../core/variables";
@@ -11,6 +11,7 @@ import {
 import { para, definitions, docTable, doDont } from "../../core/docBlocks";
 import { variantOf, setProps } from "../../core/ensure";
 import type { Library } from "./componentsPage";
+import { COMPONENT_DOCS, ICON_DOC } from "../docRegistry";
 import { created, updated } from "../../core/log";
 
 const ROOT = "Guidelines";
@@ -84,8 +85,9 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
   header.appendChild(await text(kit, "Guidelines", "Display"));
   await para(
     kit, header,
-    "The rules Sterling's components follow, and that screens built from them should follow too. Component descriptions " +
-      `point to these sections ("Guidelines: …"). For complete compositions, see the ${PATTERNS_PAGE} page.`
+    "The rules Sterling's components follow, and that screens built from them should follow too. Each component's " +
+      "documentation link points to the section with its full guidance, and Component usage says when to use each one. " +
+      `For complete compositions, see the ${PATTERNS_PAGE} page.`
   );
 
   // ---------------------------------------------------------------- Principles
@@ -177,6 +179,36 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
   await doDont(kit, colorSection, lib.icons, "Destructive actions use critical, not Sell",
     { node: danger, note: "Danger uses status/critical, so it can't be mistaken for a Sell action." },
     { node: sellColored, note: "Sell coral on a delete button: traders learn coral means Sell, so this reads as a trade." });
+
+  // ---------------------------------------------------------------- Icons
+  const iconSection = await section(kit, root, "Icons", "A small set of outline glyphs that take their size and color from where they're used.");
+  await definitions(kit, iconSection, [
+    ["Size", "16px by default. Parent components bind icon width and height to Density → icon/size (12 / 16 / 16) or a size/* step; do the same when you place an icon yourself."],
+    ["Color", "Icons have no color of their own: the component using one recolors its Glyph layer with a Color variable. When you place an icon yourself, bind its color to a Color variable (text/secondary for decoration, a status/*-strong color for meaning) so it follows Light/Dark."],
+    ["Meaning", "An icon is never the only signal. Pair it with a label, or give an icon-only control an accessible name (Controls/Icon button's Label)."],
+    ["More icons", "Sterling's Icon/* set is small. If an icon library is enabled in the file (e.g. Material Symbols), use its icons too: size them to 16 (or bind to icon/size) and bind their color to a Color variable so they follow Light/Dark. Button's Icon property can swap to any icon via the instance swap menu."],
+  ], 180);
+  const iconRow = frame("Icon set", { direction: "HORIZONTAL", gap: space(kit, "space/16"), wrap: true });
+  iconSection.appendChild(iconRow);
+  iconRow.layoutSizingHorizontal = "FILL";
+  for (const [name, icon] of lib.icons) {
+    const cell = frame(name, { align: "CENTER", gap: space(kit, "space/4"), width: 88 });
+    iconRow.appendChild(cell);
+    cell.appendChild(icon.createInstance());
+    cell.appendChild(await text(kit, name, "Caption", "text/secondary"));
+  }
+
+  // ---------------------------------------------------------------- Component usage
+  const usage = await section(
+    kit, root, "Component usage",
+    "When to use each component, and when to use something else. The same guidance appears under each component on the Components page."
+  );
+  const sentence = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+  const usageRows: string[][] = [
+    ...Object.entries(COMPONENT_DOCS).map(([name, d]) => [name, sentence(d.use), sentence(d.dont)]),
+    ["Icon/*", sentence(ICON_DOC.use), sentence(ICON_DOC.dont)],
+  ];
+  await docTable(kit, usage, "Usage table", ["Component", "Use when", "Don't use when"], usageRows, [220, 400]);
 
   const footer = frame("Footer", {});
   root.appendChild(footer);

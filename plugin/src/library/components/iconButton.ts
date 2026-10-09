@@ -4,9 +4,10 @@
 // icon-only button can never show a visible label; it exists for the properties panel and Dev Mode.
 // Danger uses status/critical (destructive row actions such as delete), never finance/sell.
 
-import { Kit, color, density, space, configureFrame, setSize, doc } from "../../core/helpers";
+import { Kit, color, density, space, configureFrame, setSize } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference, ensureFocusRing } from "../../core/ensure";
 import type { IconIndex } from "../icons";
+import { describe } from "../docRegistry";
 
 interface Look {
   fill?: string;
@@ -40,14 +41,7 @@ export function iconButtonSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   const defaultIcon = icons.get("more")!;
   return {
     name: "Controls/Icon button",
-    description: doc(
-      "Kind (secondary / ghost / danger) × Size (sm / md) × State (default / hover / pressed / focus / disabled). Square, " +
-        "sized to the control height (Density). Icon is an instance swap; Label is the accessible name — its layer is " +
-        "hidden, so set it to the action (\"Delete row\") and use it as aria-label and tooltip in code. Danger uses status/critical.",
-      "a well-known action in a dense row or toolbar (more, delete, edit, refresh), with a tooltip.",
-      "the action isn't obvious from the icon (use Controls/Button with a label), or it's the main action of the area.",
-      { guidelines: ["Accessibility", "Color"] }
-    ),
+    description: describe("Controls/Icon button"),
     variants: combos({
       Kind: ["secondary", "ghost", "danger"],
       Size: ["sm", "md"],

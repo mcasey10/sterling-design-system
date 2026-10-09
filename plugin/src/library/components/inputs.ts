@@ -4,12 +4,13 @@
 // and colored helper text, not just a border color; error-focus keeps the error and adds the focus ring.
 // Properties: Label, Value, Placeholder, Helper (text), Show label, Show helper (boolean).
 
-import { Kit, size, color, density, space, configureFrame, setSize, truncate, doc } from "../../core/helpers";
+import { Kit, size, color, density, space, configureFrame, setSize, truncate } from "../../core/helpers";
 import {
   ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference,
   ensureFocusRing,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
+import { describe } from "../docRegistry";
 
 interface FieldLook {
   fill: string;
@@ -50,23 +51,7 @@ function inputSpec(kit: Kit, icons: IconIndex, kind: "text" | "select", menu?: C
     : { label: "Label", value: "Value", placeholder: "Enter a value", helper: "Helper text" };
   return {
     name: select ? "Input/Select" : "Input/Text",
-    description:
-      doc(
-      `${select ? "Select" : "Text input"} with label and helper text. State: default / hover / focus / ` +
-        (select ? "open (menu below the field, covering the helper) / " : "") +
-        "error / error-focus / warning / disabled; error and warning add an icon and colored helper text. Content: value / " +
-        "placeholder (Placeholder text in text/secondary). Label, Value, Placeholder, Helper, Show label, and Show helper are " +
-        "component properties; long values truncate. Field height follows Density → control/height.",
-      select
-        ? "choosing one option from a list of about 5–15 known values."
-        : "entering free text or a number (amounts, rates, IDs).",
-      select
-        ? "there are only 2–3 options (show them all) or the list is long and searchable (use a combobox). Hide the label " +
-            "(Show label off) only when a visible label sits right next to the field, and give the field an accessible name in code."
-        : "the value comes from a fixed list (use a select). Hide the label (Show label off) only when a visible label sits " +
-            "right next to the field, and give the field an accessible name in code.",
-      { guidelines: ["Accessibility", "States"], patterns: ["Form layout"] }
-    ),
+    description: describe(select ? "Input/Select" : "Input/Text"),
     variants: combos({ State: select ? SELECT_STATES : TEXT_STATES, Content: ["value", "placeholder"] }),
     columnProp: "State",
 

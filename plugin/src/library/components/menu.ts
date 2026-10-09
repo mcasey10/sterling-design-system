@@ -3,12 +3,13 @@
 // Input/Menu — the open list: a raised panel of exposed Option instances. The open Select variant
 // places one below its field.
 
-import { Kit, color, density, space, configureFrame, setSize, truncate, doc } from "../../core/helpers";
+import { Kit, color, density, space, configureFrame, setSize, truncate } from "../../core/helpers";
 import {
   ComponentSetSpec, Props, combos, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference, variantOf,
   setProps, ensureComponent, ensureFrame,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
+import { describe } from "../docRegistry";
 
 export const MENU_WIDTH = 240;
 
@@ -22,13 +23,7 @@ const LOOKS: Record<string, { fill?: string; text: string; style: string }> = {
 export function optionSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   return {
     name: "Input/Option",
-    description: doc(
-      "One menu row. State (default / hover / selected / disabled); selected adds a check icon and bold label. Label is a " +
-        "text property; long labels truncate. Height follows Density → control/height.",
-      "listing choices in Input/Menu (a select's open list).",
-      "the choices act immediately (use a menu of actions) or need multi-select (use checkboxes).",
-      { guidelines: ["States"], patterns: ["Form layout"] }
-    ),
+    description: describe("Input/Option"),
     variants: combos({ State: ["default", "hover", "selected", "disabled"] }),
     columnProp: "State",
 
@@ -80,13 +75,7 @@ export async function buildMenu(
 ): Promise<ComponentNode> {
   const comp = ensureComponent(
     page, parent, index, "Input/Menu",
-    doc(
-      "Open list for Input/Select: a raised panel of Input/Option instances. Options are exposed instances — set each " +
-        "one's Label and State from this component's panel; hide extra rows to shorten the list.",
-      "showing a select's options (it's placed under the field in Input/Select State = open).",
-      "the list needs search or grouping beyond ~15 options (use a combobox).",
-      { patterns: ["Form layout"] }
-    )
+    describe("Input/Menu")
   );
   configureFrame(comp, {
     padding: { y: space(kit, "space/4") },
@@ -113,12 +102,7 @@ export const DESCRIPTION_MENU_WIDTH = 280;
 export function optionDescriptionSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   return {
     name: "Input/Option with description",
-    description: doc(
-      "Two-line menu row: Label plus a muted Description. State (default / hover / selected / disabled); selected adds a " +
-        "check icon and bold label. Label and Description are text properties; both truncate.",
-      "each choice needs a short explanation — a saved view and its filters, an account and its number.",
-      "one line is enough (use Input/Option)."
-    ),
+    description: describe("Input/Option with description"),
     variants: combos({ State: ["default", "hover", "selected", "disabled"] }),
     columnProp: "State",
 
@@ -165,11 +149,7 @@ export function optionDescriptionSpec(kit: Kit, icons: IconIndex): ComponentSetS
 export async function buildMenuHeading(kit: Kit, page: PageNode, parent: FrameNode, index: number): Promise<ComponentNode> {
   const comp = ensureComponent(
     page, parent, index, "Input/Menu heading",
-    doc(
-      "Group heading inside a menu. Label is a text property. Not interactive.",
-      "a menu has two or more groups of options (e.g. predefined and saved views).",
-      "the menu has a single group — omit the heading."
-    )
+    describe("Input/Menu heading")
   );
   configureFrame(comp, {
     padding: { x: density(kit, "control/padding-x"), y: space(kit, "space/4") },

@@ -2,20 +2,14 @@
 // 2px accent underline and stronger text, so selection isn't shown by color alone.
 // Properties: Label, Count (text).
 
-import { Kit, color, density, space, configureFrame, truncate, doc } from "../../core/helpers";
+import { Kit, color, density, space, configureFrame, truncate } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureFrame, ensureText, ensureProp, prune, reference, ensureFocusRing } from "../../core/ensure";
+import { describe } from "../docRegistry";
 
 export function tabSpec(kit: Kit): ComponentSetSpec {
   return {
     name: "Tabs/Tab",
-    description:
-      doc(
-      "View switcher above the grid. State: default / hover / focus / disabled / selected / selected-focus. Label, Count, and Show count are " +
-        "component properties; long labels truncate. Selected adds an underline and bold label; focus adds a focus/ring outline.",
-      "switching between views of the same data (e.g. All / Open / Closed).",
-      "navigating between pages or steps (use navigation), or filtering by many values (use filters).",
-      { guidelines: ["States", "Accessibility"], patterns: ["Filters, grid, and bulk actions"] }
-    ),
+    description: describe("Tabs/Tab"),
     variants: combos({ State: ["default", "hover", "focus", "disabled", "selected", "selected-focus"] }),
     columnProp: "State",
 

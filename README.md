@@ -37,7 +37,7 @@ and Code (Roboto Mono).
 | **Read me** | Yes | Guide to using Sterling. Redrawn every run, so don't edit it by hand. |
 | **Foundations** | Yes | Color swatches (Light and Dark), primitive ramps, type specimens, spacing, radius and density panels, all bound to the variables they show. Redrawn every run. |
 | **Components** | Yes | The component library (below), with neutral placeholder content. Updated in place, so instances stay linked and keep their overrides. |
-| **Guidelines** | Yes | Design principles (good vs bad table), accessibility, data display, naming, states and color rules, with do / don't pairs built from Sterling instances. Each section is a `Guideline/<name>` frame; component descriptions end with "Guidelines: …" and "Patterns: …" lines that point here. Redrawn every run. |
+| **Guidelines** | Yes | Design principles (good vs bad table), accessibility, data display, naming, states and color rules, with do / don't pairs built from Sterling instances; icons; and Component usage (when to use each component). Each section is a `Guideline/<name>` frame, and component documentation links point here. Redrawn every run. |
 | **Patterns** | Yes | Three compositions built only from Sterling instances, each with numbered notes and use / don't-use guidance: filters + grid + bulk actions, form layout, and loading / empty / error states. Redrawn every run. |
 | **Template** | Yes | `Template/Desktop 1440`: a blank 1440 × 900 skeleton on a 12-column grid (16px margins and gutters, bound to `space/16`), with an app bar and empty slots for filters (2 cols), main content (8 cols) and summary (2 cols). |
 | **Component architecture** | Yes | A reference on component architecture: variants, properties, slots, and hierarchy. See [Component architecture page](#component-architecture-page). |
@@ -45,9 +45,12 @@ and Code (Roboto Mono).
 
 If the file only has an empty "Page 1", it's renamed to "Read me".
 
-**Description links:** when the plugin can read the file key (`enablePrivatePluginApi` in the
-manifest), the "Guidelines:" and "Patterns:" lines in component descriptions link to those
-pages. Otherwise they stay plain text and the run logs a warning.
+**Documentation:** every published component's documentation comes from one table,
+[`plugin/src/library/docRegistry.ts`](plugin/src/library/docRegistry.ts): a one-sentence description
+(Assets panel and Dev Mode), a usage note under the component on the Components page (details,
+use when, don't use when), and a documentation link to its Guidelines or Patterns frame. Links need
+the file key (`enablePrivatePluginApi` in the manifest); without it the run logs a warning and the
+library checks fail.
 
 ### Components
 
@@ -103,8 +106,10 @@ The Components page's **Edge cases** section shows each rule: long labels, left-
 right-aligned 200px header cells truncating at the cell width, text cells truncating, numeric cells sized by the column rule
 (and one "don't" sized too narrow), and a compact-notation metric.
 
-**Descriptions:** every component's description ends with "Use when / Don't use when"
-guidance, visible in the Assets panel and Dev Mode.
+**Library checks:** each Build library run fails a check ("library checks: N FAILED" in the
+notification) if a published component has no registry entry, no description, a description that
+isn't exactly one sentence, or no documentation link; if a registry entry has no matching component;
+or if a Primitives variable is visible to publishing.
 
 **Focus:** every interactive control (button, checkbox, filter chip, tab, sortable header
 cell, inputs) has a focus variant with a 2px `focus/ring` outline. The outline is an

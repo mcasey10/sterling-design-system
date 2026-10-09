@@ -56,6 +56,10 @@ plugin/
   src/library/            Sterling itself:
     buildLibrary.ts       "Build library": variables, styles, every library page, link check
     libraryLoader.ts      Read-only library lookup, used by "Build example"
+    docRegistry.ts        THE table of component documentation: one-sentence description, details,
+                          use / don't use, documentation target. Every published component needs an entry
+    docLinks.ts           Sets documentation links from the registry (after Guidelines / Patterns are drawn)
+    checks.ts             Library checks: descriptions, doc links, registry coverage, hidden Primitives
     icons.ts              Icon/<name> components (original outline glyphs, layer "Glyph")
     components/*.ts       One spec per component; grid and bulk bar are data/spec-driven
                           (grid.ts also builds Skeleton row and Empty state; menu.ts builds

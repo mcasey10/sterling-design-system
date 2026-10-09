@@ -2,25 +2,18 @@
 // A 16px Box with a 12px glyph, plus an optional Label (Show label, off by default so grid use is
 // unchanged — with the label hidden the checkbox is still 16 × 16).
 
-import { Kit, size, color, space, configureFrame, setSize, doc } from "../../core/helpers";
+import { Kit, size, color, space, configureFrame, setSize } from "../../core/helpers";
 import {
   ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference,
   ensureFocusRing,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
+import { describe } from "../docRegistry";
 
 export function checkboxSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   return {
     name: "Controls/Checkbox",
-    description:
-      doc(
-      "Checked (off / on / indeterminate) × State (default / hover / focus / disabled). Checked states use accent/default " +
-        "with a text/inverse glyph; focus adds a focus/ring outline. Label and Show label (off by default) add a visible " +
-        "label for use outside the grid; in a grid row the row itself labels the checkbox.",
-      "selecting rows or items for a bulk action, or choosing any number of options (turn Show label on outside the grid).",
-      "the choice applies immediately like an on/off setting (use a switch), or only one option can be chosen (use a radio or select).",
-      { guidelines: ["Accessibility", "States"], patterns: ["Form layout"] }
-    ),
+    description: describe("Controls/Checkbox"),
     variants: combos({ Checked: ["off", "on", "indeterminate"], State: ["default", "hover", "focus", "disabled"] }),
     columnProp: "State",
 

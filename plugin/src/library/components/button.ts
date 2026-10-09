@@ -2,9 +2,10 @@
 // (default / hover / pressed / focus / disabled). Focus adds a focus/ring outline. Properties: Label (text), Show icon (boolean), Icon (swap).
 // Danger uses status/critical — never finance/sell, so Sell never reads as destructive.
 
-import { Kit, color, density, space, configureFrame, setSize, doc } from "../../core/helpers";
+import { Kit, color, density, space, configureFrame, setSize } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference, ensureFocusRing } from "../../core/ensure";
 import type { IconIndex } from "../icons";
+import { describe } from "../docRegistry";
 
 interface Look {
   fill?: string;
@@ -45,15 +46,7 @@ export function buttonSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   const defaultIcon = icons.get("plus")!;
   return {
     name: "Controls/Button",
-    description:
-      doc(
-      "Kind × Size × State (default / hover / pressed / focus / disabled). Label, Show icon, and Icon are component " +
-        "properties. Height and padding follow the Density mode. Danger uses status/critical, never finance/sell.",
-      "triggering an action. One primary per area; secondary for alternatives; ghost in dense toolbars and bulk bars; " +
-        "danger for destructive actions.",
-      "navigating to another page (use a link), toggling a setting (use a checkbox), or Buy/Sell trade actions styled with danger.",
-      { guidelines: ["Accessibility", "Color", "Naming"] }
-    ),
+    description: describe("Controls/Button"),
     variants: combos({
       Kind: ["primary", "secondary", "ghost", "danger"],
       Size: ["sm", "md"],

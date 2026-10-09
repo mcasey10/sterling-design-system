@@ -2,8 +2,8 @@
 // frame, sections, and component sets are matched by name and updated in place so
 // instances used elsewhere stay linked and keep their overrides.
 
-import { Kit, color, space, pinMode, PLUGIN_KEY, configureFrame, doc, frame, text, setSize, density, numericColumnWidth } from "../../core/helpers";
-import { ensureFrame, ensureText, ensureComponentSet, variantOf, setProps } from "../../core/ensure";
+import { Kit, color, space, pinMode, PLUGIN_KEY, configureFrame, frame, text, setSize, density, numericColumnWidth } from "../../core/helpers";
+import { ensureFrame, ensureText, ensureComponentSet, variantOf, setProps, prune } from "../../core/ensure";
 import { buildIcons, IconIndex } from "../icons";
 import { buttonSpec } from "../components/button";
 import { statusChipSpec } from "../components/statusChip";
@@ -24,6 +24,7 @@ import { textInputSpec, selectSpec } from "../components/inputs";
 import { COLLECTIONS } from "../../core/variables";
 import { tokens } from "../../core/tokens";
 import { created } from "../../core/log";
+import { describe, docFor, targetLabel } from "../docRegistry";
 
 const ROOT = "Components";
 
@@ -33,6 +34,36 @@ async function ensureSection(kit: Kit, root: FrameNode, index: number, title: st
   await ensureText(kit, header, "Title", title, "Title", "text/primary", 0);
   await ensureText(kit, header, "Description", description, "Body", "text/secondary", 1);
   return section;
+}
+
+const USAGE_WIDTH = 720;
+
+/**
+ * Usage note under a component: its details, "Use when" / "Don't use when", and a pointer to the full guidance.
+ * Text comes from docRegistry.ts; the pointer becomes a link once the Guidelines and Patterns pages are drawn
+ * (library/docLinks.ts). A component without a registry entry gets an empty note, and the library checks fail.
+ */
+async function usageNote(kit: Kit, section: FrameNode, index: number, name: string): Promise<FrameNode> {
+  const note = ensureFrame(section, `Usage/${name}`, { gap: space(kit, "space/4"), width: USAGE_WIDTH }, index);
+  const entry = docFor(name);
+  const lines: [string, string, string, string][] = entry
+    ? [
+        ["Details", entry.details, "Body", "text/secondary"],
+        ["Use when", `Use when: ${entry.use}`, "Body", "text/primary"],
+        ["Don't use when", `Don't use when: ${entry.dont}`, "Body", "text/primary"],
+        ["Guidance link", `Full guidance: ${targetLabel(entry.docs)}`, "Body", "accent/default"],
+      ]
+    : [];
+  const keep: SceneNode[] = [];
+  for (const [layer, chars, style, ink] of lines) {
+    const t = await ensureText(kit, note, layer, chars, style, ink, keep.length);
+    // Wraps at the note's width.
+    if (t.layoutSizingHorizontal !== "FILL") t.layoutSizingHorizontal = "FILL";
+    if (layer === "Guidance link" && t.textDecoration !== "UNDERLINE") t.textDecoration = "UNDERLINE";
+    keep.push(t);
+  }
+  prune(note, keep);
+  return note;
 }
 
 interface EdgeSets {
@@ -230,40 +261,30 @@ export async function buildComponentsPage(kit: Kit, page: PageNode): Promise<{ r
   );
   const grid = ensureFrame(iconSection, "Icons/Grid", { direction: "HORIZONTAL", gap: space(kit, "space/24"), wrap: true, width: 960 }, 1);
   const icons = await buildIcons(kit, page, grid);
+  await usageNote(kit, iconSection, 2, "Icon/*");
 
-  const button = await ensureComponentSet(
-    kit, page,
-    await ensureSection(kit, root, 2, "Button", "Kind (primary / secondary / ghost / danger) × Size (sm / md) × State (default / hover / pressed / focus / disabled)."),
-    1, buttonSpec(kit, icons)
-  );
-  const iconButton = await ensureComponentSet(
-    kit, page,
-    await ensureSection(kit, root, 3, "Icon button",
-      "Square, icon-only actions for dense rows and toolbars. Label is the accessible name (hidden layer). Danger for destructive row actions."),
-    1, iconButtonSpec(kit, icons)
-  );
-  const link = await ensureComponentSet(
-    kit, page,
-    await ensureSection(kit, root, 4, "Link",
-      "Inline text link, always underlined so it doesn't rely on color. For navigation and shortcuts such as \"Filter: Status is Exception\"."),
-    1, linkSpec(kit)
-  );
-  const chip = await ensureComponentSet(
-    kit, page,
-    await ensureSection(kit, root, 5, "Status chip", "Positive / warning / critical / info / neutral. The icon keeps status from relying on color alone."),
-    1, statusChipSpec(kit, icons)
-  );
-  const sideChip = await ensureComponentSet(
-    kit, page,
-    await ensureSection(kit, root, 6, "Side chip",
-      "Buy / sell side of an order or trade. The label carries the meaning; Buy/Sell hues stay distinct from Gain/Loss."),
-    1, sideChipSpec(kit)
-  );
-  const checkbox = await ensureComponentSet(
-    kit, page,
-    await ensureSection(kit, root, 7, "Checkbox", "Checked: off / on / indeterminate. Show label adds a label for use outside the grid."),
-    1, checkboxSpec(kit, icons)
-  );
+  // Each component is followed by its usage note (details, use / don't use, link to the full guidance).
+  const buttonSection = await ensureSection(kit, root, 2, "Button", "Kind (primary / secondary / ghost / danger) × Size (sm / md) × State (default / hover / pressed / focus / disabled).");
+  const button = await ensureComponentSet(kit, page, buttonSection, 1, buttonSpec(kit, icons));
+  await usageNote(kit, buttonSection, 2, button.name);
+  const iconButtonSection = await ensureSection(kit, root, 3, "Icon button",
+    "Square, icon-only actions for dense rows and toolbars. Label is the accessible name (hidden layer). Danger for destructive row actions.");
+  const iconButton = await ensureComponentSet(kit, page, iconButtonSection, 1, iconButtonSpec(kit, icons));
+  await usageNote(kit, iconButtonSection, 2, iconButton.name);
+  const linkSection = await ensureSection(kit, root, 4, "Link",
+    "Inline text link, always underlined so it doesn't rely on color. For navigation and shortcuts such as \"Filter: Status is Exception\".");
+  const link = await ensureComponentSet(kit, page, linkSection, 1, linkSpec(kit));
+  await usageNote(kit, linkSection, 2, link.name);
+  const chipSection = await ensureSection(kit, root, 5, "Status chip", "Positive / warning / critical / info / neutral. The icon keeps status from relying on color alone.");
+  const chip = await ensureComponentSet(kit, page, chipSection, 1, statusChipSpec(kit, icons));
+  await usageNote(kit, chipSection, 2, chip.name);
+  const sideChipSection = await ensureSection(kit, root, 6, "Side chip",
+    "Buy / sell side of an order or trade. The label carries the meaning; Buy/Sell hues stay distinct from Gain/Loss.");
+  const sideChip = await ensureComponentSet(kit, page, sideChipSection, 1, sideChipSpec(kit));
+  await usageNote(kit, sideChipSection, 2, sideChip.name);
+  const checkboxSection = await ensureSection(kit, root, 7, "Checkbox", "Checked: off / on / indeterminate. Show label adds a label for use outside the grid.");
+  const checkbox = await ensureComponentSet(kit, page, checkboxSection, 1, checkboxSpec(kit, icons));
+  await usageNote(kit, checkboxSection, 2, checkbox.name);
 
   // Data grid: cells first, then a generic row and grid built from them. Worked examples
   // build their own rows and grids from the same cells (see src/example/).
@@ -275,48 +296,42 @@ export async function buildComponentsPage(kit: Kit, page: PageNode): Promise<{ r
   );
   const deps = { icons, chip, checkbox };
   const headerCell = await ensureComponentSet(kit, page, gridSection, 1, headerCellSpec(kit, deps));
-  const bodyCell = await ensureComponentSet(kit, page, gridSection, 2, bodyCellSpec(kit, deps));
-  const row = await ensureComponentSet(kit, page, gridSection, 3, rowSpec(kit, bodyCell, {
+  await usageNote(kit, gridSection, 2, headerCell.name);
+  const bodyCell = await ensureComponentSet(kit, page, gridSection, 3, bodyCellSpec(kit, deps));
+  await usageNote(kit, gridSection, 4, bodyCell.name);
+  const row = await ensureComponentSet(kit, page, gridSection, 5, rowSpec(kit, bodyCell, {
     name: "Grid/Row",
-    description: doc(
-      "State (default / hover / selected / selected-hover). A checkbox cell plus generic columns, built from Grid/BodyCell instances.",
-      "assembling a grid: one Row instance per record, overriding cell values.",
-      "a single value needs a different state — override that cell instead of adding row variants.",
-      { guidelines: ["States"], patterns: ["Filters, grid, and bulk actions"] }
-    ),
+    description: describe("Grid/Row"),
     data: GENERIC_DATA,
   }));
-  const exampleGrid = await buildGrid(kit, page, gridSection, 4, { header: headerCell, row, checkbox }, {
+  await usageNote(kit, gridSection, 6, row.name);
+  const exampleGrid = await buildGrid(kit, page, gridSection, 7, { header: headerCell, row, checkbox }, {
     name: "Grid/Data grid",
-    description: doc(
-      "Generic grid with placeholder data: one selected row and one cell in the error state. Override values per screen.",
-      "starting a data view quickly; override headers and cell values, or rebuild rows from Grid/Row.",
-      "the layout isn't tabular (use cards or a list).",
-      { guidelines: ["Data display"], patterns: ["Filters, grid, and bulk actions", "Loading, empty, and error states"] }
-    ),
+    description: describe("Grid/Data grid"),
     data: GENERIC_DATA,
   });
+  await usageNote(kit, gridSection, 8, exampleGrid.name);
   const width = gridWidth(GENERIC_DATA);
-  const pagination = await buildPagination(kit, page, gridSection, 5, button, width);
-  const skeletonRow = await buildSkeletonRow(kit, page, gridSection, 6, GENERIC_DATA);
-  const emptyState = await ensureComponentSet(kit, page, gridSection, 7, emptyStateSpec(kit, { icons, button }, width));
+  const pagination = await buildPagination(kit, page, gridSection, 9, button, width);
+  await usageNote(kit, gridSection, 10, pagination.name);
+  const skeletonRow = await buildSkeletonRow(kit, page, gridSection, 11, GENERIC_DATA);
+  await usageNote(kit, gridSection, 12, skeletonRow.name);
+  const emptyState = await ensureComponentSet(kit, page, gridSection, 13, emptyStateSpec(kit, { icons, button }, width));
+  await usageNote(kit, gridSection, 14, emptyState.name);
 
   const bulkSection = await ensureSection(
     kit, root, 9, "Bulk action bar",
     "N selected · Select all matching, plus actions. Rename the action buttons from the instance; Show destructive toggles the danger action."
   );
   const bulkActionBar = await buildBulkActionBar(kit, page, bulkSection, 1, { button, checkbox, icons }, width, GENERIC_BAR);
-  const filterChip = await ensureComponentSet(
-    kit, page,
-    await ensureSection(kit, root, 10, "Filter chip", "Applied filter; Show remove toggles the x icon."),
-    1, filterChipSpec(kit, icons)
-  );
-  const summaryMetric = await ensureComponentSet(
-    kit, page,
-    await ensureSection(kit, root, 11, "Summary metric",
-      "Label, value, and progress vs. target. Over-target adds a warning icon and text; State = loading shows a skeleton and \"Loading…\"."),
-    1, summaryMetricSpec(kit, icons)
-  );
+  await usageNote(kit, bulkSection, 2, bulkActionBar.name);
+  const filterChipSection = await ensureSection(kit, root, 10, "Filter chip", "Applied filter; Show remove toggles the x icon.");
+  const filterChip = await ensureComponentSet(kit, page, filterChipSection, 1, filterChipSpec(kit, icons));
+  await usageNote(kit, filterChipSection, 2, filterChip.name);
+  const summarySection = await ensureSection(kit, root, 11, "Summary metric",
+    "Label, value, and progress vs. target. Over-target adds a warning icon and text; State = loading shows a skeleton and \"Loading…\".");
+  const summaryMetric = await ensureComponentSet(kit, page, summarySection, 1, summaryMetricSpec(kit, icons));
+  await usageNote(kit, summarySection, 2, summaryMetric.name);
   const inputs = await ensureSection(
     kit, root, 12, "Inputs",
     "Text input and select: default / hover / focus / error / error-focus / warning / disabled × value / placeholder. " +
@@ -324,23 +339,25 @@ export async function buildComponentsPage(kit: Kit, page: PageNode): Promise<{ r
       "build grouped menus (e.g. saved views)."
   );
   const textInput = await ensureComponentSet(kit, page, inputs, 1, textInputSpec(kit, icons));
-  const option = await ensureComponentSet(kit, page, inputs, 2, optionSpec(kit, icons));
-  const menu = await buildMenu(kit, page, inputs, 3, option);
-  const select = await ensureComponentSet(kit, page, inputs, 4, selectSpec(kit, icons, menu));
-  const optionDescription = await ensureComponentSet(kit, page, inputs, 5, optionDescriptionSpec(kit, icons));
-  const menuHeading = await buildMenuHeading(kit, page, inputs, 6);
-  const tab = await ensureComponentSet(
-    kit, page,
-    await ensureSection(kit, root, 13, "Tabs", "View switcher with a count badge. Selected adds an underline and bold label; selected-focus adds the focus ring."),
-    1, tabSpec(kit)
-  );
+  await usageNote(kit, inputs, 2, textInput.name);
+  const option = await ensureComponentSet(kit, page, inputs, 3, optionSpec(kit, icons));
+  await usageNote(kit, inputs, 4, option.name);
+  const menu = await buildMenu(kit, page, inputs, 5, option);
+  await usageNote(kit, inputs, 6, menu.name);
+  const select = await ensureComponentSet(kit, page, inputs, 7, selectSpec(kit, icons, menu));
+  await usageNote(kit, inputs, 8, select.name);
+  const optionDescription = await ensureComponentSet(kit, page, inputs, 9, optionDescriptionSpec(kit, icons));
+  await usageNote(kit, inputs, 10, optionDescription.name);
+  const menuHeading = await buildMenuHeading(kit, page, inputs, 11);
+  await usageNote(kit, inputs, 12, menuHeading.name);
+  const tabSection = await ensureSection(kit, root, 13, "Tabs", "View switcher with a count badge. Selected adds an underline and bold label; selected-focus adds the focus ring.");
+  const tab = await ensureComponentSet(kit, page, tabSection, 1, tabSpec(kit));
+  await usageNote(kit, tabSection, 2, tab.name);
 
-  const dialog = await buildDialog(
-    kit, page,
-    await ensureSection(kit, root, 14, "Dialog",
-      "Modal container: Title, a Body slot for each instance's content, and Cancel / Primary actions."),
-    1, { button, iconButton, icons }
-  );
+  const dialogSection = await ensureSection(kit, root, 14, "Dialog",
+    "Modal container: Title, a Body slot for each instance's content, and Cancel / Primary actions.");
+  const dialog = await buildDialog(kit, page, dialogSection, 1, { button, iconButton, icons });
+  await usageNote(kit, dialogSection, 2, dialog.name);
 
   await buildEdgeCases(kit, root, 15, { headerCell, button, chip, checkbox, filterChip, tab, bodyCell, textInput, select, summaryMetric });
 

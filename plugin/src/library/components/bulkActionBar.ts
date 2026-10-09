@@ -4,11 +4,12 @@
 // Properties: Count, Select all (text), plus one boolean per toggleable action. Action buttons
 // are exposed instances, so their labels can be edited from the bar instance.
 
-import { Kit, color, density, space, configureFrame, doc } from "../../core/helpers";
+import { Kit, color, density, space, configureFrame } from "../../core/helpers";
 import {
   ensureComponent, ensureFrame, ensureInstance, ensureText, ensureProp, prune, reference, setProps, variantOf,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
+import { describe } from "../docRegistry";
 
 export interface BarAction {
   /** Layer name; keep stable so instance overrides survive reruns. */
@@ -35,14 +36,7 @@ export interface BarSpec {
 
 export const GENERIC_BAR: BarSpec = {
   name: "Grid/BulkActionBar",
-  description: doc(
-    "Shown above a grid while rows are selected. Count and Select all are text properties; Show select all hides the " +
-      "Select all link (e.g. once all matching rows are selected); Show destructive toggles the danger action. Action " +
-      "buttons are exposed instances — rename them from the bar instance.",
-    "one or more grid rows are selected and the actions apply to all of them.",
-    "nothing is selected (hide the bar), or an action applies to a single row (put it in the row).",
-    { guidelines: ["States"], patterns: ["Filters, grid, and bulk actions"] }
-  ),
+  description: describe("Grid/BulkActionBar"),
   count: "2 selected",
   selectAll: "Select all 120 matching",
   actions: [

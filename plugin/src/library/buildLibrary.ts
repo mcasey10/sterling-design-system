@@ -10,27 +10,14 @@ import { buildTemplate } from "./pages/template";
 import { buildReadme } from "./pages/readme";
 import { buildComponentArchitecture } from "./pages/componentArchitecture";
 import {
-  ensurePages, useStrokeScale, Kit, ARCHITECTURE_PAGE, GUIDELINES_PAGE, PATTERNS_PAGE, REDRAWN_PAGES, docLinks,
+  ensurePages, useStrokeScale, Kit, ARCHITECTURE_PAGE, GUIDELINES_PAGE, PATTERNS_PAGE, REDRAWN_PAGES,
 } from "../core/helpers";
 import { buildGuidelines } from "./pages/guidelines";
 import { buildPatterns } from "./pages/patterns";
 import { report, warn } from "../core/log";
 import { snapshotInstances, compareInstances } from "../core/linkCheck";
-
-/**
- * Component descriptions end with "Guidelines: …" / "Patterns: …". When the file key is available,
- * those lines link to the pages (page IDs are stable across runs); otherwise they stay plain text.
- */
-function linkDescriptions(pages: Map<string, PageNode>) {
-  const key = figma.fileKey;
-  if (!key) {
-    warn("File key unavailable, so component descriptions name their Guidelines / Patterns sections without links.");
-    return;
-  }
-  const url = (page: PageNode) => `https://www.figma.com/design/${key}/?node-id=${page.id.replace(":", "-")}`;
-  docLinks.guidelines = url(pages.get(GUIDELINES_PAGE)!);
-  docLinks.patterns = url(pages.get(PATTERNS_PAGE)!);
-}
+import { applyDocLinks } from "./docLinks";
+import { checkLibrary, LIBRARY_CHECK_FAILED } from "./checks";
 
 /**
  * Post-build reminder: the plugin API can't turn on tabular figures for a text style, so they're set by hand
@@ -70,7 +57,6 @@ export async function buildLibrary(): Promise<{ summary: string; extra: string; 
   useStrokeScale(kit);
 
   const pages = await ensurePages();
-  linkDescriptions(pages);
 
   await buildFoundations(kit, pages.get("Foundations")!);
   const { lib } = await buildComponentsPage(kit, pages.get("Components")!);
@@ -80,15 +66,19 @@ export async function buildLibrary(): Promise<{ summary: string; extra: string; 
   await buildGuidelines(kit, pages.get(GUIDELINES_PAGE)!, lib);
   await buildPatterns(kit, pages.get(PATTERNS_PAGE)!, lib);
   await buildReadme(kit, pages.get("Read me")!);
+  // Documentation links point at Guidelines and Patterns frames, which were just redrawn; then check the library.
+  await applyDocLinks(pages.get("Components")!, pages);
+  checkLibrary(kit, pages.get("Components")!);
 
   const links = await compareInstances(instancesBefore);
   const kept = [...links.values()].reduce((n, c) => n + c.kept, 0);
   const changed = report.warnings.filter((w) => w.startsWith("Link check")).length;
+  const failed = report.warnings.filter((w) => w.startsWith(LIBRARY_CHECK_FAILED)).length;
 
   await figma.setCurrentPageAsync(pages.get("Template")!);
   return {
     summary: `Sterling library: ${variables.vars.size} variables, ${styles.size} text styles, ${pages.size} pages`,
-    extra: ` · links: ${kept} kept, ${changed} changed`,
+    extra: ` · links: ${kept} kept, ${changed} changed · library checks: ${failed ? `${failed} FAILED` : "pass"}`,
     focus: template,
   };
 }

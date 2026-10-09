@@ -3,9 +3,10 @@
 // just color. Loading replaces the value with a skeleton bar and says "Loading…"; it looks the same for both Statuses.
 // Properties: Label, Value, Detail (text), Show progress (boolean).
 
-import { Kit, size, color, space, configureFrame, setSize, bindFill, bindRadius, rect, truncate, untruncate, doc } from "../../core/helpers";
+import { Kit, size, color, space, configureFrame, setSize, bindFill, bindRadius, rect, truncate, untruncate } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference } from "../../core/ensure";
 import type { IconIndex } from "../icons";
+import { describe } from "../docRegistry";
 
 const WIDTH = 220;
 const PAD = 16;
@@ -18,16 +19,7 @@ const STATES: Record<string, { value: string; detail: string; ratio: number }> =
 export function summaryMetricSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   return {
     name: "Summary/Summary metric",
-    description:
-      doc(
-      "Label, value, and optional progress vs. target. Status (normal / over-target): over-target adds a warning icon and " +
-        "text in addition to the bar color. State (default / loading): loading shows a skeleton bar and \"Loading…\" in place " +
-        "of the value. Long labels truncate; the value never does — use compact notation " +
-        "(e.g. $12.35B) for large numbers and put the full value in Detail. Resize the Bar layer to reflect progress.",
-      "a single headline number someone checks at a glance, optionally against a target or limit.",
-      "comparing many values over time (use a chart or grid), or the number needs row-level detail.",
-      { guidelines: ["Data display", "States"], patterns: ["Loading, empty, and error states"] }
-    ),
+    description: describe("Summary/Summary metric"),
     variants: combos({ Status: ["normal", "over-target"], State: ["default", "loading"] }),
     columnProp: "Status",
 

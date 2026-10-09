@@ -1,19 +1,14 @@
 // Controls/Link — inline text link. Size (sm / md) × State (default / hover / focus).
 // Always underlined, so a link is never marked by color alone. Property: Label (text).
 
-import { Kit, space, configureFrame, doc } from "../../core/helpers";
+import { Kit, space, configureFrame } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureText, ensureProp, prune, reference, ensureFocusRing } from "../../core/ensure";
+import { describe } from "../docRegistry";
 
 export function linkSpec(kit: Kit): ComponentSetSpec {
   return {
     name: "Controls/Link",
-    description: doc(
-      "Inline text link. Size (sm = Label 12 / md = Body 13) × State (default / hover / focus). Label is a text property. " +
-        "Always underlined in accent/default (accent/hover on hover), so it never relies on color alone; focus adds the outside ring.",
-      "navigating, or applying a shortcut such as a filter (\"Filter: Status is Exception\"), from within text or a summary panel.",
-      "the action changes data (use Controls/Button), or it's the main action of an area.",
-      { guidelines: ["Accessibility", "Color"] }
-    ),
+    description: describe("Controls/Link"),
     variants: combos({ Size: ["sm", "md"], State: ["default", "hover", "focus"] }),
     columnProp: "State",
 

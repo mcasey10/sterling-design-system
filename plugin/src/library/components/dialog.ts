@@ -2,10 +2,11 @@
 // content, and exposed Cancel / Primary buttons. Raised surface with a border (no shadow tokens yet).
 // If slots aren't available to the plugin, Body is a plain frame and the run logs a warning.
 
-import { Kit, color, space, configureFrame, frame, text, doc } from "../../core/helpers";
+import { Kit, color, space, configureFrame, frame, text } from "../../core/helpers";
 import { ensureComponent, ensureFrame, ensureInstance, ensureText, ensureProp, prune, reference, setProps, variantOf } from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { warn } from "../../core/log";
+import { describe } from "../docRegistry";
 
 export const DIALOG_WIDTH = 480;
 
@@ -18,13 +19,7 @@ export async function buildDialog(
 ): Promise<ComponentNode> {
   const comp = ensureComponent(
     page, parent, index, "Overlay/Dialog",
-    doc(
-      "Modal dialog: Title, Show close, a Body slot for the instance's own content, and exposed Cancel and Primary buttons " +
-        "(set the primary's label and disabled state from this component's panel). Raised surface with a border.",
-      "confirming or completing one focused task without leaving the screen (sign off, rename, confirm a destructive action).",
-      "the task needs the rest of the screen for reference (use a side panel), or it's only a message (use inline status).",
-      { guidelines: ["Accessibility", "States"] }
-    )
+    describe("Overlay/Dialog")
   );
   configureFrame(comp, {
     width: DIALOG_WIDTH,

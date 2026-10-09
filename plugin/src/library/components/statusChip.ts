@@ -2,9 +2,10 @@
 // Properties: Label (text), Show icon (boolean). Each tone has its own glyph so
 // status is never conveyed by color alone.
 
-import { Kit, size, color, space, configureFrame, setSize, truncate, doc } from "../../core/helpers";
+import { Kit, size, color, space, configureFrame, setSize, truncate } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference } from "../../core/ensure";
 import type { IconIndex } from "../icons";
+import { describe } from "../docRegistry";
 
 export const TONE_ICONS: Record<string, string> = {
   positive: "circle-check",
@@ -17,14 +18,7 @@ export const TONE_ICONS: Record<string, string> = {
 export function statusChipSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   return {
     name: "Chip/Status",
-    description:
-      doc(
-      "Tone (positive / warning / critical / info / neutral) with a tone-specific icon. Label and Show icon are component " +
-        "properties; labels longer than 160px truncate. Colors: status/<tone>-subtle background, status/<tone>-strong text and icon.",
-      "showing the status of a record (in a grid cell, card, or header). Keep labels to one or two words.",
-      "the status is an applied filter (use Chip/Filter), or the chip would be the only signal — keep the icon or label visible.",
-      { guidelines: ["Accessibility"] }
-    ),
+    description: describe("Chip/Status"),
     variants: combos({ Tone: Object.keys(TONE_ICONS) }),
     columnProp: "Tone",
 

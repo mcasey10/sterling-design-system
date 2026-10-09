@@ -3,9 +3,10 @@
 // overrides carry over when an icon is swapped. Glyph layers scale with the instance.
 // Glyphs are only redrawn when their SVG source changes, keeping node IDs stable.
 
-import { Kit, color, space, recolor, PLUGIN_KEY, doc, setDescription } from "../core/helpers";
+import { Kit, color, space, recolor, PLUGIN_KEY, setDescription } from "../core/helpers";
 import { ensureFrame, ensureText, findComponent } from "../core/ensure";
 import { created, updated } from "../core/log";
+import { describe } from "./docRegistry";
 
 const STROKE = 'stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"';
 const FILL = 'fill="#000"';
@@ -72,12 +73,7 @@ export async function buildIcons(kit: Kit, page: PageNode, grid: FrameNode): Pro
     } else {
       updated(`Component Icon/${name}`);
     }
-    const description = doc(
-      "16px outline icon. Parent components recolor the Glyph layer; resize with icon/size or size/*.",
-      "supporting a label, or as an instance-swap value in Button, Status badge, and similar components.",
-      "it's the only way to convey meaning — pair it with text or an accessible name.",
-      { guidelines: ["Accessibility"] }
-    );
+    const description = describe(`Icon/${name}`);
     if (comp.getPluginData(PLUGIN_KEY) !== "generated") comp.setPluginData(PLUGIN_KEY, "generated");
     if (comp.width !== 16 || comp.height !== 16) comp.resizeWithoutConstraints(16, 16);
     if (!Array.isArray(comp.fills) || comp.fills.length) comp.fills = [];
