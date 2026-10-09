@@ -60,6 +60,13 @@ export async function buildReadme(kit: Kit, page: PageNode): Promise<FrameNode> 
     `See ${EXAMPLE_PAGE} for a finished screen built this way.`,
   ]);
 
+  const postBuild = await docSection(kit, root, "After the first build");
+  await steps(kit, postBuild, [
+    "Turn on tabular figures for the Numeric text style, so digits line up in columns: select the Numeric style, open " +
+      "Type settings → Details → Numbers, and set Style to Monospace uppercase/lining. Do this once per file; builds " +
+      "leave it alone. The plugin API can't set it, so Build library reminds you in its run report until it's on.",
+  ]);
+
   const tweak = await docSection(kit, root, "Changing Sterling");
   await para(
     kit, tweak,
@@ -82,7 +89,7 @@ export async function buildReadme(kit: Kit, page: PageNode): Promise<FrameNode> 
 
   const limits = await docSection(kit, root, "Known limitations");
   await definitions(kit, limits, [
-    ["Tabular figures", "The plugin API can't enable OpenType features on a text style. For Numeric, enable Type settings → Details → Numbers → Style → Monospace uppercase/lining once per file; reruns leave it alone."],
+    ["Tabular figures", "The plugin API can't enable OpenType features on a text style, so tabular figures on Numeric are a one-time manual step (see After the first build)."],
     ["Generated pages", "Read me, Foundations, Guidelines, Patterns, the Component architecture reference sheet, and the example's About frame are redrawn on every run; edits made there by hand are lost."],
   ]);
 

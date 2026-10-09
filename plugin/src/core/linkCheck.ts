@@ -68,7 +68,10 @@ export async function compareInstances(before: InstanceSnapshot) {
     if (!a.main) warn(`Link check: ${a.page} / "${a.name}" (${id}) has no main component`);
   }
 
-  const summary = pages.map((p) => {
+  // A page renamed during the build (a new file's empty "Page 1" becomes "Read me") had nothing to check.
+  const hadInstances = new Set([...before.entries.values()].map((e) => e.page));
+  const reported = pages.filter((name) => hadInstances.has(name) || figma.root.children.some((p) => p.name === name));
+  const summary = reported.map((p) => {
     const c = counts.get(p)!;
     return `${p}: ${c.kept} kept (${c.renamed} with renamed properties), ${c.rebuilt} rebuilt`;
   }).join(" · ");

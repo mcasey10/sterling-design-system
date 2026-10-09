@@ -112,6 +112,15 @@ example be added beside it.
    under Plugins → Development. (This is a new plugin entry. It is separate from any older
    plugin you have imported, and it never touches other files.)
 
+### After the first Build library (one time per file)
+
+Turn on **tabular figures** for the **Numeric** text style, so digits line up in columns:
+select the Numeric style, open **Type settings → Details → Numbers**, and set **Style** to
+**Monospace uppercase/lining**. The plugin API can't set OpenType features on a text style,
+so this is the only manual step. Builds never undo it, and until it's done **Build library**
+adds a reminder to its run report (it reads the setting from a Numeric text on the
+Components page). The Read me page lists the same step.
+
 ### Every time you change something
 
 ```
@@ -188,7 +197,7 @@ Think of each generated thing as one of four kinds:
 | **Redrawn** | Cover, Read me, Foundations, Guidelines, Patterns, the Component architecture reference sheet, the Components page's Edge cases, the example's Example states and About frame | Deleted and drawn again at the same position | **No.** Any edit is lost. You *can* move the frame; it's redrawn where you left it. |
 | **Updated in place** | Components (library, `_Demo/*`, and `Example/*`), Components page sections | Matched by name; properties, layers, fills, and sizes are set back to what the code says. Layers the code doesn't know are removed from components. | **No.** Change the code instead. Moving a component set on the page is fine. |
 | **Updated in place, additions kept** | The Template frame and the two example screens | The plugin's own layers are reset. Layers you add at the top level of the frame are kept. Found by node ID, so **duplicates are never touched**. | Duplicate first, then edit the copy freely. |
-| **Values from tokens** | Variables and text styles | Values and descriptions are reset from tokens.json. Extra variables or styles you add are kept and listed as warnings. | Add new ones freely; don't edit Sterling's. One exception: the Numeric style's tabular figures setting, which the API can't set, survives builds. |
+| **Values from tokens** | Variables and text styles | Values and descriptions are reset from tokens.json. Extra variables or styles you add are kept and listed as warnings. | Add new ones freely; don't edit Sterling's. One exception: the Numeric style's tabular figures setting (the one-time step after the first build), which the API can't set, survives builds. |
 
 **Rule of thumb:** if the plugin made it, change it in code. If you made it (a duplicate, a
 new page, a new frame), it's yours and builds leave it alone.

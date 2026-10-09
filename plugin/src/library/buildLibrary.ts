@@ -33,6 +33,25 @@ function linkDescriptions(pages: Map<string, PageNode>) {
 }
 
 /**
+ * Post-build reminder: the plugin API can't turn on tabular figures for a text style, so they're set by hand
+ * once per file (see the Read me page). Text nodes do report their OpenType features, so this reads one
+ * Numeric text on the Components page and warns until tabular figures (TNUM) are on.
+ */
+function checkTabularFigures(kit: Kit, page: PageNode) {
+  const style = kit.styles.get("Numeric");
+  if (!style) return;
+  const sample = page.findOne((n) => n.type === "TEXT" && n.textStyleId === style.id) as TextNode | null;
+  if (!sample || sample.openTypeFeatures === figma.mixed) return;
+  // TNUM is missing from the typings' feature list, but Figma reports it at runtime.
+  if (!(sample.openTypeFeatures as Record<string, boolean>).TNUM) {
+    warn(
+      "Reminder: the Numeric text style doesn't have tabular figures yet. Select the Numeric style, open Type settings → " +
+        "Details → Numbers, and set Style to Monospace uppercase/lining. One time per file; builds leave it alone."
+    );
+  }
+}
+
+/**
  * Pages the link check covers: every page whose instances aren't redrawn by this build — the Template,
  * the Component architecture page, and any other page that uses library components (examples, your own pages).
  */
@@ -55,6 +74,7 @@ export async function buildLibrary(): Promise<{ summary: string; extra: string; 
 
   await buildFoundations(kit, pages.get("Foundations")!);
   const { lib } = await buildComponentsPage(kit, pages.get("Components")!);
+  checkTabularFigures(kit, pages.get("Components")!);
   const template = await buildTemplate(kit, pages.get("Template")!, lib);
   await buildComponentArchitecture(kit, pages.get(ARCHITECTURE_PAGE)!, lib);
   await buildGuidelines(kit, pages.get(GUIDELINES_PAGE)!, lib);
