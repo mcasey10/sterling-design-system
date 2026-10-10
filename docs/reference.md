@@ -344,6 +344,19 @@ Actions**; the next push to `main` publishes the site.
 push and pull request: it type-checks and builds the plugin, runs the contrast and token checks, and
 builds the token site. The library and example checks need a Figma file, so they run in the plugin.
 
+## Going public
+
+The repository is private for now. When it's time to publish, in this order:
+
+1. **Update the README** for whatever Sterling includes at that point (for example, Storybook).
+2. **Make the repository public:** GitHub → Settings → General → Danger Zone → Change visibility.
+3. **Turn on Pages:** Settings → Pages → Build and deployment → Source: **GitHub Actions**. Then run
+   the "Token site" workflow from the Actions tab, or push to `main`.
+4. **Set the Figma file to "Anyone with the link can view":** Share → change the link's access.
+5. **Test the Figma link in a private browser window**, signed out, to confirm it opens without an
+   account.
+6. **Verify both links in the README:** the token site and the Figma file.
+
 ## Known limitations
 
 - **Tabular figures:** the plugin API can't turn on OpenType features for a text
