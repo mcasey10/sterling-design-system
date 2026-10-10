@@ -48,3 +48,17 @@
   display: contents;
   color: var(--stl-color-text-secondary);
 }
+
+/* A menu shown by itself in a story is as wide as the library draws it (240px). */
+.stl-story-menu {
+  width: calc(var(--stl-size-40) * 6);
+}
+/* Room under each row for an open menu, which hangs below its field. */
+.stl-variants--menus tbody td {
+  padding-bottom: calc(var(--stl-size-40) * 4);
+  vertical-align: top;
+}
+.stl-variants--menus tbody th {
+  padding-top: var(--stl-space-24);
+  vertical-align: top;
+}

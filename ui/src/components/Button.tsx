@@ -1,7 +1,7 @@
 // Controls/Button: triggers an action. Kind and Size are props; hover, pressed, and focus come from CSS,
 // and disabled is the native attribute. Danger uses status/critical, never finance/sell.
 
-import type { ButtonHTMLAttributes } from "react";
+import type { ButtonHTMLAttributes, Ref } from "react";
 import type { VariantValue } from "../../../definitions/components";
 import { textClass } from "../tokens";
 import { cx } from "./classes";
@@ -18,6 +18,7 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   /** Shows the icon before the label. The icon is decorative: the label names the action. */
   showIcon?: boolean;
   icon?: IconName;
+  ref?: Ref<HTMLButtonElement>;
 }
 
 export function Button({

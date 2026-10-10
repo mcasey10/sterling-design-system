@@ -367,6 +367,13 @@ Not planned for a release yet:
   shows its label with the browser's own tooltip (`title`), which can't be styled, appears after a
   delay, and doesn't appear on keyboard focus.
 
+- **Scrim token.** A semantic color for the layer behind a modal dialog (for example `surface/scrim`).
+  Until then the coded Dialog's backdrop uses the `neutral/900` primitive at 50%, the one place a
+  component reads a primitive.
+- **Input/Select warning-focus and Input/Option focus.** Figma has no variant for a focused select
+  with a warning, or for the option the arrow keys are on; the coded components show both.
+- **Input/Option with description and Input/Menu heading** aren't coded yet.
+
 ## Known limitations
 
 - **Tabular figures:** the plugin API can't turn on OpenType features for a text

@@ -42,6 +42,9 @@ export const DESCRIPTIONS = {
   density: descriptions(raw.density),
 };
 
+/** A spacing token in pixels, for the few places that position things in JavaScript: "space/4" → 4. */
+export const spacePx = (name: string): number => (raw.spacing as unknown as Record<string, number>)[name];
+
 /** "{blue/600}" → "blue/600"; a raw value → null. */
 export const aliasOf = (value: string | number): string | null => /^\{(.+)\}$/.exec(String(value))?.[1] ?? null;
 

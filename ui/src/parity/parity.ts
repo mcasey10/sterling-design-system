@@ -11,7 +11,7 @@
 //       anything else           → a prop the component names in `stateProps` (selected → `selected`,
 //                                 error → `validation`, …)
 //     A combined value such as "error-focus" is the combination of its parts.
-//   • Text, boolean, instance-swap and slot properties are props too.
+//   • Text, boolean and instance-swap properties are props too. A slot is `children`.
 // Anything else a component leaves out or adds must be listed with its reason (`figmaOnly`, `codeOnly`),
 // which is what the "Where Figma and code differ" documentation is written from. Native HTML attributes
 // that a component passes through (onClick, href, …) are not design props and aren't listed.
@@ -74,7 +74,7 @@ export function parityProblems(name: string, def: ComponentDef, coded: CodedComp
     if (!sourceText.includes(type)) problems.push(`${name}: ${coded.source} must type ${propName(axis)} as ${type}`);
   }
   for (const property of def.properties) {
-    if (!(property.name in figmaOnly)) expected.add(propName(property.name));
+    if (!(property.name in figmaOnly)) expected.add(property.type === "SLOT" ? "children" : propName(property.name));
   }
 
   for (const prop of expected) {

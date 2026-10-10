@@ -115,12 +115,13 @@ function combinations(axes: [string, readonly string[]][]): Record<string, strin
  * A component with no State property gets one row, with a column per value of its variant property.
  */
 export function AllVariants<P>({
-  component, render, states: own = {},
+  component, render, states: own = {}, className,
 }: {
   component: ComponentName;
   render: (props: P) => ReactNode;
   /** Props for the State parts the component expresses with its own props (see `stateProps` in src/parity/coded.ts). */
   states?: Record<string, object>;
+  className?: string;
 }) {
   const variants = Object.entries(componentDef(component).variants);
   // Columns are the State values; a component with no State uses its first variant property instead.
@@ -132,7 +133,7 @@ export function AllVariants<P>({
   const columnProps = (value: string) =>
     columnAxis === "State" ? stateProps(value, own) : columnAxis ? { [propName(columnAxis)]: value } : {};
   return (
-    <table className="stl-variants">
+    <table className={["stl-variants", className].filter(Boolean).join(" ")}>
       <thead>
         <tr>
           {labelled && <td />}

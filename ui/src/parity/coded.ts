@@ -39,6 +39,46 @@ export const CODED: Record<string, CodedComponent> = {
     stateProps: { error: "validation", warning: "validation" },
     figmaOnly: { Content: "In code the field shows its placeholder whenever the value is empty, so there is nothing to choose." },
   },
+  "Input/Select": {
+    source: "src/components/Select.tsx",
+    props: [
+      "label", "value", "placeholder", "helper", "showLabel", "showHelper", "validation", "disabled", "open",
+      "options", "onValueChange", "onOpenChange", "name",
+    ],
+    stateProps: { open: "open", error: "validation", warning: "validation" },
+    figmaOnly: { Content: "In code the field shows its placeholder whenever nothing is selected, so there is nothing to choose." },
+    codeOnly: {
+      options: "The choices. In Figma they are the Option instances inside Input/Menu.",
+      onValueChange: "Reports the option the user chose; Figma has no behavior.",
+      onOpenChange: "Reports the menu opening and closing; Figma has no behavior.",
+      name: "The field's name when it is submitted with a form.",
+    },
+  },
+  "Input/Menu": {
+    source: "src/components/Menu.tsx",
+    props: [],
+  },
+  "Input/Option": {
+    source: "src/components/Menu.tsx",
+    props: ["label", "selected", "disabled"],
+    stateProps: { selected: "selected" },
+  },
+  "Overlay/Dialog": {
+    source: "src/components/Dialog.tsx",
+    props: [
+      "title", "showClose", "children", "open", "onClose", "cancelLabel", "primaryLabel", "primaryKind", "primaryDisabled",
+      "onPrimary",
+    ],
+    codeOnly: {
+      open: "Whether the dialog is showing. In Figma a dialog is placed on the canvas or not.",
+      onClose: "Called for Cancel, the close button, and Escape; Figma has no behavior.",
+      cancelLabel: "In Figma, set on the exposed Cancel button instance.",
+      primaryLabel: "In Figma, set on the exposed Primary button instance.",
+      primaryKind: "In Figma, set on the exposed Primary button instance (Kind).",
+      primaryDisabled: "In Figma, set on the exposed Primary button instance (State).",
+      onPrimary: "Called for the primary action; Figma has no behavior.",
+    },
+  },
 };
 
 /** Coded components with no Figma component, each with the reason. */

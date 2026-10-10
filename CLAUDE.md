@@ -106,6 +106,8 @@ ui/                       Sterling in code (React + Storybook, Vite). Own packag
   src/components/         <Name>.tsx + .css + .stories.tsx. Variant props are typed with
                           VariantValue<"Controls/Button", "Kind"> (the parity check requires it); a new
                           component is added to src/parity/coded.ts. Class names: stl-<component>[--<value>]
+                          Select uses React Aria hooks (react-aria, react-stately) for behavior only;
+                          Dialog is a native <dialog>. No other runtime dependencies besides React
   src/stories/definitions.tsx  Docs text (docRegistry), controls and defaults, and the "All variants"
                           grid (columns = State, forced with the pseudo-states addon), all from definitions/
   src/parity/             parity.ts (how definitions map to code: no `state` prop; hover / focus /

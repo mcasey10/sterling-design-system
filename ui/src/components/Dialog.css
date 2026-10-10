@@ -1,0 +1,49 @@
+/* Overlay/Dialog. A raised surface with a border, 480px wide, or the window's width less a margin. */
+
+.stl-dialog {
+  box-sizing: border-box;
+  width: calc(var(--stl-size-40) * 12);
+  max-width: calc(100vw - var(--stl-space-32));
+  max-height: calc(100vh - var(--stl-space-32));
+  padding: 0;
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  border-radius: var(--stl-radius-md);
+  background: var(--stl-color-surface-raised);
+  color: var(--stl-color-text-primary);
+}
+.stl-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+/* Interim: Sterling has no scrim token yet, so the backdrop dims the page with the darkest neutral. */
+.stl-dialog::backdrop {
+  background: color-mix(in srgb, var(--stl-neutral-900) 50%, transparent);
+}
+
+.stl-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--stl-space-16);
+  padding: var(--stl-space-16) var(--stl-space-24);
+}
+.stl-dialog__title {
+  margin: 0;
+}
+.stl-dialog__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+  padding: var(--stl-space-4) var(--stl-space-24);
+  overflow-y: auto;
+}
+.stl-dialog__body p {
+  margin: 0;
+}
+.stl-dialog__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--stl-space-8);
+  padding: var(--stl-space-24);
+}
