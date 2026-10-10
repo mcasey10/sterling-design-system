@@ -80,7 +80,8 @@ sterling-design-system/
 │               ├── buildExample.ts   Runs the example build
 │               ├── loanData.ts       Sample data, eligibility rules, counts, views
 │               ├── loanPooling.ts    Screens, states, About frame, example components
-│               └── checks.ts         Data consistency + action-trigger checks
+│               ├── annotations.ts    Developer annotations on the Pool loans screen (one table)
+│               └── checks.ts         Data consistency, action triggers, grid layout, annotation targets
 │
 ├── scripts/                Node scripts (no Figma needed)
 │   ├── contrast-check.mjs     WCAG check of every text/background pair (Light and Dark)
@@ -307,7 +308,12 @@ Each **Build example** run starts with these, and failures appear in the notific
    view, …) must have a **visible** button or link with that label on a screen or state
    frame, and in the right place (e.g. Sign off must be in a bulk action bar, not only in a
    dialog). Adding an action to the docs without a trigger fails the build.
-3. **Grid chips read-back:** after filling each grid row, the plugin reads every status
+3. **Grid layout:** in every example grid, right-aligned header labels end exactly where their values
+   end, every numeric cell's content fits its column, and the header shows at most one sort icon.
+4. **Annotations:** the Pool loans screen carries developer annotations (press Shift+Y in Figma to
+   show or hide them). They come from one table, `annotations.ts`; the check fails if an
+   annotation's target layer is missing after the build.
+5. **Grid chips read-back:** after filling each grid row, the plugin reads every status
    chip back and warns if its label or tone doesn't match the data.
 
 ---

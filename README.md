@@ -193,6 +193,9 @@ pools have rules, a glossary) for readers without a mortgage-industry background
   share the extra width, while numeric and identifier columns (Loan ID) stay sized to their values, so
   header sort icons sit beside their labels.
   Views set columns as well as filters (Exceptions to sign off and Signed off add Sign-off note).
+- **Developer annotations** on the Pool loans screen (press Shift+Y to show or hide): accessibility and
+  behavior notes for engineers, from one table in `annotations.ts`. A build fails a check if a note's
+  target layer is missing.
 - **Example states**: Pool loans — filtered, View menu (open), Sign off dialog.
 - **About this example**: brief, pool and loan workflows, eligibility rules and how they
   appear, the filter model (filter, filter set, view, status; criteria aren't filters),

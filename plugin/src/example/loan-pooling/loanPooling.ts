@@ -5,6 +5,7 @@
 //     the leading underscore hides them from publishing).
 //   • Two 1440px screens, updated in place and tracked by node ID: Pool loans (the pool's own loans)
 //     and Add loans (candidates for the pool).
+//   • Developer annotations on the Pool loans screen, from the table in annotations.ts.
 //   • "Example states": Pool loans — filtered, View menu (open), Sign off dialog. Rebuilt each run.
 //   • "About this example": brief, workflows, rules, filter model, steps, assumptions. Rebuilt each run.
 // The workflow, rules and counts are defined in loanData.ts; see the header comment there.
@@ -27,7 +28,8 @@ import {
   SIGN_OFF_HINT, SUBMITTED_DATA, POOL_STATE_A_DATA, POOL_STATE_B_DATA, POOL_VIEW, EXCEPTIONS_VIEW, CANDIDATE_VIEW, filteredAddable, MAIN_WIDTH, Filter,
   poolTotal, candidateTotal, issueCount, pages, preview, millions, classify, PAGE_SIZE,
 } from "./loanData";
-import { checkData, checkActionTriggers, checkGridLayout } from "./checks";
+import { checkData, checkActionTriggers, checkGridLayout, checkAnnotations } from "./checks";
+import { applyAnnotations } from "./annotations";
 import { created, updated, warn } from "../../core/log";
 
 const WIDTH = SCREEN_WIDTH;
@@ -115,15 +117,6 @@ async function setText(inst: InstanceNode, layer: string, chars: string) {
 
 function fillWidth(node: SceneNode & LayoutMixin) {
   if (node.layoutSizingHorizontal !== "FILL") node.layoutSizingHorizontal = "FILL";
-}
-
-/** Dev Mode annotation (skipped quietly where the node type doesn't allow one). */
-function annotate(node: SceneNode, markdown: string) {
-  try {
-    (node as FrameNode).annotations = [{ labelMarkdown: markdown }];
-  } catch (e) {
-    warn(`Couldn't annotate "${node.name}": ${(e as Error).message}`);
-  }
 }
 
 function ensureHolder(kit: Kit, page: PageNode): FrameNode {
@@ -244,9 +237,6 @@ async function toolbar(
   const select = await ensureInstance(left, "View", variantOf(lib.select, { State: "default", Content: "value" }), 1);
   setSize(select, 200, select.height);
   setProps(select, { Label: "View", Value: view, "Show label": false, "Show helper": false });
-  annotate(select,
-    "**View select** — Input/Select with Show label off, next to an inline text label \"View\". In code, associate " +
-    "the label with the select (<label for> or aria-labelledby).");
   keep.push(select);
   for (const [i, label] of chips.entries()) {
     const c = await ensureInstance(left, `Filter ${i + 1}`, variantOf(lib.filterChip, { State: "default" }), keep.length);
@@ -828,6 +818,7 @@ async function buildAbout(kit: Kit, page: PageNode, lib: Library, at: { x: numbe
       "rules documented on the page. An example built with Sterling; start your own work from the blank Template page. " +
       "Planning diagrams live in the repo at docs/examples/loan-pooling/."
   );
+  await para(kit, head, "Developer annotations: press Shift+Y to show or hide.", "Caption");
 
   await businessContext(kit, root, lib);
 
@@ -972,6 +963,10 @@ export async function buildLoanExample(kit: Kit, page: PageNode, lib: Library): 
     kit, page, lib, { exceptionsGrid, stateAGrid, stateBGrid, poolBar, submittedGrid }, { x: add.root.x + WIDTH + GAP, y: add.root.y }, keep
   );
   await buildAbout(kit, page, lib, { x: states.x + states.width + GAP, y: states.y }, keep);
+
+  // Developer annotations live on the Pool loans screen only (annotations.ts).
+  await applyAnnotations(pool.root, [add.root]);
+  checkAnnotations(pool.root);
 
   // Action-trigger check: every action the example offers has a visible trigger on a screen or state.
   checkActionTriggers([pool.root, add.root, states]);

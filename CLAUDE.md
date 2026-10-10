@@ -80,7 +80,10 @@ plugin/
     buildExample.ts       "Build example": reads the library, builds the page, runs the checks
     loanPooling.ts        Screen, About frame, example components (_Example/*), state frames
     loanData.ts           Loan sample data, eligibility rules, counts, consistency check
-    checks.ts             Example checks: data consistency + action triggers (explicit ACTIONS list)
+    annotations.ts        THE table of developer annotations on the Pool loans screen (target layer, category,
+                          text); applied on every Build example
+    checks.ts             Example checks: data consistency, action triggers (explicit ACTIONS list),
+                          grid layout, annotation targets
   tsconfig.json           TypeScript config (uses @figma/plugin-typings)
   package.json            build (esbuild → dist/code.js), watch, typecheck
   dist/                   Build output (gitignored)

@@ -2,12 +2,14 @@
 // CHECK_FAILED, and main.ts counts them in the run notification ("example checks: N FAILED").
 //   • Data consistency: consistencyProblems() in loanData.ts (totals, views, selections, column widths).
 //   • Action triggers: every action in ACTIONS has a visible trigger on a screen or state frame.
+//   • Annotations: every developer annotation in annotations.ts is on its target layer after the build.
 //   • Grid layout: in every example grid, right-aligned header labels are flush with their values in every
 //     row, and every numeric cell's content fits its column.
 // Neither check reads descriptions or documentation text; those are for people only.
 
 import { consistencyProblems } from "./loanData";
 import { gridLayoutProblems, Dataset } from "../../library/components/grid";
+import { annotationProblems } from "./annotations";
 import { warn } from "../../core/log";
 
 /** Prefix for example check failures; main.ts counts them in the run notification. */
@@ -39,6 +41,11 @@ export const ACTIONS: { name: string; trigger: RegExp; within?: string }[] = [
 /** Data consistency: logs each problem in loanData.ts as a failure. */
 export function checkData() {
   for (const p of consistencyProblems()) warn(`${CHECK_FAILED} — data: ${p}`);
+}
+
+/** Annotations: every entry in the annotations table has its target layer, with the note on it. */
+export function checkAnnotations(screen: FrameNode) {
+  for (const p of annotationProblems(screen)) warn(`${CHECK_FAILED} — ${p}`);
 }
 
 /** Grid layout: flush right-aligned headers and numeric content that fits its column, in every example grid. */
