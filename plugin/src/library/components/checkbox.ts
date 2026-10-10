@@ -8,7 +8,7 @@ import {
   ensureFocusRing,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
-import { describe } from "../docRegistry";
+import { describe } from "../../../../definitions/docRegistry";
 
 export function checkboxSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   return {

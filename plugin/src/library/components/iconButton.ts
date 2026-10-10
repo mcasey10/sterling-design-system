@@ -7,7 +7,7 @@
 import { Kit, color, density, space, configureFrame, setSize } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference, ensureFocusRing } from "../../core/ensure";
 import type { IconIndex } from "../icons";
-import { describe } from "../docRegistry";
+import { describe } from "../../../../definitions/docRegistry";
 
 interface Look {
   fill?: string;

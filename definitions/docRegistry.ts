@@ -1,4 +1,5 @@
-// Documentation registry: the one table for every published component's documentation.
+// Documentation registry: the one table for every published component's documentation. Plain data, shared
+// by the Figma plugin (descriptions, documentation links, usage notes) and the coded layer (Docs pages).
 //   • description — exactly one sentence. It's the component's Figma description, shown in the Assets
 //     Details panel (click a component in Assets), the Component documentation panel, and Dev Mode.
 //     People read it; no check or build logic parses it.
@@ -10,7 +11,13 @@
 //     Guidelines › Component usage; set docs to send it elsewhere (e.g. a Storybook URL later).
 // Components whose names start with "_" (demo and example components) aren't published and need no entry.
 
-import type { GuidelineSection, PatternName } from "../core/helpers";
+/** Sections of the Guidelines page; each is a frame named "Guideline/<section>". */
+export type GuidelineSection =
+  | "Principles" | "Accessibility" | "Data display" | "Naming" | "States" | "Color" | "Icons" | "Component usage";
+/** Patterns on the Patterns page; each is a frame named "Pattern/<name>". */
+export type PatternName =
+  | "Filters, grid, and bulk actions" | "Bulk action bar" | "Filter panel and chips" | "Saved views" | "Status chips"
+  | "Warning and exception cells" | "Confirmation dialog" | "Form layout" | "Loading, empty, and error states";
 
 export type DocTarget =
   | { page: "Guidelines"; section: GuidelineSection }

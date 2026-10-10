@@ -3,7 +3,7 @@
 // Runs after the Guidelines and Patterns pages are drawn: those pages are redrawn on every build, so their
 // frames get new IDs and the links are refreshed each time.
 
-import { COMPONENT_DOCS, ICON_DOC, docFor, isPublished, targetFrameName, targetLabel, DocTarget } from "./docRegistry";
+import { COMPONENT_DOCS, ICON_DOC, docFor, isPublished, targetFrameName, targetLabel, DocTarget } from "../../../definitions/docRegistry";
 import { GUIDELINES_PAGE, PATTERNS_PAGE } from "../core/helpers";
 import { warn } from "../core/log";
 

@@ -6,7 +6,7 @@ import { Kit, color, space, configureFrame, frame, text } from "../../core/helpe
 import { ensureComponent, ensureFrame, ensureInstance, ensureText, ensureProp, prune, reference, setProps, variantOf } from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { warn } from "../../core/log";
-import { describe } from "../docRegistry";
+import { describe } from "../../../../definitions/docRegistry";
 
 export const DIALOG_WIDTH = 480;
 

@@ -24,7 +24,7 @@ import { textInputSpec, selectSpec } from "../components/inputs";
 import { COLLECTIONS } from "../../core/variables";
 import { tokens } from "../../core/tokens";
 import { created } from "../../core/log";
-import { describe, docFor, targetLabel } from "../docRegistry";
+import { describe, docFor, targetLabel } from "../../../../definitions/docRegistry";
 
 const ROOT = "Components";
 

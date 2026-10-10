@@ -4,7 +4,7 @@
 
 import { Kit, color, density, space, configureFrame, truncate } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureFrame, ensureText, ensureProp, prune, reference, ensureFocusRing } from "../../core/ensure";
-import { describe } from "../docRegistry";
+import { describe } from "../../../../definitions/docRegistry";
 
 export function tabSpec(kit: Kit): ComponentSetSpec {
   return {

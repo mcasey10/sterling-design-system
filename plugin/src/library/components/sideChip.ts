@@ -5,7 +5,7 @@
 
 import { Kit, color, space, configureFrame } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureText, prune } from "../../core/ensure";
-import { describe } from "../docRegistry";
+import { describe } from "../../../../definitions/docRegistry";
 
 const LABELS: Record<string, string> = { buy: "Buy", sell: "Sell" };
 

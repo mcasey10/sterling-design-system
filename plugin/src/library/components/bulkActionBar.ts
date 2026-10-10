@@ -10,7 +10,7 @@ import {
   ensureComponent, ensureFrame, ensureInstance, ensureText, ensureProp, prune, reference, setProps, variantOf,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
-import { describe } from "../docRegistry";
+import { describe } from "../../../../definitions/docRegistry";
 
 export interface BarAction {
   /** Layer name; keep stable so instance overrides survive reruns. */

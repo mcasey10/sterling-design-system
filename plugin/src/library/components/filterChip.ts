@@ -4,7 +4,7 @@
 import { Kit, size, color, density, space, configureFrame, setSize, truncate } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference, ensureFocusRing } from "../../core/ensure";
 import type { IconIndex } from "../icons";
-import { describe } from "../docRegistry";
+import { describe } from "../../../../definitions/docRegistry";
 
 export function filterChipSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   return {

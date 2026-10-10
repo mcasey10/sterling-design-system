@@ -5,7 +5,7 @@
 import { Kit, size, color, space, configureFrame, setSize, truncate } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference } from "../../core/ensure";
 import type { IconIndex } from "../icons";
-import { describe } from "../docRegistry";
+import { describe } from "../../../../definitions/docRegistry";
 
 export const TONE_ICONS: Record<string, string> = {
   positive: "circle-check",

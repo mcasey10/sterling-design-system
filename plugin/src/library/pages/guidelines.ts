@@ -12,7 +12,7 @@ import {
 import { para, definitions, docTable, doDont } from "../../core/docBlocks";
 import { variantOf, setProps } from "../../core/ensure";
 import type { Library } from "./componentsPage";
-import { COMPONENT_DOCS, ICON_DOC, DocTarget, targetLabel } from "../docRegistry";
+import { COMPONENT_DOCS, ICON_DOC, DocTarget, targetLabel } from "../../../../definitions/docRegistry";
 import { created, updated } from "../../core/log";
 
 const ROOT = "Guidelines";

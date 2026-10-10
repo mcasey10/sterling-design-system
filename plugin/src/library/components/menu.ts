@@ -9,7 +9,7 @@ import {
   setProps, ensureComponent, ensureFrame,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
-import { describe } from "../docRegistry";
+import { describe } from "../../../../definitions/docRegistry";
 
 export const MENU_WIDTH = 240;
 

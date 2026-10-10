@@ -10,7 +10,7 @@ import {
   ensureFocusRing,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
-import { describe } from "../docRegistry";
+import { describe } from "../../../../definitions/docRegistry";
 
 interface FieldLook {
   fill: string;

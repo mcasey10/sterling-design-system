@@ -6,7 +6,7 @@
 import { Kit, size, color, space, configureFrame, setSize, bindFill, bindRadius, rect, truncate, untruncate } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference } from "../../core/ensure";
 import type { IconIndex } from "../icons";
-import { describe } from "../docRegistry";
+import { describe } from "../../../../definitions/docRegistry";
 
 const WIDTH = 220;
 const PAD = 16;

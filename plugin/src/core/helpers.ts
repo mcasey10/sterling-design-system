@@ -380,13 +380,8 @@ export function doc(summary: string, use: string, dont: string): string {
   return `${summary}\n\nUse when: ${use}\nDon't use when: ${dont}`;
 }
 
-/** Sections of the Guidelines page; each is a frame named "Guideline/<section>". */
-export type GuidelineSection =
-  | "Principles" | "Accessibility" | "Data display" | "Naming" | "States" | "Color" | "Icons" | "Component usage";
-/** Patterns on the Patterns page; each is a frame named "Pattern/<name>". */
-export type PatternName =
-  | "Filters, grid, and bulk actions" | "Bulk action bar" | "Filter panel and chips" | "Saved views" | "Status chips"
-  | "Warning and exception cells" | "Confirmation dialog" | "Form layout" | "Loading, empty, and error states";
+// The Guidelines section and Patterns names live with the documentation registry, which refers to them.
+export type { GuidelineSection, PatternName } from "../../../definitions/docRegistry";
 
 /** Writes a component description, only when it differs, so reruns don't churn. */
 export function setDescription(node: ComponentNode | ComponentSetNode, text: string) {

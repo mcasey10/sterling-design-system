@@ -3,7 +3,7 @@
 
 import { Kit, space, configureFrame } from "../../core/helpers";
 import { ComponentSetSpec, Props, combos, ensureText, ensureProp, prune, reference, ensureFocusRing } from "../../core/ensure";
-import { describe } from "../docRegistry";
+import { describe } from "../../../../definitions/docRegistry";
 
 export function linkSpec(kit: Kit): ComponentSetSpec {
   return {

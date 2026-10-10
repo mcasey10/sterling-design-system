@@ -7,7 +7,7 @@
 //   • In the generic grid, each right-aligned header label is flush with the values below it, and every
 //     numeric cell's content fits its column.
 
-import { COMPONENT_DOCS, docFor, isOneSentence, targetLabel } from "./docRegistry";
+import { COMPONENT_DOCS, docFor, isOneSentence, targetLabel } from "../../../definitions/docRegistry";
 import { publishedComponents } from "./docLinks";
 import { GENERIC_DATA, gridLayoutProblems } from "./components/grid";
 import { COLLECTIONS } from "../core/variables";

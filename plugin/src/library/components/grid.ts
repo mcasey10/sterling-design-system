@@ -11,7 +11,7 @@ import {
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { warn } from "../../core/log";
-import { describe } from "../docRegistry";
+import { describe } from "../../../../definitions/docRegistry";
 
 // ------------------------------------------------------------ Datasets
 
