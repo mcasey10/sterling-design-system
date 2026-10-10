@@ -4,9 +4,11 @@
 //   • Every registry entry matches a published component (no stale entries).
 //   • Every published variable (Color, Spacing, Size, Density) has a description.
 //   • Every Primitives variable is hidden from publishing.
+//   • In the generic grid, each right-aligned header label is flush with the values below it.
 
 import { COMPONENT_DOCS, docFor, isOneSentence, targetLabel } from "./docRegistry";
 import { publishedComponents } from "./docLinks";
+import { GENERIC_DATA, headerAlignmentProblems } from "./components/grid";
 import { COLLECTIONS } from "../core/variables";
 import type { Kit } from "../core/helpers";
 import { warn } from "../core/log";
@@ -44,6 +46,9 @@ export function checkLibrary(kit: Kit, componentsPage: PageNode) {
       if (!variable.description.trim()) failures.push(`${key} has no description (add it to "$descriptions" in tokens.json)`);
     }
   }
+
+  const grid = components.find((c) => c.name === "Grid/Data grid");
+  if (grid?.type === "COMPONENT") failures.push(...headerAlignmentProblems(grid, GENERIC_DATA));
 
   for (const f of failures) warn(`${LIBRARY_CHECK_FAILED} — ${f}`);
   console.log(

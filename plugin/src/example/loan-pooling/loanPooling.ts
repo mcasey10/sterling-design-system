@@ -27,7 +27,7 @@ import {
   SIGN_OFF_HINT, SUBMITTED_DATA, POOL_STATE_A_DATA, POOL_STATE_B_DATA, POOL_VIEW, EXCEPTIONS_VIEW, CANDIDATE_VIEW, filteredAddable, MAIN_WIDTH, Filter,
   poolTotal, candidateTotal, issueCount, pages, preview, millions, classify, PAGE_SIZE,
 } from "./loanData";
-import { checkData, checkActionTriggers } from "./checks";
+import { checkData, checkActionTriggers, checkHeaderAlignment } from "./checks";
 import { created, updated, warn } from "../../core/log";
 
 const WIDTH = SCREEN_WIDTH;
@@ -975,5 +975,9 @@ export async function buildLoanExample(kit: Kit, page: PageNode, lib: Library): 
 
   // Action-trigger check: every action the example offers has a visible trigger on a screen or state.
   checkActionTriggers([pool.root, add.root, states]);
+  checkHeaderAlignment([
+    [poolGrid, POOL_DATA], [exceptionsGrid, EXCEPTIONS_DATA], [candidateGrid, CANDIDATE_DATA],
+    [stateAGrid, POOL_STATE_A_DATA], [stateBGrid, POOL_STATE_B_DATA], [submittedGrid, SUBMITTED_DATA],
+  ]);
   return pool.root;
 }

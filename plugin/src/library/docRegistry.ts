@@ -107,8 +107,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     description: "Labels a grid column, with optional sorting and left or right alignment.",
     details:
       "Sort (none / asc / desc) × Align (left / right) × State (default / hover / focus). Label and Show sort are " +
-      "component properties. The label fills the cell and truncates at its width; the sort icon follows it at the " +
-      "cell's right edge, directly beside a right-aligned label. " +
+      "component properties. The label fills the cell and truncates at its width; the sort icon sits at the cell edge " +
+      "(right edge for left-aligned headers, left edge for right-aligned ones, so the label stays flush with the numbers). " +
       "Height follows Density → row/height.",
     use: "labeling a grid column; use Align = right for numeric columns so headers line up with the numbers.",
     dont: "the column can't be sorted — turn Show sort off rather than using a different header.",

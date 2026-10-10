@@ -154,7 +154,8 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
   await definitions(kit, data, [
     ["Truncate text, never numbers", "Text (labels, names, text cell values) truncates with an ellipsis at a max width. Numbers never truncate — hidden digits are a risk in financial data."],
     ["Size numeric columns", "Width = characters × 7.5 + 24, rounded up to 8 (numericColumnWidth() in the plugin); add 16 for the gain / loss glyph. Size for the longest value the column can hold."],
-    ["Tabular figures, right aligned", "Numeric columns use the Numeric style (tabular figures) and right alignment, so digits line up. Numeric headers are right-aligned too, with the sort icon directly after the label."],
+    ["Tabular figures, right aligned", "Numeric columns use the Numeric style (tabular figures) and right alignment, so digits line up. Numeric headers are right-aligned too."],
+    ["Right-aligned headers", "Label flush with the values; the sort icon sits immediately to the label's left. Size numeric columns to their values (numericColumnWidth()) to keep it there: the icon is at the cell's left edge, so in a column wider than its values it drifts away from the label."],
     ["Compact notation in summaries", "Summary metrics show a compact value (e.g. $12.35B) with the full value in Detail."],
     ["Tabs, views, filters", "Tabs separate scopes; views are named filter sets; every applied filter is a chip; criteria that define a dataset are not filters."],
   ], 180);

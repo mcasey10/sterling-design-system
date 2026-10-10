@@ -64,9 +64,11 @@ export const GENERIC_DATA: Dataset = {
   columns: [
     { key: "select", label: "", type: "checkbox", width: 40 },
     { key: "id", label: "ID", type: "text", width: 96 },
-    { key: "name", label: "Name", type: "text", width: 200 },
-    { key: "amount", label: "Amount", type: "numeric", width: 120 },
-    { key: "percent", label: "Percent", type: "numeric", width: 96 },
+    { key: "name", label: "Name", type: "text", width: 240 },
+    // Numeric columns are sized to their values, not wider, so each header's sort icon sits beside its label:
+    // Amount by numericColumnWidth("2,100.00") = 88; Percent is 88 too, so its header label fits next to the icon.
+    { key: "amount", label: "Amount", type: "numeric", width: 88 },
+    { key: "percent", label: "Percent", type: "numeric", width: 88 },
     { key: "status", label: "Status", type: "chip", width: 120 },
   ],
   rows: [
@@ -114,12 +116,15 @@ export function headerCellSpec(kit: Kit, deps: GridDeps): ComponentSetSpec {
         strokeSides: { bottom: 1 },
       });
       // The label fills the cell and truncates at its width (instances can't override max width, so a
-      // fill is the only rule that follows each column's width). The sort icon always follows the label,
-      // at the cell's right edge. In a right-aligned header the label's text is right-aligned, so the icon
-      // sits directly beside it instead of alone at the far side of a wide column.
-      const label = await ensureText(kit, comp, "Label", "Column", "Label", ink, 0);
+      // fill is the only rule that follows each column's width). The sort icon sits at the cell edge:
+      // after the label for left-aligned headers, first for right-aligned ones, whose label is
+      // right-aligned so it stays flush with the numbers below. A hugging label with a max width would keep
+      // the icon beside the label in any column, but that max width can't follow an instance's width, so it
+      // would truncate too early in wide columns and overflow in narrow ones. Instead, size numeric columns to
+      // their values (numericColumnWidth): then the icon sits immediately to the label's left.
+      const label = await ensureText(kit, comp, "Label", "Column", "Label", ink, right ? 1 : 0);
       truncate(label, { fill: true, align: right ? "RIGHT" : "LEFT" });
-      const icon = await ensureInstance(comp, "Sort", deps.icons.get(SORT_ICONS[p.Sort])!, 1);
+      const icon = await ensureInstance(comp, "Sort", deps.icons.get(SORT_ICONS[p.Sort])!, right ? 0 : 1);
       setSize(icon, size(kit, "size/12"), size(kit, "size/12"));
       tintIcon(icon, color(kit, ink));
       // Header cells sit edge to edge, so the focus ring is drawn inside the cell.
@@ -394,6 +399,31 @@ export async function buildGrid(
   }
   prune(comp, keep);
   return comp;
+}
+
+/**
+ * Right-aligned headers must be flush with their values: in each numeric column, the right edge of the header
+ * label must match the right edge of the values below it. Returns one message per column that's off.
+ */
+export function headerAlignmentProblems(grid: ComponentNode, data: Dataset): string[] {
+  const problems: string[] = [];
+  const header = grid.children.find((c) => c.name === "Header" && c.type === "FRAME") as FrameNode | undefined;
+  const row = grid.children.find((c) => c.type === "INSTANCE") as InstanceNode | undefined;
+  if (!header || !row) return [`${grid.name}: no header or rows to compare`];
+  const rightEdge = (n: SceneNode | null | undefined) =>
+    n?.absoluteBoundingBox ? n.absoluteBoundingBox.x + n.absoluteBoundingBox.width : undefined;
+  const textIn = (parent: SceneNode | undefined, name: string) =>
+    parent && "findOne" in parent ? (parent.findOne((n) => n.type === "TEXT" && n.name === name) as TextNode | null) : null;
+  for (const col of data.columns) {
+    if (col.type !== "numeric") continue; // the columns whose header is right-aligned
+    const label = rightEdge(textIn(header.children.find((c) => c.name === `Head/${col.key}`), "Label"));
+    const value = rightEdge(textIn(row.children.find((c) => c.name === `Cell/${col.key}`), "Value"));
+    if (label === undefined || value === undefined) problems.push(`${grid.name}: "${col.label}" header label or value not found`);
+    else if (Math.abs(label - value) > 0.5) {
+      problems.push(`${grid.name}: the "${col.label}" header label ends ${Math.abs(label - value).toFixed(1)}px away from its values`);
+    }
+  }
+  return problems;
 }
 
 // ------------------------------------------------------------ Loading and empty states
