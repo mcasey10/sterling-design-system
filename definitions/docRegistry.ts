@@ -121,9 +121,10 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     details:
       "Sort (none / asc / desc) × Align (left / right) × State (default / hover / focus). Label and Show sort are " +
       "component properties. Only a sorted header (asc / desc) shows its icon at rest; an unsorted one reveals ⇕ on hover " +
-      "and focus, so a grid shows at most one sort icon. Show sort off means the column can't be sorted. The label fills " +
-      "the cell and truncates at its width; the sort icon sits at the cell edge (right edge for left-aligned headers, left " +
-      "edge for right-aligned ones, so the label stays flush with the numbers). " +
+      "and focus, so a grid shows at most one sort icon. Show sort off means the column can't be sorted. The sort icon " +
+      "belongs next to its label, and a right-aligned label stays flush with the numbers. In this component the label fills " +
+      "the cell and truncates at its width, so the icon sits at the cell edge: size numeric columns to their values and it " +
+      "lands beside the label. " +
       "Height follows Density → row/height.",
     use: "labeling a grid column; use Align = right for numeric columns so headers line up with the numbers.",
     dont: "the column can't be sorted — turn Show sort off rather than using a different header.",
@@ -139,7 +140,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "Type (text / numeric / gain / loss / chip / checkbox) × State (default / hover / selected / selected-hover / focus / " +
       "warning / warning-focus / error / error-focus). Numeric, gain and loss cells are right-aligned in the Numeric style and " +
       "never truncate (size the column instead); text values truncate. Gain and loss add ▲ / ▼ and finance/gain / loss — type " +
-      "the sign in Value (+1.25%, −0.80%). Warning and error add a border and an icon, so they never rely on color alone. " +
+      "the sign in Value (+1.25%, −0.80%). Warning and error add a border and an icon, so they never rely on color alone, " +
+      "and a flagged cell keeps its look while its row is hovered or selected. " +
       "Chip and Checkbox are exposed nested instances; swap the Chip to Chip/Side for buy / sell.",
     use: "building custom rows or tables from individual cells, or overriding one cell's state (e.g. a value that breaks a rule).",
     dont: "you need a whole row — use Grid/Row, which keeps cell widths and states consistent.",

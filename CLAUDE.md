@@ -188,6 +188,8 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
 - **Sort icons**: only the sorted column shows one at rest; an unsorted Grid/HeaderCell hides its icon
   layer (kept, not removed) until hover or focus. Both builds fail if a grid header shows more than one.
 - **Numeric columns** use tabular figures (Numeric style) and right alignment, so digits line up.
+  The intent: the sort icon always sits next to its label (code does this at any width; Figma approximates it,
+  with the icon at the cell edge). Flagged cells (warning / error) keep their look on hover and selection.
   Right-aligned header labels stay flush with the values; the sort icon sits to the label's left. Never
   change the HeaderCell layout to move the icon: size numeric columns to their values instead (see
   ARCHITECTURE.md, "Where Figma and code differ"). Both builds check the alignment.

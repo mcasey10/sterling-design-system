@@ -431,8 +431,11 @@ cell's content fits its column.
 
 The coded `HeaderCell` implements the rule exactly, at any column width: the label ends where the
 values end, the icon sits 4px to its left, and a label longer than its column truncates while the
-icon keeps its place (the "Right-aligned at any width" story shows all three). For the same reason
-a left-aligned header's icon follows its label in code, where Figma puts it at the cell's far edge.
+icon keeps its place (the "Right-aligned at any width" story shows all three).
+
+The intent, as Guidelines states it, is that **the sort icon always sits next to its label**. Code
+does that for both alignments. Figma approximates it: a left-aligned header's icon sits at the
+cell's right edge, away from a short label, because the label fills the cell.
 
 **Grid cells.** The coded cells are table cells (`<th>`, `<td>`), so they only work inside a table.
 In a chip or checkbox cell, the chip or checkbox is `children`; in Figma it is an exposed nested

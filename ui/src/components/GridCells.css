@@ -129,7 +129,8 @@ button.stl-header-cell__content {
 }
 
 /* Warning and error: a tinted fill, a full border, and an icon. The border is drawn over the padding, so
-   the value stays aligned with the values in other rows. Hover and selection don't change a flagged cell. */
+   the value stays aligned with the values in other rows. A flag stays visible: hover and selection don't
+   change a flagged cell. */
 .stl-body-cell--warning,
 .stl-body-cell--warning:hover {
   --stl-body-cell-fill: var(--stl-color-status-warning-subtle);

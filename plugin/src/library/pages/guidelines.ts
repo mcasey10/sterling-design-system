@@ -157,7 +157,8 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
     ["Tabular figures, right aligned", "Numeric columns use the Numeric style (tabular figures) and right alignment, so digits line up. Numeric headers are right-aligned too."],
     ["Column widths", "Size numeric and identifier columns (IDs, codes, reference numbers) to their values. When a grid has room to spare, only descriptive text columns (names, notes, reasons) stretch to take it up."],
     ["Sort indicators", "Only the sorted column shows a sort icon: ↑ ascending, ↓ descending. An unsorted, sortable header shows no icon at rest and reveals ⇕ on hover and on keyboard focus, so a grid shows at most one sort icon at rest. Sortability stays discoverable through that hover and focus icon and a pointer cursor; in code, set aria-sort on the sorted header. Turn Show sort off for a column that can't be sorted."],
-    ["Right-aligned headers", "Label flush with the values; the sort icon sits immediately to the label's left. Size numeric columns to their values (numericColumnWidth()) to keep it there: the icon is at the cell's left edge, so in a column wider than its values it drifts away from the label."],
+    ["Sort icon position", "The sort icon always sits next to its label: immediately after a left-aligned label, immediately before a right-aligned one. A right-aligned label stays flush with the values below it."],
+    ["Headers in this library", "The Figma header cell approximates that rule: its label fills the cell, so the icon sits at the cell's edge. For numeric columns, size the column to its values (numericColumnWidth()) and the icon lands beside the label; in a left-aligned column the icon stays at the right edge. The coded header keeps the icon beside the label at any width."],
     ["Compact notation in summaries", "Summary metrics show a compact value (e.g. $12.35B) with the full value in Detail."],
     ["Tabs, views, filters", "Tabs separate scopes; views are named filter sets; every applied filter is a chip; criteria that define a dataset are not filters."],
   ], 180);
@@ -183,6 +184,7 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
     ["Coverage by control type", "Interactive controls: default, hover, pressed, focus, disabled, and selected where it applies. Inputs and cells: error and warning. Data views: loading and empty."],
     ["One State axis", "State holds the element's UI state — interaction, plus selection and validation where the element has them. Conditions of the data use Status (e.g. Summary metric over-target)."],
     ["Combined values", "Where two states happen together, add a combined value instead of a second axis: selected-hover (rows, cells), error-focus and warning-focus (inputs, cells), selected-focus (tabs)."],
+    ["Flags stay visible", "A warning or error cell keeps its tinted fill, border, and icon while its row is hovered or selected. A flag is never hidden by another state."],
     ["No invalid combinations", "Every combination of variant properties exists and looks right (e.g. Summary metric has all four Status × State variants; loading looks the same for both Statuses)."],
   ], 180);
 
