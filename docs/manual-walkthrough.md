@@ -22,7 +22,7 @@ Figma is the same.
 5. In each variable's settings, **turn off all scopes** and tick **Hide from publishing**,
    so designers pick semantic colors instead of raw ones.
 
-**Compare:** Variables → Primitives (62 colors in groups); Foundations page → Primitives.
+**Compare:** Variables → Primitives (64 colors in groups); Foundations page → Primitives.
 
 ## 2. Semantic color variables with Light and Dark modes
 
@@ -64,15 +64,16 @@ height show variable names instead of numbers.
    `text/inverse` to the text color.
 2. Make it a component with **Ctrl+Alt+K** (Cmd+Option+K on Mac).
 3. In the right panel, choose **Add variant**. Figma wraps it in a **component set** with
-   a property called "Property 1". Rename it **Variant** and name this one `primary`.
+   a property called "Property 1". Rename it **Kind** and name this one `primary`.
 4. Add variants for `secondary`, `ghost` and `danger`, changing only which variables are
    applied (for example, `danger` uses `status/critical` for its fill).
-5. Add two more properties: **Size** (sm / md) and **State** (default / hover / disabled),
-   and fill in every combination (hover uses `accent/hover`; disabled uses
-   `surface/disabled` with `text/disabled`). That's 4 × 2 × 3 = 24 variants.
+5. Add two more properties: **Size** (sm / md) and **State** (default / hover / pressed / focus /
+   disabled), and fill in every combination (hover uses `accent/hover`; disabled uses
+   `surface/disabled` with `text/disabled`; focus adds a 2px `focus/ring` outline). That's
+   4 × 2 × 5 = 40 variants.
 
-**Compare:** Components page → Button (the 24 variants in a grid inside the dashed
-component-set box). Select the set to see the Variant, Size and State properties.
+**Compare:** Components page → Button (the 40 variants in a grid inside the dashed
+component-set box). Select the set to see the Kind, Size and State properties.
 
 ## 6. Component properties (per-instance edits that aren't variants)
 
@@ -137,10 +138,10 @@ Things to know:
 
 | Manual step | Code |
 |---|---|
-| 1–3: collections, modes, aliases, scopes | [`tokens/tokens.json`](../tokens/tokens.json) (values) and [`plugin/src/variables.ts`](../plugin/src/core/variables.ts) (creates them) |
-| 4: applying variables to layers | `configureFrame`, `bindFill` and `setNum` in [`plugin/src/helpers.ts`](../plugin/src/core/helpers.ts) |
-| 5–6: variants and properties | [`plugin/src/components/button.ts`](../plugin/src/library/components/button.ts): `combos(...)` creates the variants, `LOOKS` picks variables per variant and state, `wire` adds the properties |
-| 7: applying variable modes to frames | `pinMode` in [`plugin/src/helpers.ts`](../plugin/src/core/helpers.ts) |
+| 1–3: collections, modes, aliases, scopes | [`tokens/tokens.json`](../tokens/tokens.json) (values) and [`plugin/src/core/variables.ts`](../plugin/src/core/variables.ts) (creates them) |
+| 4: applying variables to layers | `configureFrame`, `bindFill` and `setNum` in [`plugin/src/core/helpers.ts`](../plugin/src/core/helpers.ts) |
+| 5–6: variants and properties | [`plugin/src/library/components/button.ts`](../plugin/src/library/components/button.ts): `combos(...)` creates the variants, `LOOKS` picks variables per variant and state, `wire` adds the properties |
+| 7: applying variable modes to frames | `pinMode` in [`plugin/src/core/helpers.ts`](../plugin/src/core/helpers.ts) |
 
 ## Practice
 
