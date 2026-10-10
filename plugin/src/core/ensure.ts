@@ -366,7 +366,7 @@ export function nested(inst: InstanceNode, name: string): InstanceNode | undefin
 }
 
 /** Cartesian product of variant property values, in declaration order. */
-export function combos(axes: Record<string, string[]>): Props[] {
+export function combos(axes: Record<string, readonly string[]>): Props[] {
   return Object.entries(axes).reduce<Props[]>(
     (acc, [key, values]) =>
       acc.reduce<Props[]>((out, p) => out.concat(values.map((val) => ({ ...p, [key]: val }))), []),

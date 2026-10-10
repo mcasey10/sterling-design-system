@@ -19,7 +19,7 @@ import { COMPONENTS, variantCount } from "../../../definitions/components";
 
 export const LIBRARY_CHECK_FAILED = "Library check failed";
 
-const sameSet = (a: string[], b: string[]) => a.length === b.length && a.every((x) => b.includes(x));
+const sameSet = (a: readonly string[], b: readonly string[]) => a.length === b.length && a.every((x) => b.includes(x));
 
 /**
  * Differences between a built component and its definition in definitions/components.ts: variant properties

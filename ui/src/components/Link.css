@@ -1,0 +1,15 @@
+/* Controls/Link. Always underlined, so a link is never marked by color alone. */
+
+.stl-link {
+  border-radius: var(--stl-radius-xs);
+  color: var(--stl-color-accent-default);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.stl-link:hover {
+  color: var(--stl-color-accent-hover);
+}
+.stl-link:focus-visible {
+  outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);
+  outline-offset: var(--stl-stroke-1);
+}

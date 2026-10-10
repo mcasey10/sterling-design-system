@@ -1,0 +1,7 @@
+/* Icon: sized by the Density icon size; colored by the text color of whatever contains it. */
+
+.stl-icon {
+  flex: none;
+  width: var(--stl-icon-size);
+  height: var(--stl-icon-size);
+}

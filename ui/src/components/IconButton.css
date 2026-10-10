@@ -1,0 +1,69 @@
+/* Controls/Icon button. Square, sized to the control height, which follows Density. States come from CSS. */
+
+.stl-icon-button {
+  --stl-icon-button-fill: transparent;
+  --stl-icon-button-border: transparent;
+  --stl-icon-button-icon: var(--stl-color-text-primary);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: var(--stl-stroke-1) solid var(--stl-icon-button-border);
+  border-radius: var(--stl-radius-sm);
+  background: var(--stl-icon-button-fill);
+  color: var(--stl-icon-button-icon);
+  cursor: pointer;
+}
+.stl-icon-button--md {
+  width: var(--stl-control-height);
+  height: var(--stl-control-height);
+}
+.stl-icon-button--sm {
+  width: var(--stl-control-height-sm);
+  height: var(--stl-control-height-sm);
+}
+
+.stl-icon-button--secondary {
+  --stl-icon-button-fill: var(--stl-color-surface-panel);
+  --stl-icon-button-border: var(--stl-color-border-strong);
+}
+.stl-icon-button--secondary:hover,
+.stl-icon-button--ghost:hover {
+  --stl-icon-button-fill: var(--stl-color-surface-hover);
+}
+.stl-icon-button--secondary:active,
+.stl-icon-button--ghost:active {
+  --stl-icon-button-fill: var(--stl-color-surface-pressed);
+}
+
+/* Danger sits quietly in a row until hovered; pressed fills solid critical. */
+.stl-icon-button--danger {
+  --stl-icon-button-icon: var(--stl-color-status-critical);
+}
+.stl-icon-button--danger:hover {
+  --stl-icon-button-fill: var(--stl-color-status-critical-subtle);
+  --stl-icon-button-icon: var(--stl-color-status-critical-strong);
+}
+.stl-icon-button--danger:active {
+  --stl-icon-button-fill: var(--stl-color-status-critical);
+  --stl-icon-button-icon: var(--stl-color-text-inverse);
+}
+
+.stl-icon-button:focus-visible {
+  outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);
+  outline-offset: var(--stl-stroke-1);
+}
+
+.stl-icon-button:disabled {
+  --stl-icon-button-fill: transparent;
+  --stl-icon-button-border: transparent;
+  --stl-icon-button-icon: var(--stl-color-text-disabled);
+  cursor: default;
+}
+.stl-icon-button--secondary:disabled {
+  --stl-icon-button-fill: var(--stl-color-surface-disabled);
+  --stl-icon-button-border: var(--stl-color-border-default);
+}

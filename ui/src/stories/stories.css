@@ -1,0 +1,38 @@
+/* Layout for the "All variants" grids and other story-only arrangements. Token values only. */
+
+.stl-variants {
+  border-collapse: separate;
+  border-spacing: var(--stl-space-16) var(--stl-space-12);
+}
+.stl-variants th {
+  color: var(--stl-color-text-secondary);
+  text-align: left;
+  white-space: nowrap;
+}
+.stl-variants td {
+  padding: 0;
+  vertical-align: middle;
+}
+.stl-story-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stl-space-12);
+}
+.stl-icon-gallery {
+  display: grid;
+  grid-template-columns: repeat(5, max-content);
+  gap: var(--stl-space-16) var(--stl-space-32);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.stl-icon-gallery li {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+  color: var(--stl-color-text-primary);
+}
+.stl-icon-gallery span {
+  color: var(--stl-color-text-secondary);
+}

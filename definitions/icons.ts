@@ -7,7 +7,7 @@ const FILL = 'fill="#000"';
 const ring = `<circle cx="8" cy="8" r="6.25" ${STROKE}/>`;
 const path = (d: string, attrs = STROKE) => `<path d="${d}" ${attrs}/>`;
 
-export const ICONS: Record<string, string> = {
+export const ICONS = {
   check: path("M3.5 8.5 L6.5 11.5 L12.5 4.5"),
   minus: path("M4 8 L12 8"),
   plus: path("M8 3.5 L8 12.5 M3.5 8 L12.5 8"),
@@ -28,7 +28,10 @@ export const ICONS: Record<string, string> = {
   "chevron-up": path("M4 10 L8 6 L12 10"),
   more: [3.5, 8, 12.5].map((x) => `<circle cx="${x}" cy="8" r="1.25" ${FILL}/>`).join(""),
   refresh: path("M13 8 A5 5 0 1 1 11.54 4.46") + path("M11.75 1.75 L11.75 4.75 L8.75 4.75"),
-};
+} satisfies Record<string, string>;
+
+/** The name of an icon, e.g. "plus". */
+export type IconName = keyof typeof ICONS;
 
 /** A complete 16 × 16 SVG document for a glyph body from ICONS. */
 export function svgFor(body: string) {

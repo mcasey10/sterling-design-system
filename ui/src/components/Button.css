@@ -1,0 +1,87 @@
+/* Controls/Button. Height, padding, gap, and icon size follow Density. States come from CSS:
+   :hover, :active (pressed), :focus-visible, and :disabled. */
+
+.stl-button {
+  --stl-button-fill: transparent;
+  --stl-button-border: transparent;
+  --stl-button-text: var(--stl-color-text-primary);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--stl-control-gap);
+  box-sizing: border-box;
+  margin: 0;
+  border: var(--stl-stroke-1) solid var(--stl-button-border);
+  border-radius: var(--stl-radius-sm);
+  background: var(--stl-button-fill);
+  color: var(--stl-button-text);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* The border sits inside the padding, so text starts at the same place with or without a visible border. */
+.stl-button--md {
+  height: var(--stl-control-height);
+  padding: 0 calc(var(--stl-control-padding-x) - var(--stl-stroke-1));
+}
+.stl-button--sm {
+  height: var(--stl-control-height-sm);
+  padding: 0 calc(var(--stl-control-padding-x-sm) - var(--stl-stroke-1));
+}
+
+.stl-button--primary {
+  --stl-button-fill: var(--stl-color-accent-default);
+  --stl-button-text: var(--stl-color-text-inverse);
+}
+.stl-button--primary:hover {
+  --stl-button-fill: var(--stl-color-accent-hover);
+}
+.stl-button--primary:active {
+  --stl-button-fill: var(--stl-color-accent-pressed);
+}
+
+.stl-button--secondary {
+  --stl-button-fill: var(--stl-color-surface-panel);
+  --stl-button-border: var(--stl-color-border-strong);
+}
+.stl-button--secondary:hover,
+.stl-button--ghost:hover {
+  --stl-button-fill: var(--stl-color-surface-hover);
+}
+.stl-button--secondary:active,
+.stl-button--ghost:active {
+  --stl-button-fill: var(--stl-color-surface-pressed);
+}
+
+/* Danger uses status/critical, never finance/sell, so Sell never reads as destructive. */
+.stl-button--danger {
+  --stl-button-fill: var(--stl-color-status-critical);
+  --stl-button-text: var(--stl-color-text-inverse);
+}
+.stl-button--danger:hover {
+  --stl-button-fill: var(--stl-color-status-critical-hover);
+}
+.stl-button--danger:active {
+  --stl-button-fill: var(--stl-color-status-critical-pressed);
+}
+
+/* The ring is 2px, 1px clear of the control, and never shifts layout. */
+.stl-button:focus-visible {
+  outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);
+  outline-offset: var(--stl-stroke-1);
+}
+
+.stl-button:disabled {
+  --stl-button-fill: var(--stl-color-surface-disabled);
+  --stl-button-border: transparent;
+  --stl-button-text: var(--stl-color-text-disabled);
+  cursor: default;
+}
+.stl-button--secondary:disabled {
+  --stl-button-border: var(--stl-color-border-default);
+}
+.stl-button--ghost:disabled {
+  --stl-button-fill: transparent;
+}

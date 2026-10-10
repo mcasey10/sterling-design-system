@@ -2,8 +2,8 @@
 // data. One source for two builds:
 //   • the Figma plugin creates each component's variants and properties from it, and its library checks
 //     fail if a built component doesn't match;
-//   • the coded layer types its props from it, generates its "All variants" stories from it, and its parity
-//     check fails if a coded component's props don't match.
+//   • the coded layer types its props from it (VariantValue), generates its "All variants" stories from it,
+//     and its parity check fails if a coded component's props don't match.
 // Names and values are written exactly as Figma shows them (sentence case: "Show icon"). In code a property
 // name becomes camelCase (showIcon); values keep the same strings.
 // Icons (Icon/<name>) have no properties and aren't listed; their glyphs are in icons.ts.
@@ -22,9 +22,9 @@ export interface PropertyDef {
 
 export interface ComponentDef {
   /** Variant properties in declaration order, each with its values in display order. */
-  variants: Record<string, string[]>;
+  variants: Record<string, readonly string[]>;
   /** Component properties (text, boolean, instance swap, slot), in the order they're created. */
-  properties: PropertyDef[];
+  properties: readonly PropertyDef[];
 }
 
 const text = (name: string, value: string): PropertyDef => ({ name, type: "TEXT", default: value });
@@ -32,9 +32,9 @@ const bool = (name: string, value: boolean): PropertyDef => ({ name, type: "BOOL
 const icon = (name: string, value: string): PropertyDef => ({ name, type: "INSTANCE_SWAP", default: value });
 const slot = (name: string): PropertyDef => ({ name, type: "SLOT" });
 
-const BUTTON_STATES = ["default", "hover", "pressed", "focus", "disabled"];
-const FIELD_STATES = ["default", "hover", "focus", "error", "error-focus", "warning", "disabled"];
-const OPTION_STATES = ["default", "hover", "selected", "disabled"];
+const BUTTON_STATES = ["default", "hover", "pressed", "focus", "disabled"] as const;
+const FIELD_STATES = ["default", "hover", "focus", "error", "error-focus", "warning", "disabled"] as const;
+const OPTION_STATES = ["default", "hover", "selected", "disabled"] as const;
 /** Input/Text and Input/Select share their properties; only the default value and placeholder differ. */
 const fieldProperties = (value: string, placeholder: string): PropertyDef[] => [
   text("Label", "Label"),
@@ -45,7 +45,7 @@ const fieldProperties = (value: string, placeholder: string): PropertyDef[] => [
   bool("Show helper", true),
 ];
 
-export const COMPONENTS: Record<string, ComponentDef> = {
+const DEFINITIONS = {
   "Controls/Button": {
     variants: { Kind: ["primary", "secondary", "ghost", "danger"], Size: ["sm", "md"], State: BUTTON_STATES },
     properties: [text("Label", "Button"), bool("Show icon", false), icon("Icon", "plus")],
@@ -150,7 +150,18 @@ export const COMPONENTS: Record<string, ComponentDef> = {
     variants: {},
     properties: [text("Title", "Dialog title"), bool("Show close", true), slot("Body")],
   },
-};
+} as const satisfies Record<string, ComponentDef>;
+
+/** Every definition, by component name. */
+export const COMPONENTS: Record<string, ComponentDef> = DEFINITIONS;
+
+/** The name of a defined component, e.g. "Controls/Button". */
+export type ComponentName = keyof typeof DEFINITIONS;
+/** The values of one variant property, as a union: VariantValue<"Controls/Button", "Kind"> is "primary" | "secondary" | … */
+export type VariantValue<
+  C extends ComponentName,
+  P extends keyof (typeof DEFINITIONS)[C]["variants"],
+> = (typeof DEFINITIONS)[C]["variants"][P] extends readonly (infer V)[] ? V : never;
 
 /** A component's definition; throws for a name that has none, so a typo fails loudly. */
 export function componentDef(name: string): ComponentDef {
