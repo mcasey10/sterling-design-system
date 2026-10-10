@@ -56,7 +56,10 @@ export interface Dataset {
 
 export const gridWidth = (data: Dataset) => data.columns.reduce((sum, c) => sum + c.width, 0);
 
-/** Neutral placeholder data for the reusable grid on the Components page. */
+/**
+ * Neutral placeholder data for the reusable grid on the Components page: fictional, generic records.
+ * Two rows are selected, matching the bulk action bar's default "2 selected".
+ */
 export const GENERIC_DATA: Dataset = {
   columns: [
     { key: "select", label: "", type: "checkbox", width: 40 },
@@ -67,11 +70,11 @@ export const GENERIC_DATA: Dataset = {
     { key: "status", label: "Status", type: "chip", width: 120 },
   ],
   rows: [
-    { values: { id: "ID-0001", name: "Item one", amount: "1,250.00", percent: "12.5%", status: "Active" } },
-    { values: { id: "ID-0002", name: "Item two", amount: "840.00", percent: "8.0%", status: "Pending" }, selected: true },
-    { values: { id: "ID-0003", name: "Item three", amount: "2,100.00", percent: "21.0%", status: "Flagged" } },
-    { values: { id: "ID-0004", name: "Item four", amount: "-35.00", percent: "0.0%", status: "Blocked" }, error: ["amount"] },
-    { values: { id: "ID-0005", name: "Item five", amount: "610.00", percent: "6.1%", status: "Draft" } },
+    { values: { id: "INV-20418", name: "Alder Street renewal", amount: "1,250.00", percent: "12.5%", status: "Active" } },
+    { values: { id: "INV-20419", name: "Kestrel onboarding", amount: "840.00", percent: "8.0%", status: "Pending" }, selected: true },
+    { values: { id: "INV-20423", name: "Marlow annual audit", amount: "2,100.00", percent: "21.0%", status: "Flagged" }, selected: true },
+    { values: { id: "INV-20431", name: "Tamarack migration", amount: "-35.00", percent: "0.0%", status: "Blocked" }, error: ["amount"] },
+    { values: { id: "INV-20436", name: "Quillon site survey", amount: "610.00", percent: "6.1%", status: "Draft" } },
   ],
   tones: { Active: "positive", Pending: "info", Flagged: "warning", Blocked: "critical", Draft: "neutral" },
   sortKey: "id",
@@ -111,12 +114,12 @@ export function headerCellSpec(kit: Kit, deps: GridDeps): ComponentSetSpec {
         strokeSides: { bottom: 1 },
       });
       // The label fills the cell and truncates at its width (instances can't override max width, so a
-      // fill is the only rule that follows each column's width). The sort icon sits at the cell edge:
-      // after the label for left-aligned headers, first for right-aligned ones, whose label is
-      // right-aligned so it lines up with the numbers below.
-      const label = await ensureText(kit, comp, "Label", "Column", "Label", ink, right ? 1 : 0);
+      // fill is the only rule that follows each column's width). The sort icon always follows the label,
+      // at the cell's right edge. In a right-aligned header the label's text is right-aligned, so the icon
+      // sits directly beside it instead of alone at the far side of a wide column.
+      const label = await ensureText(kit, comp, "Label", "Column", "Label", ink, 0);
       truncate(label, { fill: true, align: right ? "RIGHT" : "LEFT" });
-      const icon = await ensureInstance(comp, "Sort", deps.icons.get(SORT_ICONS[p.Sort])!, right ? 0 : 1);
+      const icon = await ensureInstance(comp, "Sort", deps.icons.get(SORT_ICONS[p.Sort])!, 1);
       setSize(icon, size(kit, "size/12"), size(kit, "size/12"));
       tintIcon(icon, color(kit, ink));
       // Header cells sit edge to edge, so the focus ring is drawn inside the cell.

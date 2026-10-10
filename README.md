@@ -71,7 +71,7 @@ indeterminate × State: default / hover / focus / disabled; Label and Show label
 | `Grid/HeaderCell` | Sort (none / asc / desc) × Align (left / right) × State (default / hover / focus) | Label and Show sort properties |
 | `Grid/BodyCell` | Type (text / numeric / gain / loss / chip / checkbox) × State (default / hover / selected / selected-hover / focus / warning / warning-focus / error / error-focus), 54 variants | Value property; gain / loss add ▲ / ▼ and finance/gain / loss; Chip and Checkbox are exposed nested instances (swap the Chip to Chip/Side for buy / sell); warning and error add a border and icon |
 | `Grid/Row` | State (default / hover / selected / selected-hover) | Checkbox cell + generic columns (ID, Name, Amount, Percent, Status) built from BodyCell instances |
-| `Grid/Data grid` | — | Generic grid with placeholder data: one selected row, one error cell |
+| `Grid/Data grid` | — | Generic grid with placeholder data: two selected rows, one error cell |
 | `Grid/Pagination` | — | Range and Page properties; Previous / Next are exposed Button instances (set disabled on the first or last page) |
 | `Grid/Skeleton row` | — | Loading placeholder with the generic grid's column widths (`surface/skeleton` bars); Label and Show label add "Loading rows…" |
 | `Grid/Empty state` | Tone (neutral / critical) | No results / nothing yet, or a load error; Title and Message text layers; Show action and an exposed Action button (Clear filters / Retry) |
@@ -93,7 +93,7 @@ never truncate, because hidden digits are a risk in financial data.
 
 | Component | Text that truncates | Max width |
 |---|---|---|
-| `Grid/HeaderCell` | Label (fills the cell; sort icon at the cell edge — right edge for left-aligned, left edge for right-aligned headers) | cell width minus padding and the sort icon |
+| `Grid/HeaderCell` | Label (fills the cell; the sort icon follows it at the cell's right edge, directly beside a right-aligned label) | cell width minus padding and the sort icon |
 | `Grid/BodyCell` (text) | Value | fills the cell (cell width − padding) |
 | `Grid/BodyCell` (numeric, gain, loss) | — never truncates | hugs; size the column with `numericColumnWidth()`: characters × 7.5 + 24 (+ 16 for the gain / loss glyph), rounded up to 8 |
 | `Chip/Status` | Label | 160px |

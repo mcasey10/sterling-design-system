@@ -6,3 +6,5 @@ import pkg from "../../../package.json";
 export const NAME = "Sterling";
 export const TAGLINE = "A design system for data-dense applications";
 export const VERSION: string = pkg.version;
+/** Author credit shown on the cover. */
+export const CREDIT = "Michael Casey · 2026";

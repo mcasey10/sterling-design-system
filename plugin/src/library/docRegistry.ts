@@ -107,8 +107,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     description: "Labels a grid column, with optional sorting and left or right alignment.",
     details:
       "Sort (none / asc / desc) × Align (left / right) × State (default / hover / focus). Label and Show sort are " +
-      "component properties. The label fills the cell and truncates at its width; the sort icon sits at the cell edge " +
-      "(right edge for left-aligned headers, left edge for right-aligned ones so the label lines up with the numbers). " +
+      "component properties. The label fills the cell and truncates at its width; the sort icon follows it at the " +
+      "cell's right edge, directly beside a right-aligned label. " +
       "Height follows Density → row/height.",
     use: "labeling a grid column; use Align = right for numeric columns so headers line up with the numbers.",
     dont: "the column can't be sorted — turn Show sort off rather than using a different header.",
@@ -135,7 +135,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
   },
   "Grid/Data grid": {
     description: "A generic data grid with placeholder rows, to override or rebuild for a real dataset.",
-    details: "Generic grid with placeholder data: one selected row and one cell in the error state. Override values per screen.",
+    details: "Generic grid with placeholder data: two selected rows and one cell in the error state. Override values per screen.",
     use: "starting a data view quickly; override headers and cell values, or rebuild rows from Grid/Row.",
     dont: "the layout isn't tabular (use cards or a list).",
     related: [guidelines("Data display"), patterns("Filters, grid, and bulk actions"), patterns("Loading, empty, and error states")],
