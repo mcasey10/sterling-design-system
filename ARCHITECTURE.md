@@ -318,15 +318,19 @@ Every published component's documentation comes from one table,
 
 | Field | Shown where |
 |---|---|
-| `description`: exactly one sentence | The component's Figma description: Assets panel hover and Dev Mode |
+| `description`: exactly one sentence | The component's Figma description: the Assets Details panel (click a component in Assets), the Component documentation panel, and Dev Mode |
 | `details`: variants, properties, rules | The usage note under the component on the Components page |
-| `use` / `dont` | The usage note, and the Component usage table on the Guidelines page |
-| `docs`: where the full guidance lives | The component's documentation link, and the usage note's "Full guidance" line |
+| `use` / `dont` | The usage note, and the component's entry under Guidelines › Component usage |
+| `related`: Guidelines sections and Patterns that apply | "Related" links in the component's entry |
+| `docs` (optional): where the documentation link goes | By default, the component's own entry under Guidelines › Component usage |
 
-`docs` names a place (for example "Guidelines › Data display" or "Patterns › Form layout"),
-not a URL. At the end of each Build library run, after the Guidelines and Patterns pages are
-redrawn (their frames get new IDs), the plugin turns it into a link to that frame in this file.
-Later, an entry can point to a Storybook URL instead, without touching the components.
+Every component has its own entry on the Guidelines page (a frame named `Component/<name>`
+under Component usage) with a live preview, its details, when to use it, and links to the
+related rules. Its documentation link opens that entry; icons share the Icons section. Targets
+are named as places, not URLs: at the end of each Build library run, after the Guidelines and
+Patterns pages are redrawn (their frames get new IDs), the plugin turns each one into a link
+to that frame in this file. Later, an entry can set `docs` to a Storybook URL instead, without
+touching the components.
 Descriptions are for people: no check or build logic parses them.
 
 Every published variable in Color, Spacing, Size, and Density has a description from

@@ -37,7 +37,7 @@ and Code (Roboto Mono).
 | **Read me** | Yes | Guide to using Sterling. Redrawn every run, so don't edit it by hand. |
 | **Foundations** | Yes | Color swatches (Light and Dark), primitive ramps, type specimens, spacing, radius and density panels, all bound to the variables they show. Redrawn every run. |
 | **Components** | Yes | The component library (below), with neutral placeholder content. Updated in place, so instances stay linked and keep their overrides. |
-| **Guidelines** | Yes | Design principles (good vs bad table), accessibility, data display, naming, states and color rules, with do / don't pairs built from Sterling instances; icons; and Component usage (when to use each component). Each section is a `Guideline/<name>` frame, and component documentation links point here. Redrawn every run. |
+| **Guidelines** | Yes | Design principles (good vs bad table), accessibility, data display, naming, states and color rules, with do / don't pairs built from Sterling instances; icons; and Component usage (one `Component/<name>` entry per component, which its documentation link opens). Each section is a `Guideline/<name>` frame. Redrawn every run. |
 | **Patterns** | Yes | Three compositions built only from Sterling instances, each with numbered notes and use / don't-use guidance: filters + grid + bulk actions, form layout, and loading / empty / error states. Redrawn every run. |
 | **Template** | Yes | `Template/Desktop 1440`: a blank 1440 × 900 skeleton on a 12-column grid (16px margins and gutters, bound to `space/16`), with an app bar and empty slots for filters (2 cols), main content (8 cols) and summary (2 cols). |
 | **Component architecture** | Yes | A reference on component architecture: variants, properties, slots, and hierarchy. See [Component architecture page](#component-architecture-page). |
@@ -47,8 +47,10 @@ If the file only has an empty "Page 1", it's renamed to "Read me".
 
 **Documentation:** every published component's documentation comes from one table,
 [`plugin/src/library/docRegistry.ts`](plugin/src/library/docRegistry.ts): a one-sentence description
-(Assets panel and Dev Mode), a usage note under the component on the Components page (details,
-use when, don't use when), and a documentation link to its Guidelines or Patterns frame. Links need
+(shown in the Assets Details panel when you click a component, in the Component documentation
+panel, and in Dev Mode), a usage note under the component on the Components page (details, use
+when, don't use when), and a documentation link to the component's own entry under Guidelines ›
+Component usage, which links on to the related Guidelines sections and Patterns. Links need
 the file key (`enablePrivatePluginApi` in the manifest); without it the run logs a warning and the
 library checks fail.
 

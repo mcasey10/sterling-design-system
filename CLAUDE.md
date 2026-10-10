@@ -57,7 +57,8 @@ plugin/
     buildLibrary.ts       "Build library": variables, styles, every library page, link check
     libraryLoader.ts      Read-only library lookup, used by "Build example"
     docRegistry.ts        THE table of component documentation: one-sentence description, details,
-                          use / don't use, documentation target. Every published component needs an entry
+                          use / don't use, related guidance. Every published component needs an entry;
+                          its documentation link opens its own entry under Guidelines › Component usage
     docLinks.ts           Sets documentation links from the registry (after Guidelines / Patterns are drawn)
     checks.ts             Library checks: descriptions, doc links, registry coverage, hidden Primitives
     icons.ts              Icon/<name> components (original outline glyphs, layer "Glyph")

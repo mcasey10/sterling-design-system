@@ -1,7 +1,8 @@
 // Guidelines page: Sterling's design principles and rules — accessibility, data display, naming,
 // states, color, icons, and component usage — with do / don't pairs built from Sterling instances. Domain-neutral.
 // Documentation only, so it is rebuilt on each run (at the same position). Each section is a frame
-// named "Guideline/<section>"; components' documentation links point here (library/docLinks.ts).
+// named "Guideline/<section>"; each component's documentation link opens its "Component/<name>" entry
+// under Component usage (library/docLinks.ts).
 
 import { tokens } from "../../core/tokens";
 import { COLLECTIONS } from "../../core/variables";
@@ -11,7 +12,7 @@ import {
 import { para, definitions, docTable, doDont } from "../../core/docBlocks";
 import { variantOf, setProps } from "../../core/ensure";
 import type { Library } from "./componentsPage";
-import { COMPONENT_DOCS, ICON_DOC } from "../docRegistry";
+import { COMPONENT_DOCS, ICON_DOC, DocTarget, targetLabel } from "../docRegistry";
 import { created, updated } from "../../core/log";
 
 const ROOT = "Guidelines";
@@ -63,6 +64,25 @@ function cells(kit: Kit, lib: Library, name: string, type: string, values: strin
   return col;
 }
 
+const sentence = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+/**
+ * "Related" row: one underlined link per target, in text layers named "Related/<target label>". The links
+ * themselves are set by library/docLinks.ts once every target frame exists.
+ */
+async function relatedLinks(kit: Kit, parent: FrameNode, targets: DocTarget[]) {
+  const row = frame("Related", { direction: "HORIZONTAL", align: "CENTER", gap: space(kit, "space/12"), wrap: true });
+  parent.appendChild(row);
+  row.layoutSizingHorizontal = "FILL";
+  row.appendChild(await text(kit, "Related", "Body-strong"));
+  for (const t of targets) {
+    const link = await text(kit, targetLabel(t), "Body", "accent/default");
+    link.name = `Related/${targetLabel(t)}`;
+    link.textDecoration = "UNDERLINE";
+    row.appendChild(link);
+  }
+}
+
 export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): Promise<FrameNode> {
   const pos = takeOver(page, ROOT);
   const root = frame(ROOT, {
@@ -86,7 +106,7 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
   await para(
     kit, header,
     "The rules Sterling's components follow, and that screens built from them should follow too. Each component's " +
-      "documentation link points to the section with its full guidance, and Component usage says when to use each one. " +
+      "documentation link opens its entry under Component usage, which links to the rules that apply to it. " +
       `For complete compositions, see the ${PATTERNS_PAGE} page.`
   );
 
@@ -186,6 +206,8 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
     ["Size", "16px by default. Parent components bind icon width and height to Density → icon/size (12 / 16 / 16) or a size/* step; do the same when you place an icon yourself."],
     ["Color", "Icons have no color of their own: the component using one recolors its Glyph layer with a Color variable. When you place an icon yourself, bind its color to a Color variable (text/secondary for decoration, a status/*-strong color for meaning) so it follows Light/Dark."],
     ["Meaning", "An icon is never the only signal. Pair it with a label, or give an icon-only control an accessible name (Controls/Icon button's Label)."],
+    ["Use when", sentence(ICON_DOC.use)],
+    ["Don't use when", sentence(ICON_DOC.dont)],
     ["More icons", "Sterling's Icon/* set is small. If an icon library is enabled in the file (e.g. Material Symbols), use its icons too: size them to 16 (or bind to icon/size) and bind their color to a Color variable so they follow Light/Dark. Button's Icon property can swap to any icon via the instance swap menu."],
   ], 180);
   const iconRow = frame("Icon set", { direction: "HORIZONTAL", gap: space(kit, "space/16"), wrap: true });
@@ -197,18 +219,40 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
     cell.appendChild(icon.createInstance());
     cell.appendChild(await text(kit, name, "Caption", "text/secondary"));
   }
+  await relatedLinks(kit, iconSection, ICON_DOC.related);
 
   // ---------------------------------------------------------------- Component usage
+  // One entry per published component, named "Component/<name>": each component's documentation link opens
+  // its own entry here (library/docLinks.ts).
   const usage = await section(
     kit, root, "Component usage",
-    "When to use each component, and when to use something else. The same guidance appears under each component on the Components page."
+    "One entry per component: what it is, when to use it, when to use something else, and the rules that apply. " +
+      "Each component's documentation link opens its entry here."
   );
-  const sentence = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-  const usageRows: string[][] = [
-    ...Object.entries(COMPONENT_DOCS).map(([name, d]) => [name, sentence(d.use), sentence(d.dont)]),
-    ["Icon/*", sentence(ICON_DOC.use), sentence(ICON_DOC.dont)],
-  ];
-  await docTable(kit, usage, "Usage table", ["Component", "Use when", "Don't use when"], usageRows, [220, 400]);
+  const componentsPage = figma.root.children.find((p) => p.name === "Components");
+  for (const [name, d] of Object.entries(COMPONENT_DOCS)) {
+    const entry = frame(`Component/${name}`, {
+      gap: space(kit, "space/8"),
+      padding: { y: space(kit, "space/16") },
+      stroke: color(kit, "border/default"),
+      strokeSides: { top: 1 },
+    });
+    usage.appendChild(entry);
+    entry.layoutSizingHorizontal = "FILL";
+    entry.appendChild(await text(kit, name, "Heading"));
+    await para(kit, entry, d.description, "Body", "text/primary");
+    // Live preview: the component's default variant.
+    const main = componentsPage?.findOne((n) => (n.type === "COMPONENT_SET" || n.type === "COMPONENT") && n.name === name);
+    const source = main?.type === "COMPONENT_SET" ? main.defaultVariant : (main as ComponentNode | undefined);
+    if (source) {
+      const preview = frame("Preview", { padding: space(kit, "space/16"), fill: color(kit, "surface/background"), radius: space(kit, "radius/sm") });
+      entry.appendChild(preview);
+      preview.appendChild(source.createInstance());
+    }
+    await para(kit, entry, d.details);
+    await definitions(kit, entry, [["Use when", sentence(d.use)], ["Don't use when", sentence(d.dont)]], 140);
+    if (d.related.length) await relatedLinks(kit, entry, d.related);
+  }
 
   const footer = frame("Footer", {});
   root.appendChild(footer);

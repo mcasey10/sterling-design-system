@@ -3,7 +3,7 @@
 // Runs after the Guidelines and Patterns pages are drawn: those pages are redrawn on every build, so their
 // frames get new IDs and the links are refreshed each time.
 
-import { docFor, isPublished, DocTarget } from "./docRegistry";
+import { COMPONENT_DOCS, ICON_DOC, docFor, isPublished, targetFrameName, targetLabel, DocTarget } from "./docRegistry";
 import { GUIDELINES_PAGE, PATTERNS_PAGE } from "../core/helpers";
 import { warn } from "../core/log";
 
@@ -17,7 +17,7 @@ export function publishedComponents(page: PageNode): (ComponentNode | ComponentS
 function targetFrame(target: DocTarget, pages: Map<string, PageNode>): FrameNode | null {
   if ("url" in target) return null;
   const page = pages.get(target.page === "Guidelines" ? GUIDELINES_PAGE : PATTERNS_PAGE);
-  const name = target.page === "Guidelines" ? `Guideline/${target.section}` : `Pattern/${target.pattern}`;
+  const name = targetFrameName(target);
   return (page?.findOne((n) => n.type === "FRAME" && n.name === name) as FrameNode | null) ?? null;
 }
 
@@ -52,9 +52,24 @@ export async function applyDocLinks(componentsPage: PageNode, pages: Map<string,
     const link = entry && resolve(entry.docs, pages, key);
     const text = note.findChild((n) => n.type === "TEXT" && n.name === "Guidance link") as TextNode | null;
     if (!link || !text) continue;
-    if (JSON.stringify(text.hyperlink) !== JSON.stringify(link.hyperlink)) {
-      await figma.loadFontAsync(text.fontName as FontName);
-      text.hyperlink = link.hyperlink;
-    }
+    await setHyperlink(text, link.hyperlink);
   }
+
+  // "Related" links in each component's entry under Guidelines › Component usage: text layers named
+  // "Related/<target label>". Pattern frames don't exist yet when the Guidelines page is drawn, so they're linked here.
+  const related = new Map<string, DocTarget>();
+  for (const doc of [...Object.values(COMPONENT_DOCS), ICON_DOC]) for (const t of doc.related) related.set(targetLabel(t), t);
+  const guidelinesPage = pages.get(GUIDELINES_PAGE);
+  for (const text of (guidelinesPage?.findAll((n) => n.type === "TEXT" && n.name.startsWith("Related/")) ?? []) as TextNode[]) {
+    const target = related.get(text.name.slice("Related/".length));
+    const link = target && resolve(target, pages, key);
+    if (link) await setHyperlink(text, link.hyperlink);
+    else warn(`Related link "${text.name.slice("Related/".length)}" has no target frame.`);
+  }
+}
+
+async function setHyperlink(text: TextNode, target: HyperlinkTarget) {
+  if (JSON.stringify(text.hyperlink) === JSON.stringify(target)) return;
+  await figma.loadFontAsync(text.fontName as FontName);
+  text.hyperlink = target;
 }
