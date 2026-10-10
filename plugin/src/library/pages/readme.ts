@@ -40,7 +40,7 @@ export async function buildReadme(kit: Kit, page: PageNode): Promise<FrameNode> 
 
   const contents = await docSection(kit, root, "What's in Sterling");
   await definitions(kit, contents, [
-    ["Variables", "Primitives (color ramps) · Color (Light, Dark) · Spacing (space, radius) · Size (fixed widths and heights) · Density (Compact, Default, Comfortable). Color aliases Primitives; Density aliases Size and Spacing, so sizes stay on-scale."],
+    ["Variables", "Primitives (color ramps) · Color (Light, Dark) · Spacing (space, radius) · Size (fixed widths and heights) · Density (Compact, Default, Comfortable). Color aliases Primitives; Density aliases Size and Spacing, so sizes stay on-scale. Every Color, Spacing, Size, and Density variable has a description saying what it's for; Primitives are hidden."],
     ["Text styles", "Inter: Display, Title, Heading, Body, Body-strong, Label, Caption, Numeric. Roboto Mono: Code."],
     ["Foundations", "Color swatches for both modes, primitive ramps, type specimens, spacing, radius, and density panels."],
     ["Components", "Icons, Button, Icon button, Status chip, Side chip, Checkbox, data grid (header cell, body cell with gain / loss, row, grid, pagination, skeleton row, empty state), bulk action bar, filter chip, summary metric, text input, select with menu and options, and tabs — with neutral placeholder content, every interactive state, loading and empty states, and an Edge cases section. Each has a one-sentence description (click a component in the Assets panel to see it in Details), a usage note (details, when to use it, and when not), and a documentation link to its entry on the Guidelines page."],

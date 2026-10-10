@@ -2,6 +2,7 @@
 // LIBRARY_CHECK_FAILED, and the run notification shows "library checks: N FAILED".
 //   • Every published component has a registry entry, a one-sentence description, and a documentation link.
 //   • Every registry entry matches a published component (no stale entries).
+//   • Every published variable (Color, Spacing, Size, Density) has a description.
 //   • Every Primitives variable is hidden from publishing.
 
 import { COMPONENT_DOCS, docFor, isOneSentence, targetLabel } from "./docRegistry";
@@ -33,16 +34,22 @@ export function checkLibrary(kit: Kit, componentsPage: PageNode) {
   }
 
   let primitives = 0;
+  let published = 0;
   for (const [key, variable] of kit.vars) {
-    if (!key.startsWith(`${COLLECTIONS.primitives}/`)) continue;
-    primitives++;
-    if (!variable.hiddenFromPublishing) failures.push(`Primitives/${variable.name} isn't hidden from publishing`);
+    if (key.startsWith(`${COLLECTIONS.primitives}/`)) {
+      primitives++;
+      if (!variable.hiddenFromPublishing) failures.push(`Primitives/${variable.name} isn't hidden from publishing`);
+    } else {
+      published++;
+      if (!variable.description.trim()) failures.push(`${key} has no description (add it to "$descriptions" in tokens.json)`);
+    }
   }
 
   for (const f of failures) warn(`${LIBRARY_CHECK_FAILED} — ${f}`);
   console.log(
     `[sterling] Library checks — ${components.length} published components (description, one sentence, documentation link), ` +
-      `${Object.keys(COMPONENT_DOCS).length} registry entries, ${primitives} Primitives hidden: ` +
+      `${Object.keys(COMPONENT_DOCS).length} registry entries, ${published} published variables (description), ` +
+      `${primitives} Primitives hidden: ` +
       `${failures.length ? `${failures.length} failed` : "pass"}`
   );
 }

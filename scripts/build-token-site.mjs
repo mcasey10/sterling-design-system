@@ -91,7 +91,7 @@ function colorSection() {
     const d = resolveColor(tokens, primitives, name, DARK);
     const cell = (r, mode) =>
       `<td><div class="token-value">${swatch(r.hex, `${name} in ${mode}: ${r.hex}`)}<span><code>${esc(r.alias ?? r.hex)}</code><br><span class="muted">${r.hex}</span></span></div></td>`;
-    return `<tr><th scope="row"><code>${esc(name)}</code><div class="note">${esc(noteFor(name))}</div></th>${cell(l, LIGHT)}${cell(d, DARK)}<td><code>--color-${slug(name)}</code></td></tr>`;
+    return `<tr><th scope="row"><code>${esc(name)}</code><div class="note">${esc([tokens.color.$descriptions?.[name], noteFor(name)].filter(Boolean).join(" "))}</div></th>${cell(l, LIGHT)}${cell(d, DARK)}<td><code>--color-${slug(name)}</code></td></tr>`;
   });
   return `
   <section id="color">

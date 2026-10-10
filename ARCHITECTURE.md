@@ -83,7 +83,7 @@ sterling-design-system/
 │
 ├── scripts/                Node scripts (no Figma needed)
 │   ├── contrast-check.mjs     WCAG check of every text/background pair (Light and Dark)
-│   ├── check-tokens.mjs       Every published variable has a description; versions agree
+│   ├── check-tokens.mjs       Every published token has a description; versions agree
 │   ├── build-token-site.mjs   Token reference website → site/
 │   └── lib/tokens.mjs         Shared token loading and contrast math
 │
@@ -159,7 +159,7 @@ From the repo root:
 | Command | Checks |
 |---|---|
 | `npm run contrast` | Every text/background pair in both color modes meets WCAG (4.5:1 text, 3:1 large text and UI). 248 pairs today, 0 failures. |
-| `npm run check:tokens` | Every published variable has a description; the version in tokens.json matches package.json. |
+| `npm run check:tokens` | Every published token has a description, no description is left over for a removed token, and the version in tokens.json matches package.json. |
 | `npm run tokens:site` | Writes the token reference site to `site/` |
 
 GitHub runs the same checks on every push (`ci.yml`).
@@ -333,15 +333,17 @@ to that frame in this file. Later, an entry can set `docs` to a Storybook URL in
 touching the components.
 Descriptions are for people: no check or build logic parses them.
 
-Every published variable in Color, Spacing, Size, and Density has a description from
-`tokens.json`. Primitives are hidden from publishing and from property pickers, so designers
-reach for semantic tokens.
+Every published variable in Color, Spacing, Size, and Density has a description, written in
+`tokens.json` in that group's `"$descriptions"` map (next to the values, so adding a token and
+describing it happen in the same place). In Figma, it's the Description field in a variable's
+edit window (Variables panel). Primitives are hidden from publishing and
+from property pickers, so designers reach for semantic tokens. `npm run check:tokens` fails
+if a published token has no description, before anything reaches Figma.
 
 **Library checks** (run by Build library; failures show as "library checks: N FAILED"):
 a published component with no registry entry, no description, a description that isn't exactly
 one sentence, or no documentation link fails; a registry entry with no matching component fails;
-a visible Primitive fails. A published variable without a description will fail too, once the
-variable descriptions are in `tokens.json`.
+a published variable without a description fails; a visible Primitive fails.
 
 Components whose names start with `_` (`_Demo/*`, `_Example/*`) are hidden from publishing,
 so they don't need entries.

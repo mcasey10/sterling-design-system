@@ -85,6 +85,8 @@ plugin/
 scripts/contrast-check.mjs  Reports WCAG contrast for every pair in tokens.json
                           `contrast.rules`; fails if body text < 4.5:1 or large
                           text/UI < 3:1. Run: `npm run contrast` (repo root)
+scripts/check-tokens.mjs  Token checks: every published token (color, spacing, size, density) has a
+                          description in its group's "$descriptions"; versions agree. Run: `npm run check:tokens`
 scripts/build-token-site.mjs  Token reference site: `npm run tokens:site` writes site/index.html
                           and site/tokens.css (gitignored)
 scripts/lib/tokens.mjs    Shared token loading, alias resolution, and contrast evaluation
@@ -154,6 +156,9 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
 - Type-check before finishing: `cd plugin && npm run typecheck` (runs `tsc --noEmit`).
 - Run `npm run contrast` after any color token change; it must exit 0 (248 pairs today). When
   adding a new text/background combination to a component, add it to `contrast.rules` too.
+- Run `npm run check:tokens` after any token change; it must exit 0. Every new Color, Spacing, Size,
+  or Density token needs a description in that group's `"$descriptions"` in tokens.json (Primitives
+  need none: they're hidden).
 - Before committing, grep for the banned terms (see Hard rules → Naming); there must be none.
 
 ## Loan-pooling example (approved)

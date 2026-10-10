@@ -292,6 +292,18 @@ large text or UI graphics are below 3:1. Disabled text is reported but not
 enforced (WCAG exempts it). Use `npm run contrast:failures` to show only
 failures.
 
+## Token checks
+
+```bash
+npm run check:tokens
+```
+
+Every published token (Color, Spacing, Size, Density) needs a description in its group's
+`"$descriptions"` map in `tokens.json`; the plugin writes it to the Figma variable. This check
+fails if one is missing, if a description is left over for a token that no longer exists, or if
+the version in `tokens.json` differs from `package.json`. Build library runs the same
+description check against the variables in the file.
+
 ## Token reference site
 
 ```

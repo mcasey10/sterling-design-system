@@ -5,7 +5,7 @@
 // and Spacing scales (per Compact/Default/Comfortable mode). Density values are never raw
 // numbers, so component sizing can't drift off-scale.
 
-import { tokens, entries, aliasTarget, hexToRgb, ModeValues } from "./tokens";
+import { tokens, entries, aliasTarget, hexToRgb, describeToken, ModeValues } from "./tokens";
 import { created, updated, warn } from "./log";
 
 export const COLLECTIONS = {
@@ -76,7 +76,8 @@ function upsertVariable(
   ctx: CollectionContext,
   name: string,
   type: VariableResolvedDataType,
-  scopes: VariableScope[]
+  scopes: VariableScope[],
+  description?: string
 ): Variable | null {
   let variable = ctx.byName.get(name);
   if (variable && variable.resolvedType !== type) {
@@ -91,6 +92,8 @@ function upsertVariable(
     updated(`Variable ${ctx.collection.name}/${name}`);
   }
   variable.scopes = scopes;
+  // Published variables carry a description from tokens.json; written only when it differs.
+  if (description !== undefined && variable.description !== description) variable.description = description;
   return variable;
 }
 
@@ -141,7 +144,7 @@ async function buildColor(index: VariableIndex): Promise<CollectionContext> {
   const expected = new Set<string>();
   for (const [name, values] of entries<ModeValues<string>>(tokens.color)) {
     expected.add(name);
-    const v = upsertVariable(ctx, name, "COLOR", colorScopes(name));
+    const v = upsertVariable(ctx, name, "COLOR", colorScopes(name), describeToken("color", name));
     if (!v) continue;
     for (const [modeName, modeId] of ctx.modeIds) {
       const value = values[modeName];
@@ -169,7 +172,7 @@ async function buildSpacing(index: VariableIndex): Promise<CollectionContext> {
   const expected = new Set<string>();
   for (const [name, value] of entries<number>(tokens.spacing)) {
     expected.add(name);
-    const v = upsertVariable(ctx, name, "FLOAT", floatScopes(name));
+    const v = upsertVariable(ctx, name, "FLOAT", floatScopes(name), describeToken("spacing", name));
     if (!v) continue;
     v.setValueForMode(modeId, value);
     index.set(`${COLLECTIONS.spacing}/${name}`, v);
@@ -185,13 +188,9 @@ async function buildSize(index: VariableIndex): Promise<CollectionContext> {
   for (const [name, value] of entries<number>(tokens.size)) {
     expected.add(name);
     const stroke = name.startsWith("stroke/");
-    const description = stroke
-      ? "Stroke width for borders, dividers, focus rings, and underlines."
-      : "Fixed dimension. For heights that should follow the Density mode, use Density/* instead.";
-    const v = upsertVariable(ctx, name, "FLOAT", stroke ? ["STROKE_FLOAT"] : ["WIDTH_HEIGHT"]);
+    const v = upsertVariable(ctx, name, "FLOAT", stroke ? ["STROKE_FLOAT"] : ["WIDTH_HEIGHT"], describeToken("size", name));
     if (!v) continue;
     v.setValueForMode(modeId, value);
-    if (v.description !== description) v.description = description;
     index.set(`${COLLECTIONS.size}/${name}`, v);
   }
   warnUnknownVariables(ctx, expected);
@@ -211,7 +210,7 @@ async function buildDensity(index: VariableIndex): Promise<CollectionContext> {
     expected.add(name);
     // Existing Density variables keep their IDs: only their per-mode values change, so every
     // component binding and instance keeps working.
-    const v = upsertVariable(ctx, name, "FLOAT", floatScopes(name));
+    const v = upsertVariable(ctx, name, "FLOAT", floatScopes(name), describeToken("density", name));
     if (!v) continue;
     for (const [modeName, modeId] of ctx.modeIds) {
       const raw = values[modeName];

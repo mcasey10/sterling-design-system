@@ -1,5 +1,5 @@
 // Typed access to ../../../tokens/tokens.json (bundled by esbuild at build time).
-// Keys starting with "$" are metadata ($modes, $notes) and are skipped by the helpers.
+// Keys starting with "$" are metadata ($modes, $notes, $descriptions) and are skipped by the helpers.
 
 import raw from "../../../tokens/tokens.json";
 
@@ -28,6 +28,18 @@ export interface Tokens {
 }
 
 export const tokens = raw as unknown as Tokens;
+
+/** Token groups whose variables are published, each with a "$descriptions" map in tokens.json. */
+export type PublishedGroup = "color" | "spacing" | "size" | "density";
+
+/**
+ * The description of a published token, from its group's "$descriptions" ("" if there is none, which
+ * `npm run check:tokens` and the library checks both report).
+ */
+export function describeToken(group: PublishedGroup, name: string): string {
+  const descriptions = (tokens[group] as unknown as { $descriptions?: Record<string, string> }).$descriptions;
+  return descriptions?.[name] ?? "";
+}
 
 /** Entries of a token group, excluding "$" metadata keys. */
 export function entries<T>(group: Record<string, unknown>): [string, T][] {

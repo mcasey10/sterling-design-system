@@ -7,6 +7,7 @@
   "scripts": {
     "contrast": "node scripts/contrast-check.mjs",
     "contrast:failures": "node scripts/contrast-check.mjs --failures-only",
+    "check:tokens": "node scripts/check-tokens.mjs",
     "tokens:site": "node scripts/build-token-site.mjs"
   }
 }
