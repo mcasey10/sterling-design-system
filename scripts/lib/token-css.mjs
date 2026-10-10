@@ -3,18 +3,10 @@
 // same file: `npm run tokens:css` writes dist/tokens.css, and `npm run tokens:site` inlines the same text.
 
 import { entries, flattenPrimitives, aliasOf } from "./tokens.mjs";
+import { cssVar, cssClass } from "./token-names.mjs";
 
-/** "accent/default" → "accent-default" */
-export const slug = (name) => name.replace(/[^a-zA-Z0-9]+/g, "-");
-/**
- * Sterling's code prefix. Everything Sterling puts in the global CSS namespace carries it: custom
- * properties (--stl-space-8, --stl-color-text-primary) and classes (.stl-density-compact, .stl-text-body).
- */
-export const PREFIX = "stl";
-/** "space/8" → "--stl-space-8"; "color/text/primary" → "--stl-color-text-primary" */
-export const cssVar = (name) => `--${PREFIX}-${slug(name)}`;
-/** "density-compact" → "stl-density-compact" */
-export const cssClass = (name) => `${PREFIX}-${slug(name).toLowerCase()}`;
+export { slug, PREFIX, cssVar, cssClass } from "./token-names.mjs";
+
 const WEIGHTS = { Thin: 100, Light: 300, Regular: 400, Medium: 500, "Semi Bold": 600, Bold: 700, "Extra Bold": 800 };
 
 /** The density mode :root uses: "Default" if the tokens have it, otherwise the first mode. */

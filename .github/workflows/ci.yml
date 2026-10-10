@@ -1,6 +1,7 @@
 # Checks that need no Figma file, on every push and pull request:
 # the plugin type-checks and builds, every color pair meets WCAG contrast, every published
-# token has a description, and the token CSS and token site build.
+# token has a description, and the token CSS and token site build. The coded layer (ui/) type-checks,
+# follows the component definitions, and its Storybook builds.
 name: CI
 
 on:
@@ -39,3 +40,29 @@ jobs:
         run: npm run tokens:css
       - name: Build the token site
         run: npm run tokens:site
+
+  ui:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+
+      - name: Install ui dependencies
+        run: npm ci
+        working-directory: ui
+      - name: Generate the token CSS
+        run: npm run tokens
+        working-directory: ui
+      - name: Type-check the coded layer
+        run: npm run typecheck
+        working-directory: ui
+      - name: Coded components follow their definitions
+        run: npm run check:parity
+        working-directory: ui
+      - name: Build Storybook
+        run: npm run build-storybook
+        working-directory: ui

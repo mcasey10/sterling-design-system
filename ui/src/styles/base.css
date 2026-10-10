@@ -1,0 +1,14 @@
+/* Page defaults for anything that renders Sterling components. Values come from tokens.css only; the
+   default text style is the stl-text-body class on the body. */
+
+body {
+  margin: 0;
+  background: var(--stl-color-surface-background);
+  color: var(--stl-color-text-primary);
+}
+
+/* Storybook's Docs pages put stories on their own canvas; give it Sterling's surface too. */
+.docs-story {
+  background: var(--stl-color-surface-background);
+  color: var(--stl-color-text-primary);
+}
