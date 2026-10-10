@@ -77,8 +77,8 @@ indeterminate × State: default / hover / focus / disabled; Label and Show label
 | `Grid/BulkActionBar` | — | "N selected · Select all M matching" + Clear selection / Export / Delete / Primary action; Count, Select all, Show select all, Show destructive, Hint and Show hint properties (the hint says why an action is disabled); action buttons are exposed instances, so they can be renamed from the bar |
 | `Chip/Filter` | State (default / hover / pressed / focus) | Label and Show remove properties |
 | `Summary/Summary metric` | Status (normal / over-target) × State (default / loading) | Label and Show progress properties; over-target adds a warning icon and text; loading shows a skeleton bar and "Loading…" |
-| `Input/Text`, `Input/Select` | State (default / hover / focus / error / error-focus / warning / disabled; Text adds warning-focus, Select adds open) × Content (value / placeholder) | Label, Value, Placeholder, Helper, Show label, Show helper properties; error and warning add an icon; hide the label only when a visible label sits next to the field |
-| `Input/Option` | State (default / hover / selected / disabled) | Label property; selected adds a check icon |
+| `Input/Text`, `Input/Select` | State (default / hover / focus / error / error-focus / warning / warning-focus / disabled; Select adds open) × Content (value / placeholder) | Label, Value, Placeholder, Helper, Show label, Show helper properties; error and warning add an icon; hide the label only when a visible label sits next to the field |
+| `Input/Option` | State (default / hover / focus / selected / disabled) | Label property; selected adds a check icon; focus adds a ring inside the row |
 | `Input/Option with description` | State (default / hover / selected / disabled) | Label and Description properties (muted second line, e.g. a saved view's filter) |
 | `Input/Menu heading` | — | Label property; group heading inside a menu |
 | `Input/Menu` | — | Raised list of five exposed Option instances; Select State = open shows it under the field |
@@ -367,11 +367,6 @@ Not planned for a release yet:
   shows its label with the browser's own tooltip (`title`), which can't be styled, appears after a
   delay, and doesn't appear on keyboard focus.
 
-- **Scrim token.** A semantic color for the layer behind a modal dialog (for example `surface/scrim`).
-  Until then the coded Dialog's backdrop uses the `neutral/900` primitive at 50%, the one place a
-  component reads a primitive.
-- **Input/Select warning-focus and Input/Option focus.** Figma has no variant for a focused select
-  with a warning, or for the option the arrow keys are on; the coded components show both.
 - **Input/Option with description and Input/Menu heading** aren't coded yet.
 
 ## Known limitations

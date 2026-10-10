@@ -124,13 +124,14 @@ const DEFINITIONS = {
   "Input/Select": {
     // A select has every field state, plus open (its menu showing).
     variants: {
-      State: ["default", "hover", "focus", "open", "error", "error-focus", "warning", "disabled"],
+      State: ["default", "hover", "focus", "open", "error", "error-focus", "warning", "warning-focus", "disabled"],
       Content: ["value", "placeholder"],
     },
     properties: fieldProperties("Option", "Select an option"),
   },
   "Input/Option": {
-    variants: { State: OPTION_STATES },
+    // Focus is the option the arrow keys are on in an open select.
+    variants: { State: ["default", "hover", "focus", "selected", "disabled"] },
     properties: [text("Label", "Option")],
   },
   "Input/Menu": { variants: {}, properties: [] },

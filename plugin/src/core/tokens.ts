@@ -63,11 +63,13 @@ export function resolveColor(name: string, mode: string): { hex: Hex; alias: str
   return { hex: tokens.primitives[ramp][step], alias };
 }
 
-export function hexToRgb(hex: Hex): RGB {
+export function hexToRgb(hex: Hex): RGB | RGBA {
   const n = hex.replace("#", "");
-  return {
+  const rgb = {
     r: parseInt(n.slice(0, 2), 16) / 255,
     g: parseInt(n.slice(2, 4), 16) / 255,
     b: parseInt(n.slice(4, 6), 16) / 255,
   };
+  // An 8-digit hex (#RRGGBBAA) carries opacity: the alpha/* primitives behind surface/scrim.
+  return n.length === 8 ? { ...rgb, a: parseInt(n.slice(6, 8), 16) / 255 } : rgb;
 }

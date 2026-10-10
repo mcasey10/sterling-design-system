@@ -254,3 +254,5 @@ the consistency check live in `plugin/src/example/loan-pooling/loanData.ts`; scr
   `status/critical` (crimson), never `finance/sell`, so Sell never looks destructive.
 - `text/inverse` is the foreground for every solid fill; dark-mode fills are light
   enough to take dark text.
+- `surface/scrim` (behind a modal dialog) is the only translucent color. Its `alpha/*` primitives are
+  8-digit hex (#RRGGBBAA): neutral/900 at 50% in Light, black at 60% in Dark.

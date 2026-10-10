@@ -1,6 +1,6 @@
 // Input/Text and Input/Select — State × Content (value / placeholder).
-// State: default / hover / focus / error / error-focus / warning / disabled, plus warning-focus (Text only)
-// and open (Select only: an Input/Menu under the field). Label above, field, helper text below. Error and
+// State: default / hover / focus / error / error-focus / warning / warning-focus / disabled, plus open
+// (Select only: an Input/Menu under the field). Label above, field, helper text below. Error and
 // warning add an icon and colored helper text, not just a border color; error-focus and warning-focus keep
 // the flagged border and add the focus ring.
 // Properties: Label, Value, Placeholder, Helper (text), Show label, Show helper (boolean).

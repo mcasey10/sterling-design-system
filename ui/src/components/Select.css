@@ -23,6 +23,12 @@
   color: var(--stl-color-text-secondary);
 }
 
+/* While the menu is open, an invisible layer covers the page so a click outside closes the menu. */
+.stl-select__underlay {
+  position: fixed;
+  inset: 0;
+}
+
 /* Open looks like focus: the menu belongs to this field. */
 .stl-select__trigger[aria-expanded="true"] {
   outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);

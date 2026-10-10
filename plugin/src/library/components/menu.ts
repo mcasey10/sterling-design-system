@@ -1,4 +1,5 @@
-// Input/Option — one row of a select's menu. State (default / hover / selected / disabled).
+// Input/Option — one row of a select's menu. State (default / hover / focus / selected / disabled).
+// Focus is the option the arrow keys are on: the hover fill plus a focus ring drawn inside the row.
 // Selected adds a check icon and bold label, so selection isn't shown by the tint alone.
 // Input/Menu — the open list: a raised panel of exposed Option instances. The open Select variant
 // places one below its field.
@@ -6,7 +7,7 @@
 import { Kit, color, density, space, configureFrame, setSize, truncate } from "../../core/helpers";
 import {
   ComponentSetSpec, Props, combos, ensureInstance, ensureText, prune, tintIcon, reference, variantOf, setProps,
-  ensureComponent, ensureFrame, defineProp, variantAxes,
+  ensureComponent, ensureFrame, ensureFocusRing, defineProp, variantAxes,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { describe } from "../../../../definitions/docRegistry";
@@ -16,6 +17,7 @@ export const MENU_WIDTH = 240;
 const LOOKS: Record<string, { fill?: string; text: string; style: string }> = {
   default: { text: "text/primary", style: "Body" },
   hover: { fill: "surface/hover", text: "text/primary", style: "Body" },
+  focus: { fill: "surface/hover", text: "text/primary", style: "Body" },
   selected: { fill: "accent/subtle", text: "text/primary", style: "Body-strong" },
   disabled: { text: "text/disabled", style: "Body" },
 };
@@ -47,6 +49,9 @@ export function optionSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
         tintIcon(check, color(kit, "accent/default"));
         keep.push(check);
       }
+      // Options sit edge to edge in a menu, so the focus ring is drawn inside the row.
+      const ring = ensureFocusRing(kit, comp, p.State === "focus", null, "inside");
+      if (ring) keep.push(ring);
       prune(comp, keep);
     },
 

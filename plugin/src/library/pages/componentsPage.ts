@@ -357,8 +357,8 @@ export async function buildComponentsPage(kit: Kit, page: PageNode): Promise<{ r
   await usageNote(kit, summarySection, 2, summaryMetric.name);
   const inputs = await ensureSection(
     kit, root, 12, "Inputs",
-    "Text input and select: default / hover / focus / error / error-focus / warning / disabled × value / placeholder. " +
-      "Text input adds warning-focus. Select adds open, with Input/Menu (a list of Input/Option) under the field. Option with description and Menu heading " +
+    "Text input and select: default / hover / focus / error / error-focus / warning / warning-focus / disabled × value / placeholder. " +
+      "Select adds open, with Input/Menu (a list of Input/Option) under the field. Option with description and Menu heading " +
       "build grouped menus (e.g. saved views)."
   );
   const textInput = await ensureComponentSet(kit, page, inputs, 1, textInputSpec(kit, icons));

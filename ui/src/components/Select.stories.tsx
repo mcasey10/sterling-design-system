@@ -1,11 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useArgs } from "storybook/preview-api";
 import { AllVariants, FORCED_STATES, argTypes, defaultArgs, docs } from "../stories/definitions";
-import { Select, type SelectProps } from "./Select";
+import { Menu, Option } from "./Menu";
+import { Select, SelectField, type SelectProps } from "./Select";
 
 const NAME = "Input/Select";
 
+// First letters differ, so typing a letter jumps to one option.
 const OPTIONS = [
+  { value: "daily", label: "Daily" },
+  { value: "weekly", label: "Weekly" },
+  { value: "monthly", label: "Monthly" },
+  { value: "quarterly", label: "Quarterly" },
+  { value: "yearly", label: "Yearly" },
+  { value: "never", label: "Never", disabled: true },
+];
+
+// The options Input/Menu shows in the Figma library, for "All variants".
+const LIBRARY_OPTIONS = [
   { value: "one", label: "Option one" },
   { value: "two", label: "Option two" },
   { value: "three", label: "Option three" },
@@ -24,7 +36,7 @@ const meta = {
     validation: { control: "select", options: [undefined, "error", "warning"], table: { type: { summary: '"error" | "warning"' } } },
     open: { control: false },
   },
-  args: { ...(defaultArgs(NAME) as unknown as SelectProps), options: OPTIONS, value: "two" },
+  args: { ...(defaultArgs(NAME) as unknown as SelectProps), options: OPTIONS, value: "weekly" },
   // Choosing an option updates the Value control, as an application would update its state.
   render: function Controlled(args) {
     const [, updateArgs] = useArgs<SelectProps>();
@@ -54,7 +66,8 @@ export const Warning: Story = {
 
 /**
  * Every State in the definition, with a value and with the placeholder. Hover and focus are forced here; in
- * use they come from CSS. Open is the `open` prop, and error and warning are the validation prop.
+ * use they come from CSS. Error and warning are the validation prop. The open column is a picture, drawn
+ * with SelectField, Menu, and Option: a live select is modal while open, so only one can be open at a time.
  */
 export const Variants: Story = {
   name: "All variants",
@@ -64,16 +77,32 @@ export const Variants: Story = {
       component={NAME}
       className="stl-variants--menus"
       states={{ open: { open: true }, error: { validation: "error" }, warning: { validation: "warning" } }}
-      render={({ content, ...props }) => (
-        <Select
-          {...props}
-          label="Label"
-          helper="Helper text"
-          placeholder="Select an option"
-          options={OPTIONS}
-          value={content === "value" ? "two" : null}
-        />
-      )}
+      render={({ content, open, ...props }) =>
+        open ? (
+          <SelectField
+            label="Label"
+            placeholder="Select an option"
+            valueText={content === "value" ? "Option two" : undefined}
+            open
+            triggerProps={{ "aria-haspopup": "listbox" }}
+          >
+            <Menu aria-label="Label">
+              {LIBRARY_OPTIONS.map((option) => (
+                <Option key={option.value} label={option.label} selected={option.value === "two"} disabled={option.disabled} />
+              ))}
+            </Menu>
+          </SelectField>
+        ) : (
+          <Select
+            {...props}
+            label="Label"
+            helper="Helper text"
+            placeholder="Select an option"
+            options={LIBRARY_OPTIONS}
+            value={content === "value" ? "two" : null}
+          />
+        )
+      }
     />
   ),
 };

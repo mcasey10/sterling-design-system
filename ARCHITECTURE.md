@@ -456,20 +456,14 @@ Differences like these are recorded with their reasons in `ui/src/parity/coded.t
 **Select and its menu.** The coded Select gets its keyboard behavior, typeahead, and screen-reader
 semantics from React Aria (`react-aria` and `react-stately`, hooks only), because a custom listbox
 is easy to get subtly wrong. The look is Sterling's own CSS. It is the only component with a
-runtime dependency besides React. Three things differ from the Figma component:
-
-- The choices are an `options` prop; in Figma they are the Option instances inside Input/Menu.
-- Input/Option has no focus state in Figma. In code, the option the arrow keys are on has the hover
-  look plus a focus ring drawn inside it, so the position is visible even on the selected option.
-- Input/Select has no warning-focus variant in Figma (Input/Text has one). In code a flagged select
-  keeps its border when focused or open, with the ring outside, as Input/Text does.
+runtime dependency besides React. The choices are an `options` prop; in Figma they are the Option
+instances inside Input/Menu. While the menu is open React Aria treats it as modal, its default: the
+rest of the page is hidden from assistive technology and can't be scrolled until the menu closes.
 
 **Dialog.** The coded Dialog is a native `<dialog>` opened as a modal, so the browser keeps focus
 inside it, makes the page behind inert, closes on Escape, and returns focus. Figma's Body slot is
 `children`; the Cancel and Primary buttons, which Figma exposes as nested instances, are props
-(`cancelLabel`, `primaryLabel`, `primaryKind`, `primaryDisabled`). The backdrop dims the page with
-the darkest neutral primitive for now: Sterling has no scrim token yet (see the
-[backlog](docs/reference.md#backlog)).
+(`cancelLabel`, `primaryLabel`, `primaryKind`, `primaryDisabled`). The backdrop is `surface/scrim`.
 
 **Icon button tooltip.** In Figma an icon button's Label is a hidden layer: its accessible name. In
 code the label is the `aria-label` and, for now, the browser's own tooltip (`title`). A Sterling

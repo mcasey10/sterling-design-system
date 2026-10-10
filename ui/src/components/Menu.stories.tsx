@@ -45,7 +45,7 @@ export const InAMenu: Story = {
   ),
 };
 
-/** Every State in the definition. Hover is forced here; in use it comes from CSS. */
+/** Every State in the definition. Hover and focus are forced here; in use they come from CSS. */
 export const Variants: Story = {
   name: "All variants",
   parameters: { pseudo: FORCED_STATES, controls: { disable: true } },

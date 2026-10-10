@@ -182,7 +182,7 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
   await definitions(kit, states, [
     ["Coverage by control type", "Interactive controls: default, hover, pressed, focus, disabled, and selected where it applies. Inputs and cells: error and warning. Data views: loading and empty."],
     ["One State axis", "State holds the element's UI state — interaction, plus selection and validation where the element has them. Conditions of the data use Status (e.g. Summary metric over-target)."],
-    ["Combined values", "Where two states happen together, add a combined value instead of a second axis: selected-hover (rows, cells), error-focus (inputs, cells), warning-focus (text inputs, cells), selected-focus (tabs)."],
+    ["Combined values", "Where two states happen together, add a combined value instead of a second axis: selected-hover (rows, cells), error-focus and warning-focus (inputs, cells), selected-focus (tabs)."],
     ["No invalid combinations", "Every combination of variant properties exists and looks right (e.g. Summary metric has all four Status × State variants; loading looks the same for both Statuses)."],
   ], 180);
 

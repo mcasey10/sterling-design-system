@@ -51,7 +51,7 @@ const FIELD_LABEL_NOTE =
 const fieldDetails = (select: boolean) =>
   `${select ? "Select" : "Text input"} with label and helper text. State: default / hover / focus / ` +
   (select ? "open (menu below the field, covering the helper) / " : "") +
-  `error / error-focus / warning / ${select ? "" : "warning-focus / "}disabled; error and warning add an icon and colored ` +
+  "error / error-focus / warning / warning-focus / disabled; error and warning add an icon and colored " +
   "helper text, and a flagged field keeps its border when focused, with the focus ring outside it. Content: value / " +
   "placeholder (Placeholder text in text/secondary). Label, Value, Placeholder, Helper, Show label, and Show helper are " +
   "component properties; long values truncate. Field height follows Density → control/height.";
@@ -235,7 +235,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
   "Input/Option": {
     description: "One row in a select's open menu.",
     details:
-      "One menu row. State (default / hover / selected / disabled); selected adds a check icon and bold label. Label is a " +
+      "One menu row. State (default / hover / focus / selected / disabled); selected adds a check icon and bold label, and " +
+      "focus (the option the arrow keys are on) adds a focus ring inside the row to the hover fill. Label is a " +
       "text property; long labels truncate. Height follows Density → control/height.",
     use: "listing choices in Input/Menu (a select's open list).",
     dont: "the choices act immediately (use a menu of actions) or need multi-select (use checkboxes).",
