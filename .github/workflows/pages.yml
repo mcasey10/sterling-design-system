@@ -1,0 +1,50 @@
+# Publishes the token reference site (site/) to GitHub Pages on every push to main.
+# It does nothing while the repository is private. Once the repository is public, turn Pages on
+# in Settings → Pages → Build and deployment → Source: "GitHub Actions"; the next push to main
+# (or a manual run from the Actions tab) publishes the site.
+name: Token site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: ${{ !github.event.repository.private }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # The site is only published from tokens that pass the checks.
+      - name: Contrast (WCAG) for every pair in tokens.json
+        run: npm run contrast:failures
+      - name: Token checks (descriptions, version)
+        run: npm run check:tokens
+      - name: Build the token site
+        run: npm run tokens:site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
