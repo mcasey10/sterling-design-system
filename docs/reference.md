@@ -359,6 +359,14 @@ The repository is private for now. When it's time to publish, in this order:
    account.
 6. **Verify both links in the README:** the token site and the Figma file.
 
+## Backlog
+
+Not planned for a release yet:
+
+- **Tooltip component.** A Sterling tooltip, in Figma and in code. Until then the coded Icon button
+  shows its label with the browser's own tooltip (`title`), which can't be styled, appears after a
+  delay, and doesn't appear on keyboard focus.
+
 ## Known limitations
 
 - **Tabular figures:** the plugin API can't turn on OpenType features for a text

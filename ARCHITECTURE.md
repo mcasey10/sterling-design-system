@@ -430,6 +430,24 @@ cell's content fits its column.
 
 The coded component (Storybook, later) will implement the rule exactly, at any column width.
 
+**States.** Figma shows each state as a variant (`State=hover`). Code has no `state` prop: hover,
+pressed, and focus come from CSS (`:hover`, `:active`, `:focus-visible`), and disabled is the
+`disabled` prop. The mapping is written down once, in `ui/src/parity/parity.ts`, and
+`npm run check:parity` applies it to every coded component. Storybook's "All variants" stories
+force the CSS states so they can be compared with the Figma variant set.
+
+**Text width.** Text is slightly narrower in the browser than in Figma: a small Button is about
+53px wide in code and 55px in Figma. The text styles are the same (size, weight, line height, and
+letter spacing all match). The difference is the font file and rounding: Figma renders Inter 3.19,
+the coded layer bundles Inter 4 (`@fontsource/inter`), whose Medium and Semi Bold are about 2%
+narrower (Regular is the same width), and Figma rounds every text box up to a whole pixel. Heights,
+padding, and gaps are identical, so only the widths of text-sized controls differ, by 1–2px.
+
+**Icon button tooltip.** In Figma an icon button's Label is a hidden layer: its accessible name. In
+code the label is the `aria-label` and, for now, the browser's own tooltip (`title`). A Sterling
+Tooltip component is on the backlog ([reference](docs/reference.md#backlog)); when it exists, the
+icon button will use it instead.
+
 ---
 
 ## 11. Versioning
