@@ -489,7 +489,7 @@ async function confirmation(kit: Kit, lib: Library, root: FrameNode) {
     const action = nested(d, "Primary");
     if (action) setProps(action, { Kind: kind, Label: primary });
     const content = dialogBody(d);
-    if (content) content.appendChild(await text(kit, body, "Body", "text/primary"));
+    if (content) await para(kit, content, body, "Body", "text/primary"); // wraps at the dialog's width
   };
   await marker(kit, p.canvas, 1, "An action that can't be undone");
   await dialog("Delete 2 items?", "This can't be undone.", "Delete 2 items", "danger");
