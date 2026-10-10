@@ -1,0 +1,12 @@
+{
+  "name": "sterling-design-system",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sterling Design System: tokens, a Figma component library, and guidelines for data-dense applications. Fictional data only.",
+  "type": "module",
+  "scripts": {
+    "contrast": "node scripts/contrast-check.mjs",
+    "contrast:failures": "node scripts/contrast-check.mjs --failures-only",
+    "tokens:site": "node scripts/build-token-site.mjs"
+  }
+}

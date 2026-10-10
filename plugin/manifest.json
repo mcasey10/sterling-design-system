@@ -1,0 +1,27 @@
+{
+  "name": "Sterling",
+  "id": "sterling-design-system-local",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "editorType": [
+    "figma"
+  ],
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": [
+      "none"
+    ],
+    "reasoning": "Generates everything from bundled tokens; no network access needed."
+  },
+  "menu": [
+    {
+      "name": "Build library",
+      "command": "library"
+    },
+    {
+      "name": "Build example",
+      "command": "example"
+    }
+  ],
+  "enablePrivatePluginApi": true
+}

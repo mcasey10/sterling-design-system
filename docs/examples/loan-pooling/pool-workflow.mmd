@@ -1,0 +1,6 @@
+stateDiagram-v2
+  direction LR
+  [*] --> Draft: Pool created (name, criteria, target)
+  Draft --> Draft: Add / remove loans, sign off, Save draft
+  Draft --> Submitted: Submit pool (0 issues)
+  Submitted --> [*]: Read-only

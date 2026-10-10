@@ -1,0 +1,8 @@
+flowchart LR
+  AV["Available<br/>candidate: unpooled, meets criteria"] -->|"Add to pool<br/>(eligible)"| RD["Ready"]
+  AV -->|"Add to pool<br/>(exception)"| EX["Exception<br/>needs sign-off · 1 issue"]
+  EX -->|"Sign off<br/>(note required)"| SO["Signed off"]
+  RD -->|"Remove from pool"| AV
+  EX -->|"Remove from pool"| AV
+  SO -->|"Remove from pool"| AV
+  IN["Ineligible<br/>can't be added to the pool"]

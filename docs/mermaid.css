@@ -1,0 +1,2 @@
+/* Opaque edge-label backgrounds so arrows don't strike through the label text. */
+.edgeLabel rect, .edgeLabel .label rect { opacity: 1 !important; fill: #ffffff !important; }

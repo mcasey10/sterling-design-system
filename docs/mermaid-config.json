@@ -1,0 +1,7 @@
+{
+  "theme": "default",
+  "htmlLabels": false,
+  "flowchart": { "htmlLabels": false },
+  "state": { "htmlLabels": false },
+  "fontFamily": "Arial, Helvetica, sans-serif"
+}
