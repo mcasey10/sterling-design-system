@@ -90,10 +90,15 @@ export interface StateProps {
   "data-state"?: string;
 }
 
-function stateProps(value: string): StateProps {
+/** `own` maps the State parts a component expresses with its own props, e.g. { selected: { selected: true } }. */
+export function stateProps(value: string, own: Record<string, object> = {}): StateProps {
   const parts = stateParts(value).filter((part) => part !== REST);
-  const forced = parts.filter((part) => part !== DISABLED);
-  return { ...(parts.includes(DISABLED) ? { disabled: true } : {}), ...(forced.length ? { "data-state": forced.join(" ") } : {}) };
+  const forced = parts.filter((part) => part in CSS_STATES);
+  return {
+    ...Object.assign({}, ...parts.map((part) => own[part] ?? {})),
+    ...(parts.includes(DISABLED) ? { disabled: true } : {}),
+    ...(forced.length ? { "data-state": forced.join(" ") } : {}),
+  };
 }
 
 /** Every combination of the given variant properties, the first one varying slowest (the order Figma lists them). */
@@ -107,16 +112,30 @@ function combinations(axes: [string, readonly string[]][]): Record<string, strin
 /**
  * Every variant in the definition, laid out like the Figma variant set: one column per State, one row per
  * combination of the other variant properties. `render` gets the variant props (camelCase) and the state props.
+ * A component with no State property gets one row, with a column per value of its variant property.
  */
-export function AllVariants<P>({ component, render }: { component: ComponentName; render: (props: P) => ReactNode }) {
+export function AllVariants<P>({
+  component, render, states: own = {},
+}: {
+  component: ComponentName;
+  render: (props: P) => ReactNode;
+  /** Props for the State parts the component expresses with its own props (see `stateProps` in src/parity/coded.ts). */
+  states?: Record<string, object>;
+}) {
   const variants = Object.entries(componentDef(component).variants);
-  const states = variants.find(([axis]) => axis === "State")?.[1] ?? [REST];
-  const rows = combinations(variants.filter(([axis]) => axis !== "State"));
+  // Columns are the State values; a component with no State uses its first variant property instead.
+  const columnAxis = variants.some(([axis]) => axis === "State") ? "State" : variants[0]?.[0];
+  const states = variants.find(([axis]) => axis === columnAxis)?.[1] ?? [REST];
+  const rows = combinations(variants.filter(([axis]) => axis !== columnAxis));
+  // A component with one variant property has a single row, which needs no row header.
+  const labelled = rows.length > 1;
+  const columnProps = (value: string) =>
+    columnAxis === "State" ? stateProps(value, own) : columnAxis ? { [propName(columnAxis)]: value } : {};
   return (
     <table className="stl-variants">
       <thead>
         <tr>
-          <td />
+          {labelled && <td />}
           {states.map((state) => (
             <th key={state} scope="col" className={textClass("Caption")}>
               {state}
@@ -126,14 +145,16 @@ export function AllVariants<P>({ component, render }: { component: ComponentName
       </thead>
       <tbody>
         {rows.map((row) => {
-          const label = Object.values(row).join(" · ") || component;
+          const label = Object.values(row).join(" · ");
           return (
             <tr key={label}>
-              <th scope="row" className={textClass("Caption")}>
-                {label}
-              </th>
+              {labelled && (
+                <th scope="row" className={textClass("Caption")}>
+                  {label}
+                </th>
+              )}
               {states.map((state) => (
-                <td key={state}>{render({ ...row, ...stateProps(state) } as P)}</td>
+                <td key={state}>{render({ ...row, ...columnProps(state) } as P)}</td>
               ))}
             </tr>
           );

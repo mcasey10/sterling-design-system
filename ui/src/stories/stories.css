@@ -36,3 +36,15 @@
 .stl-icon-gallery span {
   color: var(--stl-color-text-secondary);
 }
+
+/* A single row of variants with a label above each, for components that must share one container (tabs). */
+.stl-variant-strip {
+  display: inline-grid;
+  grid-template-columns: repeat(var(--stl-variant-columns), max-content);
+  gap: var(--stl-space-8) var(--stl-space-16);
+  align-items: center;
+}
+.stl-variant-strip .stl-variant-strip__row {
+  display: contents;
+  color: var(--stl-color-text-secondary);
+}

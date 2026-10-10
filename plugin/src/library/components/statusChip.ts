@@ -8,14 +8,9 @@ import {
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { describe } from "../../../../definitions/docRegistry";
+import { TONE_ICONS as TONE_ICON_NAMES } from "../../../../definitions/icons";
 
-export const TONE_ICONS: Record<string, string> = {
-  positive: "circle-check",
-  warning: "alert-triangle",
-  critical: "circle-x",
-  info: "info",
-  neutral: "circle-dot",
-};
+export const TONE_ICONS: Record<string, string> = TONE_ICON_NAMES;
 
 export function statusChipSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   return {

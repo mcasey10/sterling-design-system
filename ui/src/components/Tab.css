@@ -1,0 +1,68 @@
+/* Tabs/Tab and its list. Tab height follows Density. The selected tab has an underline and stronger text,
+   so selection is never shown by color alone. */
+
+.stl-tab-list {
+  display: flex;
+  align-items: stretch;
+}
+
+.stl-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+  box-sizing: border-box;
+  height: var(--stl-control-height);
+  margin: 0;
+  padding: 0 var(--stl-space-12);
+  border: 0;
+  border-bottom: var(--stl-stroke-2) solid transparent;
+  background: transparent;
+  color: var(--stl-color-text-secondary);
+  cursor: pointer;
+}
+/* Long labels truncate at 200px. */
+.stl-tab__label {
+  max-width: calc(var(--stl-size-40) * 5);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.stl-tab__count {
+  padding: 0 var(--stl-space-4);
+  border-radius: var(--stl-radius-pill);
+  background: var(--stl-color-status-neutral-subtle);
+  color: var(--stl-color-status-neutral-strong);
+}
+
+.stl-tab:hover {
+  background: var(--stl-color-surface-hover);
+  color: var(--stl-color-text-primary);
+}
+
+.stl-tab--selected,
+.stl-tab--selected:hover {
+  border-bottom-color: var(--stl-color-accent-default);
+  background: transparent;
+  color: var(--stl-color-text-primary);
+}
+.stl-tab--selected .stl-tab__count {
+  background: var(--stl-color-accent-subtle);
+  color: var(--stl-color-accent-default);
+}
+
+/* Tabs sit edge to edge, so the focus ring is drawn inside the tab. */
+.stl-tab:focus-visible {
+  border-radius: var(--stl-radius-sm);
+  outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);
+  outline-offset: calc(-1 * var(--stl-stroke-2));
+}
+
+.stl-tab:disabled,
+.stl-tab:disabled:hover {
+  background: transparent;
+  color: var(--stl-color-text-disabled);
+  cursor: default;
+}
+.stl-tab:disabled .stl-tab__count {
+  color: var(--stl-color-text-disabled);
+}

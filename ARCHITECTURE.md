@@ -443,6 +443,15 @@ the coded layer bundles Inter 4 (`@fontsource/inter`), whose Medium and Semi Bol
 narrower (Regular is the same width), and Figma rounds every text box up to a whole pixel. Heights,
 padding, and gaps are identical, so only the widths of text-sized controls differ, by 1–2px.
 
+**Input content.** Figma's Input/Text has a Content property (value / placeholder) so a mockup can show
+either. In code there is nothing to choose: the field shows its placeholder whenever its value is
+empty. Error and warning are one prop, `validation`.
+
+**Tab list.** Code has a `TabList` with no Figma component. It gives its tabs the tablist role, an
+accessible name, and arrow-key navigation; in Figma, tabs are placed side by side in a frame.
+Differences like these are recorded with their reasons in `ui/src/parity/coded.ts` (`figmaOnly`,
+`codeOnly`, `CODE_ONLY_COMPONENTS`).
+
 **Icon button tooltip.** In Figma an icon button's Label is a hidden layer: its accessible name. In
 code the label is the `aria-label` and, for now, the browser's own tooltip (`title`). A Sterling
 Tooltip component is on the backlog ([reference](docs/reference.md#backlog)); when it exists, the

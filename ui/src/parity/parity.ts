@@ -8,7 +8,8 @@
 //   • State is the one deliberate difference. Code has no `state` prop:
 //       hover, pressed, focus   → CSS (:hover, :active, :focus-visible), never a prop
 //       disabled                → the boolean prop `disabled`
-//       anything else           → a prop the component names in `stateProps` (selected, error, open, …)
+//       anything else           → a prop the component names in `stateProps` (selected → `selected`,
+//                                 error → `validation`, …)
 //     A combined value such as "error-focus" is the combination of its parts.
 //   • Text, boolean, instance-swap and slot properties are props too.
 // Anything else a component leaves out or adds must be listed with its reason (`figmaOnly`, `codeOnly`),
@@ -29,7 +30,7 @@ export interface CodedComponent {
   source: string;
   /** The component's design props, by code name. */
   props: readonly string[];
-  /** State parts expressed by a prop: Figma part → how code writes it, e.g. { selected: "selected" }. */
+  /** State parts expressed by a prop: Figma part → the prop, e.g. { selected: "selected", error: "validation" }. */
   stateProps?: Record<string, string>;
   /** Figma properties with no prop in code: Figma name → reason. */
   figmaOnly?: Record<string, string>;
@@ -59,7 +60,8 @@ export function parityProblems(name: string, def: ComponentDef, coded: CodedComp
     if (axis === "State") {
       for (const value of values) {
         for (const part of stateParts(value)) {
-          if (part === REST || part in CSS_STATES || part in (coded.stateProps ?? {})) continue;
+          if (part === REST || part in CSS_STATES) continue;
+          if (coded.stateProps?.[part]) { expected.add(coded.stateProps[part]); continue; }
           if (part === DISABLED) expected.add(DISABLED);
           else problems.push(`${name}: State "${value}" has no mapping for "${part}" (add it to stateProps)`);
         }

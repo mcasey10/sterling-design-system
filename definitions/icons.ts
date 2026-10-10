@@ -33,6 +33,18 @@ export const ICONS = {
 /** The name of an icon, e.g. "plus". */
 export type IconName = keyof typeof ICONS;
 
+/**
+ * The icon for each status tone (Chip/Status, and the error and warning helper icons of input fields), so
+ * status is never shown by color alone.
+ */
+export const TONE_ICONS = {
+  positive: "circle-check",
+  warning: "alert-triangle",
+  critical: "circle-x",
+  info: "info",
+  neutral: "circle-dot",
+} satisfies Record<string, IconName>;
+
 /** A complete 16 × 16 SVG document for a glyph body from ICONS. */
 export function svgFor(body: string) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">${body}</svg>`;

@@ -1,0 +1,44 @@
+/* Chip/Status. Each tone has its own icon, so status is never shown by color alone. */
+
+.stl-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--stl-space-4);
+  padding: var(--stl-space-2) var(--stl-space-8);
+  border-radius: var(--stl-radius-sm);
+  background: var(--stl-status-chip-fill);
+  color: var(--stl-status-chip-text);
+  vertical-align: middle;
+}
+.stl-status-chip .stl-icon {
+  width: var(--stl-size-12);
+  height: var(--stl-size-12);
+}
+/* Long labels truncate at 160px. */
+.stl-status-chip__label {
+  max-width: calc(var(--stl-size-40) * 4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stl-status-chip--positive {
+  --stl-status-chip-fill: var(--stl-color-status-positive-subtle);
+  --stl-status-chip-text: var(--stl-color-status-positive-strong);
+}
+.stl-status-chip--warning {
+  --stl-status-chip-fill: var(--stl-color-status-warning-subtle);
+  --stl-status-chip-text: var(--stl-color-status-warning-strong);
+}
+.stl-status-chip--critical {
+  --stl-status-chip-fill: var(--stl-color-status-critical-subtle);
+  --stl-status-chip-text: var(--stl-color-status-critical-strong);
+}
+.stl-status-chip--info {
+  --stl-status-chip-fill: var(--stl-color-status-info-subtle);
+  --stl-status-chip-text: var(--stl-color-status-info-strong);
+}
+.stl-status-chip--neutral {
+  --stl-status-chip-fill: var(--stl-color-status-neutral-subtle);
+  --stl-status-chip-text: var(--stl-color-status-neutral-strong);
+}
