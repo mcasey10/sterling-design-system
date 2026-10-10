@@ -57,6 +57,8 @@ plugin/
   src/library/            Sterling itself:
     buildLibrary.ts       "Build library": variables, styles, every library page, link check
     libraryLoader.ts      Read-only library lookup, used by "Build example"
+    compositions.ts       Reusable layouts from library components (filter panel, view toolbar, view menu,
+                          card, link row); used by the Patterns page and by examples
     docRegistry.ts        THE table of component documentation: one-sentence description, details,
                           use / don't use, related guidance. Every published component needs an entry;
                           its documentation link opens its own entry under Guidelines › Component usage

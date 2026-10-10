@@ -87,7 +87,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "properties; labels longer than 160px truncate. Colors: status/<tone>-subtle background, status/<tone>-strong text and icon.",
     use: "showing the status of a record (in a grid cell, card, or header). Keep labels to one or two words.",
     dont: "the status is an applied filter (use Chip/Filter), or the chip would be the only signal — keep the icon or label visible.",
-    related: [guidelines("Accessibility")],
+    related: [patterns("Status chips"), guidelines("Accessibility")],
   },
   "Chip/Side": {
     description: "Shows the buy or sell side of an order or trade.",
@@ -135,7 +135,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "Chip and Checkbox are exposed nested instances; swap the Chip to Chip/Side for buy / sell.",
     use: "building custom rows or tables from individual cells, or overriding one cell's state (e.g. a value that breaks a rule).",
     dont: "you need a whole row — use Grid/Row, which keeps cell widths and states consistent.",
-    related: [guidelines("Data display"), guidelines("States"), guidelines("Accessibility"), guidelines("Color")],
+    related: [patterns("Warning and exception cells"), guidelines("Data display"), guidelines("States"), guidelines("Accessibility"), guidelines("Color")],
   },
   "Grid/Row": {
     description: "One grid row of body cells, in default, hover, selected, and selected-hover states.",
@@ -183,11 +183,12 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     description: "Shows the selection count and the actions for the selected grid rows.",
     details:
       "Shown above a grid while rows are selected. Count and Select all are text properties; Show select all hides the " +
-      "Select all link (e.g. once all matching rows are selected); Show destructive toggles the danger action. Action " +
-      "buttons are exposed instances — rename them from the bar instance.",
+      "Select all link (e.g. once all matching rows are selected); Show destructive toggles the danger action. Hint and " +
+      "Show hint (off by default) explain why an action is disabled. Action buttons are exposed instances — rename them " +
+      "and set their state from the bar instance.",
     use: "one or more grid rows are selected and the actions apply to all of them.",
     dont: "nothing is selected (hide the bar), or an action applies to a single row (put it in the row).",
-    related: [guidelines("States"), patterns("Filters, grid, and bulk actions")],
+    related: [patterns("Bulk action bar"), patterns("Filters, grid, and bulk actions"), guidelines("States")],
   },
   "Chip/Filter": {
     description: "Shows one applied filter, with a control to remove it.",
@@ -196,7 +197,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "longer than 240px truncate. Height follows Density → control/height-sm.",
     use: "summarizing filters already applied to a view, with a way to remove each one.",
     dont: "showing a record's status (use Chip/Status), or offering filters to apply (use inputs and selects in a filters panel).",
-    related: [guidelines("Accessibility"), patterns("Filters, grid, and bulk actions")],
+    related: [patterns("Filter panel and chips"), patterns("Filters, grid, and bulk actions"), guidelines("Accessibility")],
   },
   "Summary/Summary metric": {
     description: "Shows one headline number, with an optional progress bar against a target.",
@@ -248,14 +249,14 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "check icon and bold label. Label and Description are text properties; both truncate.",
     use: "each choice needs a short explanation — a saved view and its filters, an account and its number.",
     dont: "one line is enough (use Input/Option).",
-    related: [],
+    related: [patterns("Saved views")],
   },
   "Input/Menu heading": {
     description: "A group heading inside a menu.",
     details: "Group heading inside a menu. Label is a text property. Not interactive.",
     use: "a menu has two or more groups of options (e.g. predefined and saved views).",
     dont: "the menu has a single group — omit the heading.",
-    related: [],
+    related: [patterns("Saved views")],
   },
   "Tabs/Tab": {
     description: "Switches between views of the same data, with an optional count.",
@@ -273,7 +274,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "(set the primary's label and disabled state from this component's panel). Raised surface with a border.",
     use: "confirming or completing one focused task without leaving the screen (sign off, rename, confirm a destructive action).",
     dont: "the task needs the rest of the screen for reference (use a side panel), or it's only a message (use inline status).",
-    related: [guidelines("Accessibility"), guidelines("States")],
+    related: [patterns("Confirmation dialog"), guidelines("Accessibility"), guidelines("States")],
   },
 };
 

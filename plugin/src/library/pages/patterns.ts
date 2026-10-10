@@ -1,15 +1,20 @@
 // Patterns page: complete compositions built only from Sterling instances, with numbered notes and
-// use / don't-use guidance — filters + grid + bulk actions, form layout, and loading / empty / error
-// states. Domain-neutral placeholder content. Documentation only, so it is rebuilt on each run (at the
+// use / don't-use guidance — filters + grid + bulk actions, the bulk action bar's states, filter panel and
+// chips, saved views, status chips, warning and exception cells, the confirmation dialog, form layout, and
+// loading / empty / error states. Domain-neutral placeholder content. Documentation only, so it is rebuilt on each run (at the
 // same position); instances here are recreated, not tracked by the link check.
 
 import { tokens } from "../../core/tokens";
 import { COLLECTIONS } from "../../core/variables";
-import { Kit, color, space, frame, text, pinMode, takeOver, setSize, density, PatternName, GUIDELINES_PAGE } from "../../core/helpers";
+import {
+  Kit, color, space, frame, text, pinMode, takeOver, setSize, density, numericColumnWidth, PatternName, GUIDELINES_PAGE,
+} from "../../core/helpers";
 import { para, definitions, steps } from "../../core/docBlocks";
 import { variantOf, setProps, nested } from "../../core/ensure";
 import { GENERIC_DATA } from "../components/grid";
 import type { Library } from "./componentsPage";
+import { toolbar, filterPanel, viewMenu, dialogBody, FilterField, ViewGroup } from "../compositions";
+import { DESCRIPTION_MENU_WIDTH } from "../components/menu";
 import { created, updated } from "../../core/log";
 
 const ROOT = "Patterns";
@@ -272,6 +277,231 @@ async function dataStates(kit: Kit, lib: Library, root: FrameNode) {
   ]);
 }
 
+// ------------------------------------------------------------ Bulk action bar
+
+const BAR_WIDTH = 800;
+
+async function bulkBar(kit: Kit, lib: Library, root: FrameNode) {
+  const p = await pattern(
+    kit, root, "Bulk action bar",
+    "What the bar above a grid says and offers as the selection changes. It appears only while rows are selected, directly above the grid, and pushes the grid down.",
+    "people act on several rows at once (approve, export, delete).",
+    "an action applies to one row (put it in the row), or nothing can be selected (a read-only view has no bar)."
+  );
+  /**
+   * A bar instance with a real verb on its primary action; `primaryState` disables it. Wider than the generic
+   * grid, so the hint and every action fit on one line.
+   */
+  const bar = (props: Record<string, string | boolean>, primaryState = "default") => {
+    const inst = lib.bulkActionBar.createInstance();
+    p.canvas.appendChild(inst);
+    inst.resize(BAR_WIDTH, inst.height);
+    setProps(inst, props);
+    const primary = nested(inst, "Primary");
+    if (primary) setProps(primary, { Label: "Approve", State: primaryState });
+    return inst;
+  };
+  await marker(kit, p.canvas, 1, "Some rows selected");
+  bar({ Count: "2 selected", "Select all": "Select all 120 matching" });
+  await marker(kit, p.canvas, 2, "All matching rows selected");
+  bar({ Count: "All 120 matching selected", "Show select all": false });
+  await marker(kit, p.canvas, 3, "An action that can't apply to this selection");
+  bar({ Count: "2 selected", "Select all": "Select all 120 matching", Hint: "No flagged items selected", "Show hint": true }, "disabled");
+  await marker(kit, p.canvas, 4, "Read-only view");
+  p.canvas.appendChild(await text(kit, "No checkboxes and no bar: there is nothing to select.", "Body", "text/secondary"));
+
+  await steps(kit, p.notes, [
+    "The count says how many rows are selected. Select all N matching extends the selection to every row that matches the filters, not only the page shown.",
+    "Once everything matching is selected, the count says so and the Select all link is hidden. Before a destructive action on this selection, ask for confirmation: it reaches rows the person can't see (see Confirmation dialog).",
+    "When an action can't apply to the selection, keep it in place, disabled, and say why in the hint beside it (Show hint). In code, link the hint to the button with aria-describedby.",
+    "A read-only view has no checkboxes and no bar. Danger actions use status/critical; reversible ones use a secondary button.",
+  ]);
+}
+
+// ------------------------------------------------------------ Filter panel and chips
+
+const FILTER_FIELDS: FilterField[] = [
+  { label: "Status", kind: "select", placeholder: "Any status" },
+  { label: "Owner", kind: "select", placeholder: "Any owner" },
+  { label: "Amount", kind: "text", placeholder: "e.g. > 1,000" },
+  { label: "Updated", kind: "text", placeholder: "e.g. last 7 days" },
+];
+
+/** A fixed-width holder for a toolbar, which fills its parent. */
+function toolbarHolder(parent: FrameNode, name: string): FrameNode {
+  const holder = frame(name, { width: 640 });
+  parent.appendChild(holder);
+  return holder;
+}
+
+async function filterChips(kit: Kit, lib: Library, root: FrameNode) {
+  const p = await pattern(
+    kit, root, "Filter panel and chips",
+    "A panel sets the filters; chips above the grid show what's applied. The two always agree.",
+    "a grid has several filterable columns and people combine filters.",
+    "there's one simple filter (put a select or a search field in the toolbar), or the condition defines the dataset itself (that's a criterion, not a filter)."
+  );
+  const screen = frame("Screen", { direction: "HORIZONTAL", gap: space(kit, "space/16") });
+  p.canvas.appendChild(screen);
+  const left = frame("Panel", { gap: space(kit, "space/8") });
+  screen.appendChild(left);
+  await marker(kit, left, 1, "Filter panel");
+  await filterPanel(kit, lib, left, 1, "Filter items", FILTER_FIELDS, { Status: "Open", Owner: "Team A" }, 240);
+  const right = frame("Applied filters", { gap: space(kit, "space/8") });
+  screen.appendChild(right);
+  await marker(kit, right, 2, "Applied filters as chips");
+  await toolbar(kit, lib, toolbarHolder(right, "Toolbar holder"), 0, "All items · edited", ["Status is Open", "Owner is Team A"], true);
+
+  await steps(kit, p.notes, [
+    "The panel has one field per commonly filtered column; Add filter offers the rest. Apply runs the query and Reset clears every field. Placeholders give an example of the expected value, never the label.",
+    "Every applied filter shows as a chip in plain words (Status is Open). Removing a chip clears its field in the panel, and choosing a view fills both. Changing the filters marks the view as edited (see Saved views).",
+  ]);
+}
+
+// ------------------------------------------------------------ Saved views
+
+const VIEW_GROUPS: ViewGroup[] = [
+  {
+    heading: "Predefined",
+    views: [
+      { name: "All items", filter: "No filters" },
+      { name: "Open items", filter: "Status is Open" },
+      { name: "Flagged", filter: "Status is Flagged · adds Reason column" },
+    ],
+  },
+  { heading: "Saved by me", views: [{ name: "Team A, large", filter: "Owner is Team A · Amount ≥ 10,000", selected: true }] },
+];
+
+async function savedViews(kit: Kit, lib: Library, root: FrameNode) {
+  const p = await pattern(
+    kit, root, "Saved views",
+    "A view is a named filter set, plus its columns and sort. People pick one from the View menu and can save their own.",
+    "people come back to the same few filter sets (my items, flagged, large amounts).",
+    "the filters are one-off (chips are enough), or the choice switches to a different dataset (use tabs)."
+  );
+  await marker(kit, p.canvas, 1, "View menu, open");
+  const trigger = frame("Trigger", { direction: "HORIZONTAL", align: "CENTER", gap: space(kit, "space/8") });
+  p.canvas.appendChild(trigger);
+  trigger.appendChild(await text(kit, "View", "Label", "text/secondary"));
+  const select = variantOf(lib.select, { State: "focus", Content: "value" }).createInstance();
+  trigger.appendChild(select);
+  setSize(select, 200, select.height);
+  setProps(select, { Label: "View", Value: "Team A, large", "Show label": false, "Show helper": false });
+  viewMenu(kit, lib, p.canvas, VIEW_GROUPS, DESCRIPTION_MENU_WIDTH + 80);
+  await marker(kit, p.canvas, 2, "An edited view: Save view is enabled");
+  await toolbar(kit, lib, toolbarHolder(p.canvas, "Edited view"), 0, "Open items · edited", ["Status is Open", "Owner is Team A"], true);
+  await marker(kit, p.canvas, 3, "An unchanged view: Save view is disabled");
+  await toolbar(kit, lib, toolbarHolder(p.canvas, "Unchanged view"), 0, "Open items", ["Status is Open"], false);
+
+  await steps(kit, p.notes, [
+    "The menu groups predefined views and the person's own. Each option shows its filter set in muted text, so people know what they'll get before choosing. A view can also add columns.",
+    "Changing a view's filters keeps its name and adds \"· edited\". Save view becomes available and saves the current filter set under Saved by me.",
+    "While a view is unchanged, Save view stays visible but disabled, so its place doesn't shift.",
+  ]);
+}
+
+// ------------------------------------------------------------ Status chips
+
+const STATUS_SAMPLES: [string, string][] = [
+  ["Active", "positive"], ["Pending", "info"], ["Flagged", "warning"], ["Blocked", "critical"], ["Draft", "neutral"],
+];
+
+async function statusChips(kit: Kit, lib: Library, root: FrameNode) {
+  const p = await pattern(
+    kit, root, "Status chips",
+    "A status chip says what state a record is in, with a tone, an icon, and one or two words.",
+    "a record has a small set of states that people scan for (active, pending, flagged, blocked, draft).",
+    "the value is a number or free text, or the chip would show an applied filter (use a filter chip)."
+  );
+  await marker(kit, p.canvas, 1, "One tone per meaning");
+  const tones = frame("Tones", { direction: "HORIZONTAL", align: "CENTER", gap: space(kit, "space/12") });
+  p.canvas.appendChild(tones);
+  for (const [label, tone] of STATUS_SAMPLES) {
+    const chip = variantOf(lib.chip, { Tone: tone }).createInstance();
+    tones.appendChild(chip);
+    setProps(chip, { Label: label });
+  }
+  await marker(kit, p.canvas, 2, "In a grid");
+  p.canvas.appendChild(lib.exampleGrid.createInstance());
+  await marker(kit, p.canvas, 3, "Long labels truncate");
+  const long = variantOf(lib.chip, { Tone: "info" }).createInstance();
+  p.canvas.appendChild(long);
+  setProps(long, { Label: "Awaiting secondary review by the operations team" });
+
+  await steps(kit, p.notes, [
+    "Positive: done or healthy. Info: in progress. Warning: needs attention. Critical: blocked or failed. Neutral: inactive or draft. Each tone has its own icon, so the status never depends on color alone.",
+    "In a grid, status gets its own column, sized to the longest label. Use the same word for the same state everywhere.",
+    "Keep labels to one or two words. Longer labels truncate at 160px, so put detail in a neighboring column, not in the chip.",
+  ]);
+}
+
+// ------------------------------------------------------------ Warning and exception cells
+
+async function flaggedCells(kit: Kit, lib: Library, root: FrameNode) {
+  const p = await pattern(
+    kit, root, "Warning and exception cells",
+    "How a grid flags one value that needs attention or breaks a rule, without relying on color.",
+    "one value in a row is outside a rule or limit, and people need to find it and see why.",
+    "the whole row has a state (use a status chip), or the grid couldn't load (use the error state)."
+  );
+  const flagWidth = numericColumnWidth("21.0%", { icon: true });
+  const cell = (type: string, state: string, value: string, width = flagWidth) => {
+    const c = variantOf(lib.bodyCell, { Type: type, State: state }).createInstance();
+    setProps(c, { Value: value });
+    setSize(c, width, density(kit, "row/height"));
+    return c;
+  };
+  const row = (name: string, cells: InstanceNode[]) => {
+    const r = frame(name, { direction: "HORIZONTAL", gap: space(kit, "space/16") });
+    p.canvas.appendChild(r);
+    for (const c of cells) r.appendChild(c);
+  };
+  await marker(kit, p.canvas, 1, "Normal, warning, error");
+  row("States", [cell("numeric", "default", "18.5%"), cell("numeric", "warning", "21.0%"), cell("numeric", "error", "26.4%")]);
+  await marker(kit, p.canvas, 2, "With keyboard focus");
+  row("Focus", [cell("numeric", "warning-focus", "21.0%"), cell("numeric", "error-focus", "26.4%")]);
+  await marker(kit, p.canvas, 3, "Say why, next to the value");
+  const reason = frame("Reason", { direction: "HORIZONTAL" });
+  p.canvas.appendChild(reason);
+  reason.appendChild(cell("numeric", "warning", "21.0%"));
+  reason.appendChild(cell("text", "default", "Above the 20% limit", 200));
+
+  await steps(kit, p.notes, [
+    "Warning marks a value that's allowed but needs attention; error marks one that blocks the action. Both add a border and an icon, and use darker ink on the tinted background.",
+    "The focus ring sits inside the flag's border, so a focused cell still shows that it's flagged.",
+    "Say why in the row: a reason in a neighboring column, with the full rule in a tooltip. In code, include the reason in the cell's accessible name. Size the column with the icon allowance (numericColumnWidth with icon), so flagged values fit.",
+  ]);
+}
+
+// ------------------------------------------------------------ Confirmation dialog
+
+async function confirmation(kit: Kit, lib: Library, root: FrameNode) {
+  const p = await pattern(
+    kit, root, "Confirmation dialog",
+    "A dialog that asks before an action that can't be undone, or that reaches further than the person can see.",
+    "the action is irreversible (delete), or it applies to rows beyond the visible page (all 120 matching).",
+    "the action is small and reversible: do it and offer Undo. Confirming everything teaches people to click through."
+  );
+  const dialog = async (title: string, body: string, primary: string, kind: string) => {
+    const d = lib.dialog.createInstance();
+    p.canvas.appendChild(d);
+    setProps(d, { Title: title, "Show close": true });
+    const action = nested(d, "Primary");
+    if (action) setProps(action, { Kind: kind, Label: primary });
+    const content = dialogBody(d);
+    if (content) content.appendChild(await text(kit, body, "Body", "text/primary"));
+  };
+  await marker(kit, p.canvas, 1, "An action that can't be undone");
+  await dialog("Delete 2 items?", "This can't be undone.", "Delete 2 items", "danger");
+  await marker(kit, p.canvas, 2, "A selection that goes beyond the page");
+  await dialog("Archive all 120 matching items?", "This includes items on other pages. You can restore them from the archive.", "Archive 120 items", "primary");
+
+  await steps(kit, p.notes, [
+    "The title asks the question, with the count. The primary button repeats the verb and the count, never \"OK\". Destructive actions use the danger button. Cancel is always there, and Escape closes the dialog.",
+    "A reversible action needs confirmation only when the selection goes beyond what's visible. The body says what's included and how to undo it.",
+  ]);
+}
+
 export async function buildPatterns(kit: Kit, page: PageNode, lib: Library): Promise<FrameNode> {
   const pos = takeOver(page, ROOT);
   const root = frame(ROOT, {
@@ -298,6 +528,12 @@ export async function buildPatterns(kit: Kit, page: PageNode, lib: Library): Pro
   );
 
   await filtersGrid(kit, lib, root);
+  await bulkBar(kit, lib, root);
+  await filterChips(kit, lib, root);
+  await savedViews(kit, lib, root);
+  await statusChips(kit, lib, root);
+  await flaggedCells(kit, lib, root);
+  await confirmation(kit, lib, root);
   await formLayout(kit, lib, root);
   await dataStates(kit, lib, root);
 

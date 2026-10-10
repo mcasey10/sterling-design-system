@@ -1,8 +1,9 @@
 // Bulk action bar — "N selected · Select all M matching" plus actions, shown above a grid while
 // rows are selected. Built from a spec so the Components page has a generic bar
 // (Grid/BulkActionBar) and worked examples can define their own actions.
-// Properties: Count, Select all (text), plus one boolean per toggleable action. Action buttons
-// are exposed instances, so their labels can be edited from the bar instance.
+// Properties: Count, Select all (text), Hint and Show hint (why an action is disabled; off by default), plus
+// one boolean per toggleable action. Action buttons are exposed instances, so their labels can be edited
+// from the bar instance.
 
 import { Kit, color, density, space, configureFrame } from "../../core/helpers";
 import {
@@ -45,6 +46,7 @@ export const GENERIC_BAR: BarSpec = {
     { name: "Destructive", label: "Delete", variant: "danger", toggle: { prop: "Show destructive", default: true } },
     { name: "Primary", label: "Primary action", variant: "primary" },
   ],
+  hint: "No eligible items selected",
 };
 
 export async function buildBulkActionBar(

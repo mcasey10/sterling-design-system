@@ -384,7 +384,9 @@ export function doc(summary: string, use: string, dont: string): string {
 export type GuidelineSection =
   | "Principles" | "Accessibility" | "Data display" | "Naming" | "States" | "Color" | "Icons" | "Component usage";
 /** Patterns on the Patterns page; each is a frame named "Pattern/<name>". */
-export type PatternName = "Filters, grid, and bulk actions" | "Form layout" | "Loading, empty, and error states";
+export type PatternName =
+  | "Filters, grid, and bulk actions" | "Bulk action bar" | "Filter panel and chips" | "Saved views" | "Status chips"
+  | "Warning and exception cells" | "Confirmation dialog" | "Form layout" | "Loading, empty, and error states";
 
 /** Writes a component description, only when it differs, so reruns don't churn. */
 export function setDescription(node: ComponentNode | ComponentSetNode, text: string) {
