@@ -367,7 +367,8 @@ export function untruncate(t: TextNode) {
  * rounded up to a multiple of 8.
  */
 export function numericColumnWidth(longestValue: string, opts: { icon?: boolean } = {}): number {
-  // Gain / loss cells add a 12px ▲ / ▼ glyph plus a 4px gap.
+  // A 12px icon plus a 4px gap: the ▲ / ▼ glyph in gain / loss cells, or the warning / error icon in a
+  // column whose cells can be flagged.
   return Math.ceil((longestValue.length * 7.5 + 24 + (opts.icon ? 16 : 0)) / 8) * 8;
 }
 

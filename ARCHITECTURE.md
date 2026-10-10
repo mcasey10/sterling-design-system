@@ -384,7 +384,8 @@ cell, so it is always flush with the values and always truncates correctly. To k
 beside the label, numeric columns are sized to their values (`numericColumnWidth()`), and the
 example's column fitting gives extra width only to descriptive text columns (identifier columns
 such as Loan ID stay value-sized too). Both builds check that every
-right-aligned header label ends exactly where its values end.
+right-aligned header label ends exactly where its values end, in every row, and that every numeric
+cell's content fits its column.
 
 The coded component (Storybook, later) will implement the rule exactly, at any column width.
 

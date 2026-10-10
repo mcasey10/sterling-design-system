@@ -2,11 +2,12 @@
 // CHECK_FAILED, and main.ts counts them in the run notification ("example checks: N FAILED").
 //   • Data consistency: consistencyProblems() in loanData.ts (totals, views, selections, column widths).
 //   • Action triggers: every action in ACTIONS has a visible trigger on a screen or state frame.
-//   • Header alignment: in every example grid, right-aligned header labels are flush with their values.
+//   • Grid layout: in every example grid, right-aligned header labels are flush with their values in every
+//     row, and every numeric cell's content fits its column.
 // Neither check reads descriptions or documentation text; those are for people only.
 
 import { consistencyProblems } from "./loanData";
-import { headerAlignmentProblems, Dataset } from "../../library/components/grid";
+import { gridLayoutProblems, Dataset } from "../../library/components/grid";
 import { warn } from "../../core/log";
 
 /** Prefix for example check failures; main.ts counts them in the run notification. */
@@ -40,9 +41,9 @@ export function checkData() {
   for (const p of consistencyProblems()) warn(`${CHECK_FAILED} — data: ${p}`);
 }
 
-/** Header alignment: each right-aligned header label is flush with the values below it, in every example grid. */
-export function checkHeaderAlignment(grids: [ComponentNode, Dataset][]) {
-  for (const [grid, data] of grids) for (const p of headerAlignmentProblems(grid, data)) warn(`${CHECK_FAILED} — layout: ${p}`);
+/** Grid layout: flush right-aligned headers and numeric content that fits its column, in every example grid. */
+export function checkGridLayout(grids: [ComponentNode, Dataset][]) {
+  for (const [grid, data] of grids) for (const p of gridLayoutProblems(grid, data)) warn(`${CHECK_FAILED} — layout: ${p}`);
 }
 
 /**

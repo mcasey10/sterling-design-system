@@ -95,7 +95,7 @@ never truncate, because hidden digits are a risk in financial data.
 |---|---|---|
 | `Grid/HeaderCell` | Label (fills the cell; sort icon at the cell edge — right edge for left-aligned, left edge for right-aligned headers, whose label stays flush with the numbers) | cell width minus padding and the sort icon |
 | `Grid/BodyCell` (text) | Value | fills the cell (cell width − padding) |
-| `Grid/BodyCell` (numeric, gain, loss) | — never truncates | hugs; size the column with `numericColumnWidth()`: characters × 7.5 + 24 (+ 16 for the gain / loss glyph), rounded up to 8 |
+| `Grid/BodyCell` (numeric, gain, loss) | — never truncates | hugs; size the column with `numericColumnWidth()`: characters × 7.5 + 24 (+ 16 for the gain / loss glyph, or for the warning / error icon in a column that can be flagged), rounded up to 8 |
 | `Chip/Status` | Label | 160px |
 | `Chip/Filter` | Label | 240px |
 | `Tabs/Tab` | Label | 200px (count stays visible) |

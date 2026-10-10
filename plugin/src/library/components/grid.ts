@@ -208,6 +208,9 @@ export function bodyCellSpec(kit: Kit, deps: GridDeps): ComponentSetSpec {
         stroke: color(kit, flag ? flag.stroke : "border/default"),
         strokeSides: flag ? { top: 1, right: 1, bottom: 1, left: 1 } : { bottom: 1 },
       });
+      // A flagged cell's border is drawn over its padding instead of taking up layout space. Otherwise the
+      // right border would push the value 1px left of the values in unflagged rows and of the header label.
+      if (comp.strokesIncludedInLayout !== !flag) comp.strokesIncludedInLayout = !flag;
 
       const keep: SceneNode[] = [];
       for (const [state, f] of Object.entries(CELL_FLAGS)) {
@@ -413,25 +416,38 @@ export async function buildGrid(
 }
 
 /**
- * Right-aligned headers must be flush with their values: in each numeric column, the right edge of the header
- * label must match the right edge of the values below it. Returns one message per column that's off.
+ * Layout problems in a grid's numeric columns, one message each:
+ *   • Right-aligned headers must be flush with their values: the right edge of the header label must match
+ *     the right edge of the value in every row.
+ *   • A cell's content (value, plus a warning / error icon or gain / loss glyph) must fit inside its column.
  */
-export function headerAlignmentProblems(grid: ComponentNode, data: Dataset): string[] {
+export function gridLayoutProblems(grid: ComponentNode, data: Dataset): string[] {
   const problems: string[] = [];
   const header = grid.children.find((c) => c.name === "Header" && c.type === "FRAME") as FrameNode | undefined;
-  const row = grid.children.find((c) => c.type === "INSTANCE") as InstanceNode | undefined;
-  if (!header || !row) return [`${grid.name}: no header or rows to compare`];
+  const rows = grid.children.filter((c): c is InstanceNode => c.type === "INSTANCE");
+  if (!header || !rows.length) return [`${grid.name}: no header or rows to compare`];
   const rightEdge = (n: SceneNode | null | undefined) =>
     n?.absoluteBoundingBox ? n.absoluteBoundingBox.x + n.absoluteBoundingBox.width : undefined;
   const textIn = (parent: SceneNode | undefined, name: string) =>
     parent && "findOne" in parent ? (parent.findOne((n) => n.type === "TEXT" && n.name === name) as TextNode | null) : null;
   for (const col of data.columns) {
-    if (col.type !== "numeric") continue; // the columns whose header is right-aligned
+    if (!NUMERIC_TYPES.includes(col.type)) continue;
     const label = rightEdge(textIn(header.children.find((c) => c.name === `Head/${col.key}`), "Label"));
-    const value = rightEdge(textIn(row.children.find((c) => c.name === `Cell/${col.key}`), "Value"));
-    if (label === undefined || value === undefined) problems.push(`${grid.name}: "${col.label}" header label or value not found`);
-    else if (Math.abs(label - value) > 0.5) {
-      problems.push(`${grid.name}: the "${col.label}" header label ends ${Math.abs(label - value).toFixed(1)}px away from its values`);
+    for (const row of rows) {
+      const cell = row.children.find((c) => c.name === `Cell/${col.key}`) as InstanceNode | undefined;
+      const value = rightEdge(textIn(cell, "Value"));
+      if (!cell || label === undefined || value === undefined) {
+        problems.push(`${grid.name}: "${col.label}" header label or ${row.name} value not found`);
+        continue;
+      }
+      // Only "numeric" columns have a right-aligned header; gain / loss headers are left-aligned.
+      if (col.type === "numeric" && Math.abs(label - value) > 0.5) {
+        problems.push(`${grid.name} ${row.name}: the "${col.label}" header label ends ${Math.abs(label - value).toFixed(1)}px away from its value`);
+      }
+      const first = cell.children.find((c) => c.visible && c.name !== "Focus ring");
+      if (first && first.x < cell.paddingLeft - 0.5) {
+        problems.push(`${grid.name} ${row.name}: "${col.label}" content is ${(cell.paddingLeft - first.x).toFixed(1)}px too wide for its ${Math.round(cell.width)}px column`);
+      }
     }
   }
   return problems;

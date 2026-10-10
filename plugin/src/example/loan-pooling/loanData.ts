@@ -11,6 +11,7 @@
 import { stretches } from "../../library/components/grid";
 import type { Column, Dataset, GridRow } from "../../library/components/grid";
 import { columnSpan } from "../../core/layout";
+import { numericColumnWidth } from "../../core/helpers";
 
 // ------------------------------------------------------------ Grid widths
 
@@ -183,16 +184,21 @@ export const EXCEPTIONS_VIEW = {
 
 const poolMatches = (view: { filters: Filter<PoolLoan>[] }) => POOL_LOANS.filter((l) => view.filters.every((f) => f.test(l)));
 
-// Minimum widths: numeric columns from numericColumnWidth() (UPB "598,700.00" → 104), at least 64 so the
-// header's sort icon fits; chips fit "Signed off" / "Ineligible"; Lender fits the longest lender name.
+// Minimum widths: numeric columns from numericColumnWidth() for the longest value, with room for the
+// warning / error icon in columns whose cells can be flagged (FICO, LTV); chips fit "Signed off" /
+// "Ineligible"; Lender fits the longest lender name.
+const UPB_WIDTH = numericColumnWidth("598,700.00"); // 104
+const FICO_WIDTH = numericColumnWidth("672", { icon: true }); // 64
+const LTV_WIDTH = numericColumnWidth("93.0%", { icon: true }); // 80
+const RATE_WIDTH = numericColumnWidth("6.875%"); // 72
 // fitColumns shares the remaining width across the descriptive text columns (Loan ID is an identifier).
 const BASE_POOL_COLUMNS: Column[] = [
   { key: "select", label: "", type: "checkbox", width: 40 },
   { key: "loanId", label: "Loan ID", type: "text", width: 88, identifier: true },
   { key: "lender", label: "Lender", type: "text", width: 160 },
-  { key: "upb", label: "UPB", type: "numeric", width: 104 },
-  { key: "fico", label: "FICO", type: "numeric", width: 64 },
-  { key: "ltv", label: "LTV", type: "numeric", width: 64 },
+  { key: "upb", label: "UPB", type: "numeric", width: UPB_WIDTH },
+  { key: "fico", label: "FICO", type: "numeric", width: FICO_WIDTH },
+  { key: "ltv", label: "LTV", type: "numeric", width: LTV_WIDTH },
   { key: "status", label: "Status", type: "chip", width: 104 },
   { key: "exception", label: "Exception", type: "text", width: 168 }, // fits "LTV 93.0% — above 90%"
 ];
@@ -342,10 +348,10 @@ const CANDIDATE_COLUMNS = fitColumns([
   { key: "select", label: "", type: "checkbox", width: 40 },
   { key: "loanId", label: "Loan ID", type: "text", width: 88, identifier: true },
   { key: "lender", label: "Lender", type: "text", width: 160 },
-  { key: "upb", label: "UPB", type: "numeric", width: 104 },
-  { key: "rate", label: "Rate", type: "numeric", width: 64 },
-  { key: "fico", label: "FICO", type: "numeric", width: 64 },
-  { key: "ltv", label: "LTV", type: "numeric", width: 64 },
+  { key: "upb", label: "UPB", type: "numeric", width: UPB_WIDTH },
+  { key: "rate", label: "Rate", type: "numeric", width: RATE_WIDTH },
+  { key: "fico", label: "FICO", type: "numeric", width: FICO_WIDTH },
+  { key: "ltv", label: "LTV", type: "numeric", width: LTV_WIDTH },
   { key: "eligibility", label: "Eligibility", type: "chip", width: 112 },
 ], "lender");
 

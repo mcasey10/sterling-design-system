@@ -141,7 +141,8 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
   doesn't overlap neighbours. Documented on the Guidelines page.
 - **Truncate text, never numbers**: labels and text values truncate with an ellipsis at a max
   width; numeric values (cells, metric values) never truncate — size numeric columns with
-  `numericColumnWidth()` (characters × 7.5 + 24, + 16 for gain / loss glyphs, rounded up to 8) and
+  `numericColumnWidth()` (characters × 7.5 + 24, + 16 for gain / loss glyphs or for the flag icon in columns that can be
+  flagged, rounded up to 8) and
   use compact notation (e.g. $12.35B) in summary metrics with the full value in Detail.
   Documented on the Guidelines page.
 - **Numeric columns** use tabular figures (Numeric style) and right alignment, so digits line up.
