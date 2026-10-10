@@ -156,6 +156,7 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
     ["Size numeric columns", "Width = characters × 7.5 + 24, rounded up to 8 (numericColumnWidth() in the plugin); add 16 for the gain / loss glyph, or for the warning / error icon in a column whose cells can be flagged. Size for the longest value the column can hold."],
     ["Tabular figures, right aligned", "Numeric columns use the Numeric style (tabular figures) and right alignment, so digits line up. Numeric headers are right-aligned too."],
     ["Column widths", "Size numeric and identifier columns (IDs, codes, reference numbers) to their values. When a grid has room to spare, only descriptive text columns (names, notes, reasons) stretch to take it up."],
+    ["Sort indicators", "Only the sorted column shows a sort icon: ↑ ascending, ↓ descending. An unsorted, sortable header shows no icon at rest and reveals ⇕ on hover and on keyboard focus, so a grid shows at most one sort icon at rest. Sortability stays discoverable through that hover and focus icon and a pointer cursor; in code, set aria-sort on the sorted header. Turn Show sort off for a column that can't be sorted."],
     ["Right-aligned headers", "Label flush with the values; the sort icon sits immediately to the label's left. Size numeric columns to their values (numericColumnWidth()) to keep it there: the icon is at the cell's left edge, so in a column wider than its values it drifts away from the label."],
     ["Compact notation in summaries", "Summary metrics show a compact value (e.g. $12.35B) with the full value in Detail."],
     ["Tabs, views, filters", "Tabs separate scopes; views are named filter sets; every applied filter is a chip; criteria that define a dataset are not filters."],
@@ -243,13 +244,22 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
     entry.layoutSizingHorizontal = "FILL";
     entry.appendChild(await text(kit, name, "Heading"));
     await para(kit, entry, d.description, "Body", "text/primary");
-    // Live preview: the component's default variant.
+    // Live preview: the variants the registry lists for this component, or its default variant.
     const main = componentsPage?.findOne((n) => (n.type === "COMPONENT_SET" || n.type === "COMPONENT") && n.name === name);
-    const source = main?.type === "COMPONENT_SET" ? main.defaultVariant : (main as ComponentNode | undefined);
-    if (source) {
-      const preview = frame("Preview", { padding: space(kit, "space/16"), fill: color(kit, "surface/background"), radius: space(kit, "radius/sm") });
+    const sources: ComponentNode[] =
+      main?.type === "COMPONENT_SET"
+        ? d.preview ? d.preview.map((props) => variantOf(main, props)) : [main.defaultVariant]
+        : main ? [main as ComponentNode] : [];
+    if (sources.length) {
+      const preview = frame("Preview", {
+        direction: "HORIZONTAL",
+        gap: space(kit, "space/16"),
+        padding: space(kit, "space/16"),
+        fill: color(kit, "surface/background"),
+        radius: space(kit, "radius/sm"),
+      });
       entry.appendChild(preview);
-      preview.appendChild(source.createInstance());
+      for (const source of sources) preview.appendChild(source.createInstance());
     }
     await para(kit, entry, d.details);
     await definitions(kit, entry, [["Use when", sentence(d.use)], ["Don't use when", sentence(d.dont)]], 140);

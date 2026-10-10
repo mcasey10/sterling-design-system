@@ -145,6 +145,8 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
   flagged, rounded up to 8) and
   use compact notation (e.g. $12.35B) in summary metrics with the full value in Detail.
   Documented on the Guidelines page.
+- **Sort icons**: only the sorted column shows one at rest; an unsorted Grid/HeaderCell hides its icon
+  layer (kept, not removed) until hover or focus. Both builds fail if a grid header shows more than one.
 - **Numeric columns** use tabular figures (Numeric style) and right alignment, so digits line up.
   Right-aligned header labels stay flush with the values; the sort icon sits to the label's left. Never
   change the HeaderCell layout to move the icon: size numeric columns to their values instead (see

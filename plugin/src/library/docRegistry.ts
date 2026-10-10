@@ -25,6 +25,11 @@ export interface ComponentDoc {
   dont: string;
   related: DocTarget[];
   docs?: DocTarget;
+  /**
+   * Variants shown side by side in the component's entry under Guidelines › Component usage (variant
+   * property → value). Default: the component's default variant alone.
+   */
+  preview?: Record<string, string>[];
 }
 
 /** A component's documentation with its link target resolved. */
@@ -107,11 +112,17 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     description: "Labels a grid column, with optional sorting and left or right alignment.",
     details:
       "Sort (none / asc / desc) × Align (left / right) × State (default / hover / focus). Label and Show sort are " +
-      "component properties. The label fills the cell and truncates at its width; the sort icon sits at the cell edge " +
-      "(right edge for left-aligned headers, left edge for right-aligned ones, so the label stays flush with the numbers). " +
+      "component properties. Only a sorted header (asc / desc) shows its icon at rest; an unsorted one reveals ⇕ on hover " +
+      "and focus, so a grid shows at most one sort icon. Show sort off means the column can't be sorted. The label fills " +
+      "the cell and truncates at its width; the sort icon sits at the cell edge (right edge for left-aligned headers, left " +
+      "edge for right-aligned ones, so the label stays flush with the numbers). " +
       "Height follows Density → row/height.",
     use: "labeling a grid column; use Align = right for numeric columns so headers line up with the numbers.",
     dont: "the column can't be sorted — turn Show sort off rather than using a different header.",
+    preview: [
+      { Sort: "none", Align: "left", State: "default" },
+      { Sort: "asc", Align: "left", State: "default" },
+    ],
     related: [guidelines("Data display"), guidelines("Accessibility"), patterns("Filters, grid, and bulk actions")],
   },
   "Grid/BodyCell": {

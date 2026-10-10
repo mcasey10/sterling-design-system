@@ -68,7 +68,7 @@ indeterminate × State: default / hover / focus / disabled; Label and Show label
 | `Overlay/Dialog` | — | Title and Show close properties; Body slot for the instance's content; exposed Cancel and Primary buttons |
 | `Controls/Icon button` | Kind (secondary / ghost / danger) × Size (sm / md) × State (default / hover / pressed / focus / disabled) | Icon (swap) and Label properties; Label is the accessible name on a hidden layer, so a label never shows |
 | `Chip/Side` | Side (buy / sell) | Label text layer ("Buy" / "Sell", or "B" / "S"); finance/buy and finance/sell colors |
-| `Grid/HeaderCell` | Sort (none / asc / desc) × Align (left / right) × State (default / hover / focus) | Label and Show sort properties |
+| `Grid/HeaderCell` | Sort (none / asc / desc) × Align (left / right) × State (default / hover / focus) | Label and Show sort properties. Only a sorted header shows its icon at rest; an unsorted one reveals it on hover and focus, so a grid shows at most one sort icon. Show sort off = not sortable |
 | `Grid/BodyCell` | Type (text / numeric / gain / loss / chip / checkbox) × State (default / hover / selected / selected-hover / focus / warning / warning-focus / error / error-focus), 54 variants | Value property; gain / loss add ▲ / ▼ and finance/gain / loss; Chip and Checkbox are exposed nested instances (swap the Chip to Chip/Side for buy / sell); warning and error add a border and icon |
 | `Grid/Row` | State (default / hover / selected / selected-hover) | Checkbox cell + generic columns (ID, Name, Amount, Percent, Status) built from BodyCell instances |
 | `Grid/Data grid` | — | Generic grid with placeholder data: two selected rows, one error cell |

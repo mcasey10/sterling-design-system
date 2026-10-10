@@ -101,6 +101,13 @@ export interface GridDeps {
 
 const SORT_ICONS: Record<string, string> = { none: "sort", asc: "arrow-up", desc: "arrow-down" };
 
+/**
+ * Sort icons show only where they carry information: on the sorted column (asc / desc, in every state), and on
+ * an unsorted column while it's hovered or focused. An unsorted header at rest keeps its icon layer, hidden, so
+ * every variant has the same layers and a grid shows at most one sort icon at rest.
+ */
+const sortIconHidden = (p: Props) => p.Sort === "none" && p.State === "default";
+
 // ------------------------------------------------------------ Header cell
 
 export function headerCellSpec(kit: Kit, deps: GridDeps): ComponentSetSpec {
@@ -138,6 +145,18 @@ export function headerCellSpec(kit: Kit, deps: GridDeps): ComponentSetSpec {
       const icon = await ensureInstance(comp, "Sort", deps.icons.get(SORT_ICONS[p.Sort])!, right ? 0 : 1);
       setSize(icon, size(kit, "size/12"), size(kit, "size/12"));
       tintIcon(icon, color(kit, ink));
+      // Unsorted at rest: the icon is hidden, and it's released from the Show sort property (which would
+      // otherwise make it visible again). The other variants are tied to Show sort in wire().
+      if (sortIconHidden(p)) {
+        const refs = icon.componentPropertyReferences;
+        if (refs?.visible) {
+          const { visible: _visible, ...rest } = refs;
+          icon.componentPropertyReferences = rest;
+        }
+        if (icon.visible) icon.visible = false;
+      } else if (!icon.componentPropertyReferences?.visible && !icon.visible) {
+        icon.visible = true;
+      }
       // Header cells sit edge to edge, so the focus ring is drawn inside the cell.
       const ring = ensureFocusRing(kit, comp, p.State === "focus", null, "inside");
       prune(comp, ring ? [label, icon, ring] : [label, icon]);
@@ -148,7 +167,9 @@ export function headerCellSpec(kit: Kit, deps: GridDeps): ComponentSetSpec {
       const showKey = ensureProp(set, "Show sort", "BOOLEAN", true);
       for (const comp of variants) {
         reference(comp, "Label", "characters", labelKey);
-        reference(comp, "Sort", "visible", showKey);
+        // Show sort = off means "not sortable": it hides the icon wherever a variant shows one.
+        const unsortedAtRest = comp.name.includes("Sort=none") && comp.name.includes("State=default");
+        if (!unsortedAtRest) reference(comp, "Sort", "visible", showKey);
       }
     },
   };
@@ -416,7 +437,8 @@ export async function buildGrid(
 }
 
 /**
- * Layout problems in a grid's numeric columns, one message each:
+ * Layout problems in a grid, one message each:
+ *   • The header row shows at most one sort icon (the sorted column; a grid with no sorted column shows none).
  *   • Right-aligned headers must be flush with their values: the right edge of the header label must match
  *     the right edge of the value in every row.
  *   • A cell's content (value, plus a warning / error icon or gain / loss glyph) must fit inside its column.
@@ -430,6 +452,8 @@ export function gridLayoutProblems(grid: ComponentNode, data: Dataset): string[]
     n?.absoluteBoundingBox ? n.absoluteBoundingBox.x + n.absoluteBoundingBox.width : undefined;
   const textIn = (parent: SceneNode | undefined, name: string) =>
     parent && "findOne" in parent ? (parent.findOne((n) => n.type === "TEXT" && n.name === name) as TextNode | null) : null;
+  const sortIcons = header.children.filter((c) => "findOne" in c && c.findOne((n) => n.name === "Sort" && n.visible)).length;
+  if (sortIcons > 1) problems.push(`${grid.name}: the header shows ${sortIcons} sort icons; only the sorted column shows one at rest`);
   for (const col of data.columns) {
     if (!NUMERIC_TYPES.includes(col.type)) continue;
     const label = rightEdge(textIn(header.children.find((c) => c.name === `Head/${col.key}`), "Label"));
