@@ -137,10 +137,10 @@ Things to know:
 
 | Manual step | Code |
 |---|---|
-| 1–3: collections, modes, aliases, scopes | [`tokens/tokens.json`](../tokens/tokens.json) (values) and [`plugin/src/variables.ts`](../plugin/src/variables.ts) (creates them) |
-| 4: applying variables to layers | `configureFrame`, `bindFill` and `setNum` in [`plugin/src/helpers.ts`](../plugin/src/helpers.ts) |
-| 5–6: variants and properties | [`plugin/src/components/button.ts`](../plugin/src/components/button.ts): `combos(...)` creates the variants, `LOOKS` picks variables per variant and state, `wire` adds the properties |
-| 7: applying variable modes to frames | `pinMode` in [`plugin/src/helpers.ts`](../plugin/src/helpers.ts) |
+| 1–3: collections, modes, aliases, scopes | [`tokens/tokens.json`](../tokens/tokens.json) (values) and [`plugin/src/variables.ts`](../plugin/src/core/variables.ts) (creates them) |
+| 4: applying variables to layers | `configureFrame`, `bindFill` and `setNum` in [`plugin/src/helpers.ts`](../plugin/src/core/helpers.ts) |
+| 5–6: variants and properties | [`plugin/src/components/button.ts`](../plugin/src/library/components/button.ts): `combos(...)` creates the variants, `LOOKS` picks variables per variant and state, `wire` adds the properties |
+| 7: applying variable modes to frames | `pinMode` in [`plugin/src/helpers.ts`](../plugin/src/core/helpers.ts) |
 
 ## Practice
 

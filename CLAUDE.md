@@ -95,15 +95,22 @@ scripts/contrast-check.mjs  Reports WCAG contrast for every pair in tokens.json
 scripts/check-tokens.mjs  Token checks: every published token (color, spacing, size, density) has a
                           description in its group's "$descriptions"; versions agree. Run: `npm run check:tokens`
 scripts/build-token-site.mjs  Token reference site: `npm run tokens:site` writes site/index.html
-                          and site/tokens.css (gitignored)
+                          and site/tokens.css (gitignored). CSS names carry the `stl-` code prefix
+                          (--stl-space-8, .stl-text-body); Figma names take no prefix
 scripts/lib/tokens.mjs    Shared token loading, alias resolution, and contrast evaluation
 package.json              Version (the single source; shown on the Cover and Read me pages) and root
                           scripts (contrast check, token checks, token site); no dependencies
-README.md                 Building and maintaining Sterling (usage lives on the Figma Read me page)
+README.md                 Public front page: what Sterling is, what's in it, how it's built, how to run it
+docs/reference.md         Maintainer reference: every collection, component, property, and tool option
+CONTRIBUTING.md           Propose, build, check, release; versioning rules
+CHANGELOG.md              Every release, starting at 1.0.0
+LICENSE, LICENSE-docs.md  MIT for code; CC BY 4.0 for documentation and design content
+.github/workflows/        ci.yml (checks on every push and pull request); pages.yml (publishes the token
+                          site from main; skipped while the repo is private)
 ARCHITECTURE.md           How it fits together, for designers
 docs/mermaid-config.json, docs/mermaid.css   Shared settings for rendering example diagrams
 docs/examples/<name>/     Planning docs for an example: .mmd sources (source of truth) and
-                          rendered .svg — re-render after editing a .mmd (command in README)
+                          rendered .svg — re-render after editing a .mmd (command in docs/reference.md)
 ```
 
 ## Figma output
@@ -173,6 +180,8 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
 - Run `npm run check:tokens` after any token change; it must exit 0. Every new Color, Spacing, Size,
   or Density token needs a description in that group's `"$descriptions"` in tokens.json (Primitives
   need none: they're hidden).
+- When a release changes the version, set it in package.json, plugin/package.json, and tokens.json
+  `$meta.version`, and add a CHANGELOG.md entry (see CONTRIBUTING.md).
 - Before committing, grep for the banned terms (see Hard rules → Naming); there must be none.
 
 ## Loan-pooling example (approved)

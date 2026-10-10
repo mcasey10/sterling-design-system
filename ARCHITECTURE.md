@@ -1,11 +1,8 @@
 # Sterling architecture
 
-> **Status: proposed.** This describes Sterling 1.0.0 as planned. It will be updated as the
-> port lands, so that it always matches the code.
-
 Sterling is a design system for data-dense applications. One Figma file holds it, generated
 by a local Figma plugin from one token file (`tokens/tokens.json`). The same file also holds
-**an example built with Sterling**: a loan pooling workflow on its own pages at the end.
+**an example built with Sterling**: a loan pooling workflow on its own page at the end.
 
 This document is written for designers first. Code paths are given so you can find things,
 but you don't need to read code to follow it.
@@ -39,6 +36,7 @@ sterling-design-system/
 ├── CONTRIBUTING.md         Propose → build → check → release
 ├── CHANGELOG.md            Every release, starting at 1.0.0
 ├── CLAUDE.md               Rules for Claude Code when working in this repo
+├── LICENSE, LICENSE-docs.md   MIT for code; CC BY 4.0 for documentation and design content
 ├── package.json            Repo version (the single source of the version number) and scripts
 │
 ├── tokens/
@@ -68,9 +66,10 @@ sterling-design-system/
 │       │   ├── docRegistry.ts    ONE TABLE: every published component's description,
 │       │   │                     usage note, and documentation link
 │       │   ├── docLinks.ts       Turns registry targets into documentation links (after docs pages are drawn)
-│       │   ├── checks.ts         Library checks (descriptions, doc links, hidden Primitives)
+│       │   ├── checks.ts         Library checks (component and variable documentation, hidden
+│       │   │                     Primitives, grid layout)
 │       │   ├── compositions.ts   Reusable layouts used by Patterns and the example
-│       │   │                     (filter panel, view toolbar, side-panel card)
+│       │   │                     (filter panel, view toolbar, view menu, card, link row)
 │       │   ├── icons.ts          Icon/* glyphs
 │       │   ├── components/       One file per component (button.ts, grid.ts, inputs.ts, …)
 │       │   └── pages/            cover, readme, foundations, components, guidelines,
@@ -90,6 +89,8 @@ sterling-design-system/
 │   └── lib/tokens.mjs         Shared token loading and contrast math
 │
 ├── docs/
+│   ├── reference.md           Every collection, component, property, and tool option
+│   ├── images/                Screenshots used by the README
 │   ├── manual-walkthrough.md  How a designer would build variables/variants by hand
 │   └── examples/loan-pooling/ Planning diagrams (.mmd source, .svg rendered)
 │
@@ -234,9 +235,10 @@ override on every instance. Treat it as a breaking change (see CONTRIBUTING.md).
 
 ### What the link check verifies
 
-At the start of each build, the plugin records every top-level instance on the Template,
-Component architecture, and Example pages: its ID and the exact variant it points to. At the
-end, it checks again:
+At the start of each build, the plugin records every top-level instance on the pages it checks:
+its ID and the exact variant it points to. **Build library** checks every page it doesn't redraw
+(Template, Component architecture, the example page, and any page you add yourself); **Build
+example** checks the example page. At the end, it checks again:
 
 | Result | Meaning |
 |---|---|
@@ -351,7 +353,9 @@ if a published token has no description, before anything reaches Figma.
 **Library checks** (run by Build library; failures show as "library checks: N FAILED"):
 a published component with no registry entry, no description, a description that isn't exactly
 one sentence, or no documentation link fails; a registry entry with no matching component fails;
-a published variable without a description fails; a visible Primitive fails.
+a published variable without a description fails; a visible Primitive fails; and the generic grid
+must follow the layout rules (right-aligned headers flush with their values, content that fits its
+column, at most one sort icon).
 
 Components whose names start with `_` (`_Demo/*`, `_Example/*`) are hidden from publishing,
 so they don't need entries.

@@ -2,6 +2,7 @@
   "name": "sterling-plugin",
   "version": "1.0.0",
   "private": true,
+  "license": "MIT",
   "description": "Local Figma plugin that generates Sterling from ../tokens/tokens.json. No network access.",
   "scripts": {
     "build": "esbuild src/main.ts --bundle --outfile=dist/code.js --target=es2017 --log-level=warning",
