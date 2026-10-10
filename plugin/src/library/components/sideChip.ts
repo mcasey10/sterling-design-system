@@ -4,7 +4,7 @@
 // across the set, which would make the Sell variant read "Buy".
 
 import { Kit, color, space, configureFrame } from "../../core/helpers";
-import { ComponentSetSpec, Props, combos, ensureText, prune } from "../../core/ensure";
+import { ComponentSetSpec, Props, combos, ensureText, prune, variantAxes } from "../../core/ensure";
 import { describe } from "../../../../definitions/docRegistry";
 
 const LABELS: Record<string, string> = { buy: "Buy", sell: "Sell" };
@@ -13,7 +13,7 @@ export function sideChipSpec(kit: Kit): ComponentSetSpec {
   return {
     name: "Chip/Side",
     description: describe("Chip/Side"),
-    variants: combos({ Side: ["buy", "sell"] }),
+    variants: combos(variantAxes("Chip/Side")),
     columnProp: "Side",
 
     async build(comp: ComponentNode, p: Props) {

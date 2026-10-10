@@ -2,7 +2,10 @@
 // Properties: Label (text), Show remove (boolean, shows the x icon).
 
 import { Kit, size, color, density, space, configureFrame, setSize, truncate } from "../../core/helpers";
-import { ComponentSetSpec, Props, combos, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference, ensureFocusRing } from "../../core/ensure";
+import {
+  ComponentSetSpec, Props, combos, ensureInstance, ensureText, prune, tintIcon, reference, ensureFocusRing, defineProp,
+  variantAxes,
+} from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { describe } from "../../../../definitions/docRegistry";
 
@@ -10,7 +13,7 @@ export function filterChipSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   return {
     name: "Chip/Filter",
     description: describe("Chip/Filter"),
-    variants: combos({ State: ["default", "hover", "pressed", "focus"] }),
+    variants: combos(variantAxes("Chip/Filter")),
     columnProp: "State",
 
     async build(comp: ComponentNode, p: Props) {
@@ -34,8 +37,8 @@ export function filterChipSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
     },
 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
-      const labelKey = ensureProp(set, "Label", "TEXT", "Filter: Value");
-      const removableKey = ensureProp(set, "Show remove", "BOOLEAN", true);
+      const labelKey = defineProp(set, "Label");
+      const removableKey = defineProp(set, "Show remove");
       for (const comp of variants) {
         reference(comp, "Label", "characters", labelKey);
         reference(comp, "Remove", "visible", removableKey);

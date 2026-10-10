@@ -4,7 +4,10 @@
 // Properties: Label, Value, Detail (text), Show progress (boolean).
 
 import { Kit, size, color, space, configureFrame, setSize, bindFill, bindRadius, rect, truncate, untruncate } from "../../core/helpers";
-import { ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference } from "../../core/ensure";
+import {
+  ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, prune, tintIcon, reference, defineProp,
+  variantAxes,
+} from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { describe } from "../../../../definitions/docRegistry";
 
@@ -20,7 +23,7 @@ export function summaryMetricSpec(kit: Kit, icons: IconIndex): ComponentSetSpec 
   return {
     name: "Summary/Summary metric",
     description: describe("Summary/Summary metric"),
-    variants: combos({ Status: ["normal", "over-target"], State: ["default", "loading"] }),
+    variants: combos(variantAxes("Summary/Summary metric")),
     columnProp: "Status",
 
     async build(comp: ComponentNode, p: Props) {
@@ -99,8 +102,8 @@ export function summaryMetricSpec(kit: Kit, icons: IconIndex): ComponentSetSpec 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
       // Value and Detail differ per state, so they stay plain text layers (overridable) rather than
       // set-wide text properties, which would force one default across both variants.
-      const labelKey = ensureProp(set, "Label", "TEXT", "Metric");
-      const showKey = ensureProp(set, "Show progress", "BOOLEAN", true);
+      const labelKey = defineProp(set, "Label");
+      const showKey = defineProp(set, "Show progress");
       for (const comp of variants) {
         reference(comp, "Label", "characters", labelKey);
         reference(comp, "Progress", "visible", showKey);

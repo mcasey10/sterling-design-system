@@ -5,9 +5,13 @@
 // Danger uses status/critical (destructive row actions such as delete), never finance/sell.
 
 import { Kit, color, density, space, configureFrame, setSize } from "../../core/helpers";
-import { ComponentSetSpec, Props, combos, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference, ensureFocusRing } from "../../core/ensure";
+import {
+  ComponentSetSpec, Props, combos, ensureInstance, ensureText, prune, tintIcon, reference, ensureFocusRing, defineProp,
+  variantAxes,
+} from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { describe } from "../../../../definitions/docRegistry";
+import { propertyDef } from "../../../../definitions/components";
 
 interface Look {
   fill?: string;
@@ -38,15 +42,11 @@ const LOOKS: Record<string, Record<string, Look>> = {
 };
 
 export function iconButtonSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
-  const defaultIcon = icons.get("more")!;
+  const defaultIcon = icons.get(propertyDef("Controls/Icon button", "Icon").default as string)!;
   return {
     name: "Controls/Icon button",
     description: describe("Controls/Icon button"),
-    variants: combos({
-      Kind: ["secondary", "ghost", "danger"],
-      Size: ["sm", "md"],
-      State: ["default", "hover", "pressed", "focus", "disabled"],
-    }),
+    variants: combos(variantAxes("Controls/Icon button")),
     columnProp: "State",
 
     async build(comp: ComponentNode, p: Props) {
@@ -73,14 +73,11 @@ export function iconButtonSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
     },
 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
-      const labelKey = ensureProp(set, "Label", "TEXT", "Action");
-      const iconKey = ensureProp(
-        set,
-        "Icon",
-        "INSTANCE_SWAP",
-        defaultIcon.id,
-        [...icons.values()].map((c) => ({ type: "COMPONENT" as const, key: c.key }))
-      );
+      const labelKey = defineProp(set, "Label");
+      const iconKey = defineProp(set, "Icon", {
+        defaultId: defaultIcon.id,
+        preferredValues: [...icons.values()].map((c) => ({ type: "COMPONENT" as const, key: c.key })),
+      });
       for (const comp of variants) {
         reference(comp, "Label", "characters", labelKey);
         reference(comp, "Icon", "mainComponent", iconKey);

@@ -6,8 +6,8 @@
 
 import { Kit, size, color, density, space, configureFrame, setSize, truncate, untruncate, widthOf, bindFill } from "../../core/helpers";
 import {
-  ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, ensureProp, prune, tintIcon,
-  variantOf, setProps, nested, reference, ensureComponent, ensureFocusRing,
+  ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, prune, tintIcon, variantOf, setProps, nested,
+  reference, ensureComponent, ensureFocusRing, defineProp, variantAxes,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { warn } from "../../core/log";
@@ -114,7 +114,7 @@ export function headerCellSpec(kit: Kit, deps: GridDeps): ComponentSetSpec {
   return {
     name: "Grid/HeaderCell",
     description: describe("Grid/HeaderCell"),
-    variants: combos({ Sort: ["none", "asc", "desc"], Align: ["left", "right"], State: ["default", "hover", "focus"] }),
+    variants: combos(variantAxes("Grid/HeaderCell")),
     columnProp: "State",
 
     async build(comp: ComponentNode, p: Props) {
@@ -163,8 +163,8 @@ export function headerCellSpec(kit: Kit, deps: GridDeps): ComponentSetSpec {
     },
 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
-      const labelKey = ensureProp(set, "Label", "TEXT", "Column");
-      const showKey = ensureProp(set, "Show sort", "BOOLEAN", true);
+      const labelKey = defineProp(set, "Label");
+      const showKey = defineProp(set, "Show sort");
       for (const comp of variants) {
         reference(comp, "Label", "characters", labelKey);
         // Show sort = off means "not sortable": it hides the icon wherever a variant shows one.
@@ -176,8 +176,6 @@ export function headerCellSpec(kit: Kit, deps: GridDeps): ComponentSetSpec {
 }
 
 // ------------------------------------------------------------ Body cell
-
-const CELL_STATES = ["default", "hover", "selected", "selected-hover", "focus", "warning", "warning-focus", "error", "error-focus"];
 
 const CELL_FILLS: Record<string, string> = {
   default: "surface/panel",
@@ -205,10 +203,7 @@ export function bodyCellSpec(kit: Kit, deps: GridDeps): ComponentSetSpec {
   return {
     name: "Grid/BodyCell",
     description: describe("Grid/BodyCell"),
-    variants: combos({
-      Type: ["text", "numeric", "gain", "loss", "chip", "checkbox"],
-      State: CELL_STATES,
-    }),
+    variants: combos(variantAxes("Grid/BodyCell")),
     columnProp: "State",
 
     async build(comp: ComponentNode, p: Props) {
@@ -272,7 +267,7 @@ export function bodyCellSpec(kit: Kit, deps: GridDeps): ComponentSetSpec {
     },
 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
-      const valueKey = ensureProp(set, "Value", "TEXT", "Value");
+      const valueKey = defineProp(set, "Value");
       for (const comp of variants) reference(comp, "Value", "characters", valueKey);
     },
   };
@@ -316,7 +311,7 @@ export function rowSpec(kit: Kit, bodyCell: ComponentSetNode, opts: GridSpecOpti
     name: opts.name,
     previousNames: opts.previousNames,
     description: opts.description,
-    variants: combos({ State: ["default", "hover", "selected", "selected-hover"] }),
+    variants: combos(variantAxes("Grid/Row")),
     columnProp: "",
 
     async build(comp: ComponentNode, p: Props) {
@@ -536,8 +531,8 @@ export async function buildSkeletonRow(
     keep.push(cell);
   }
   prune(comp, keep);
-  const labelKey = ensureProp(comp, "Label", "TEXT", "Loading rows…");
-  const showKey = ensureProp(comp, "Show label", "BOOLEAN", false);
+  const labelKey = defineProp(comp, "Label");
+  const showKey = defineProp(comp, "Show label");
   reference(comp, "Label", "characters", labelKey);
   reference(comp, "Label", "visible", showKey);
   return comp;
@@ -559,7 +554,7 @@ export function emptyStateSpec(kit: Kit, deps: { icons: IconIndex; button: Compo
   return {
     name: "Grid/Empty state",
     description: describe("Grid/Empty state"),
-    variants: combos({ Tone: ["neutral", "critical"] }),
+    variants: combos(variantAxes("Grid/Empty state")),
     columnProp: "Tone",
 
     async build(comp: ComponentNode, p: Props) {
@@ -587,7 +582,7 @@ export function emptyStateSpec(kit: Kit, deps: { icons: IconIndex; button: Compo
     },
 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
-      const showKey = ensureProp(set, "Show action", "BOOLEAN", true);
+      const showKey = defineProp(set, "Show action");
       for (const comp of variants) reference(comp, "Action", "visible", showKey);
     },
   };
@@ -625,7 +620,7 @@ export async function buildPagination(
   if (!next.isExposedInstance) next.isExposedInstance = true;
   prune(nav, [prev, pageText, next]);
   prune(comp, [range, nav]);
-  reference(comp, "Range", "characters", ensureProp(comp, "Range", "TEXT", "Showing 1–5 of 120"));
-  reference(comp, "Page", "characters", ensureProp(comp, "Page", "TEXT", "Page 1 of 24"));
+  reference(comp, "Range", "characters", defineProp(comp, "Range"));
+  reference(comp, "Page", "characters", defineProp(comp, "Page"));
   return comp;
 }

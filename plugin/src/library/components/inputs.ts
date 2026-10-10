@@ -6,11 +6,12 @@
 
 import { Kit, size, color, density, space, configureFrame, setSize, truncate } from "../../core/helpers";
 import {
-  ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference,
-  ensureFocusRing,
+  ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, prune, tintIcon, reference, ensureFocusRing,
+  defineProp, variantAxes,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { describe } from "../../../../definitions/docRegistry";
+import { defaultText } from "../../../../definitions/components";
 
 interface FieldLook {
   fill: string;
@@ -41,18 +42,19 @@ const LOOKS: Record<string, FieldLook> = {
   disabled: { fill: "surface/disabled", stroke: "border/default", weight: 1, value: "text/disabled", helper: "text/disabled" },
 };
 
-const TEXT_STATES = ["default", "hover", "focus", "error", "error-focus", "warning", "disabled"];
-const SELECT_STATES = ["default", "hover", "focus", "open", "error", "error-focus", "warning", "disabled"];
-
 function inputSpec(kit: Kit, icons: IconIndex, kind: "text" | "select", menu?: ComponentNode): ComponentSetSpec {
   const select = kind === "select";
-  const defaults = select
-    ? { label: "Label", value: "Option", placeholder: "Select an option", helper: "Helper text" }
-    : { label: "Label", value: "Value", placeholder: "Enter a value", helper: "Helper text" };
+  const component = select ? "Input/Select" : "Input/Text";
+  const defaults = {
+    label: defaultText(component, "Label"),
+    value: defaultText(component, "Value"),
+    placeholder: defaultText(component, "Placeholder"),
+    helper: defaultText(component, "Helper"),
+  };
   return {
     name: select ? "Input/Select" : "Input/Text",
     description: describe(select ? "Input/Select" : "Input/Text"),
-    variants: combos({ State: select ? SELECT_STATES : TEXT_STATES, Content: ["value", "placeholder"] }),
+    variants: combos(variantAxes(select ? "Input/Select" : "Input/Text")),
     columnProp: "State",
 
     async build(comp: ComponentNode, p: Props) {
@@ -135,12 +137,12 @@ function inputSpec(kit: Kit, icons: IconIndex, kind: "text" | "select", menu?: C
     },
 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
-      const labelKey = ensureProp(set, "Label", "TEXT", defaults.label);
-      const valueKey = ensureProp(set, "Value", "TEXT", defaults.value);
-      const placeholderKey = ensureProp(set, "Placeholder", "TEXT", defaults.placeholder);
-      const helperKey = ensureProp(set, "Helper", "TEXT", defaults.helper);
-      const showLabelKey = ensureProp(set, "Show label", "BOOLEAN", true);
-      const showHelperKey = ensureProp(set, "Show helper", "BOOLEAN", true);
+      const labelKey = defineProp(set, "Label");
+      const valueKey = defineProp(set, "Value");
+      const placeholderKey = defineProp(set, "Placeholder");
+      const helperKey = defineProp(set, "Helper");
+      const showLabelKey = defineProp(set, "Show label");
+      const showHelperKey = defineProp(set, "Show helper");
       for (const comp of variants) {
         reference(comp, "Label", "characters", labelKey);
         reference(comp, "Label", "visible", showLabelKey);

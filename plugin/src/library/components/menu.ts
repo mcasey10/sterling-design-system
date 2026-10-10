@@ -5,8 +5,8 @@
 
 import { Kit, color, density, space, configureFrame, setSize, truncate } from "../../core/helpers";
 import {
-  ComponentSetSpec, Props, combos, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference, variantOf,
-  setProps, ensureComponent, ensureFrame,
+  ComponentSetSpec, Props, combos, ensureInstance, ensureText, prune, tintIcon, reference, variantOf, setProps,
+  ensureComponent, ensureFrame, defineProp, variantAxes,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { describe } from "../../../../definitions/docRegistry";
@@ -24,7 +24,7 @@ export function optionSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   return {
     name: "Input/Option",
     description: describe("Input/Option"),
-    variants: combos({ State: ["default", "hover", "selected", "disabled"] }),
+    variants: combos(variantAxes("Input/Option")),
     columnProp: "State",
 
     async build(comp: ComponentNode, p: Props) {
@@ -51,7 +51,7 @@ export function optionSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
     },
 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
-      const labelKey = ensureProp(set, "Label", "TEXT", "Option");
+      const labelKey = defineProp(set, "Label");
       for (const comp of variants) reference(comp, "Label", "characters", labelKey);
     },
   };
@@ -103,7 +103,7 @@ export function optionDescriptionSpec(kit: Kit, icons: IconIndex): ComponentSetS
   return {
     name: "Input/Option with description",
     description: describe("Input/Option with description"),
-    variants: combos({ State: ["default", "hover", "selected", "disabled"] }),
+    variants: combos(variantAxes("Input/Option with description")),
     columnProp: "State",
 
     async build(comp: ComponentNode, p: Props) {
@@ -135,8 +135,8 @@ export function optionDescriptionSpec(kit: Kit, icons: IconIndex): ComponentSetS
     },
 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
-      const labelKey = ensureProp(set, "Label", "TEXT", "Option");
-      const detailKey = ensureProp(set, "Description", "TEXT", "Description");
+      const labelKey = defineProp(set, "Label");
+      const detailKey = defineProp(set, "Description");
       for (const comp of variants) {
         reference(comp, "Label", "characters", labelKey);
         reference(comp, "Description", "characters", detailKey);
@@ -158,6 +158,6 @@ export async function buildMenuHeading(kit: Kit, page: PageNode, parent: FrameNo
   const label = await ensureText(kit, comp, "Label", "Group", "Label", "text/secondary", 0);
   truncate(label, { fill: true });
   prune(comp, [label]);
-  reference(comp, "Label", "characters", ensureProp(comp, "Label", "TEXT", "Group"));
+  reference(comp, "Label", "characters", defineProp(comp, "Label"));
   return comp;
 }

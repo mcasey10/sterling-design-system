@@ -3,7 +3,9 @@
 // status is never conveyed by color alone.
 
 import { Kit, size, color, space, configureFrame, setSize, truncate } from "../../core/helpers";
-import { ComponentSetSpec, Props, combos, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference } from "../../core/ensure";
+import {
+  ComponentSetSpec, Props, combos, ensureInstance, ensureText, prune, tintIcon, reference, defineProp, variantAxes,
+} from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { describe } from "../../../../definitions/docRegistry";
 
@@ -19,7 +21,7 @@ export function statusChipSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   return {
     name: "Chip/Status",
     description: describe("Chip/Status"),
-    variants: combos({ Tone: Object.keys(TONE_ICONS) }),
+    variants: combos(variantAxes("Chip/Status")),
     columnProp: "Tone",
 
     async build(comp: ComponentNode, p: Props) {
@@ -42,8 +44,8 @@ export function statusChipSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
     },
 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
-      const labelKey = ensureProp(set, "Label", "TEXT", "Status");
-      const showKey = ensureProp(set, "Show icon", "BOOLEAN", true);
+      const labelKey = defineProp(set, "Label");
+      const showKey = defineProp(set, "Show icon");
       for (const comp of variants) {
         reference(comp, "Label", "characters", labelKey);
         reference(comp, "Icon", "visible", showKey);

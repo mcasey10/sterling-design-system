@@ -3,14 +3,16 @@
 // Properties: Label, Count (text).
 
 import { Kit, color, density, space, configureFrame, truncate } from "../../core/helpers";
-import { ComponentSetSpec, Props, combos, ensureFrame, ensureText, ensureProp, prune, reference, ensureFocusRing } from "../../core/ensure";
+import {
+  ComponentSetSpec, Props, combos, ensureFrame, ensureText, prune, reference, ensureFocusRing, defineProp, variantAxes,
+} from "../../core/ensure";
 import { describe } from "../../../../definitions/docRegistry";
 
 export function tabSpec(kit: Kit): ComponentSetSpec {
   return {
     name: "Tabs/Tab",
     description: describe("Tabs/Tab"),
-    variants: combos({ State: ["default", "hover", "focus", "disabled", "selected", "selected-focus"] }),
+    variants: combos(variantAxes("Tabs/Tab")),
     columnProp: "State",
 
     async build(comp: ComponentNode, p: Props) {
@@ -52,9 +54,9 @@ export function tabSpec(kit: Kit): ComponentSetSpec {
     },
 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
-      const labelKey = ensureProp(set, "Label", "TEXT", "Tab");
-      const countKey = ensureProp(set, "Count", "TEXT", "0");
-      const showCountKey = ensureProp(set, "Show count", "BOOLEAN", true);
+      const labelKey = defineProp(set, "Label");
+      const countKey = defineProp(set, "Count");
+      const showCountKey = defineProp(set, "Show count");
       for (const comp of variants) {
         reference(comp, "Label", "characters", labelKey);
         reference(comp, "Count", "characters", countKey);

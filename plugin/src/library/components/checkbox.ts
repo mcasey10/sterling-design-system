@@ -4,8 +4,8 @@
 
 import { Kit, size, color, space, configureFrame, setSize } from "../../core/helpers";
 import {
-  ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, ensureProp, prune, tintIcon, reference,
-  ensureFocusRing,
+  ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, prune, tintIcon, reference, ensureFocusRing,
+  defineProp, variantAxes,
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { describe } from "../../../../definitions/docRegistry";
@@ -14,7 +14,7 @@ export function checkboxSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
   return {
     name: "Controls/Checkbox",
     description: describe("Controls/Checkbox"),
-    variants: combos({ Checked: ["off", "on", "indeterminate"], State: ["default", "hover", "focus", "disabled"] }),
+    variants: combos(variantAxes("Controls/Checkbox")),
     columnProp: "State",
 
     async build(comp: ComponentNode, p: Props) {
@@ -59,8 +59,8 @@ export function checkboxSpec(kit: Kit, icons: IconIndex): ComponentSetSpec {
     },
 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
-      const labelKey = ensureProp(set, "Label", "TEXT", "Label");
-      const showKey = ensureProp(set, "Show label", "BOOLEAN", false);
+      const labelKey = defineProp(set, "Label");
+      const showKey = defineProp(set, "Show label");
       for (const comp of variants) {
         reference(comp, "Label", "characters", labelKey);
         reference(comp, "Label", "visible", showKey);

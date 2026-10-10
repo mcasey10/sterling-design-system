@@ -3,7 +3,9 @@
 // If slots aren't available to the plugin, Body is a plain frame and the run logs a warning.
 
 import { Kit, color, space, configureFrame, frame, text } from "../../core/helpers";
-import { ensureComponent, ensureFrame, ensureInstance, ensureText, ensureProp, prune, reference, setProps, variantOf } from "../../core/ensure";
+import {
+  ensureComponent, ensureFrame, ensureInstance, ensureText, prune, reference, setProps, variantOf, defineProp,
+} from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { warn } from "../../core/log";
 import { describe } from "../../../../definitions/docRegistry";
@@ -72,7 +74,7 @@ export async function buildDialog(
   prune(footer, [cancel, primary]);
   prune(comp, [header, body, footer]);
 
-  reference(comp, "Title", "characters", ensureProp(comp, "Title", "TEXT", "Dialog title"));
-  reference(comp, "Close", "visible", ensureProp(comp, "Show close", "BOOLEAN", true));
+  reference(comp, "Title", "characters", defineProp(comp, "Title"));
+  reference(comp, "Close", "visible", defineProp(comp, "Show close"));
   return comp;
 }

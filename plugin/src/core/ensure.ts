@@ -4,6 +4,7 @@
 
 import { Kit, FrameOptions, configureFrame, color, bindFill, bindStroke, bindRadius, recolor, space, PLUGIN_KEY, setDescription } from "./helpers";
 import { created, updated, warn } from "./log";
+import { componentDef, propertyDef } from "../../../definitions/components";
 
 type Parent = BaseNode & ChildrenMixin;
 
@@ -115,6 +116,29 @@ export function ensureProp(
     return owner.editComponentProperty(key, preferredValues ? { defaultValue, preferredValues } : { defaultValue });
   }
   return owner.addComponentProperty(name, type, defaultValue, preferredValues ? { preferredValues } : undefined);
+}
+
+/** A component's variant properties and their values, from definitions/components.ts, ready for combos(). */
+export const variantAxes = (component: string) => componentDef(component).variants;
+
+/**
+ * Adds (or updates) a property that definitions/components.ts declares for `owner` (looked up by the owner's
+ * name), with the declared type and default. Throws if the definition doesn't list it, so the definitions stay
+ * the one place properties are named. For an instance-swap property, pass the default component's ID and the
+ * components it may swap to; the definition names the default icon, and the caller resolves it to a node.
+ */
+export function defineProp(
+  owner: ComponentSetNode | ComponentNode,
+  name: string,
+  swap?: { defaultId: string; preferredValues: InstanceSwapPreferredValue[] }
+): string {
+  const def = propertyDef(owner.name, name);
+  if (def.type === "INSTANCE_SWAP") {
+    if (!swap) throw new Error(`${owner.name} / ${name} is an instance-swap property; pass its default and preferred values.`);
+    return ensureProp(owner, name, "INSTANCE_SWAP", swap.defaultId, swap.preferredValues);
+  }
+  if (def.type === "SLOT") throw new Error(`${owner.name} / ${name} is a slot; slots are created with createSlot(), not as properties.`);
+  return ensureProp(owner, name, def.type, def.default as string | boolean);
 }
 
 // ------------------------------------------------------------ Component sets

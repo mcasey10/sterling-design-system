@@ -11,6 +11,7 @@ import {
 } from "../../core/ensure";
 import type { IconIndex } from "../icons";
 import { describe } from "../../../../definitions/docRegistry";
+import { defaultText, propertyDef } from "../../../../definitions/components";
 
 export interface BarAction {
   /** Layer name; keep stable so instance overrides survive reruns. */
@@ -35,18 +36,21 @@ export interface BarSpec {
   hint?: string;
 }
 
+/** The library's generic bar. Its property defaults come from definitions/components.ts. */
+const GENERIC_BAR_NAME = "Grid/BulkActionBar";
+
 export const GENERIC_BAR: BarSpec = {
-  name: "Grid/BulkActionBar",
+  name: GENERIC_BAR_NAME,
   description: describe("Grid/BulkActionBar"),
-  count: "2 selected",
-  selectAll: "Select all 120 matching",
+  count: defaultText(GENERIC_BAR_NAME, "Count"),
+  selectAll: defaultText(GENERIC_BAR_NAME, "Select all"),
   actions: [
     { name: "Clear", label: "Clear selection", variant: "ghost" },
     { name: "Secondary", label: "Export", variant: "secondary" },
-    { name: "Destructive", label: "Delete", variant: "danger", toggle: { prop: "Show destructive", default: true } },
+    { name: "Destructive", label: "Delete", variant: "danger", toggle: { prop: "Show destructive", default: propertyDef(GENERIC_BAR_NAME, "Show destructive").default as boolean } },
     { name: "Primary", label: "Primary action", variant: "primary" },
   ],
-  hint: "No eligible items selected",
+  hint: defaultText(GENERIC_BAR_NAME, "Hint"),
 };
 
 export async function buildBulkActionBar(

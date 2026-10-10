@@ -2,14 +2,16 @@
 // Always underlined, so a link is never marked by color alone. Property: Label (text).
 
 import { Kit, space, configureFrame } from "../../core/helpers";
-import { ComponentSetSpec, Props, combos, ensureText, ensureProp, prune, reference, ensureFocusRing } from "../../core/ensure";
+import {
+  ComponentSetSpec, Props, combos, ensureText, prune, reference, ensureFocusRing, defineProp, variantAxes,
+} from "../../core/ensure";
 import { describe } from "../../../../definitions/docRegistry";
 
 export function linkSpec(kit: Kit): ComponentSetSpec {
   return {
     name: "Controls/Link",
     description: describe("Controls/Link"),
-    variants: combos({ Size: ["sm", "md"], State: ["default", "hover", "focus"] }),
+    variants: combos(variantAxes("Controls/Link")),
     columnProp: "State",
 
     async build(comp: ComponentNode, p: Props) {
@@ -23,7 +25,7 @@ export function linkSpec(kit: Kit): ComponentSetSpec {
     },
 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
-      const labelKey = ensureProp(set, "Label", "TEXT", "Link");
+      const labelKey = defineProp(set, "Label");
       for (const comp of variants) reference(comp, "Label", "characters", labelKey);
     },
   };
