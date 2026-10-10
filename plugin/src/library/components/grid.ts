@@ -25,7 +25,18 @@ export interface Column {
   label: string;
   type: CellType;
   width: number;
+  /**
+   * Identifier column (IDs, codes, reference numbers): a text cell whose width is sized to its values, like
+   * a numeric column, and never stretched.
+   */
+  identifier?: boolean;
 }
+
+/**
+ * Which columns take up extra width when a grid is fitted to a wider area: only descriptive text (names,
+ * notes). Numeric, identifier, chip, and checkbox columns stay sized to their values.
+ */
+export const stretches = (c: Column) => c.type === "text" && !c.identifier;
 
 export interface GridRow {
   values: Record<string, string>;
@@ -63,7 +74,7 @@ export const gridWidth = (data: Dataset) => data.columns.reduce((sum, c) => sum 
 export const GENERIC_DATA: Dataset = {
   columns: [
     { key: "select", label: "", type: "checkbox", width: 40 },
-    { key: "id", label: "ID", type: "text", width: 96 },
+    { key: "id", label: "ID", type: "text", width: 96, identifier: true },
     { key: "name", label: "Name", type: "text", width: 240 },
     // Numeric columns are sized to their values, not wider, so each header's sort icon sits beside its label:
     // Amount by numericColumnWidth("2,100.00") = 88; Percent is 88 too, so its header label fits next to the icon.

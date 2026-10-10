@@ -8,6 +8,7 @@
 // Available; Ineligible loans can't be added. Loans lock with the pool.
 // Issues (block Submit pool): each Exception loan, and each limit breach.
 
+import { stretches } from "../../library/components/grid";
 import type { Column, Dataset, GridRow } from "../../library/components/grid";
 import { columnSpan } from "../../core/layout";
 
@@ -20,14 +21,14 @@ export const GRID_BORDER = 2;
 
 /**
  * Column set that fills `total` exactly, so the grid spans the space between the panels with no
- * horizontal gap. Each column's width is its minimum; the leftover space is shared among the text
- * columns in proportion to those minimums, rounded to whole pixels, and `flexKey` (Lender) absorbs the
- * rounding remainder. No single column soaks up all the extra space. Numeric, chip, and checkbox columns
- * stay at their value-sized minimums: a numeric column wider than its values would pull the header's sort
- * icon away from its right-aligned label.
+ * horizontal gap. Each column's width is its minimum; the leftover space is shared among the columns that
+ * stretch (descriptive text; see `stretches` in grid.ts) in proportion to those minimums, rounded to whole
+ * pixels, and `flexKey` (Lender) absorbs the rounding remainder. Numeric, identifier, chip, and checkbox
+ * columns stay at their value-sized minimums: a numeric column wider than its values would pull the header's
+ * sort icon away from its right-aligned label, and an ID gains nothing from extra room.
  */
 export function fitColumns(columns: Column[], flexKey: string, total = MAIN_WIDTH - GRID_BORDER): Column[] {
-  const grows = (c: Column) => c.type === "text";
+  const grows = stretches;
   const base = columns.reduce((a, c) => a + c.width, 0);
   const growBase = columns.filter(grows).reduce((a, c) => a + c.width, 0);
   const extra = Math.max(0, total - base);
@@ -184,10 +185,10 @@ const poolMatches = (view: { filters: Filter<PoolLoan>[] }) => POOL_LOANS.filter
 
 // Minimum widths: numeric columns from numericColumnWidth() (UPB "598,700.00" → 104), at least 64 so the
 // header's sort icon fits; chips fit "Signed off" / "Ineligible"; Lender fits the longest lender name.
-// fitColumns shares the remaining width across the text columns.
+// fitColumns shares the remaining width across the descriptive text columns (Loan ID is an identifier).
 const BASE_POOL_COLUMNS: Column[] = [
   { key: "select", label: "", type: "checkbox", width: 40 },
-  { key: "loanId", label: "Loan ID", type: "text", width: 88 },
+  { key: "loanId", label: "Loan ID", type: "text", width: 88, identifier: true },
   { key: "lender", label: "Lender", type: "text", width: 160 },
   { key: "upb", label: "UPB", type: "numeric", width: 104 },
   { key: "fico", label: "FICO", type: "numeric", width: 64 },
@@ -339,7 +340,7 @@ export const filteredAddable = () => CANDIDATE_VIEW.total - filteredIneligible()
 
 const CANDIDATE_COLUMNS = fitColumns([
   { key: "select", label: "", type: "checkbox", width: 40 },
-  { key: "loanId", label: "Loan ID", type: "text", width: 88 },
+  { key: "loanId", label: "Loan ID", type: "text", width: 88, identifier: true },
   { key: "lender", label: "Lender", type: "text", width: 160 },
   { key: "upb", label: "UPB", type: "numeric", width: 104 },
   { key: "rate", label: "Rate", type: "numeric", width: 64 },

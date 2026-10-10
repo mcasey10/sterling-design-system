@@ -382,7 +382,8 @@ follow each column's width.
 Sterling's Figma component therefore keeps what matters most for data: the label **fills** the
 cell, so it is always flush with the values and always truncates correctly. To keep the sort icon
 beside the label, numeric columns are sized to their values (`numericColumnWidth()`), and the
-example's column fitting gives extra width to text columns only. Both builds check that every
+example's column fitting gives extra width only to descriptive text columns (identifier columns
+such as Loan ID stay value-sized too). Both builds check that every
 right-aligned header label ends exactly where its values end.
 
 The coded component (Storybook, later) will implement the rule exactly, at any column width.

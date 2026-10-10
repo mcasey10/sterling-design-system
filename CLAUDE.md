@@ -183,8 +183,9 @@ the consistency check live in `plugin/src/example/loan-pooling/loanData.ts`; scr
   (shortcuts add a chip); pool criteria are not filters. Each tab has its own left filter
   panel (filters the grid only); panel and chips stay in sync; choosing a view fills both.
 - **Layout**: filter panel 2 cols | grid 8 cols | summary 2 cols. Grids fill the 8 columns
-  exactly (`fitColumns`: text columns share the extra width, Lender takes the rounding remainder;
-  numeric, chip, and checkbox columns stay value-sized); the default pool view has no Sign-off note column.
+  exactly (`fitColumns`: descriptive text columns share the extra width, Lender takes the rounding
+  remainder; numeric, identifier (`identifier: true`, e.g. Loan ID), chip, and checkbox columns stay
+  value-sized — the rule is `stretches()` in grid.ts); the default pool view has no Sign-off note column.
 - **Status tones**: Ready positive, Exception warning, Signed off info. Use ⚠ for exceptions,
   never ▲/▼ (gain/loss). One role (the trader); a second approver is out of scope.
 - **Counts**: pool 181 Ready + 2 Exception + 3 Signed off = 186; candidates 56 Eligible +
