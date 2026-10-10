@@ -189,7 +189,8 @@ pools have rules, a glossary) for readers without a mortgage-industry background
   b2 (remove confirmation), c (Add loans), and d (a submitted, read-only pool).
 - Each build runs the data consistency check and an **action-trigger check** (every action the docs
   name has a visible trigger); the run notification ends with "example checks: pass" or "N FAILED".
-- Each grid fills the 8 columns between the panels exactly; Lender is the flexible column.
+- Each grid fills the 8 columns between the panels exactly: text columns share the extra width and
+  numeric columns stay sized to their values, so header sort icons sit beside their labels.
   Views set columns as well as filters (Exceptions to sign off and Signed off add Sign-off note).
 - **Example states**: Pool loans — filtered, View menu (open), Sign off dialog.
 - **About this example**: brief, pool and loan workflows, eligibility rules and how they

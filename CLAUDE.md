@@ -145,6 +145,9 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
   use compact notation (e.g. $12.35B) in summary metrics with the full value in Detail.
   Documented on the Guidelines page.
 - **Numeric columns** use tabular figures (Numeric style) and right alignment, so digits line up.
+  Right-aligned header labels stay flush with the values; the sort icon sits to the label's left. Never
+  change the HeaderCell layout to move the icon: size numeric columns to their values instead (see
+  ARCHITECTURE.md, "Where Figma and code differ"). Both builds check the alignment.
   Documented on the Guidelines page.
 - **Property names**: Figma names are sentence case and map 1:1 to camelCase code props (Show icon ↔
   showIcon). Kind = visual style · Tone = semantic color · Size = dimensions · State = the
@@ -180,7 +183,8 @@ the consistency check live in `plugin/src/example/loan-pooling/loanData.ts`; scr
   (shortcuts add a chip); pool criteria are not filters. Each tab has its own left filter
   panel (filters the grid only); panel and chips stay in sync; choosing a view fills both.
 - **Layout**: filter panel 2 cols | grid 8 cols | summary 2 cols. Grids fill the 8 columns
-  exactly (`fitColumns`, Lender flexible); the default pool view has no Sign-off note column.
+  exactly (`fitColumns`: text columns share the extra width, Lender takes the rounding remainder;
+  numeric, chip, and checkbox columns stay value-sized); the default pool view has no Sign-off note column.
 - **Status tones**: Ready positive, Exception warning, Signed off info. Use ⚠ for exceptions,
   never ▲/▼ (gain/loss). One role (the trader); a second approver is out of scope.
 - **Counts**: pool 181 Ready + 2 Exception + 3 Signed off = 186; candidates 56 Eligible +

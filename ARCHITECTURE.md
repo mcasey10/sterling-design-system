@@ -366,7 +366,30 @@ so they don't need entries.
 
 ---
 
-## 10. Versioning
+## 10. Where Figma and code differ
+
+**Right-aligned grid headers.** The rule is: the header label is flush with the numbers below it,
+and the sort icon sits immediately to the label's left. In code that's one flex row: the label
+shrinks and truncates when the column is narrow, and the icon stays beside it at any width.
+
+Figma auto layout has no equivalent of flex-shrink. A text layer either **fills** its container
+(it truncates at the container's width, but then the icon sits at the far edge) or **hugs** its
+text (the icon stays beside it, but it only truncates at a fixed max width). And an instance can't
+change the max width of a layer nested inside it: Figma rejects it with "This property cannot be
+overridden in an instance: max-size" (tested October 2026). So a hugging label's max width can't
+follow each column's width.
+
+Sterling's Figma component therefore keeps what matters most for data: the label **fills** the
+cell, so it is always flush with the values and always truncates correctly. To keep the sort icon
+beside the label, numeric columns are sized to their values (`numericColumnWidth()`), and the
+example's column fitting gives extra width to text columns only. Both builds check that every
+right-aligned header label ends exactly where its values end.
+
+The coded component (Storybook, later) will implement the rule exactly, at any column width.
+
+---
+
+## 11. Versioning
 
 The version number lives in the root `package.json` (1.0.0). The plugin reads it at build
 time and prints it on the Cover and Read me pages and in the run notification.
