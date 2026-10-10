@@ -142,6 +142,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
       "never truncate (size the column instead); text values truncate. Gain and loss add ▲ / ▼ and finance/gain / loss — type " +
       "the sign in Value (+1.25%, −0.80%). Warning and error add a border and an icon, so they never rely on color alone, " +
       "and a flagged cell keeps its look while its row is hovered or selected. " +
+      "Focus variants are for future editable cells; read-only grids show focus on header buttons and row checkboxes only. " +
       "Chip and Checkbox are exposed nested instances; swap the Chip to Chip/Side for buy / sell.",
     use: "building custom rows or tables from individual cells, or overriding one cell's state (e.g. a value that breaks a rule).",
     dont: "you need a whole row — use Grid/Row, which keeps cell widths and states consistent.",

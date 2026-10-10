@@ -437,6 +437,32 @@ The intent, as Guidelines states it, is that **the sort icon always sits next to
 does that for both alignments. Figma approximates it: a left-aligned header's icon sits at the
 cell's right edge, away from a short label, because the label fills the cell.
 
+**Grids are data tables.** Sterling's grids are used to read and compare rows, sort them, select
+some, and act on the selection. Nothing is edited in place, and a row holds one control (its
+checkbox). So the coded Data grid is a native `<table>`, not an interactive grid (`role="grid"`):
+
+- Tab moves between the header sort buttons and the row checkboxes; there is no cell-by-cell focus.
+- Screen readers keep their own table commands (move by row and column, hear the header with each
+  cell), which `role="grid"` would replace with navigation Sterling had to build and maintain.
+- The cost is one Tab stop per row. The offsets are a select-all checkbox in the header,
+  "Select all N matching" in the bulk action bar, and Shift+click or Shift+Space to select a range.
+
+Sterling would move to `role="grid"` when cells become editable or hold more than one control: then
+arrow keys between cells are worth their cost. Until then the body cell's focus variants in Figma
+(`focus`, `warning-focus`, `error-focus`) have no trigger in code. Focus variants are for future editable cells; read-only grids show focus on header buttons and row checkboxes only.
+
+**Data grid and bulk action bar.** The coded Data grid is driven by data (`columns`, `rows`, `sort`,
+`selected`), using the same dataset shape and placeholder data as the plugin (`definitions/grid.ts`);
+in Figma a grid is instances with overridden values. It reports what the person asks for and leaves
+sorting, paging, and storing the selection to the application. In the bulk action bar:
+
+- The actions are `children`; Figma exposes four button instances and a Show destructive toggle.
+- The mark beside the count is a picture of the selection, hidden from assistive technology. In
+  Figma it is a Checkbox instance. The count itself is a status that screen readers announce.
+- "Select all N matching" is underlined, like every link; Figma shows it in the accent color only.
+- Focus is never dropped: after "Select all N matching" it moves to the count, and when clearing the
+  selection removes the bar, the screen moves it to the grid's select-all checkbox.
+
 **Grid cells.** The coded cells are table cells (`<th>`, `<td>`), so they only work inside a table.
 In a chip or checkbox cell, the chip or checkbox is `children`; in Figma it is an exposed nested
 instance. Error and warning are one prop, `validation`, as on the inputs.

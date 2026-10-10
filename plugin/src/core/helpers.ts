@@ -361,16 +361,8 @@ export function untruncate(t: TextNode) {
   if (t.layoutSizingHorizontal !== "HUG") t.layoutSizingHorizontal = "HUG";
 }
 
-/**
- * Numeric column sizing rule: wide enough for the longest formatted value at Numeric 13px with
- * tabular figures (≈7.5px per character) plus the largest cell padding (12px each side, Comfortable),
- * rounded up to a multiple of 8.
- */
-export function numericColumnWidth(longestValue: string, opts: { icon?: boolean } = {}): number {
-  // A 12px icon plus a 4px gap: the ▲ / ▼ glyph in gain / loss cells, or the warning / error icon in a
-  // column whose cells can be flagged.
-  return Math.ceil((longestValue.length * 7.5 + 24 + (opts.icon ? 16 : 0)) / 8) * 8;
-}
+// The numeric column sizing rule is shared with the coded Data grid.
+export { numericColumnWidth } from "../../../definitions/grid";
 
 /**
  * Description with use / don't-use guidance, for the hidden demo components on the Component architecture

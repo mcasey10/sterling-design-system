@@ -42,6 +42,8 @@ definitions/              Plain data about components, with no Figma code (share
   components.ts           THE table of variant properties, values, and component properties with
                           defaults. The plugin builds from it (`variantAxes`, `defineProp` in
                           core/ensure.ts); a library check fails if a built component differs
+  grid.ts                 Data grid datasets: Column / GridRow / Dataset types, the generic placeholder data,
+                          which columns stretch, and numericColumnWidth(). Shared by the plugin and ui/
   docRegistry.ts          THE table of component documentation: one-sentence description, details,
                           use / don't use, related guidance. Every published component needs an entry;
                           its documentation link opens its own entry under Guidelines › Component usage
@@ -188,6 +190,8 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
 - **Sort icons**: only the sorted column shows one at rest; an unsorted Grid/HeaderCell hides its icon
   layer (kept, not removed) until hover or focus. Both builds fail if a grid header shows more than one.
 - **Numeric columns** use tabular figures (Numeric style) and right alignment, so digits line up.
+  In code a grid is a native table (data table, not role="grid"): Tab moves between header sort buttons and
+  row checkboxes. Body cell focus variants are for future editable cells. See ARCHITECTURE.md.
   The intent: the sort icon always sits next to its label (code does this at any width; Figma approximates it,
   with the icon at the cell edge). Flagged cells (warning / error) keep their look on hover and selection.
   Right-aligned header labels stay flush with the values; the sort icon sits to the label's left. Never

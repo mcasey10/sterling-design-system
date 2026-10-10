@@ -48,16 +48,16 @@ button.stl-header-cell__content {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.stl-header-cell .stl-icon {
+.stl-header-cell__content > .stl-icon {
   width: var(--stl-size-12);
   height: var(--stl-size-12);
   /* Unsorted and at rest: hidden but still taking its space, so a grid shows at most one sort icon. */
   visibility: hidden;
 }
-.stl-header-cell--sorted .stl-icon,
-.stl-header-cell--sortable:hover .stl-icon,
-.stl-header-cell--sortable:focus-visible .stl-icon,
-.stl-header-cell--sortable:has(:focus-visible) .stl-icon {
+.stl-header-cell--sorted .stl-header-cell__content > .stl-icon,
+.stl-header-cell--sortable:hover .stl-header-cell__content > .stl-icon,
+.stl-header-cell--sortable:focus-visible .stl-header-cell__content > .stl-icon,
+.stl-header-cell--sortable:has(:focus-visible) .stl-header-cell__content > .stl-icon {
   visibility: visible;
 }
 

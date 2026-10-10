@@ -92,3 +92,16 @@
   gap: var(--stl-space-8);
   color: var(--stl-color-text-secondary);
 }
+
+/* A grid with its bulk action bar above it, as on a screen. */
+.stl-story-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--stl-space-12);
+  width: fit-content;
+  max-width: 100%;
+}
+.stl-story-stack--fill {
+  width: auto;
+}

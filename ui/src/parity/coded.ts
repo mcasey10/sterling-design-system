@@ -74,6 +74,40 @@ export const CODED: Record<string, CodedComponent> = {
     stateProps: { selected: "selected", warning: "validation", error: "validation" },
     codeOnly: { children: "The StatusChip or Checkbox of a chip or checkbox cell. In Figma it is an exposed nested instance." },
   },
+  "Grid/Row": {
+    source: "src/components/DataGrid.tsx",
+    props: ["selected", "children"],
+    stateProps: { selected: "selected" },
+    codeOnly: { children: "The row's BodyCells. In Figma a row is built from body cell instances." },
+  },
+  "Grid/Data grid": {
+    source: "src/components/DataGrid.tsx",
+    props: ["label", "columns", "rows", "tones", "rowKey", "selected", "onSelectedChange", "sort", "onSortChange", "unsortable", "fill"],
+    codeOnly: {
+      label: "The grid's accessible name.",
+      columns: "The application owns the data: the grid shows what it is given and reports what the person asks for. In Figma, columns are edited on the instance.",
+      rows: "The application owns the data: the grid shows what it is given and reports what the person asks for. In Figma, rows are instances with overridden values.",
+      tones: "The tone of each chip label. In Figma, set on each chip.",
+      rowKey: "Which column identifies a row, for selection.",
+      selected: "The selected rows. In Figma, each row's State.",
+      onSelectedChange: "Reports selection, including select-all and Shift ranges; Figma has no behavior.",
+      sort: "The sorted column. In Figma, each header cell's Sort.",
+      onSortChange: "Reports a request to sort; Figma has no behavior.",
+      unsortable: "Columns that can't be sorted. In Figma, each header cell's Show sort.",
+      fill: "Stretches descriptive text columns to fill the container, as the plugin does when it fits a grid to a screen.",
+    },
+  },
+  "Grid/BulkActionBar": {
+    source: "src/components/BulkActionBar.tsx",
+    props: ["count", "selectAll", "showSelectAll", "hint", "showHint", "onSelectAll", "allSelected", "hintId", "children"],
+    figmaOnly: { "Show destructive": "In code the actions are children: leave the destructive button out instead of hiding it." },
+    codeOnly: {
+      onSelectAll: "Called for \"Select all N matching\"; Figma has no behavior.",
+      allSelected: "Shows a check instead of a dash beside the count. In Figma, set on the nested checkbox.",
+      hintId: "Lets a disabled action point to the hint that explains it (aria-describedby).",
+      children: "The action Buttons. In Figma they are exposed button instances.",
+    },
+  },
   "Overlay/Dialog": {
     source: "src/components/Dialog.tsx",
     props: [

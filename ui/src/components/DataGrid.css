@@ -1,0 +1,98 @@
+/* Grid/Row, Grid/Data grid, and Grid/BulkActionBar. Cell looks are in GridCells.css. */
+
+/* ------------------------------------------------------------ Row */
+
+/* A row tints its cells on hover and when selected. A flag stays visible: flagged cells keep their own fill. */
+.stl-row:hover > .stl-body-cell:not(.stl-body-cell--warning, .stl-body-cell--error) {
+  --stl-body-cell-fill: var(--stl-color-surface-hover);
+}
+.stl-row--selected > .stl-body-cell:not(.stl-body-cell--warning, .stl-body-cell--error) {
+  --stl-body-cell-fill: var(--stl-color-selection-row);
+}
+.stl-row--selected:hover > .stl-body-cell:not(.stl-body-cell--warning, .stl-body-cell--error) {
+  --stl-body-cell-fill: var(--stl-color-selection-row-hover);
+}
+/* A row that can't be selected: muted text, except in flagged cells. */
+.stl-row--disabled > .stl-body-cell:not(.stl-body-cell--warning, .stl-body-cell--error) {
+  color: var(--stl-color-text-secondary);
+}
+
+/* ------------------------------------------------------------ Data grid */
+
+.stl-data-grid {
+  display: inline-block;
+  max-width: 100%;
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  /* A grid wider than its container scrolls sideways inside its border. */
+  overflow-x: auto;
+}
+.stl-data-grid--fill {
+  display: block;
+}
+.stl-data-grid__table {
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+/* The select-all cell: a header cell with a checkbox in place of a label. */
+.stl-header-cell.stl-header-cell--checkbox {
+  text-align: center;
+  vertical-align: middle;
+}
+.stl-header-cell--checkbox .stl-checkbox {
+  vertical-align: middle;
+}
+
+/* ------------------------------------------------------------ Bulk action bar */
+
+.stl-bulk-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--stl-space-16);
+  box-sizing: border-box;
+  padding: var(--stl-space-4) var(--stl-space-12);
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  border-radius: var(--stl-radius-sm);
+  background: var(--stl-color-accent-subtle);
+  color: var(--stl-color-text-primary);
+}
+.stl-bulk-bar__selection {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-control-gap);
+  min-width: 0;
+}
+/* The count takes focus after "Select all N matching"; it isn't a control, so it shows no ring. */
+.stl-bulk-bar__count {
+  outline: none;
+}
+.stl-bulk-bar__separator {
+  color: var(--stl-color-text-secondary);
+}
+/* "Select all N matching" acts on the page, so it is a button that looks like a link. */
+.stl-bulk-bar__select-all {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--stl-radius-xs);
+  background: transparent;
+  color: var(--stl-color-accent-default);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.stl-bulk-bar__select-all:hover {
+  color: var(--stl-color-accent-hover);
+}
+.stl-bulk-bar__select-all:focus-visible {
+  outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);
+  outline-offset: var(--stl-stroke-1);
+}
+.stl-bulk-bar__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--stl-space-8);
+}
+.stl-bulk-bar__hint {
+  color: var(--stl-color-text-secondary);
+}
