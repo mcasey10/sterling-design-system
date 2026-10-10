@@ -38,32 +38,54 @@ async function ensureSection(kit: Kit, root: FrameNode, index: number, title: st
 
 const USAGE_WIDTH = 720;
 
+/** Wraps a note line at the note's width. */
+function wrap(t: TextNode) {
+  if (t.layoutSizingHorizontal !== "FILL") t.layoutSizingHorizontal = "FILL";
+}
+
 /**
- * Usage note under a component: its details, "Use when" / "Don't use when", and a pointer to the full guidance.
- * Text comes from docRegistry.ts; the pointer becomes a link once the Guidelines and Patterns pages are drawn
+ * Usage note under a component: "Use when" / "Don't use when" and a pointer to the full guidance. Text comes
+ * from docRegistry.ts; the pointer becomes a link once the Guidelines and Patterns pages are drawn
  * (library/docLinks.ts). A component without a registry entry gets an empty note, and the library checks fail.
+ * The Details line is added afterwards by usageDetails(), which knows how many components each section has.
  */
 async function usageNote(kit: Kit, section: FrameNode, index: number, name: string): Promise<FrameNode> {
   const note = ensureFrame(section, `Usage/${name}`, { gap: space(kit, "space/4"), width: USAGE_WIDTH }, index);
   const entry = docFor(name);
-  const lines: [string, string, string, string][] = entry
+  const lines: [string, string, string][] = entry
     ? [
-        ["Details", entry.details, "Body", "text/secondary"],
-        ["Use when", `Use when: ${entry.use}`, "Body", "text/primary"],
-        ["Don't use when", `Don't use when: ${entry.dont}`, "Body", "text/primary"],
-        ["Guidance link", `Full guidance: ${targetLabel(entry.docs)}`, "Body", "accent/default"],
+        ["Use when", `Use when: ${entry.use}`, "text/primary"],
+        ["Don't use when", `Don't use when: ${entry.dont}`, "text/primary"],
+        ["Guidance link", `Full guidance: ${targetLabel(entry.docs)}`, "accent/default"],
       ]
     : [];
-  const keep: SceneNode[] = [];
-  for (const [layer, chars, style, ink] of lines) {
-    const t = await ensureText(kit, note, layer, chars, style, ink, keep.length);
-    // Wraps at the note's width.
-    if (t.layoutSizingHorizontal !== "FILL") t.layoutSizingHorizontal = "FILL";
+  const details = note.children.find((c) => c.type === "TEXT" && c.name === "Details");
+  const keep: SceneNode[] = details ? [details] : [];
+  for (const [layer, chars, ink] of lines) {
+    const t = await ensureText(kit, note, layer, chars, "Body", ink, keep.length);
+    wrap(t);
     if (layer === "Guidance link" && t.textDecoration !== "UNDERLINE") t.textDecoration = "UNDERLINE";
     keep.push(t);
   }
   prune(note, keep);
   return note;
+}
+
+/**
+ * Details line (variants, properties, rules) at the top of each usage note — only in sections with more than
+ * one component. A section with a single component already says this in its own description, so the line
+ * would repeat it; there it's left out (and removed if an earlier build added it).
+ */
+async function usageDetails(kit: Kit, root: FrameNode) {
+  for (const section of root.children) {
+    if (section.type !== "FRAME" || !section.name.startsWith("Section/")) continue;
+    const notes = section.children.filter((c): c is FrameNode => c.type === "FRAME" && c.name.startsWith("Usage/"));
+    for (const note of notes) {
+      const entry = docFor(note.name.slice("Usage/".length));
+      if (notes.length > 1 && entry) wrap(await ensureText(kit, note, "Details", entry.details, "Body", "text/secondary", 0));
+      else note.children.find((c) => c.type === "TEXT" && c.name === "Details")?.remove();
+    }
+  }
 }
 
 interface EdgeSets {
@@ -263,7 +285,8 @@ export async function buildComponentsPage(kit: Kit, page: PageNode): Promise<{ r
   const icons = await buildIcons(kit, page, grid);
   await usageNote(kit, iconSection, 2, "Icon/*");
 
-  // Each component is followed by its usage note (details, use / don't use, link to the full guidance).
+  // Each component is followed by its usage note (use / don't use, link to the full guidance; plus details
+  // in sections with several components — see usageDetails).
   const buttonSection = await ensureSection(kit, root, 2, "Button", "Kind (primary / secondary / ghost / danger) × Size (sm / md) × State (default / hover / pressed / focus / disabled).");
   const button = await ensureComponentSet(kit, page, buttonSection, 1, buttonSpec(kit, icons));
   await usageNote(kit, buttonSection, 2, button.name);
@@ -358,6 +381,8 @@ export async function buildComponentsPage(kit: Kit, page: PageNode): Promise<{ r
     "Modal container: Title, a Body slot for each instance's content, and Cancel / Primary actions.");
   const dialog = await buildDialog(kit, page, dialogSection, 1, { button, iconButton, icons });
   await usageNote(kit, dialogSection, 2, dialog.name);
+
+  await usageDetails(kit, root);
 
   await buildEdgeCases(kit, root, 15, { headerCell, button, chip, checkbox, filterChip, tab, bodyCell, textInput, select, summaryMetric });
 
