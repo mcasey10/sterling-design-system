@@ -350,7 +350,8 @@ async function filterChips(kit: Kit, lib: Library, root: FrameNode) {
   const right = frame("Applied filters", { gap: space(kit, "space/8") });
   screen.appendChild(right);
   await marker(kit, right, 2, "Applied filters as chips");
-  await toolbar(kit, lib, toolbarHolder(right, "Toolbar holder"), 0, "All items · edited", ["Status is Open", "Owner is Team A"], true);
+  // The toolbar hugs its content here, so the composition is only as wide as what it shows.
+  await toolbar(kit, lib, right, 1, "All items · edited", ["Status is Open", "Owner is Team A"], true);
 
   await steps(kit, p.notes, [
     "The panel has one field per commonly filtered column; Add filter offers the rest. Apply runs the query and Reset clears every field. Placeholders give an example of the expected value, never the label.",
@@ -402,6 +403,7 @@ async function savedViews(kit: Kit, lib: Library, root: FrameNode) {
 
 // ------------------------------------------------------------ Status chips
 
+const STATUS_COLUMN_WIDTH = 120;
 const STATUS_SAMPLES: [string, string][] = [
   ["Active", "positive"], ["Pending", "info"], ["Flagged", "warning"], ["Blocked", "critical"], ["Draft", "neutral"],
 ];
@@ -422,7 +424,20 @@ async function statusChips(kit: Kit, lib: Library, root: FrameNode) {
     setProps(chip, { Label: label });
   }
   await marker(kit, p.canvas, 2, "In a grid");
-  p.canvas.appendChild(lib.exampleGrid.createInstance());
+  // A plain Status column: a header cell and one chip cell per state, with nothing else competing for attention.
+  const column = frame("Status column", { stroke: color(kit, "border/default") });
+  p.canvas.appendChild(column);
+  const head = variantOf(lib.headerCell, { Sort: "none", Align: "left", State: "default" }).createInstance();
+  column.appendChild(head);
+  setSize(head, STATUS_COLUMN_WIDTH, density(kit, "row/height"));
+  setProps(head, { Label: "Status" });
+  for (const [label, tone] of STATUS_SAMPLES) {
+    const cell = variantOf(lib.bodyCell, { Type: "chip", State: "default" }).createInstance();
+    column.appendChild(cell);
+    setSize(cell, STATUS_COLUMN_WIDTH, density(kit, "row/height"));
+    const chip = nested(cell, "Chip");
+    if (chip) setProps(chip, { Tone: tone, Label: label });
+  }
   await marker(kit, p.canvas, 3, "Long labels truncate");
   const long = variantOf(lib.chip, { Tone: "info" }).createInstance();
   p.canvas.appendChild(long);
