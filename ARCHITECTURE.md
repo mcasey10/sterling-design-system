@@ -429,7 +429,14 @@ such as Loan ID stay value-sized too). Both builds check that every
 right-aligned header label ends exactly where its values end, in every row, and that every numeric
 cell's content fits its column.
 
-The coded component (Storybook, later) will implement the rule exactly, at any column width.
+The coded `HeaderCell` implements the rule exactly, at any column width: the label ends where the
+values end, the icon sits 4px to its left, and a label longer than its column truncates while the
+icon keeps its place (the "Right-aligned at any width" story shows all three). For the same reason
+a left-aligned header's icon follows its label in code, where Figma puts it at the cell's far edge.
+
+**Grid cells.** The coded cells are table cells (`<th>`, `<td>`), so they only work inside a table.
+In a chip or checkbox cell, the chip or checkbox is `children`; in Figma it is an exposed nested
+instance. Error and warning are one prop, `validation`, as on the inputs.
 
 **States.** Figma shows each state as a variant (`State=hover`). Code has no `state` prop: hover,
 pressed, and focus come from CSS (`:hover`, `:active`, `:focus-visible`), and disabled is the

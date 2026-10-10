@@ -63,6 +63,17 @@ export const CODED: Record<string, CodedComponent> = {
     props: ["label", "selected", "disabled"],
     stateProps: { selected: "selected" },
   },
+  "Grid/HeaderCell": {
+    source: "src/components/HeaderCell.tsx",
+    props: ["sort", "align", "label", "showSort", "onSort"],
+    codeOnly: { onSort: "Called when the person asks to sort by the column; Figma has no behavior." },
+  },
+  "Grid/BodyCell": {
+    source: "src/components/BodyCell.tsx",
+    props: ["type", "value", "selected", "validation", "children"],
+    stateProps: { selected: "selected", warning: "validation", error: "validation" },
+    codeOnly: { children: "The StatusChip or Checkbox of a chip or checkbox cell. In Figma it is an exposed nested instance." },
+  },
   "Overlay/Dialog": {
     source: "src/components/Dialog.tsx",
     props: [
