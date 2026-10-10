@@ -19,6 +19,8 @@ const ROOT = "Cover";
 export const COVER_WIDTH = 1920;
 export const COVER_HEIGHT = 960;
 const COVER_PADDING = 96;
+/** How far the name moves left so its first letter aligns optically with the lines around it. */
+const NAME_NUDGE = 8;
 /** Components in the montage are shown larger than life, so they read at thumbnail size. */
 const MONTAGE_SCALE = 1.25;
 /** Neutral placeholder metrics for the montage: label, value, detail. */
@@ -68,7 +70,15 @@ export async function buildCover(kit: Kit, page: PageNode, lib: Library): Promis
   const title = frame("Title", { gap: space(kit, "space/24"), width: 760 });
   root.appendChild(title);
   title.appendChild(await coverText(kit, "TOKENS · COMPONENTS · GUIDELINES", "Semi Bold", 28, "accent/default", 12));
-  title.appendChild(await coverText(kit, NAME, "Semi Bold", 200, "text/primary", -4));
+  // The name is nudged left so the round "S" lines up optically with the straight edges of the text above
+  // and below it; a wrapper keeps the nudge out of the auto layout.
+  const name = await coverText(kit, NAME, "Semi Bold", 200, "text/primary", -4);
+  const nameBox = frame("Name", { width: 760, height: name.height });
+  title.appendChild(nameBox);
+  nameBox.appendChild(name);
+  name.layoutPositioning = "ABSOLUTE";
+  name.x = -NAME_NUDGE;
+  name.y = 0;
   // The tagline breaks after "for", so its two lines are even and no word is left alone.
   title.appendChild(await coverText(kit, TAGLINE.replace(" for ", " for\n"), "Regular", 44, "text/secondary"));
   const version = frame("Version", {
@@ -92,6 +102,8 @@ export async function buildCover(kit: Kit, page: PageNode, lib: Library): Promis
   root.appendChild(montage);
   const metrics = frame("Metrics", { direction: "HORIZONTAL", gap: space(kit, "space/24") });
   montage.appendChild(metrics);
+  // The three metrics share the grid's width, so the panel's right edge is one clean line.
+  const metricWidth = (lib.exampleGrid.width * MONTAGE_SCALE - 24 * (METRICS.length - 1)) / METRICS.length;
   for (const [label, value, detail] of METRICS) {
     const metric = variantOf(lib.summaryMetric, { Status: "normal", State: "default" }).createInstance();
     metrics.appendChild(metric);
@@ -103,6 +115,7 @@ export async function buildCover(kit: Kit, page: PageNode, lib: Library): Promis
       t.characters = chars;
     }
     metric.scaleFactor = MONTAGE_SCALE;
+    metric.resize(metricWidth, metric.height);
   }
   for (const main of [lib.bulkActionBar, lib.exampleGrid, lib.pagination]) {
     const inst = main.createInstance();
