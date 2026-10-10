@@ -7,6 +7,7 @@ import { COLLECTIONS } from "../../core/variables";
 import { Kit, color, space, frame, text, pinMode, takeOver, ARCHITECTURE_PAGE, GUIDELINES_PAGE, PATTERNS_PAGE } from "../../core/helpers";
 import { para, docSection, definitions, steps } from "../../core/docBlocks";
 import { created, updated } from "../../core/log";
+import { NAME, TAGLINE, VERSION } from "../../core/meta";
 
 const ROOT = "Read me";
 /** The example's page (built by "Build example"); named here only for the text below. */
@@ -31,15 +32,17 @@ export async function buildReadme(kit: Kit, page: PageNode): Promise<FrameNode> 
   const header = frame("Header", { gap: space(kit, "space/8") });
   root.appendChild(header);
   header.layoutSizingHorizontal = "FILL";
-  header.appendChild(await text(kit, "Sterling", "Display"));
+  header.appendChild(await text(kit, NAME, "Display"));
+  header.appendChild(await text(kit, `Version ${VERSION}`, "Label", "text/secondary"));
   await para(
     kit, header,
-    "A design system for data-dense applications. Everything in this file " +
+    `${TAGLINE}. Everything in this file ` +
       "is generated from tokens/tokens.json by a local plugin. All data is hypothetical: names, IDs, and figures are fictional."
   );
 
   const contents = await docSection(kit, root, "What's in Sterling");
   await definitions(kit, contents, [
+    ["Cover", "The file's cover and thumbnail: name, tagline, and version, beside a montage of live components."],
     ["Variables", "Primitives (color ramps) · Color (Light, Dark) · Spacing (space, radius) · Size (fixed widths and heights) · Density (Compact, Default, Comfortable). Color aliases Primitives; Density aliases Size and Spacing, so sizes stay on-scale. Every Color, Spacing, Size, and Density variable has a description saying what it's for; Primitives are hidden."],
     ["Text styles", "Inter: Display, Title, Heading, Body, Body-strong, Label, Caption, Numeric. Roboto Mono: Code."],
     ["Foundations", "Color swatches for both modes, primitive ramps, type specimens, spacing, radius, and density panels."],
@@ -90,7 +93,7 @@ export async function buildReadme(kit: Kit, page: PageNode): Promise<FrameNode> 
   const limits = await docSection(kit, root, "Known limitations");
   await definitions(kit, limits, [
     ["Tabular figures", "The plugin API can't enable OpenType features on a text style, so tabular figures on Numeric are a one-time manual step (see After the first build)."],
-    ["Generated pages", "Read me, Foundations, Guidelines, Patterns, the Component architecture reference sheet, and the example's About frame are redrawn on every run; edits made there by hand are lost."],
+    ["Generated pages", "Cover, Read me, Foundations, Guidelines, Patterns, the Component architecture reference sheet, and the example's About frame are redrawn on every run; edits made there by hand are lost."],
   ]);
 
   const footer = frame("Footer", {});

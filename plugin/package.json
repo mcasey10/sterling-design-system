@@ -1,6 +1,6 @@
 {
   "name": "sterling-plugin",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Local Figma plugin that generates Sterling from ../tokens/tokens.json. No network access.",
   "scripts": {

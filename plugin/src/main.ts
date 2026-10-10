@@ -6,7 +6,7 @@
 //   • Build example — the loan-pooling example page, from an existing library; never writes to
 //     variables, styles, or library pages (example/loan-pooling/buildExample.ts).
 //
-// Pages: Read me · Foundations · Components · Guidelines · Patterns · Template (blank skeleton) ·
+// Pages: Cover · Read me · Foundations · Components · Guidelines · Patterns · Template (blank skeleton) ·
 // Component architecture (reference) · Example: Loan pooling (an example built with Sterling).
 
 import { buildLibrary } from "./library/buildLibrary";

@@ -42,6 +42,7 @@ plugin/
   manifest.json           Figma plugin manifest ("Sterling"; no network access, dynamic-page access)
   src/main.ts             Entry point — runs "Build library" or "Build example", reports results
   src/core/               Shared machinery, no design content:
+    meta.ts               Name, tagline, and version (version read from the root package.json)
     tokens.ts             Typed import of tokens.json (bundled by esbuild)
     variables.ts          Variable collections (Primitives, Color, Spacing, Size, Density)
     textStyles.ts         Inter text styles
@@ -65,6 +66,7 @@ plugin/
     components/*.ts       One spec per component; grid and bulk bar are data/spec-driven
                           (grid.ts also builds Skeleton row and Empty state; menu.ts builds
                           Input/Option and Input/Menu)
+    pages/cover.ts        Cover page: name, tagline, version, component montage (rebuilt each run)
     pages/readme.ts       Read me page (rebuilt each run at the same position)
     pages/foundations.ts  Foundations page (rebuilt each run at the same position)
     pages/componentsPage.ts  Components page (updated in place); returns the component library
@@ -90,7 +92,8 @@ scripts/check-tokens.mjs  Token checks: every published token (color, spacing, s
 scripts/build-token-site.mjs  Token reference site: `npm run tokens:site` writes site/index.html
                           and site/tokens.css (gitignored)
 scripts/lib/tokens.mjs    Shared token loading, alias resolution, and contrast evaluation
-package.json              Root scripts (contrast check, token site); no dependencies
+package.json              Version (the single source; shown on the Cover and Read me pages) and root
+                          scripts (contrast check, token checks, token site); no dependencies
 README.md                 Building and maintaining Sterling (usage lives on the Figma Read me page)
 ARCHITECTURE.md           How it fits together, for designers
 docs/mermaid-config.json, docs/mermaid.css   Shared settings for rendering example diagrams
@@ -112,15 +115,15 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
   radius bound to variables; variants + component properties; slash naming; neutral
   placeholder content. Components whose names start with `_` (`_Demo/*`, `_Example/*`) are
   hidden from publishing.
-- **Pages**: Read me · Foundations · Components · Guidelines · Patterns · Template (blank 1440px
-  skeleton, 12-col grid: filters | main content | summary slots) · Component architecture ·
-  Example: Loan pooling.
+- **Pages**: Cover · Read me · Foundations · Components · Guidelines · Patterns · Template (blank
+  1440px skeleton, 12-col grid: filters | main content | summary slots) · Component architecture ·
+  a page divider · Example: Loan pooling.
 - **Menu commands**: "Build library" (variables, styles, every library page; never touches an
   example's screens or data) and "Build example" (only the example page; reads the library via
   libraryLoader and never writes to variables, styles, or library pages).
 
 ## Update strategy
-- **Documentation frames** (Read me, Foundations, Guidelines, Patterns, an example's About frame):
+- **Documentation frames** (Cover, Read me, Foundations, Guidelines, Patterns, an example's About frame):
   deleted and redrawn each run at the same spot.
 - **Template and example screens**: updated in place; originals are tracked by node ID so user
   duplicates are never touched.

@@ -260,15 +260,16 @@ export const ARCHITECTURE_PAGE = "Component architecture";
 export const GUIDELINES_PAGE = "Guidelines";
 export const PATTERNS_PAGE = "Patterns";
 /** The library's pages, in order. They always come first; examples follow them. */
+export const COVER_PAGE = "Cover";
 export const PAGE_ORDER = [
-  "Read me", "Foundations", "Components", GUIDELINES_PAGE, PATTERNS_PAGE, "Template", ARCHITECTURE_PAGE,
+  COVER_PAGE, "Read me", "Foundations", "Components", GUIDELINES_PAGE, PATTERNS_PAGE, "Template", ARCHITECTURE_PAGE,
 ];
 /** Library pages whose content is redrawn on every build, so the link check skips them. */
-export const REDRAWN_PAGES = ["Read me", "Foundations", "Components", GUIDELINES_PAGE, PATTERNS_PAGE];
+export const REDRAWN_PAGES = [COVER_PAGE, "Read me", "Foundations", "Components", GUIDELINES_PAGE, PATTERNS_PAGE];
 
 /**
  * Ensures the library's pages exist in order, at the start of the page list. A brand-new
- * file's empty "Page 1" is renamed to "Read me" instead of being left behind.
+ * file's empty "Page 1" becomes the first page (Cover) instead of being left behind.
  */
 export async function ensurePages(): Promise<Map<string, PageNode>> {
   const pages = new Map<string, PageNode>();
@@ -297,7 +298,10 @@ export async function ensurePages(): Promise<Map<string, PageNode>> {
   return pages;
 }
 
-/** A page outside the library (e.g. an example), found by name or created at the end of the page list. */
+/**
+ * A page outside the library (e.g. an example), found by name or created at the end of the page list.
+ * A page divider is kept directly before it, so the page list shows where the library ends.
+ */
 export async function ensurePage(name: string): Promise<PageNode> {
   let page = figma.root.children.find((p) => p.name === name);
   if (!page) {
@@ -306,6 +310,15 @@ export async function ensurePage(name: string): Promise<PageNode> {
     created(`Page ${name}`);
   }
   await page.loadAsync();
+  const index = figma.root.children.indexOf(page);
+  if (index > 0 && !figma.root.children[index - 1].isPageDivider) {
+    try {
+      figma.root.insertChild(index, figma.createPageDivider());
+      created(`Page divider before ${name}`);
+    } catch (e) {
+      warn(`Couldn't add a page divider before ${name}: ${(e as Error).message}`);
+    }
+  }
   return page;
 }
 

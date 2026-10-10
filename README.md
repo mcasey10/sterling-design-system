@@ -34,6 +34,7 @@ and Code (Roboto Mono).
 
 | Page | Reusable? | How it's updated |
 |---|---|---|
+| **Cover** | Yes | The file's cover: name, tagline, and version, beside a montage of live components. Redrawn every run. |
 | **Read me** | Yes | Guide to using Sterling. Redrawn every run, so don't edit it by hand. |
 | **Foundations** | Yes | Color swatches (Light and Dark), primitive ramps, type specimens, spacing, radius and density panels, all bound to the variables they show. Redrawn every run. |
 | **Components** | Yes | The component library (below), with neutral placeholder content. Updated in place, so instances stay linked and keep their overrides. |
@@ -43,7 +44,7 @@ and Code (Roboto Mono).
 | **Component architecture** | Yes | A reference on component architecture: variants, properties, slots, and hierarchy. See [Component architecture page](#component-architecture-page). |
 | **Example: Loan pooling** | No | An example built with Sterling: a loan pooling screen for a mortgage guarantor's trading desk, with business context, workflows, and eligibility rules documented on the page. Built by **Build example**. See [Example: loan pooling](#example-loan-pooling). |
 
-If the file only has an empty "Page 1", it's renamed to "Read me".
+If the file only has an empty "Page 1", it becomes the Cover page. Build example keeps a page divider before the example page.
 
 **Documentation:** every published component's documentation comes from one table,
 [`plugin/src/library/docRegistry.ts`](plugin/src/library/docRegistry.ts): a one-sentence description

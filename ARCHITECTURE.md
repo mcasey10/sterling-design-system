@@ -52,6 +52,7 @@ sterling-design-system/
 │   └── src/
 │       ├── main.ts         Entry point: runs "Build library" or "Build example"
 │       ├── core/           Shared machinery, no design content
+│       │   ├── meta.ts           Name, tagline, and version (read from package.json)
 │       │   ├── tokens.ts         Reads tokens.json
 │       │   ├── variables.ts      Creates/updates variable collections
 │       │   ├── textStyles.ts     Creates/updates text styles
@@ -336,7 +337,8 @@ Descriptions are for people: no check or build logic parses them.
 Every published variable in Color, Spacing, Size, and Density has a description, written in
 `tokens.json` in that group's `"$descriptions"` map (next to the values, so adding a token and
 describing it happen in the same place). In Figma, it's the Description field in a variable's
-edit window (Variables panel). Primitives are hidden from publishing and
+edit window (Variables panel), and it appears as a tooltip when you point at the variable where
+it's applied, such as a Fill row in the right panel. Primitives are hidden from publishing and
 from property pickers, so designers reach for semantic tokens. `npm run check:tokens` fails
 if a published token has no description, before anything reaches Figma.
 

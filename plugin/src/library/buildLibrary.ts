@@ -8,13 +8,15 @@ import { buildFoundations } from "./pages/foundations";
 import { buildComponentsPage } from "./pages/componentsPage";
 import { buildTemplate } from "./pages/template";
 import { buildReadme } from "./pages/readme";
+import { buildCover } from "./pages/cover";
 import { buildComponentArchitecture } from "./pages/componentArchitecture";
 import {
-  ensurePages, useStrokeScale, Kit, ARCHITECTURE_PAGE, GUIDELINES_PAGE, PATTERNS_PAGE, REDRAWN_PAGES,
+  ensurePages, useStrokeScale, Kit, ARCHITECTURE_PAGE, COVER_PAGE, GUIDELINES_PAGE, PATTERNS_PAGE, REDRAWN_PAGES,
 } from "../core/helpers";
 import { buildGuidelines } from "./pages/guidelines";
 import { buildPatterns } from "./pages/patterns";
 import { report, warn } from "../core/log";
+import { VERSION } from "../core/meta";
 import { snapshotInstances, compareInstances } from "../core/linkCheck";
 import { applyDocLinks } from "./docLinks";
 import { checkLibrary, LIBRARY_CHECK_FAILED } from "./checks";
@@ -44,7 +46,9 @@ function checkTabularFigures(kit: Kit, page: PageNode) {
  */
 function linkCheckPages(): string[] {
   const names = ["Template", ARCHITECTURE_PAGE];
-  for (const p of figma.root.children) if (!REDRAWN_PAGES.includes(p.name) && !names.includes(p.name)) names.push(p.name);
+  for (const p of figma.root.children) {
+    if (!p.isPageDivider && !REDRAWN_PAGES.includes(p.name) && !names.includes(p.name)) names.push(p.name);
+  }
   return names;
 }
 
@@ -66,6 +70,7 @@ export async function buildLibrary(): Promise<{ summary: string; extra: string; 
   await buildGuidelines(kit, pages.get(GUIDELINES_PAGE)!, lib);
   await buildPatterns(kit, pages.get(PATTERNS_PAGE)!, lib);
   await buildReadme(kit, pages.get("Read me")!);
+  await buildCover(kit, pages.get(COVER_PAGE)!, lib);
   // Documentation links point at Guidelines and Patterns frames, which were just redrawn; then check the library.
   await applyDocLinks(pages.get("Components")!, pages);
   checkLibrary(kit, pages.get("Components")!);
@@ -77,7 +82,7 @@ export async function buildLibrary(): Promise<{ summary: string; extra: string; 
 
   await figma.setCurrentPageAsync(pages.get("Template")!);
   return {
-    summary: `Sterling library: ${variables.vars.size} variables, ${styles.size} text styles, ${pages.size} pages`,
+    summary: `Sterling ${VERSION} library: ${variables.vars.size} variables, ${styles.size} text styles, ${pages.size} pages`,
     extra: ` · links: ${kept} kept, ${changed} changed · library checks: ${failed ? `${failed} FAILED` : "pass"}`,
     focus: template,
   };

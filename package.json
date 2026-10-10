@@ -1,6 +1,6 @@
 {
   "name": "sterling-design-system",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Sterling Design System: tokens, a Figma component library, and guidelines for data-dense applications. Fictional data only.",
   "type": "module",
