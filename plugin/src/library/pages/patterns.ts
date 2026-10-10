@@ -7,7 +7,7 @@
 import { tokens } from "../../core/tokens";
 import { COLLECTIONS } from "../../core/variables";
 import {
-  Kit, color, space, frame, text, pinMode, takeOver, setSize, density, numericColumnWidth, PatternName, GUIDELINES_PAGE,
+  Kit, color, space, frame, rect, bindFill, text, pinMode, takeOver, setSize, density, numericColumnWidth, PatternName, GUIDELINES_PAGE,
 } from "../../core/helpers";
 import { para, definitions, steps } from "../../core/docBlocks";
 import { variantOf, setProps, nested } from "../../core/ensure";
@@ -497,23 +497,53 @@ async function confirmation(kit: Kit, lib: Library, root: FrameNode) {
     "the action is irreversible (delete), or it applies to rows beyond the visible page (all 120 matching).",
     "the action is small and reversible: do it and offer Undo. Confirming everything teaches people to click through."
   );
-  const dialog = async (title: string, body: string, primary: string, kind: string) => {
+  const dialog = async (parent: FrameNode, title: string, body: string, primary: string, kind: string) => {
     const d = lib.dialog.createInstance();
-    p.canvas.appendChild(d);
+    parent.appendChild(d);
     setProps(d, { Title: title, "Show close": true });
     const action = nested(d, "Primary");
     if (action) setProps(action, { Kind: kind, Label: primary });
     const content = dialogBody(d);
     if (content) await para(kit, content, body, "Body", "text/primary"); // wraps at the dialog's width
+    return d;
   };
   await marker(kit, p.canvas, 1, "An action that can't be undone");
-  await dialog("Delete 2 items?", "This can't be undone.", "Delete 2 items", "danger");
+  await dialog(p.canvas, "Delete 2 items?", "This can't be undone.", "Delete 2 items", "danger");
   await marker(kit, p.canvas, 2, "A selection that goes beyond the page");
-  await dialog("Archive all 120 matching items?", "This includes items on other pages. You can restore them from the archive.", "Archive 120 items", "primary");
+  await dialog(p.canvas, "Archive all 120 matching items?", "This includes items on other pages. You can restore them from the archive.", "Archive 120 items", "primary");
+
+  // 3. The dialog in place: over the screen it was opened from, with the screen dimmed by surface/scrim.
+  await marker(kit, p.canvas, 3, "Over the screen, which is dimmed");
+  const screen = frame("Screen behind the dialog", {
+    gap: space(kit, "space/12"),
+    padding: space(kit, "space/16"),
+    fill: color(kit, "surface/background"),
+    stroke: color(kit, "border/default"),
+    radius: space(kit, "radius/sm"),
+    clip: true,
+  });
+  p.canvas.appendChild(screen);
+  screen.appendChild(lib.bulkActionBar.createInstance());
+  screen.appendChild(lib.exampleGrid.createInstance());
+  screen.appendChild(lib.pagination.createInstance());
+  // The scrim and the dialog sit above the screen's layout, so they are positioned absolutely.
+  const scrim = rect("Scrim", screen.width, screen.height);
+  bindFill(scrim, color(kit, "surface/scrim"));
+  screen.appendChild(scrim);
+  scrim.layoutPositioning = "ABSOLUTE";
+  scrim.x = 0;
+  scrim.y = 0;
+  scrim.constraints = { horizontal: "STRETCH", vertical: "STRETCH" };
+  const over = await dialog(screen, "Delete 2 items?", "This can't be undone.", "Delete 2 items", "danger");
+  over.layoutPositioning = "ABSOLUTE";
+  over.x = Math.round((screen.width - over.width) / 2);
+  over.y = Math.round((screen.height - over.height) / 2);
+  over.constraints = { horizontal: "CENTER", vertical: "CENTER" };
 
   await steps(kit, p.notes, [
     "The title asks the question, with the count. The primary button repeats the verb and the count, never \"OK\". Destructive actions use the danger button. Cancel is always there, and Escape closes the dialog.",
     "A reversible action needs confirmation only when the selection goes beyond what's visible. The body says what's included and how to undo it.",
+    "The dialog is modal: it sits in the middle of the screen it was opened from, and surface/scrim dims everything behind it, which can't be used until the dialog closes.",
   ]);
 }
 
