@@ -46,7 +46,7 @@ and Code (Roboto Mono).
 If the file only has an empty "Page 1", it becomes the Cover page. Build example keeps a page divider before the example page.
 
 **Documentation:** every published component's documentation comes from one table,
-[`plugin/src/library/docRegistry.ts`](../plugin/src/library/docRegistry.ts): a one-sentence description
+[`definitions/docRegistry.ts`](../definitions/docRegistry.ts): a one-sentence description
 (shown in the Assets Details panel when you click a component, in the Component documentation
 panel, and in Dev Mode), a usage note under the component on the Components page (details, use
 when, don't use when), and a documentation link to the component's own entry under Guidelines ›
@@ -322,7 +322,9 @@ Writes two files to `site/` (gitignored), generated from `tokens/tokens.json`:
   primitive ramps, spacing / radius / size scales, the Density table, type specimens, and
   every contrast pair with its ratio and result. A System / Light / Dark toggle switches
   the page itself, which is styled with the same tokens.
-- **`site/tokens.css`**: CSS custom properties for code prototypes. Everything carries Sterling's
+- **`site/tokens.css`**: CSS custom properties for code. `npm run tokens:css` writes the same file
+  to `dist/tokens.css` without building the page; both come from one generator,
+  `scripts/lib/token-css.mjs`, so never edit either by hand. Everything carries Sterling's
   code prefix, `stl-`:
   - primitives (`--stl-blue-600`);
   - semantic colors aliasing them (`--stl-color-accent-default: var(--stl-blue-600)`); Dark applies

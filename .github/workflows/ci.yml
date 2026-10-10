@@ -1,6 +1,6 @@
 # Checks that need no Figma file, on every push and pull request:
 # the plugin type-checks and builds, every color pair meets WCAG contrast, every published
-# token has a description, and the token site builds.
+# token has a description, and the token CSS and token site build.
 name: CI
 
 on:
@@ -35,5 +35,7 @@ jobs:
         run: npm run contrast:failures
       - name: Token checks (descriptions, version)
         run: npm run check:tokens
+      - name: Build the token CSS
+        run: npm run tokens:css
       - name: Build the token site
         run: npm run tokens:site

@@ -17,8 +17,10 @@ all come from files in this repo:
 | You want to change… | Edit this | Then |
 |---|---|---|
 | A color, spacing step, size, density value, or text style | `tokens/tokens.json` | build, then run **Build library** |
-| A component's structure, states, or properties | `plugin/src/library/components/<name>.ts` | build, then run **Build library** |
-| A component's description or documentation link | `plugin/src/library/docRegistry.ts` (one table) | build, then run **Build library** |
+| A component's variants, properties, or their defaults | `definitions/components.ts` (one table) | build, then run **Build library** |
+| How a component is drawn (layers, layout, which tokens it uses) | `plugin/src/library/components/<name>.ts` | build, then run **Build library** |
+| A component's description or documentation link | `definitions/docRegistry.ts` (one table) | build, then run **Build library** |
+| An icon's glyph | `definitions/icons.ts` | build, then run **Build library** |
 | Guidelines or Patterns content | `plugin/src/library/pages/guidelines.ts` / `patterns.ts` | build, then run **Build library** |
 | Example data, rules, or counts | `plugin/src/example/loan-pooling/loanData.ts` | build, then run **Build example** |
 
@@ -44,6 +46,13 @@ sterling-design-system/
 │                           size, density (Compact/Default/Comfortable), type, contrast rules,
 │                           and a description for every published variable
 │
+├── definitions/            What each component is, as plain data (no Figma code)
+│   ├── components.ts       ONE TABLE: every published component's variant properties, values,
+│   │                       and component properties with their defaults
+│   ├── docRegistry.ts      ONE TABLE: every published component's description,
+│   │                       usage note, and documentation link
+│   └── icons.ts            The 20 icon glyphs (SVG path data)
+│
 ├── plugin/                 The Figma plugin that generates the file
 │   ├── manifest.json       Plugin name ("Sterling"), menu commands, no network access
 │   ├── package.json        build / watch / typecheck
@@ -63,14 +72,12 @@ sterling-design-system/
 │       ├── library/        Everything that is Sterling itself
 │       │   ├── buildLibrary.ts   Runs the library build in order
 │       │   ├── libraryLoader.ts  Reads an existing library without changing it (used by Build example)
-│       │   ├── docRegistry.ts    ONE TABLE: every published component's description,
-│       │   │                     usage note, and documentation link
 │       │   ├── docLinks.ts       Turns registry targets into documentation links (after docs pages are drawn)
-│       │   ├── checks.ts         Library checks (component and variable documentation, hidden
-│       │   │                     Primitives, grid layout)
+│       │   ├── checks.ts         Library checks (components match their definitions, component and
+│       │   │                     variable documentation, hidden Primitives, grid layout)
 │       │   ├── compositions.ts   Reusable layouts used by Patterns and the example
 │       │   │                     (filter panel, view toolbar, view menu, card, link row)
-│       │   ├── icons.ts          Icon/* glyphs
+│       │   ├── icons.ts          Draws each glyph in definitions/icons.ts as an Icon/* component
 │       │   ├── components/       One file per component (button.ts, grid.ts, inputs.ts, …)
 │       │   └── pages/            cover, readme, foundations, components, guidelines,
 │       │                         patterns, template, componentArchitecture
@@ -85,8 +92,10 @@ sterling-design-system/
 ├── scripts/                Node scripts (no Figma needed)
 │   ├── contrast-check.mjs     WCAG check of every text/background pair (Light and Dark)
 │   ├── check-tokens.mjs       Every published token has a description; versions agree
-│   ├── build-token-site.mjs   Token reference website → site/
-│   └── lib/tokens.mjs         Shared token loading and contrast math
+│   ├── build-token-css.mjs    Token CSS for code → dist/tokens.css
+│   ├── build-token-site.mjs   Token reference website → site/ (inlines the same CSS)
+│   ├── lib/tokens.mjs         Shared token loading and contrast math
+│   └── lib/token-css.mjs      The one generator of the token CSS (stl- prefix)
 │
 ├── docs/
 │   ├── reference.md           Every collection, component, property, and tool option
@@ -100,7 +109,10 @@ sterling-design-system/
 ```
 
 **The one-way rule:** `example/` may use `library/` and `core/`. `library/` and `core/` never
-use `example/`. That keeps Sterling usable without the loan example, and lets another
+use `example/`. `definitions/` uses nothing: it is plain data with no Figma code, so anything
+else that builds Sterling's components can read the same tables. The plugin creates each
+component's variants and properties from `definitions/components.ts`, and Build library fails
+its checks if a built component doesn't match. That keeps Sterling usable without the loan example, and lets another
 example be added beside it.
 
 ---
@@ -163,7 +175,8 @@ From the repo root:
 |---|---|
 | `npm run contrast` | Every text/background pair in both color modes meets WCAG (4.5:1 text, 3:1 large text and UI). 248 pairs today, 0 failures. |
 | `npm run check:tokens` | Every published token has a description, no description is left over for a removed token, and the version in tokens.json matches package.json. |
-| `npm run tokens:site` | Writes the token reference site to `site/` |
+| `npm run tokens:css` | Writes the token CSS to `dist/tokens.css` |
+| `npm run tokens:site` | Writes the token reference site to `site/` (with the same CSS as `site/tokens.css`) |
 
 GitHub runs the same checks on every push (`ci.yml`).
 
@@ -323,7 +336,7 @@ Each **Build example** run starts with these, and failures appear in the notific
 ## 8. Documentation links
 
 Every published component's documentation comes from one table,
-`plugin/src/library/docRegistry.ts`. Each entry has:
+`definitions/docRegistry.ts`. Each entry has:
 
 | Field | Shown where |
 |---|---|

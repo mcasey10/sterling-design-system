@@ -374,7 +374,7 @@ export function numericColumnWidth(longestValue: string, opts: { icon?: boolean 
 
 /**
  * Description with use / don't-use guidance, for the hidden demo components on the Component architecture
- * page. Published components take their one-sentence description from library/docRegistry.ts instead.
+ * page. Published components take their one-sentence description from definitions/docRegistry.ts instead.
  */
 export function doc(summary: string, use: string, dont: string): string {
   return `${summary}\n\nUse when: ${use}\nDon't use when: ${dont}`;

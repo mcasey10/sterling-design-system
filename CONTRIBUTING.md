@@ -32,8 +32,9 @@ Work on a branch, in this order: **tokens → components → guidelines and patt
 | To change… | Edit… |
 |---|---|
 | A color, spacing step, size, density value, or text style | `tokens/tokens.json` |
-| A component | `plugin/src/library/components/` |
-| A component's description, usage text, or documentation link | `plugin/src/library/docRegistry.ts` |
+| A component's variants, properties, or their defaults | `definitions/components.ts` |
+| How a component is drawn | `plugin/src/library/components/` |
+| A component's description, usage text, or documentation link | `definitions/docRegistry.ts` |
 | A guideline or pattern | `plugin/src/library/pages/` |
 | The example | `plugin/src/example/loan-pooling/` |
 

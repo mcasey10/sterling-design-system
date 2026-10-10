@@ -30,7 +30,7 @@ expect it to survive; change the tokens or plugin code and rerun the plugin.
   Component architecture stay domain-neutral (placeholder labels and data). Anything specific to
   one product brief — sample data, workflow rules, domain actions, planning diagrams — belongs to
   that example's page, code (`plugin/src/example/<name>/`), and docs (`docs/examples/<name>/`).
-  `core/` and `library/` never import from `example/`.
+  `core/` and `library/` never import from `example/`. `definitions/` imports nothing from `plugin/`.
 - **Plan before building.** Propose token and component changes for approval before writing plugin
   code. Build incrementally: tokens → foundations → components → template.
 
@@ -38,6 +38,14 @@ expect it to survive; change the tokens or plugin code and rerun the plugin.
 ```
 tokens/tokens.json        Source of truth: primitives + semantic tokens,
                           Light/Dark color modes, Compact/Default/Comfortable density
+definitions/              Plain data about components, with no Figma code (shared with other builds):
+  components.ts           THE table of variant properties, values, and component properties with
+                          defaults. The plugin builds from it (`variantAxes`, `defineProp` in
+                          core/ensure.ts); a library check fails if a built component differs
+  docRegistry.ts          THE table of component documentation: one-sentence description, details,
+                          use / don't use, related guidance. Every published component needs an entry;
+                          its documentation link opens its own entry under Guidelines › Component usage
+  icons.ts                Icon glyphs (original outline SVG path data)
 plugin/
   manifest.json           Figma plugin manifest ("Sterling"; no network access, dynamic-page access)
   src/main.ts             Entry point — runs "Build library" or "Build example", reports results
@@ -59,12 +67,10 @@ plugin/
     libraryLoader.ts      Read-only library lookup, used by "Build example"
     compositions.ts       Reusable layouts from library components (filter panel, view toolbar, view menu,
                           card, link row); used by the Patterns page and by examples
-    docRegistry.ts        THE table of component documentation: one-sentence description, details,
-                          use / don't use, related guidance. Every published component needs an entry;
-                          its documentation link opens its own entry under Guidelines › Component usage
     docLinks.ts           Sets documentation links from the registry (after Guidelines / Patterns are drawn)
-    checks.ts             Library checks: descriptions, doc links, registry coverage, hidden Primitives
-    icons.ts              Icon/<name> components (original outline glyphs, layer "Glyph")
+    checks.ts             Library checks: definitions matched, descriptions, doc links, registry coverage,
+                          hidden Primitives
+    icons.ts              Icon/<name> components drawn from definitions/icons.ts (layer "Glyph")
     components/*.ts       One spec per component; grid and bulk bar are data/spec-driven
                           (grid.ts also builds Skeleton row and Empty state; menu.ts builds
                           Input/Option and Input/Menu)
@@ -94,10 +100,13 @@ scripts/contrast-check.mjs  Reports WCAG contrast for every pair in tokens.json
                           text/UI < 3:1. Run: `npm run contrast` (repo root)
 scripts/check-tokens.mjs  Token checks: every published token (color, spacing, size, density) has a
                           description in its group's "$descriptions"; versions agree. Run: `npm run check:tokens`
+scripts/build-token-css.mjs   Token CSS for code: `npm run tokens:css` writes dist/tokens.css (gitignored)
 scripts/build-token-site.mjs  Token reference site: `npm run tokens:site` writes site/index.html
-                          and site/tokens.css (gitignored). CSS names carry the `stl-` code prefix
-                          (--stl-space-8, .stl-text-body); Figma names take no prefix
+                          and site/tokens.css (gitignored; the same CSS)
 scripts/lib/tokens.mjs    Shared token loading, alias resolution, and contrast evaluation
+scripts/lib/token-css.mjs The one generator of the token CSS. CSS names carry the `stl-` code prefix
+                          (--stl-space-8, .stl-text-body); Figma names take no prefix. Never hand-edit
+                          generated CSS
 package.json              Version (the single source; shown on the Cover and Read me pages) and root
                           scripts (contrast check, token checks, token site); no dependencies
 README.md                 Public front page: what Sterling is, what's in it, how it's built, how to run it
