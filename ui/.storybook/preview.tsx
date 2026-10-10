@@ -1,7 +1,5 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
-import "@fontsource/inter/400.css";
-import "@fontsource/inter/500.css";
-import "@fontsource/inter/600.css";
+import "../src/styles/fonts.css";
 // Generated from tokens/tokens.json by `npm run tokens` (runs before Storybook starts). Never edit it.
 import "../src/styles/tokens.css";
 import "../src/styles/base.css";

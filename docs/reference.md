@@ -77,7 +77,7 @@ indeterminate × State: default / hover / focus / disabled; Label and Show label
 | `Grid/BulkActionBar` | — | "N selected · Select all M matching" + Clear selection / Export / Delete / Primary action; Count, Select all, Show select all, Show destructive, Hint and Show hint properties (the hint says why an action is disabled); action buttons are exposed instances, so they can be renamed from the bar |
 | `Chip/Filter` | State (default / hover / pressed / focus) | Label and Show remove properties |
 | `Summary/Summary metric` | Status (normal / over-target) × State (default / loading) | Label and Show progress properties; over-target adds a warning icon and text; loading shows a skeleton bar and "Loading…" |
-| `Input/Text`, `Input/Select` | State (default / hover / focus / error / error-focus / warning / disabled; Select adds open) × Content (value / placeholder) | Label, Value, Placeholder, Helper, Show label, Show helper properties; error and warning add an icon; hide the label only when a visible label sits next to the field |
+| `Input/Text`, `Input/Select` | State (default / hover / focus / error / error-focus / warning / disabled; Text adds warning-focus, Select adds open) × Content (value / placeholder) | Label, Value, Placeholder, Helper, Show label, Show helper properties; error and warning add an icon; hide the label only when a visible label sits next to the field |
 | `Input/Option` | State (default / hover / selected / disabled) | Label property; selected adds a check icon |
 | `Input/Option with description` | State (default / hover / selected / disabled) | Label and Description properties (muted second line, e.g. a saved view's filter) |
 | `Input/Menu heading` | — | Label property; group heading inside a menu |

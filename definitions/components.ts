@@ -33,7 +33,7 @@ const icon = (name: string, value: string): PropertyDef => ({ name, type: "INSTA
 const slot = (name: string): PropertyDef => ({ name, type: "SLOT" });
 
 const BUTTON_STATES = ["default", "hover", "pressed", "focus", "disabled"] as const;
-const FIELD_STATES = ["default", "hover", "focus", "error", "error-focus", "warning", "disabled"] as const;
+const FIELD_STATES = ["default", "hover", "focus", "error", "error-focus", "warning", "warning-focus", "disabled"] as const;
 const OPTION_STATES = ["default", "hover", "selected", "disabled"] as const;
 /** Input/Text and Input/Select share their properties; only the default value and placeholder differ. */
 const fieldProperties = (value: string, placeholder: string): PropertyDef[] => [

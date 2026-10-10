@@ -51,7 +51,8 @@ const FIELD_LABEL_NOTE =
 const fieldDetails = (select: boolean) =>
   `${select ? "Select" : "Text input"} with label and helper text. State: default / hover / focus / ` +
   (select ? "open (menu below the field, covering the helper) / " : "") +
-  "error / error-focus / warning / disabled; error and warning add an icon and colored helper text. Content: value / " +
+  `error / error-focus / warning / ${select ? "" : "warning-focus / "}disabled; error and warning add an icon and colored ` +
+  "helper text, and a flagged field keeps its border when focused, with the focus ring outside it. Content: value / " +
   "placeholder (Placeholder text in text/secondary). Label, Value, Placeholder, Helper, Show label, and Show helper are " +
   "component properties; long values truncate. Field height follows Density → control/height.";
 
@@ -269,7 +270,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
     description: "Switches between views of the same data, with an optional count.",
     details:
       "View switcher above the grid. State: default / hover / focus / disabled / selected / selected-focus. Label, Count, and Show count are " +
-      "component properties; long labels truncate. Selected adds an underline and bold label; focus adds a focus/ring outline.",
+      "component properties; long labels truncate. Selected adds an underline and bold label; focus adds a focus/ring outline. " +
+      "A selected tab has no hover state: it is already the current view, so pointing at it changes nothing.",
     use: "switching between views of the same data (e.g. All / Open / Closed).",
     dont: "navigating between pages or steps (use navigation), or filtering by many values (use filters).",
     related: [guidelines("States"), guidelines("Accessibility"), patterns("Filters, grid, and bulk actions")],

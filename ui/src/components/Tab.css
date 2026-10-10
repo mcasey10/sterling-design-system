@@ -39,6 +39,7 @@
   color: var(--stl-color-text-primary);
 }
 
+/* A selected tab has no hover state: it is already the current view. */
 .stl-tab--selected,
 .stl-tab--selected:hover {
   border-bottom-color: var(--stl-color-accent-default);

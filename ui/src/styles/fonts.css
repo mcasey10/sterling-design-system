@@ -1,0 +1,24 @@
+/* Inter 3.19: the version Figma renders, so text has the same width in code and in the Figma library.
+   If the Figma text styles ever move to another Inter version, change this package in the same release. */
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../../node_modules/inter-ui/Inter (web)/Inter-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../../node_modules/inter-ui/Inter (web)/Inter-Medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../../node_modules/inter-ui/Inter (web)/Inter-SemiBold.woff2") format("woff2");
+}

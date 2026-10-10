@@ -1,7 +1,8 @@
 // Input/Text and Input/Select — State × Content (value / placeholder).
-// State: default / hover / focus / error / error-focus / warning / disabled, plus open (Select only:
-// an Input/Menu under the field). Label above, field, helper text below. Error and warning add an icon
-// and colored helper text, not just a border color; error-focus keeps the error and adds the focus ring.
+// State: default / hover / focus / error / error-focus / warning / disabled, plus warning-focus (Text only)
+// and open (Select only: an Input/Menu under the field). Label above, field, helper text below. Error and
+// warning add an icon and colored helper text, not just a border color; error-focus and warning-focus keep
+// the flagged border and add the focus ring.
 // Properties: Label, Value, Placeholder, Helper (text), Show label, Show helper (boolean).
 
 import { Kit, size, color, density, space, configureFrame, setSize, truncate } from "../../core/helpers";
@@ -38,6 +39,10 @@ const LOOKS: Record<string, FieldLook> = {
   },
   warning: {
     fill: "surface/panel", stroke: "status/warning", weight: 1, value: "text/primary", helper: "status/warning-strong", flag: WARNING,
+  },
+  "warning-focus": {
+    fill: "surface/panel", stroke: "status/warning", weight: 1, value: "text/primary", helper: "status/warning-strong", flag: WARNING,
+    ring: true,
   },
   disabled: { fill: "surface/disabled", stroke: "border/default", weight: 1, value: "text/disabled", helper: "text/disabled" },
 };
@@ -107,7 +112,7 @@ function inputSpec(kit: Kit, icons: IconIndex, kind: "text" | "select", menu?: C
         if (list.width !== field.width) list.resize(field.width, list.height);
         fieldKeep.push(list);
       }
-      // error-focus keeps the error border and adds the focus ring outside the field.
+      // error-focus and warning-focus keep the flagged border and add the focus ring outside the field.
       const ring = ensureFocusRing(kit, field, !!look.ring, space(kit, "radius/sm"));
       if (ring) fieldKeep.push(ring);
       prune(field, fieldKeep);
