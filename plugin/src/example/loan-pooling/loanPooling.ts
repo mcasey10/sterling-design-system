@@ -22,6 +22,7 @@ import { buildBulkActionBar, BarSpec } from "../../library/components/bulkAction
 import { DESCRIPTION_MENU_WIDTH } from "../../library/components/menu";
 import { para, docSection, definitions, steps, stageDiagram, docTable, flowDiagram, badgeSteps } from "../../core/docBlocks";
 import type { Library } from "../../library/pages/componentsPage";
+import { toolbar, filterPanel, viewMenu, card, linkRow } from "../../library/compositions";
 import {
   POOL, COUNTS, RULES, VIEWS, FILTER_MODEL, FILTER_FIELDS, ASSUMPTIONS, POOL_DATA, EXCEPTIONS_DATA, CANDIDATE_DATA,
   SIGN_OFF_LOAN, SELECTED_POOL_LOANS, CONTEXT, BAR_STATE_A, exceptionsIn, viewExceptions, signOffLabel, removeLabel,
@@ -210,7 +211,6 @@ async function tabs(kit: Kit, lib: Library, parent: FrameNode, index: number, ac
   prune(row, keep);
 }
 
-/** Grid toolbar: View dropdown · filter chips · + Filter · Save view (right). */
 /** Panel field values for a view's filters (e.g. { Lender: "Harbor Point" }), so panel and chips match. */
 function panelValues(filters: Pick<Filter<never>, "field" | "panel">[]): Record<string, string> {
   const values: Record<string, string> = {};
@@ -221,118 +221,20 @@ function panelValues(filters: Pick<Filter<never>, "field" | "panel">[]): Record<
 /** "· N filter(s)" for footers. */
 const filterCount = (n: number) => (n ? ` · ${n} filter${n === 1 ? "" : "s"}` : "");
 
-async function toolbar(
-  kit: Kit, lib: Library, parent: FrameNode, index: number, view: string, chips: string[], saveEnabled: boolean
-) {
-  const bar = ensureFrame(
-    parent, "Toolbar",
-    { direction: "HORIZONTAL", align: "CENTER", justify: "SPACE_BETWEEN", gap: space(kit, "space/8"), fillWidth: true },
-    index
-  );
-  // Left: "View" label + view select · applied filter chips. Right: Save view (enabled only when the view
-  // was edited). Filters are added in the filter panel. (No spacer frame: an empty frame keeps a default height.)
-  const left = ensureFrame(bar, "Filters", { direction: "HORIZONTAL", align: "CENTER", gap: space(kit, "space/8") }, 0);
-  const keep: SceneNode[] = [];
-  keep.push(await ensureText(kit, left, "View label", "View", "Label", "text/secondary", 0));
-  const select = await ensureInstance(left, "View", variantOf(lib.select, { State: "default", Content: "value" }), 1);
-  setSize(select, 200, select.height);
-  setProps(select, { Label: "View", Value: view, "Show label": false, "Show helper": false });
-  keep.push(select);
-  for (const [i, label] of chips.entries()) {
-    const c = await ensureInstance(left, `Filter ${i + 1}`, variantOf(lib.filterChip, { State: "default" }), keep.length);
-    setProps(c, { Label: label, "Show remove": true });
-    keep.push(c);
-  }
-  prune(left, keep);
-  const save = await ensureInstance(bar, "Save view",
-    variantOf(lib.button, { Kind: "ghost", Size: "sm", State: saveEnabled ? "default" : "disabled" }), 1);
-  setProps(save, { Label: "Save view" });
-  prune(bar, [left, save]);
-}
+const FILTER_TITLES: Record<Tab, string> = { pool: "Filter pool loans", add: "Filter candidates" };
 
 /**
- * Left filter panel (2 of 12 columns), the same structure as the Patterns page's: a title, one field per
- * filterable column, + Add filter, then Reset / Apply. It filters the grid only — pool criteria stay in the
- * header. `values` fills fields (e.g. a chosen view); empty fields show their placeholder.
+ * This tab's filter panel (2 of 12 columns): the shared filter panel with the tab's title and fields. It
+ * filters the grid only — pool criteria stay in the header. `values` fills fields (e.g. a chosen view).
  */
-async function filterPanel(
-  kit: Kit, lib: Library, parent: FrameNode, index: number, tab: Tab, values: Record<string, string> = {}
-): Promise<FrameNode> {
-  const panel = ensureFrame(
-    parent, "Filters panel",
-    {
-      gap: space(kit, "space/12"),
-      padding: space(kit, "space/16"),
-      width: span(2),
-      fill: color(kit, "surface/panel"),
-      stroke: color(kit, "border/default"),
-      radius: space(kit, "radius/md"),
-    },
-    index
-  );
-  const keep: SceneNode[] = [
-    await ensureText(kit, panel, "Title", tab === "pool" ? "Filter pool loans" : "Filter candidates", "Heading", "text/primary", 0),
-  ];
-  for (const f of FILTER_FIELDS[tab]) {
-    const value = values[f.label];
-    const set = f.kind === "select" ? lib.select : lib.textInput;
-    const inst = await ensureInstance(panel, f.label, variantOf(set, { State: "default", Content: value ? "value" : "placeholder" }), keep.length);
-    fillWidth(inst);
-    setProps(inst, value
-      ? { Label: f.label, Value: value, "Show helper": false }
-      : { Label: f.label, Placeholder: f.placeholder, "Show helper": false });
-    keep.push(inst);
-  }
-  const add = await ensureInstance(panel, "Add filter", variantOf(lib.button, { Kind: "ghost", Size: "sm", State: "default" }), keep.length);
-  setProps(add, { Label: "Add filter", "Show icon": true, Icon: lib.icons.get("plus")!.id });
-  keep.push(add);
-  const actions = ensureFrame(panel, "Actions", { direction: "HORIZONTAL", gap: space(kit, "space/8"), justify: "MAX", fillWidth: true }, keep.length);
-  const reset = await ensureInstance(actions, "Reset", variantOf(lib.button, { Kind: "ghost", Size: "sm", State: "default" }), 0);
-  setProps(reset, { Label: "Reset" });
-  const apply = await ensureInstance(actions, "Apply", variantOf(lib.button, { Kind: "primary", Size: "sm", State: "default" }), 1);
-  setProps(apply, { Label: "Apply" });
-  prune(actions, [reset, apply]);
-  keep.push(actions);
-  prune(panel, keep);
-  return panel;
-}
+const loanFilterPanel = (kit: Kit, lib: Library, parent: FrameNode, index: number, tab: Tab, values: Record<string, string> = {}) =>
+  filterPanel(kit, lib, parent, index, FILTER_TITLES[tab], FILTER_FIELDS[tab], values, span(2));
 
 /** Warns if a grid doesn't exactly fill the grid area (Lender is the flexible column). */
 function checkFill(area: FrameNode, grid: InstanceNode) {
   if (Math.abs(grid.width - area.width) > 0.5) {
     warn(`Loan example layout: "${grid.name}" is ${grid.width.toFixed(1)}px but the grid area is ${area.width.toFixed(1)}px.`);
   }
-}
-
-/** Card in the side panel: a title and its content, styled like a summary metric. */
-function card(kit: Kit, parent: FrameNode, name: string, index: number): FrameNode {
-  const c = ensureFrame(
-    parent, name,
-    {
-      gap: space(kit, "space/8"),
-      padding: space(kit, "space/16"),
-      fill: color(kit, "surface/panel"),
-      stroke: color(kit, "border/default"),
-      radius: space(kit, "radius/md"),
-      fillWidth: true,
-    },
-    index
-  );
-  return c;
-}
-
-/** A row of links separated by "·" (each one adds a filter chip). */
-async function linkRow(kit: Kit, lib: Library, parent: FrameNode, name: string, labels: string[], index: number) {
-  const row = ensureFrame(parent, name, { direction: "HORIZONTAL", align: "CENTER", gap: space(kit, "space/4"), wrap: true, fillWidth: true }, index);
-  const keep: SceneNode[] = [];
-  for (const [i, label] of labels.entries()) {
-    if (i > 0) keep.push(await ensureText(kit, row, `Separator ${i}`, "·", "Label", "text/secondary", keep.length));
-    const link = await ensureInstance(row, `Link ${i + 1}`, variantOf(lib.link, { Size: "sm", State: "default" }), keep.length);
-    setProps(link, { Label: label });
-    keep.push(link);
-  }
-  prune(row, keep);
-  return row;
 }
 
 async function upbMetric(kit: Kit, lib: Library, parent: FrameNode, name: string, index: number, label: string, upbM: number, detail: string) {
@@ -393,7 +295,7 @@ async function poolPanel(kit: Kit, lib: Library, body: FrameNode) {
 }
 
 async function poolTab(kit: Kit, lib: Library, body: FrameNode, poolGrid: ComponentNode, poolBar: ComponentNode) {
-  await filterPanel(kit, lib, body, 0, "pool", panelValues(POOL_VIEW.filters));
+  await loanFilterPanel(kit, lib, body, 0, "pool", panelValues(POOL_VIEW.filters));
   const area = ensureFrame(body, "Grid area", { gap: space(kit, "space/12") }, 1);
   if (area.layoutGrow !== 1) area.layoutGrow = 1;
   await tabs(kit, lib, area, 0, "pool");
@@ -447,7 +349,7 @@ async function addPanel(kit: Kit, lib: Library, body: FrameNode) {
 }
 
 async function addTab(kit: Kit, lib: Library, body: FrameNode, candidateGrid: ComponentNode, poolBar: ComponentNode) {
-  await filterPanel(kit, lib, body, 0, "add", panelValues(CANDIDATE_VIEW.filters));
+  await loanFilterPanel(kit, lib, body, 0, "add", panelValues(CANDIDATE_VIEW.filters));
   const area = ensureFrame(body, "Grid area", { gap: space(kit, "space/12") }, 1);
   if (area.layoutGrow !== 1) area.layoutGrow = 1;
   await tabs(kit, lib, area, 0, "add");
@@ -562,7 +464,7 @@ async function buildStates(
       "Removing the chip clears the Status field. The view also adds the Sign-off note column.");
   const layout = frame("Layout", { direction: "HORIZONTAL", gap: space(kit, "space/16"), align: "MIN" });
   filtered.appendChild(layout);
-  await filterPanel(kit, lib, layout, 0, "pool", panelValues(view.filters));
+  await loanFilterPanel(kit, lib, layout, 0, "pool", panelValues(view.filters));
   const area = frame("Grid area", { gap: space(kit, "space/12"), width: MAIN_WIDTH });
   layout.appendChild(area);
   await toolbar(kit, lib, area, 0, view.name, [chip], view.edited);
@@ -589,30 +491,11 @@ async function buildStates(
   setSize(trigger, 200, trigger.height);
   setProps(trigger, { Label: "View", Value: POOL_VIEW.name, "Show label": false, "Show helper": false });
   // Wider than the components' 280px default so the descriptions (filter + extra column) don't truncate.
-  const menu = frame("Menu", {
-    padding: { y: space(kit, "space/4") },
-    width: DESCRIPTION_MENU_WIDTH + 80,
-    fill: color(kit, "surface/raised"),
-    stroke: color(kit, "border/default"),
-    radius: space(kit, "radius/sm"),
-  });
-  menuFrame.appendChild(menu);
-  const group = (label: string) => {
-    const h = lib.menuHeading.createInstance();
-    menu.appendChild(h);
-    fillWidth(h);
-    setProps(h, { Label: label });
-  };
-  const option = (v: { name: string; filter: string; selected?: boolean }) => {
-    const o = variantOf(lib.optionDescription, { State: v.selected ? "selected" : "default" }).createInstance();
-    menu.appendChild(o);
-    fillWidth(o);
-    setProps(o, { Label: v.name, Description: v.filter });
-  };
-  group("Predefined");
-  VIEWS.pool.forEach(option);
-  group("Saved by me");
-  VIEWS.saved.forEach(option);
+  viewMenu(
+    kit, lib, menuFrame,
+    [{ heading: "Predefined", views: VIEWS.pool }, { heading: "Saved by me", views: VIEWS.saved }],
+    DESCRIPTION_MENU_WIDTH + 80
+  );
 
   // a. One exception selected → Sign off enabled with the count.
   const a = await stateFrame(kit, root, "Bulk action bar — a. Exception selected",
