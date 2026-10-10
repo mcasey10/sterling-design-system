@@ -1,8 +1,7 @@
 // Cover page: one 1920 × 960 frame with Sterling's name, tagline, and version beside a montage of live
 // components (summary metrics, bulk action bar, data grid, pagination) and an author credit, pinned to
-// the Dark color mode.
-// It's the file's cover, so it's what people see first. Documentation only, so it is rebuilt on each
-// run (at the same position).
+// the Dark color mode. It's set as the file's thumbnail, so it's what people see first. Documentation
+// only, so it is rebuilt on each run (at the same position).
 //
 // Cover type is larger than any text style in tokens.json (those are sized for product UI), so its font
 // sizes are set here rather than through a style. Colors and spacing are still bound to variables.
@@ -13,7 +12,7 @@ import { Kit, color, space, frame, bindFill, pinMode, takeOver, PLUGIN_KEY } fro
 import { variantOf, setProps, nested } from "../../core/ensure";
 import { NAME, TAGLINE, VERSION, CREDIT } from "../../core/meta";
 import type { Library } from "./componentsPage";
-import { created, updated } from "../../core/log";
+import { created, updated, warn } from "../../core/log";
 
 const ROOT = "Cover";
 export const COVER_WIDTH = 1920;
@@ -132,6 +131,13 @@ export async function buildCover(kit: Kit, page: PageNode, lib: Library): Promis
   credit.layoutPositioning = "ABSOLUTE";
   credit.x = COVER_PADDING;
   credit.y = COVER_HEIGHT - COVER_PADDING + 24;
+
+  // The cover is the file's thumbnail. It's redrawn on every build (a new node), so it's set again each time.
+  try {
+    await figma.setFileThumbnailNodeAsync(root);
+  } catch (e) {
+    warn(`Couldn't set the cover as the file thumbnail: ${(e as Error).message}`);
+  }
 
   if (pos) updated("Page Cover");
   else created("Page Cover content");
