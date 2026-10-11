@@ -117,4 +117,5 @@ The first release.
   published to GitHub Pages.
 - Continuous integration on every push and pull request.
 
+[1.1.0]: https://github.com/mcasey10/sterling-design-system/releases/tag/v1.1.0
 [1.0.0]: https://github.com/mcasey10/sterling-design-system/releases/tag/v1.0.0
