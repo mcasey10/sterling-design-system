@@ -41,7 +41,7 @@ const preview: Preview = {
     // Accessibility violations are errors, not warnings.
     a11y: { test: "error" },
     options: {
-      storySort: { order: ["Foundations", ["Color", "Spacing and size", "Density", "Typography"], "Components"] },
+      storySort: { order: ["Introduction", "Foundations", ["Color", "Spacing and size", "Density", "Typography"], "Components", ["Controls", "Chip", "Input", "Tabs", "Grid", "Summary", "Overlay", "Icon"]] },
     },
   },
 };

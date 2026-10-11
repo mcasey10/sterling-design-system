@@ -4,8 +4,23 @@
     {
       "name": "storybook",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "ui", "run", "storybook", "--", "--no-open"],
+      "runtimeArgs": [
+        "--prefix",
+        "ui",
+        "run",
+        "storybook",
+        "--",
+        "--no-open"
+      ],
       "port": 6006
+    },
+    {
+      "name": "site",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/serve-site.mjs"
+      ],
+      "port": 6008
     }
   ]
 }

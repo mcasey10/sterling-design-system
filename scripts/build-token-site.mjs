@@ -2,6 +2,7 @@
 // Builds a static token reference from tokens/tokens.json:
 //   site/tokens.css   The token CSS from scripts/lib/token-css.mjs (the same text `npm run tokens:css`
 //                     writes to dist/tokens.css)
+// With --storybook <address> (used by scripts/build-site.mjs), the page links to the Storybook beside it.
 //   site/index.html   Self-contained reference page (CSS inlined, no external requests):
 //                     color tokens in both modes with their alias, primitive ramps, scales,
 //                     density, type specimens, and every contrast pair with its ratio
@@ -22,6 +23,10 @@ const primitives = flattenPrimitives(tokens);
 const [LIGHT, DARK] = tokens.color.$modes;
 const DENSITY_MODES = tokens.density.$modes;
 const DEFAULT_DENSITY = defaultDensity(tokens);
+
+// --storybook <address>: add a link to the Storybook published beside this page (the combined site).
+const storybookArg = process.argv.indexOf("--storybook");
+const STORYBOOK = storybookArg > 0 ? process.argv[storybookArg + 1] : null;
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 // ------------------------------------------------------------ index.html
@@ -152,6 +157,7 @@ h3 { font-size: 14px; margin: 16px 0 8px; text-transform: capitalize; }
 p { color: var(--color-text-secondary); margin: 0 0 16px; max-width: 72ch; }
 nav { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 16px auto 0; max-width: 1120px; padding: 0 16px; }
 nav a { color: var(--color-accent-default); }
+nav a.out { margin-left: auto; font-weight: 600; }
 section { background: var(--color-surface-panel); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); padding: 24px; margin: 24px 0; }
 .table-wrap { overflow-x: auto; }
 table { border-collapse: collapse; width: 100%; }
@@ -219,7 +225,7 @@ ${PAGE_CSS}
 </header>
 <nav aria-label="Sections">
   <a href="#color">Color</a><a href="#primitives">Primitives</a><a href="#scales">Spacing, radius, size</a>
-  <a href="#density">Density</a><a href="#type">Typography</a><a href="#contrast">Contrast</a>
+  <a href="#density">Density</a><a href="#type">Typography</a><a href="#contrast">Contrast</a>${STORYBOOK ? `\n  <a class="out" href="${esc(STORYBOOK)}">Components in Storybook →</a>` : ""}
 </nav>
 <main>
 ${colorSection()}

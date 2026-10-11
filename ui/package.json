@@ -18,7 +18,8 @@
     "check:parity": "tsx scripts/check-parity.ts",
     "check:css": "node scripts/check-css.mjs",
     "precheck:css": "npm run tokens",
-    "check:a11y": "node scripts/check-a11y.mjs"
+    "check:a11y": "node scripts/check-a11y.mjs",
+    "check:docs": "tsx scripts/check-docs.ts"
   },
   "dependencies": {
     "inter-ui": "^3.19.3",

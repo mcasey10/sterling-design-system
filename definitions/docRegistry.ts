@@ -7,8 +7,9 @@
 //   • use / dont — "Use when" / "Don't use when", shown in the usage note and in the component's own entry
 //     under Guidelines › Component usage.
 //   • related — the Guidelines sections and Patterns with rules that apply to it, linked from its entry.
-//   • docs — optional. By default a component's documentation link opens its own entry under
-//     Guidelines › Component usage; set docs to send it elsewhere (e.g. a Storybook URL later).
+//   • docs — optional. By default a component's documentation link follows DOCS_TARGET (below): its own
+//     entry under Guidelines › Component usage in the Figma file, or its Docs page in Storybook. Set docs to
+//     send one component somewhere else.
 // Components whose names start with "_" (demo and example components) aren't published and need no entry.
 
 /** Sections of the Guidelines page; each is a frame named "Guideline/<section>". */
@@ -23,7 +24,7 @@ export type DocTarget =
   | { page: "Guidelines"; section: GuidelineSection }
   | { page: "Guidelines"; component: string }
   | { page: "Patterns"; pattern: PatternName }
-  | { url: string };
+  | { url: string; label?: string };
 
 export interface ComponentDoc {
   description: string;
@@ -41,6 +42,39 @@ export interface ComponentDoc {
 
 /** A component's documentation with its link target resolved. */
 export type ResolvedDoc = ComponentDoc & { docs: DocTarget };
+
+/**
+ * Where each published component's documentation link points (the link in Figma's Component documentation
+ * panel and Dev Mode, and the "Full guidance" line of its usage note):
+ *   • "figma"      its own entry under Guidelines › Component usage, in the same file. Works for anyone who
+ *                  can open the file, with nothing published.
+ *   • "storybook"  its Docs page in the published Storybook (STORYBOOK_URL). Switch to this only once that
+ *                  site is public: the link is a web address, and it is dead until the site exists.
+ * After changing it, build the plugin and run Build library.
+ */
+export const DOCS_TARGET: "figma" | "storybook" = "figma";
+
+/** Where the Storybook is published: the storybook/ folder of the GitHub Pages site. */
+export const STORYBOOK_URL = "https://mcasey10.github.io/sterling-design-system/storybook/";
+
+/** A Storybook title as it appears in a story id: lowercase, with every run of other characters as one hyphen. */
+const storyId = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+/**
+ * The id of a component's Docs page in Storybook, e.g. "Controls/Icon button" → "components-controls-icon-button--docs".
+ * Every icon shares the Icon page. `npm run check:docs` fails if a published component has no such page.
+ */
+export const storybookDocsId = (name: string) => `${storyId(`Components/${name.startsWith("Icon/") ? "Icon" : name}`)}--docs`;
+
+/** The address of a component's Docs page in the published Storybook. */
+export const storybookDocsUrl = (name: string) => `${STORYBOOK_URL}?path=/docs/${storybookDocsId(name)}`;
+
+/** A component's default documentation target, by DOCS_TARGET. */
+function defaultTarget(name: string, inFigma: DocTarget): DocTarget {
+  if (DOCS_TARGET !== "storybook") return inFigma;
+  const leaf = name.startsWith("Icon/") ? "Icon" : name.slice(name.lastIndexOf("/") + 1);
+  return { url: storybookDocsUrl(name), label: `Storybook › ${leaf}` };
+}
 
 const guidelines = (section: GuidelineSection): DocTarget => ({ page: "Guidelines", section });
 const patterns = (pattern: PatternName): DocTarget => ({ page: "Patterns", pattern });
@@ -311,10 +345,10 @@ export const ICON_DOC: Omit<ResolvedDoc, "description"> & { description: (name: 
 export function docFor(name: string): ResolvedDoc | undefined {
   if (name.startsWith("Icon/")) {
     const icon = name.slice("Icon/".length);
-    return { ...ICON_DOC, description: ICON_DOC.description(icon) };
+    return { ...ICON_DOC, description: ICON_DOC.description(icon), docs: defaultTarget(name, ICON_DOC.docs) };
   }
   const entry = COMPONENT_DOCS[name];
-  return entry && { ...entry, docs: entry.docs ?? { page: "Guidelines", component: name } };
+  return entry && { ...entry, docs: entry.docs ?? defaultTarget(name, { page: "Guidelines", component: name }) };
 }
 
 /** The one-sentence Figma description for a component ("" if missing, which the library checks report). */
@@ -325,7 +359,7 @@ export const isPublished = (name: string) => !name.startsWith("_") && !name.star
 
 /** Human-readable name of a documentation target, e.g. "Guidelines › Data display". */
 export function targetLabel(t: DocTarget): string {
-  if ("url" in t) return t.url;
+  if ("url" in t) return t.label ?? t.url;
   if (t.page === "Patterns") return `Patterns › ${t.pattern}`;
   return "component" in t ? `Guidelines › Component usage › ${t.component}` : `Guidelines › ${t.section}`;
 }

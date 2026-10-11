@@ -1,39 +1,28 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AllVariants, FORCED_STATES, argTypes, defaultArgs, docs } from "../stories/definitions";
-import { Menu, Option, type OptionProps } from "./Menu";
+import { docs } from "../stories/definitions";
+import { Menu, MenuGroup, Option, OptionWithDescription } from "./Menu";
 import "../stories/stories.css";
 
-const NAME = "Input/Option";
+const NAME = "Input/Menu";
 
 const meta = {
-  title: "Components/Input/Option",
-  component: Option,
+  title: "Components/Input/Menu",
+  component: Menu,
   tags: ["autodocs"],
   parameters: {
     docs: {
       description: {
-        component: `${docs(NAME)}\n\n**Input/Menu** ${docs("Input/Menu")}\n\nIn code, Option and Menu draw the list; Select gives it keyboard behavior. Use Select unless you are building another kind of list.`,
+        component: `${docs(NAME)}\n\n**In code** Menu is the raised panel and takes Options as children; give it an accessible name. It draws the list only: Select gives a list its keyboard behavior, so use Select unless you are building another kind of list.`,
       },
     },
+    controls: { disable: true },
   },
-  argTypes: { ...argTypes(NAME), selected: { control: "boolean", description: "The selected state.", table: { type: { summary: "boolean" } } } },
-  args: defaultArgs(NAME) as unknown as OptionProps,
-  // An option is only meaningful inside a menu.
-  render: (args) => (
-    <Menu aria-label="Options" className="stl-story-menu">
-      <Option {...args} />
-    </Menu>
-  ),
-} satisfies Meta<typeof Option>;
+} satisfies Meta<typeof Menu>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
-
 /** Input/Menu as the library draws it: five options, one selected, one disabled. */
-export const InAMenu: Story = {
-  name: "In a menu",
-  parameters: { controls: { disable: true } },
+export const Default: Story = {
   render: () => (
     <Menu aria-label="Options" className="stl-story-menu">
       <Option label="Option one" />
@@ -45,19 +34,17 @@ export const InAMenu: Story = {
   ),
 };
 
-/** Every State in the definition. Hover and focus are forced here; in use they come from CSS. */
-export const Variants: Story = {
-  name: "All variants",
-  parameters: { pseudo: FORCED_STATES, controls: { disable: true } },
+/** Two groups, each named by its heading, with a description under each option. */
+export const Grouped: Story = {
   render: () => (
-    <AllVariants<OptionProps>
-      component={NAME}
-      states={{ selected: { selected: true } }}
-      render={(props) => (
-        <Menu aria-label="Options" className="stl-story-menu">
-          <Option {...props} label="Option" />
-        </Menu>
-      )}
-    />
+    <Menu aria-label="Views" className="stl-story-menu stl-story-menu--wide">
+      <MenuGroup label="Predefined">
+        <OptionWithDescription label="All items" description="No filters" />
+        <OptionWithDescription label="Open items" description="Status is Open" selected />
+      </MenuGroup>
+      <MenuGroup label="Saved by me">
+        <OptionWithDescription label="Team A, large" description="Owner is Team A · Amount > 1,000" />
+      </MenuGroup>
+    </Menu>
   ),
 };

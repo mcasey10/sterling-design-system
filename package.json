@@ -11,9 +11,12 @@
     "check:tokens": "node scripts/check-tokens.mjs",
     "tokens:css": "node scripts/build-token-css.mjs",
     "tokens:site": "node scripts/build-token-site.mjs",
+    "site": "node scripts/build-site.mjs",
+    "site:serve": "node scripts/serve-site.mjs",
     "check:parity": "npm --prefix ui run check:parity",
     "check:css": "npm --prefix ui run check:css",
     "check:a11y": "npm --prefix ui run build-storybook && npm --prefix ui run check:a11y",
+    "check:docs": "npm --prefix ui run check:docs",
     "storybook": "npm --prefix ui run storybook"
   }
 }

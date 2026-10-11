@@ -1,8 +1,9 @@
-# Publishes the token reference site (site/) to GitHub Pages on every push to main.
+# Publishes the site (site/) to GitHub Pages on every push to main: the token reference at the root and
+# Storybook under storybook/.
 # It does nothing while the repository is private. Once the repository is public, turn Pages on
 # in Settings → Pages → Build and deployment → Source: "GitHub Actions"; the next push to main
 # (or a manual run from the Actions tab) publishes the site.
-name: Token site
+name: Site
 
 on:
   push:
@@ -27,13 +28,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+      - name: Install ui dependencies
+        run: npm ci
+        working-directory: ui
       # The site is only published from tokens that pass the checks.
       - name: Contrast (WCAG) for every pair in tokens.json
         run: npm run contrast:failures
       - name: Token checks (descriptions, version)
         run: npm run check:tokens
-      - name: Build the token site
-        run: npm run tokens:site
+      - name: Build the site (token reference and Storybook)
+        run: npm run site
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
