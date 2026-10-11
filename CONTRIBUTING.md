@@ -5,11 +5,12 @@ Sterling's Figma file and its coded components are both generated from this repo
 always a change to the tokens, the definitions, or the code, never an edit made by hand in Figma. [ARCHITECTURE.md](ARCHITECTURE.md) explains
 why, and how the pieces fit together.
 
-Sterling is maintained by Michael Casey. Suggestions and bug reports are welcome as GitHub issues.
+Sterling is a personal project, maintained by Michael Casey, and isn't accepting outside contributions.
+This guide explains how changes are made, for anyone studying the system.
 
 ## 1. Propose
 
-Open an issue before building anything. Say:
+A change starts as a written plan, approved before anything is built. It says:
 
 - **What's the problem?** Describe the screen or task that Sterling doesn't handle well today, with
   a screenshot if you have one.
@@ -23,7 +24,7 @@ For a new or changed component, the proposal covers its variants and properties,
 needs, what happens with long text and large numbers, and how it meets the rules on the Guidelines
 page (keyboard focus, contrast, never color alone).
 
-Agree on the approach in the issue before writing code.
+The approach is settled in the plan before any code is written.
 
 ## 2. Build
 
@@ -40,7 +41,7 @@ Work on a branch, in this order: **tokens → components → guidelines and patt
 | A guideline or pattern | `plugin/src/library/pages/` |
 | The example | `plugin/src/example/loan-pooling/` |
 
-**A component change has three parts, in one pull request:**
+**A component change has three parts, made together:**
 
 1. **The definition** (`definitions/components.ts`): the variant, property, or default.
 2. **The Figma spec** (`plugin/src/library/components/`): how the plugin draws it.
