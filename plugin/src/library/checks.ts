@@ -62,6 +62,26 @@ function definitionProblems(comp: ComponentNode | ComponentSetNode): string[] {
   return problems;
 }
 
+/** Link text in the library, as [component, layer]: each must be underlined, so a link is never marked by color alone. */
+const LINK_TEXT: [string, string][] = [
+  ["Controls/Link", "Label"],
+  ["Grid/BulkActionBar", "Select all"],
+];
+
+/** Link text that isn't underlined, one message per component. */
+function linkProblems(components: (ComponentNode | ComponentSetNode)[]): string[] {
+  const problems: string[] = [];
+  for (const [name, layer] of LINK_TEXT) {
+    const comp = components.find((c) => c.name === name);
+    if (!comp) continue;
+    const texts = comp.findAll((n) => n.type === "TEXT" && n.name === layer) as TextNode[];
+    const plain = texts.filter((t) => t.textDecoration !== "UNDERLINE").length;
+    if (!texts.length) problems.push(`${name}: link text "${layer}" not found`);
+    else if (plain) problems.push(`${name}: "${layer}" isn't underlined in ${plain} of ${texts.length} places; a link is never marked by color alone`);
+  }
+  return problems;
+}
+
 export function checkLibrary(kit: Kit, componentsPage: PageNode) {
   const failures: string[] = [];
   const components = publishedComponents(componentsPage);
@@ -82,6 +102,7 @@ export function checkLibrary(kit: Kit, componentsPage: PageNode) {
     if (!names.has(name)) failures.push(`docRegistry.ts has an entry for ${name}, but no published component has that name`);
   }
   for (const comp of components) failures.push(...definitionProblems(comp));
+  failures.push(...linkProblems(components));
   for (const name of Object.keys(COMPONENTS)) {
     if (!names.has(name)) failures.push(`definitions/components.ts defines ${name}, but no published component has that name`);
   }

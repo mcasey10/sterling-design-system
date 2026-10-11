@@ -238,6 +238,15 @@ export async function text(kit: Kit, chars: string, style: string, colorName = "
   return t;
 }
 
+/**
+ * Underlines a link's text, so it is never marked by color alone. Call it after the text's component property
+ * is wired: writing a text property's default re-applies the layer's text style, which clears an underline
+ * set earlier in the same run.
+ */
+export function underline(t: TextNode | null | undefined) {
+  if (t && t.textDecoration !== "UNDERLINE") t.textDecoration = "UNDERLINE";
+}
+
 export function rect(name: string, width: number, height: number): RectangleNode {
   const r = figma.createRectangle();
   r.name = name;
