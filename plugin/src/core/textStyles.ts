@@ -40,8 +40,10 @@ export async function buildTextStyles(): Promise<TextStyleIndex> {
     if (ls.unit !== "PIXELS" || ls.value !== spec.letterSpacing) {
       style.letterSpacing = { unit: "PIXELS", value: spec.letterSpacing };
     }
+    const decoration = spec.textDecoration === "underline" ? "UNDERLINE" : "NONE";
+    if (style.textDecoration !== decoration) style.textDecoration = decoration;
     const description =
-      `${spec.fontSize}/${spec.lineHeight} ${fontName.family} ${spec.fontStyle}. Generated from tokens.json.` +
+      `${spec.fontSize}/${spec.lineHeight} ${fontName.family} ${spec.fontStyle}${spec.textDecoration ? ", underlined" : ""}. Generated from tokens.json.` +
       (spec.description ? ` ${spec.description}` : "");
     if (style.description !== description) style.description = description;
     index.set(name, style);

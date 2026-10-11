@@ -152,8 +152,10 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
   raw Density value. Existing Density variables keep their IDs; only values change.
   If the plan limits modes, create the first mode only, log it, and keep the other
   mode values in `tokens.json`.
-- **Text styles** (Inter): Display 24, Title 20, Heading 16, Body 13, Body-strong 13,
-  Label 12, Caption 11, Numeric 13 (tabular figures).
+- **Text styles** (Inter): Display 24, Title 20, Heading 16, Body 13, Body-strong 13, Body-link 13,
+  Label 12, Label-link 12, Caption 11, Numeric 13 (tabular figures). The -link styles carry the underline:
+  never write a text decoration on a layer bound to a text property (Figma copies it, with that variant's
+  text style, to every variant sharing the property; see ARCHITECTURE.md).
 - **Components**: auto layout throughout; every fill, stroke, padding, gap, and
   radius bound to variables; variants + component properties; slash naming; neutral
   placeholder content. Components whose names start with `_` (`_Demo/*`, `_Example/*`) are

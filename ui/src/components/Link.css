@@ -1,9 +1,9 @@
-/* Controls/Link. Always underlined, so a link is never marked by color alone. */
+/* Controls/Link. Always underlined, so a link is never marked by color alone: the underline comes from the
+   link text styles (stl-text-label-link, stl-text-body-link). */
 
 .stl-link {
   border-radius: var(--stl-radius-xs);
   color: var(--stl-color-accent-default);
-  text-decoration: underline;
   cursor: pointer;
 }
 .stl-link:hover {

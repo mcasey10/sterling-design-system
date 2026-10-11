@@ -62,22 +62,33 @@ function definitionProblems(comp: ComponentNode | ComponentSetNode): string[] {
   return problems;
 }
 
-/** Link text in the library, as [component, layer]: each must be underlined, so a link is never marked by color alone. */
-const LINK_TEXT: [string, string][] = [
-  ["Controls/Link", "Label"],
-  ["Grid/BulkActionBar", "Select all"],
+/**
+ * Link text in the library: component, layer, and the text style each variant must use (by variant name).
+ * The underline is part of the style, so a link is never marked by color alone.
+ */
+const LINK_TEXT: { component: string; layer: string; style: (variant: string) => string }[] = [
+  { component: "Controls/Link", layer: "Label", style: (variant) => (variant.includes("Size=md") ? "Body-link" : "Label-link") },
+  { component: "Grid/BulkActionBar", layer: "Select all", style: () => "Body-link" },
 ];
 
-/** Link text that isn't underlined, one message per component. */
-function linkProblems(components: (ComponentNode | ComponentSetNode)[]): string[] {
+/** Link text with the wrong text style or no underline, one message per layer. */
+function linkProblems(kit: Kit, components: (ComponentNode | ComponentSetNode)[]): string[] {
   const problems: string[] = [];
-  for (const [name, layer] of LINK_TEXT) {
-    const comp = components.find((c) => c.name === name);
+  for (const { component, layer, style } of LINK_TEXT) {
+    const comp = components.find((c) => c.name === component);
     if (!comp) continue;
-    const texts = comp.findAll((n) => n.type === "TEXT" && n.name === layer) as TextNode[];
-    const plain = texts.filter((t) => t.textDecoration !== "UNDERLINE").length;
-    if (!texts.length) problems.push(`${name}: link text "${layer}" not found`);
-    else if (plain) problems.push(`${name}: "${layer}" isn't underlined in ${plain} of ${texts.length} places; a link is never marked by color alone`);
+    const variants = comp.type === "COMPONENT_SET" ? (comp.children as ComponentNode[]) : [comp];
+    for (const variant of variants) {
+      const where = comp.type === "COMPONENT_SET" ? `${component} / ${variant.name}` : component;
+      const text = variant.findOne((n) => n.type === "TEXT" && n.name === layer) as TextNode | null;
+      if (!text) {
+        problems.push(`${where}: link text "${layer}" not found`);
+        continue;
+      }
+      const expected = style(variant.name);
+      if (text.textStyleId !== kit.styles.get(expected)?.id) problems.push(`${where}: "${layer}" doesn't use the ${expected} text style`);
+      if (text.textDecoration !== "UNDERLINE") problems.push(`${where}: "${layer}" isn't underlined; a link is never marked by color alone`);
+    }
   }
   return problems;
 }
@@ -102,7 +113,7 @@ export function checkLibrary(kit: Kit, componentsPage: PageNode) {
     if (!names.has(name)) failures.push(`docRegistry.ts has an entry for ${name}, but no published component has that name`);
   }
   for (const comp of components) failures.push(...definitionProblems(comp));
-  failures.push(...linkProblems(components));
+  failures.push(...linkProblems(kit, components));
   for (const name of Object.keys(COMPONENTS)) {
     if (!names.has(name)) failures.push(`definitions/components.ts defines ${name}, but no published component has that name`);
   }

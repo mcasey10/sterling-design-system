@@ -113,9 +113,8 @@ export function ensureProp(
     updated(`Renamed property ${owner.name} / ${old.split("#")[0]} → ${name}`);
   }
   if (key) {
-    // An unchanged text or boolean default is left alone: rewriting a text default re-applies the bound
-    // layer's text style, which clears styling the layer adds to it (a link's underline).
-    if (!preferredValues && defs[key].defaultValue === defaultValue) return key;
+    // Written on every run, changed or not: rewriting a text default returns each bound layer to its own
+    // text style (see ensureComponentSet), which keeps variants from sharing one variant's styling.
     return owner.editComponentProperty(key, preferredValues ? { defaultValue, preferredValues } : { defaultValue });
   }
   return owner.addComponentProperty(name, type, defaultValue, preferredValues ? { preferredValues } : undefined);
@@ -236,6 +235,16 @@ export async function ensureComponentSet(
     if (set) {
       set.name = spec.name;
       updated(`Renamed ${old} → ${spec.name}`);
+    }
+  }
+  // Figma stores styling with a text property: a text style or decoration written on one variant's bound
+  // layer is copied to every variant that shares the property. Rewriting the property's default clears that
+  // and returns each layer to its own text style, so it is done before the variants are rebuilt (and again
+  // when the property is wired). For the same reason, never write a decoration on a bound text layer: use a
+  // text style that has it (Label-link, Body-link).
+  if (set) {
+    for (const [key, def] of Object.entries(set.componentPropertyDefinitions)) {
+      if (def.type === "TEXT") set.editComponentProperty(key, { defaultValue: def.defaultValue });
     }
   }
   const comps: ComponentNode[] = [];

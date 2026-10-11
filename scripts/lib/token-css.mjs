@@ -62,6 +62,7 @@ export function buildTokenCss(tokens) {
     lines.push(`  font: ${WEIGHTS[s.fontStyle] ?? 400} ${s.fontSize}px/${s.lineHeight}px ${family};`);
     lines.push(`  letter-spacing: ${s.letterSpacing}px;`);
     if (s.tabularFigures) lines.push("  font-variant-numeric: tabular-nums;");
+    if (s.textDecoration) lines.push(`  text-decoration: ${s.textDecoration};`);
     lines.push("}");
   }
   return lines.join("\n") + "\n";

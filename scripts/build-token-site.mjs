@@ -108,7 +108,7 @@ function typeSection() {
     .map(([name, s]) => {
       const sample = s.tabularFigures ? "1,234,567.89  −0.80%  +12.50" : s.fontFamily ? "numericColumnWidth(value)" : "Review the pending orders";
       const spec = `${s.fontFamily ?? tokens.typography.fontFamily} ${s.fontStyle} · ${s.fontSize}/${s.lineHeight} · ${s.letterSpacing}px`;
-      return `<tr><th scope="row">${esc(name)}<div class="note">${esc(spec)}${s.tabularFigures ? " · tabular figures" : ""}</div></th><td class="${cssClass(`text-${name}`)}">${esc(sample)}</td><td><code>.${cssClass(`text-${name}`)}</code></td></tr>`;
+      return `<tr><th scope="row">${esc(name)}<div class="note">${esc(spec)}${s.tabularFigures ? " · tabular figures" : ""}${s.textDecoration ? " · underlined" : ""}</div></th><td class="${cssClass(`text-${name}`)}">${esc(sample)}</td><td><code>.${cssClass(`text-${name}`)}</code></td></tr>`;
     })
     .join("");
   return `

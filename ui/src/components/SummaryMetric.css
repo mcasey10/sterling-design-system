@@ -1,12 +1,13 @@
-/* Summary/Summary metric. A card 220px wide as the library draws it; set a width to change it. */
+/* Summary/Summary metric. A card 220px wide as the library draws it; set a width to change it. Its padding
+   and the gap between its parts follow Density. */
 
 .stl-summary-metric {
   display: inline-flex;
   flex-direction: column;
-  gap: var(--stl-space-8);
+  gap: var(--stl-card-gap);
   box-sizing: border-box;
   width: calc(var(--stl-size-40) * 5.5);
-  padding: var(--stl-space-16);
+  padding: var(--stl-card-padding);
   border: var(--stl-stroke-1) solid var(--stl-color-border-default);
   border-radius: var(--stl-radius-md);
   background: var(--stl-color-surface-panel);

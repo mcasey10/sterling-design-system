@@ -5,7 +5,7 @@
 // one boolean per toggleable action. Action buttons are exposed instances, so their labels can be edited
 // from the bar instance.
 
-import { Kit, color, density, space, configureFrame, underline } from "../../core/helpers";
+import { Kit, color, density, space, configureFrame } from "../../core/helpers";
 import {
   ensureComponent, ensureFrame, ensureInstance, ensureText, ensureProp, prune, reference, setProps, variantOf,
 } from "../../core/ensure";
@@ -81,9 +81,8 @@ export async function buildBulkActionBar(
   );
   const count = await ensureText(kit, selection, "Count", spec.count, "Body-strong", "text/primary", 0);
   const dot = await ensureText(kit, selection, "Separator", "·", "Body", "text/secondary", 1);
-  const all = await ensureText(kit, selection, "Select all", spec.selectAll, "Body", "accent/default", 2);
-  // A link is underlined. Done while the layer is built, before its property is wired (see underline()).
-  underline(all);
+  // A link: its underline comes from the Body-link text style, so it is never marked by color alone.
+  const all = await ensureText(kit, selection, "Select all", spec.selectAll, "Body-link", "accent/default", 2);
   // Removes the checkbox-like mark earlier versions drew beside the count: it looked like a control and did nothing.
   prune(selection, [count, dot, all]);
 

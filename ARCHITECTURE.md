@@ -521,6 +521,18 @@ inside it, makes the page behind inert, closes on Escape, and returns focus. Fig
   options and names the group for screen readers; in Figma they are placed one after another.
 - *Option with description* has the keyboard focus look of Option; Figma has no focus variant for it.
 
+**Links and shared text properties (a Figma behavior).** A text property stores styling along with
+its characters. When several variants bind a layer to the same text property, a text style or
+decoration written on one variant's layer is copied to every variant that shares the property: an
+underline written on the small Link made the medium Link small as well. Rewriting the property's
+default returns each layer to its own text style and drops anything written on the layer itself.
+Unbinding, styling, and rebinding doesn't help; rebinding re-applies the shared styling.
+
+So Sterling never writes a decoration on a bound text layer. A link's underline is part of its text
+style (`Label-link`, `Body-link`), which each variant keeps and instances follow, and the plugin
+rewrites every text property default before rebuilding a component set and again when wiring it.
+Code has no such constraint; it uses the same two styles so the names match.
+
 **Icon button tooltip.** In Figma an icon button's Label is a hidden layer: its accessible name. In
 code the label is the `aria-label` and, for now, the browser's own tooltip (`title`). A Sterling
 Tooltip component is on the backlog ([reference](docs/reference.md#backlog)); when it exists, the

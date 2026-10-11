@@ -83,7 +83,8 @@
 .stl-bulk-bar__separator {
   color: var(--stl-color-text-secondary);
 }
-/* "Select all N matching" acts on the page, so it is a button that looks like a link. */
+/* "Select all N matching" acts on the page, so it is a button that looks like a link (underlined by the
+   Body-link text style). */
 .stl-bulk-bar__select-all {
   margin: 0;
   padding: 0;
@@ -91,7 +92,6 @@
   border-radius: var(--stl-radius-xs);
   background: transparent;
   color: var(--stl-color-accent-default);
-  text-decoration: underline;
   cursor: pointer;
 }
 .stl-bulk-bar__select-all:hover {

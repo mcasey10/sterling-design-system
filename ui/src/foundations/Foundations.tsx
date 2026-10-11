@@ -221,6 +221,7 @@ export function TypographyPage() {
               <td>
                 {style.fontStyle}
                 {style.tabularFigures ? ", tabular figures" : ""}
+                {style.textDecoration ? ", underlined" : ""}
               </td>
               <td>
                 <Code>.{textClass(name)}</Code>

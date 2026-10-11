@@ -62,7 +62,7 @@ export function BulkActionBar({
             <span className={cx("stl-bulk-bar__separator", textClass("Body"))} aria-hidden="true">
               ·
             </span>
-            <button type="button" className={cx("stl-bulk-bar__select-all", textClass("Body"))} onClick={chooseAll}>
+            <button type="button" className={cx("stl-bulk-bar__select-all", textClass("Body-link"))} onClick={chooseAll}>
               {selectAll}
             </button>
           </>

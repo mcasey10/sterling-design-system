@@ -12,6 +12,8 @@ export interface TextStyleToken {
   fontStyle: string;
   letterSpacing: number;
   tabularFigures?: boolean;
+  /** "underline" for link text styles: the underline is part of the style, never written on a layer. */
+  textDecoration?: "underline";
   /** Extra text appended to the generated style description. */
   description?: string;
   /** Overrides typography.fontFamily for this style (e.g. a monospace Code style). */

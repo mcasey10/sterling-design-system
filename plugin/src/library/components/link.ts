@@ -1,7 +1,8 @@
 // Controls/Link — inline text link. Size (sm / md) × State (default / hover / focus).
-// Always underlined, so a link is never marked by color alone. Property: Label (text).
+// Always underlined, so a link is never marked by color alone: the underline is part of its text styles
+// (Label-link, Body-link), never written on the layer (see ensureComponentSet). Property: Label (text).
 
-import { Kit, space, configureFrame, underline } from "../../core/helpers";
+import { Kit, space, configureFrame } from "../../core/helpers";
 import {
   ComponentSetSpec, Props, combos, ensureText, prune, reference, ensureFocusRing, defineProp, variantAxes,
 } from "../../core/ensure";
@@ -17,10 +18,8 @@ export function linkSpec(kit: Kit): ComponentSetSpec {
     async build(comp: ComponentNode, p: Props) {
       configureFrame(comp, { direction: "HORIZONTAL", align: "CENTER" });
       const label = await ensureText(
-        kit, comp, "Label", "Link", p.Size === "md" ? "Body" : "Label", p.State === "hover" ? "accent/hover" : "accent/default", 0
+        kit, comp, "Label", "Link", p.Size === "md" ? "Body-link" : "Label-link", p.State === "hover" ? "accent/hover" : "accent/default", 0
       );
-      // Underlined while the variant is built, before its Label property is wired (see underline()).
-      underline(label);
       const ring = ensureFocusRing(kit, comp, p.State === "focus", space(kit, "radius/xs"));
       prune(comp, ring ? [label, ring] : [label]);
     },

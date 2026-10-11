@@ -7,14 +7,24 @@ All notable changes to Sterling are recorded here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- **Text styles `Label-link` and `Body-link`:** Label and Body with an underline, for link text.
+- **Density tokens `card/padding` and `card/gap`:** padding and gap for cards (12 / 16 / 24 and 6 / 8 / 12).
+
 ### Changed
+
+- **Summary metric** follows Density: its padding and the gap between its parts use `card/padding` and
+  `card/gap`. Default looks the same as before.
+- **Controls/Link** is underlined in Figma, through the new link text styles. It was meant to be from the
+  start, but the underline was lost on every build.
 
 - **Bulk action bar:** removed the checkbox-like mark beside the count, in Grid/BulkActionBar and the
   loan example's bars. It looked like a control and did nothing; select-all is the checkbox in the
   grid's header. The count, the row highlights, and Clear selection carry the meaning. A correction to
   1.0.0, which was never published.
 - **Bulk action bar:** "Select all N matching" is underlined, like every link, so it isn't marked by
-  color alone.
+  color alone. It uses `Body-link`.
 
 ## [1.0.0] - 2026-10-10
 

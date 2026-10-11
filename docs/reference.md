@@ -26,7 +26,7 @@ Sizing works like color: **Color aliases Primitives** per Light/Dark mode, and
 off-scale. In `tokens.json`, aliases are written as `"{size/32}"` or `"{space/6}"`. Each
 run logs every Density alias to the console and warns if any value is a raw number.
 
-**Text styles:** Display, Title, Heading, Body, Body-strong, Label, Caption, Numeric (Inter)
+**Text styles:** Display, Title, Heading, Body, Body-strong, Body-link, Label, Label-link, Caption, Numeric (Inter). Body-link and Label-link are underlined, for link text
 and Code (Roboto Mono).
 
 ### Pages

@@ -12,6 +12,7 @@ export interface TextStyle {
   fontStyle: string;
   letterSpacing: number;
   tabularFigures?: boolean;
+  textDecoration?: string;
   fontFamily?: string;
 }
 

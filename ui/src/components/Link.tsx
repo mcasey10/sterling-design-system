@@ -1,4 +1,5 @@
-// Controls/Link: an inline text link, always underlined. Hover and focus come from CSS.
+// Controls/Link: an inline text link, always underlined (its text styles, Label-link and Body-link, carry the
+// underline). Hover and focus come from CSS.
 
 import type { AnchorHTMLAttributes } from "react";
 import type { VariantValue } from "../../../definitions/components";
@@ -15,7 +16,7 @@ export interface LinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>,
 
 export function Link({ label, size = "sm", className, ...rest }: LinkProps) {
   return (
-    <a className={cx("stl-link", textClass(size === "md" ? "Body" : "Label"), className)} {...rest}>
+    <a className={cx("stl-link", textClass(size === "md" ? "Body-link" : "Label-link"), className)} {...rest}>
       {label}
     </a>
   );

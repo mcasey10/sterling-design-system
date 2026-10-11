@@ -1,9 +1,9 @@
 // SummaryMetric — label, value, optional progress bar vs. target.
 // Status (normal / over-target) × State (default / loading). Over-target adds a warning icon and text, not
 // just color. Loading replaces the value with a skeleton bar and says "Loading…"; it looks the same for both Statuses.
-// Properties: Label, Value, Detail (text), Show progress (boolean).
+// Properties: Label, Value, Detail (text), Show progress (boolean). Padding and gap follow Density (card/padding, card/gap).
 
-import { Kit, size, color, space, configureFrame, setSize, bindFill, bindRadius, rect, truncate, untruncate } from "../../core/helpers";
+import { Kit, size, color, space, density, configureFrame, setSize, bindFill, bindRadius, rect, truncate, untruncate } from "../../core/helpers";
 import {
   ComponentSetSpec, Props, combos, ensureFrame, ensureInstance, ensureText, prune, tintIcon, reference, defineProp,
   variantAxes,
@@ -32,8 +32,9 @@ export function summaryMetricSpec(kit: Kit, icons: IconIndex): ComponentSetSpec 
       const over = p.Status === "over-target" && !loading;
       const spec = STATES[p.Status];
       configureFrame(comp, {
-        gap: space(kit, "space/8"),
-        padding: space(kit, "space/16"),
+        // The card's padding and the gap between its parts follow Density.
+        gap: density(kit, "card/gap"),
+        padding: density(kit, "card/padding"),
         width: WIDTH,
         fill: color(kit, "surface/panel"),
         stroke: color(kit, "border/default"),

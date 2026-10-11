@@ -12,7 +12,7 @@ import { buildCover } from "./pages/cover";
 import { buildComponentArchitecture } from "./pages/componentArchitecture";
 import {
   ensurePages, useStrokeScale, Kit, ARCHITECTURE_PAGE, COVER_PAGE, GUIDELINES_PAGE, PATTERNS_PAGE, REDRAWN_PAGES,
-  underlineInstanceLinks, plainInstanceLinks,
+  plainInstanceLinks,
 } from "../core/helpers";
 import { buildGuidelines } from "./pages/guidelines";
 import { buildPatterns } from "./pages/patterns";
@@ -77,11 +77,9 @@ export async function buildLibrary(): Promise<{ summary: string; extra: string; 
   await buildCover(kit, pages.get(COVER_PAGE)!, lib);
   // Documentation links point at Guidelines and Patterns frames, which were just redrawn; then check the library.
   await applyDocLinks(pages.get("Components")!, pages);
-  // Link text inside instances keeps the styling it had when its text was set, so it is underlined here.
-  const withLinks = LINK_PAGES.map((name) => pages.get(name)).filter((p): p is PageNode => !!p);
-  for (const p of withLinks) await underlineInstanceLinks(p);
   checkLibrary(kit, pages.get("Components")!);
-  for (const p of withLinks) {
+  // Link text inside instances must be underlined too (it follows the link text styles).
+  for (const p of LINK_PAGES.map((name) => pages.get(name)).filter((page): page is PageNode => !!page)) {
     const plain = await plainInstanceLinks(p);
     if (plain) warn(`${LIBRARY_CHECK_FAILED} — ${p.name}: ${plain} link text(s) in instances aren't underlined`);
   }
