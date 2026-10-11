@@ -60,10 +60,7 @@ same tokens and definitions as the Figma library.
   `card/gap`. Default looks the same as before.
 - **Controls/Link** is underlined in Figma, through the new link text styles. It was meant to be from the
   start, but the underline was lost on every build.
-- **Bulk action bar:** removed the checkbox-like mark beside the count, in Grid/BulkActionBar and the
-  loan example's bars. It looked like a control and did nothing; select-all is the checkbox in the
-  grid's header. The count, the row highlights, and Clear selection carry the meaning. A correction to
-  1.0.0, which was never published.
+- **Bulk action bar:** removed the checkbox-like mark beside the count; it looked interactive but wasn't.
 - **Bulk action bar:** "Select all N matching" is underlined, like every link, so it isn't marked by
   color alone. It uses `Body-link`.
 - **Node.js 20.19 or newer** is needed to run Storybook and the coded layer's checks.
