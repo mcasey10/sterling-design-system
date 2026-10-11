@@ -348,26 +348,30 @@ builds the token site; and for the coded layer it type-checks, runs the parity, 
 
 ## Going public
 
-The repository is private for now. When it's time to publish, in this order:
+The repository went public on 2026-10-11. The steps, in order, with what is done and what is still open:
 
-1. **Check the README** still describes what Sterling includes.
-2. **Make the repository public:** GitHub → Settings → General → Danger Zone → Change visibility.
-3. **Turn on Pages:** Settings → Pages → Build and deployment → Source: **GitHub Actions**. Then run
+1. ✓ Done. **Check the README** still describes what Sterling includes.
+2. ✓ Done. **Make the repository public:** GitHub → Settings → General → Danger Zone → Change visibility.
+3. ✓ Done. **Turn on Pages:** Settings → Pages → Build and deployment → Source: **GitHub Actions**. Then run
    the "Site" workflow from the Actions tab, or push to `main`. It publishes the token reference at
    the root and Storybook under `storybook/`.
-4. **Open both parts of the site** and follow the link from each to the other: "Components in
+4. ✓ Done. **Open both parts of the site** and follow the link from each to the other: "Components in
    Storybook" on the token reference, and the title or the Introduction page in Storybook.
-5. **Check the Storybook address** matches `STORYBOOK_URL` in `definitions/docRegistry.ts`, and open
+5. ✓ Done. **Check the Storybook address** matches `STORYBOOK_URL` in `definitions/docRegistry.ts`, and open
    one Docs link in that form, for example
    `…/storybook/?path=/docs/components-controls-button--docs`. Run `npm run check:docs`.
-6. **Point the documentation links at Storybook** (done in 1.1.1): `DOCS_TARGET` is `"storybook"` in
+6. ✓ Done in 1.1.1. **Point the documentation links at Storybook:** `DOCS_TARGET` is `"storybook"` in
    `definitions/docRegistry.ts`, so after **Build library** each component's documentation link in
    Figma opens its Storybook Docs page. Click one from the Component documentation panel to confirm.
    Set it back to `"figma"` if the site is ever taken down: without the site the links are dead.
-7. **Set the Figma file to "Anyone with the link can view":** Share → change the link's access.
-8. **Test the Figma link in a private browser window**, signed out, to confirm it opens without an
+7. ✓ Done. **Set the Figma file to "Anyone with the link can view":** Share → change the link's access.
+8. Open. **Test the Figma link in a private browser window**, signed out, to confirm it opens without an
    account.
-9. **Verify the three links in the README:** the Figma file, Storybook, and the token site.
+9. Part done. **Verify the three links in the README:** the Figma file, Storybook, and the token site.
+   Storybook and the token site open; the Figma file waits on step 8.
+
+Also open: delete the renamed private copy of the repository, `sterling-design-system-old`, which holds
+the history from before the move.
 
 ## Backlog
 
