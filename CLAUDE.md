@@ -3,7 +3,8 @@
 ## Purpose
 Sterling is a design system for data-dense applications. It is delivered as a **local Figma
 plugin** that generates everything — variables, text styles, components, documentation pages —
-from a single token file. One Figma file holds the library and, on its own page at the end,
+from a single token file, and as **React components in Storybook** (`ui/`) built from the same
+tokens and component definitions. One Figma file holds the library and, on its own page at the end,
 **an example built with Sterling** (a loan pooling and commitment workflow).
 
 `tokens/tokens.json` is the **source of truth**. Never hand-edit generated output in Figma and
@@ -44,6 +45,8 @@ definitions/              Plain data about components, with no Figma code (share
                           core/ensure.ts); a library check fails if a built component differs
   grid.ts                 Data grid datasets: Column / GridRow / Dataset types, the generic placeholder data,
                           which columns stretch, and numericColumnWidth(). Shared by the plugin and ui/
+  docRegistry.ts          Also holds DOCS_TARGET ("figma" | "storybook": where documentation links point; keep
+                          "figma" until the site is public) and STORYBOOK_URL. `npm run check:docs` checks the pages exist
   docRegistry.ts          THE table of component documentation: one-sentence description, details,
                           use / don't use, related guidance. Every published component needs an entry;
                           its documentation link opens its own entry under Guidelines › Component usage
@@ -124,6 +127,8 @@ scripts/check-tokens.mjs  Token checks: every published token (color, spacing, s
 scripts/build-token-css.mjs   Token CSS for code: `npm run tokens:css` writes dist/tokens.css (gitignored)
 scripts/build-token-site.mjs  Token reference site: `npm run tokens:site` writes site/index.html
                           and site/tokens.css (gitignored; the same CSS)
+scripts/build-site.mjs    `npm run site`: site/ = token reference + Storybook under storybook/ (what Pages
+                          publishes); scripts/serve-site.mjs (`npm run site:serve`) shows it locally
 scripts/lib/tokens.mjs    Shared token loading, alias resolution, and contrast evaluation
 scripts/lib/token-names.mjs  Token name → CSS name (no imports; shared with ui/)
 scripts/lib/token-css.mjs The one generator of the token CSS. CSS names carry the `stl-` code prefix
@@ -219,8 +224,8 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
 - Run `npm run check:tokens` after any token change; it must exit 0. Every new Color, Spacing, Size,
   or Density token needs a description in that group's `"$descriptions"` in tokens.json (Primitives
   need none: they're hidden).
-- When a release changes the version, set it in package.json, plugin/package.json, and tokens.json
-  `$meta.version`, and add a CHANGELOG.md entry (see CONTRIBUTING.md).
+- When a release changes the version, set it in package.json, plugin/package.json, ui/package.json, and
+  tokens.json `$meta.version`, and add a CHANGELOG.md entry (see CONTRIBUTING.md).
 - Before committing, grep for the banned terms (see Hard rules → Naming); there must be none.
 
 ## Loan-pooling example (approved)

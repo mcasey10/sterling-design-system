@@ -344,20 +344,31 @@ Actions**; the next push to `main` publishes the site.
 
 **Continuous integration:** [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) runs on every
 push and pull request: it type-checks and builds the plugin, runs the contrast and token checks, and
-builds the token site. The library and example checks need a Figma file, so they run in the plugin.
+builds the token site; and for the coded layer it type-checks, runs the parity, raw-value, accessibility, and documentation-link checks, and builds Storybook. The library and example checks need a Figma file, so they run in the plugin.
 
 ## Going public
 
 The repository is private for now. When it's time to publish, in this order:
 
-1. **Update the README** for whatever Sterling includes at that point (for example, Storybook).
+1. **Check the README** still describes what Sterling includes.
 2. **Make the repository public:** GitHub → Settings → General → Danger Zone → Change visibility.
 3. **Turn on Pages:** Settings → Pages → Build and deployment → Source: **GitHub Actions**. Then run
-   the "Token site" workflow from the Actions tab, or push to `main`.
-4. **Set the Figma file to "Anyone with the link can view":** Share → change the link's access.
-5. **Test the Figma link in a private browser window**, signed out, to confirm it opens without an
+   the "Site" workflow from the Actions tab, or push to `main`. It publishes the token reference at
+   the root and Storybook under `storybook/`.
+4. **Open both parts of the site** and follow the link from each to the other: "Components in
+   Storybook" on the token reference, and the title or the Introduction page in Storybook.
+5. **Check the Storybook address** matches `STORYBOOK_URL` in `definitions/docRegistry.ts`, and open
+   one Docs link in that form, for example
+   `…/storybook/?path=/docs/components-controls-button--docs`. Run `npm run check:docs`.
+6. **Switch the documentation links to Storybook** (optional): set `DOCS_TARGET` to `"storybook"` in
+   `definitions/docRegistry.ts`, build the plugin, and run **Build library**. Each component's
+   documentation link in Figma then opens its Storybook Docs page. Click one from the Component
+   documentation panel to confirm. Leave it on `"figma"` until the site is live: before that the
+   links are dead.
+7. **Set the Figma file to "Anyone with the link can view":** Share → change the link's access.
+8. **Test the Figma link in a private browser window**, signed out, to confirm it opens without an
    account.
-6. **Verify both links in the README:** the token site and the Figma file.
+9. **Verify the three links in the README:** the Figma file, Storybook, and the token site.
 
 ## Backlog
 

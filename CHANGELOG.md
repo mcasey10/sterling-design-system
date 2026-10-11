@@ -5,12 +5,54 @@ All notable changes to Sterling are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) as defined for a design system in
 [CONTRIBUTING.md](CONTRIBUTING.md#versions).
 
-## [Unreleased]
+## [1.1.0] - 2026-10-11
+
+Sterling in code: every component as a React component, documented in Storybook and built from the
+same tokens and definitions as the Figma library.
 
 ### Added
 
-- **Text styles `Label-link` and `Body-link`:** Label and Body with an underline, for link text.
-- **Density tokens `card/padding` and `card/gap`:** padding and gap for cards (12 / 16 / 24 and 6 / 8 / 12).
+**Coded components**
+- All 24 components and the 20 icons as React components, styled only with Sterling's tokens.
+- Storybook, with a Docs page per component (the same guidance as the Figma library), an "All
+  variants" story laid out like each Figma variant set, and a toolbar for Theme (Light, Dark) and
+  Density (Compact, Default, Comfortable).
+- Foundations pages for color, spacing and size, density, and typography, drawn from the token file.
+- A data grid that is a native table, with a select-all checkbox, Shift+click and Shift+Space range
+  selection, sorting, pagination, and loading, empty, and error states. Selection and loading are
+  announced to screen readers.
+- A select with full keyboard support (React Aria) and a dialog on the native `<dialog>` element.
+
+**One source for Figma and code**
+- `definitions/`: each component's variants and properties, its documentation, the icon glyphs, and
+  the grid's placeholder data, shared by the plugin and the coded layer.
+- A library check that every built Figma component matches its definition.
+
+**Checks**
+- `check:parity`: every Figma component has a coded counterpart whose props match its definition.
+- `check:a11y`: an automated accessibility run (axe) over every story, in Light and Dark.
+- `check:css`: no color, size, or font value in the coded layer's CSS that isn't a token.
+- `check:docs`: every component has the Storybook Docs page its documentation link can open.
+- Library and example checks that every link, and every instance of one, is underlined.
+
+**Site**
+- One site: the token reference at the root, with Storybook under `storybook/`, linked to each other.
+- `DOCS_TARGET`: a setting for whether a component's documentation link in Figma opens its entry in
+  the file or its Docs page in Storybook.
+
+**Tokens**
+- Text styles `Label-link` and `Body-link`: Label and Body with an underline, for link text.
+- Density tokens `card/padding` and `card/gap`: padding and gap for cards (12 / 16 / 24 and 6 / 8 / 12).
+- Color token `surface/scrim`: the layer that dims the page behind a modal dialog.
+
+**Components**
+- Input/Text and Input/Select: a `warning-focus` state.
+- Input/Option: a `focus` state, for the option the arrow keys are on.
+
+**Guidelines and Patterns**
+- The confirmation dialog shown over a dimmed screen.
+- Rules for where the sort icon sits, flags staying visible on hover and selection, selected tabs
+  having no hover state, chips and density, and why Sterling's grids are data tables.
 
 ### Changed
 
@@ -18,13 +60,13 @@ All notable changes to Sterling are recorded here. The format follows
   `card/gap`. Default looks the same as before.
 - **Controls/Link** is underlined in Figma, through the new link text styles. It was meant to be from the
   start, but the underline was lost on every build.
-
 - **Bulk action bar:** removed the checkbox-like mark beside the count, in Grid/BulkActionBar and the
   loan example's bars. It looked like a control and did nothing; select-all is the checkbox in the
   grid's header. The count, the row highlights, and Clear selection carry the meaning. A correction to
   1.0.0, which was never published.
 - **Bulk action bar:** "Select all N matching" is underlined, like every link, so it isn't marked by
   color alone. It uses `Body-link`.
+- **Node.js 20.19 or newer** is needed to run Storybook and the coded layer's checks.
 
 ## [1.0.0] - 2026-10-10
 

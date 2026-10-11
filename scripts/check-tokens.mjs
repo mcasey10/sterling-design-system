@@ -33,6 +33,11 @@ for (const group of PUBLISHED_GROUPS) {
 if (tokens.$meta?.version !== pkg.version) {
   failures.push(`version mismatch: tokens.json $meta.version is ${tokens.$meta?.version}, package.json is ${pkg.version}`);
 }
+// The plugin and the coded layer are released with the system, under the same version.
+for (const part of ["plugin", "ui"]) {
+  const version = JSON.parse(readFileSync(resolve(here, `../${part}/package.json`), "utf8")).version;
+  if (version !== pkg.version) failures.push(`version mismatch: ${part}/package.json is ${version}, package.json is ${pkg.version}`);
+}
 
 for (const f of failures) console.error(`FAIL  ${f}`);
 console.log(

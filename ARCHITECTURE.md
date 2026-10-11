@@ -4,6 +4,9 @@ Sterling is a design system for data-dense applications. One Figma file holds it
 by a local Figma plugin from one token file (`tokens/tokens.json`). The same file also holds
 **an example built with Sterling**: a loan pooling workflow on its own page at the end.
 
+Since 1.1 Sterling also exists in code: React components documented in Storybook (`ui/`), built
+from the same tokens and component definitions as the Figma library.
+
 This document is written for designers first. Code paths are given so you can find things,
 but you don't need to read code to follow it.
 
@@ -26,6 +29,11 @@ all come from files in this repo:
 
 If you change something in Figma by hand that the plugin owns, the next build puts it
 back. See [section 5](#5-what-you-can-and-cant-edit-in-figma).
+
+Since 1.1 the same sources build Sterling twice: once as the Figma library, and once as React
+components documented in Storybook. The tokens, the component definitions, the documentation
+table, and the icon glyphs are shared, so the two can't drift apart without a check failing. See
+[section 10](#10-sterling-in-code).
 
 ---
 
@@ -112,6 +120,8 @@ sterling-design-system/
 │   ├── check-tokens.mjs       Every published token has a description; versions agree
 │   ├── build-token-css.mjs    Token CSS for code → dist/tokens.css
 │   ├── build-token-site.mjs   Token reference website → site/ (inlines the same CSS)
+│   ├── build-site.mjs         The published site: token reference + Storybook under storybook/
+│   ├── serve-site.mjs         Serves site/ locally
 │   ├── lib/tokens.mjs         Shared token loading and contrast math
 │   ├── lib/token-names.mjs    How a token name becomes a CSS name (shared with ui/)
 │   └── lib/token-css.mjs      The one generator of the token CSS (stl- prefix)
@@ -123,8 +133,8 @@ sterling-design-system/
 │   └── examples/loan-pooling/ Planning diagrams (.mmd source, .svg rendered)
 │
 └── .github/workflows/
-    ├── ci.yml                 Typecheck, build, contrast, token checks on every push
-    └── pages.yml              Publishes the token site (runs only once the repo is public)
+    ├── ci.yml                 Plugin and token checks, and the coded layer's checks, on every push
+    └── pages.yml              Publishes the site: token reference and Storybook (runs only once the repo is public)
 ```
 
 **The one-way rule:** `example/` may use `library/` and `core/`. `library/` and `core/` never
@@ -179,7 +189,7 @@ Figma loads `plugin/dist/code.js` fresh each time you run a command, so there is
 
 The notification at the end summarizes the run, in this shape:
 
-> Sterling 1.0.0 library: N variables, N text styles, N pages · links: N kept, 0 changed · library checks: pass
+> Sterling 1.1.0 library: N variables, N text styles, N pages · links: N kept, 0 changed · library checks: pass
 
 > Sterling example: loan pooling · links: N kept, 0 changed · example checks: pass
 
@@ -196,6 +206,8 @@ From the repo root:
 | `npm run check:tokens` | Every published token has a description, no description is left over for a removed token, and the version in tokens.json matches package.json. |
 | `npm run tokens:css` | Writes the token CSS to `dist/tokens.css` |
 | `npm run tokens:site` | Writes the token reference site to `site/` (with the same CSS as `site/tokens.css`) |
+| `npm run site` | Builds the whole site into `site/`: the token reference, with Storybook under `storybook/`. `npm run site:serve` shows it locally |
+| `npm run check:docs` | Every published component has the Storybook Docs page its documentation link can open. Needs a Storybook build |
 | `npm run check:parity` | Every published component except the icons has a coded counterpart in `ui/` (24 of 24), and each one follows its definition. Needs `npm install` in `ui/` first. |
 | `npm run check:css` | No raw values in the coded layer's CSS: every color, length, and font value is a token, and every `var(--stl-…)` names a real one. |
 | `npm run check:a11y` | Builds Storybook, then runs axe on every story in Light and Dark with headless Chrome (158 runs today). Fails on any violation or any story that doesn't render. |
@@ -367,7 +379,7 @@ Every published component's documentation comes from one table,
 | `details`: variants, properties, rules | The component's entry under Guidelines › Component usage, and its usage note on the Components page when its section holds more than one component (a single-component section already says it in its description) |
 | `use` / `dont` | The usage note, and the component's entry under Guidelines › Component usage |
 | `related`: Guidelines sections and Patterns that apply | "Related" links in the component's entry |
-| `docs` (optional): where the documentation link goes | By default, the component's own entry under Guidelines › Component usage |
+| `docs` (optional): where the documentation link goes | By default it follows `DOCS_TARGET` (below) |
 
 Every component has its own entry on the Guidelines page (a frame named `Component/<name>`
 under Component usage) with a live preview, its details, when to use it, and links to the
@@ -396,6 +408,19 @@ column, at most one sort icon).
 Components whose names start with `_` (`_Demo/*`, `_Example/*`) are hidden from publishing,
 so they don't need entries.
 
+### Where the links point: `DOCS_TARGET`
+
+One setting in `definitions/docRegistry.ts` decides where every component's documentation link goes:
+
+| `DOCS_TARGET` | The link opens | Use it when |
+|---|---|---|
+| `"figma"` (the default) | The component's own entry under Guidelines › Component usage, in the same file | Always safe: it works for anyone who can open the file |
+| `"storybook"` | The component's Docs page in the published Storybook | The site is public. Before that the links are dead |
+
+To switch, change the setting, build the plugin, and run **Build library**. `npm run check:docs` fails
+if any published component has no Storybook Docs page for its link to open, whichever way the
+setting points.
+
 ---
 
 ## 9. Naming and code prefix
@@ -412,9 +437,94 @@ so they don't need entries.
 
 ---
 
-## 10. Where Figma and code differ
+## 10. Sterling in code
 
-**Right-aligned grid headers.** The rule is: the header label is flush with the numbers below it,
+`ui/` holds Sterling as React components, documented in Storybook. It is built from the same
+sources as the Figma library, not from the Figma file.
+
+| Shared source | The plugin uses it to… | The coded layer uses it to… |
+|---|---|---|
+| `tokens/tokens.json` | create variables and text styles | generate `tokens.css` (custom properties and text classes with the `stl-` prefix) |
+| `definitions/components.ts` | create each component's variants and properties | type each component's props, and build its controls and "All variants" story |
+| `definitions/docRegistry.ts` | write descriptions, usage notes, and documentation links | write each Docs page |
+| `definitions/icons.ts` | draw the `Icon/*` components | render icons inline |
+| `definitions/grid.ts` | draw the generic data grid | render the Data grid, with the same placeholder data and column width rule |
+
+**How a definition becomes a component.** A property name becomes camelCase (`Show icon` →
+`showIcon`), and its values stay the same strings. Every variant property except State is a prop.
+State is handled differently: see [States](#states). A slot is `children`. Anything a component
+adds or leaves out is listed with its reason in `ui/src/parity/coded.ts`, which is where the
+differences in section 11 are recorded.
+
+**Styling.** Components use only Sterling's tokens: `var(--stl-…)` custom properties and the
+`stl-text-…` classes. Class names are `stl-<component>` with `--<value>` modifiers. The Theme
+toolbar sets `data-theme` on the page; the Density toolbar sets a class on the body. An application
+does the same.
+
+**The checks.** They run in CI on every push, and from the repo root:
+
+| Check | Fails when |
+|---|---|
+| `npm run check:parity` | a defined component has no coded counterpart, or a coded component's props don't match its definition |
+| `npm run check:css` | a color, length, or font value in the CSS isn't a token, or a `var(--stl-…)` names no token |
+| `npm run check:a11y` | any story has an axe violation, in Light or Dark, or doesn't render |
+| `npm run check:docs` | a published component has no Storybook Docs page for its documentation link |
+
+**Dependencies.** React, and for the Select only, React Aria (`react-aria`, `react-stately`), which
+supplies its keyboard behavior and screen-reader semantics. Inter 3.19 is bundled (`inter-ui`).
+
+**The site.** `npm run site` builds `site/`: the token reference at the root and Storybook under
+`storybook/`, each linking to the other. `npm run site:serve` shows it at http://localhost:6008.
+The Pages workflow publishes it on every push to `main`, once the repository is public.
+
+---
+
+## 11. Where Figma and code differ
+
+Figma and code are built from the same definitions, but they are different materials. Each
+difference below is deliberate, and each has a reason. Per-component details (a property with no
+prop, or a prop with no property) are also listed in `ui/src/parity/coded.ts`.
+
+### States
+
+Figma shows each state as a variant (`State=hover`). Code has no `state` prop: hover,
+pressed, and focus come from CSS (`:hover`, `:active`, `:focus-visible`), and disabled is the
+`disabled` prop. The mapping is written down once, in `ui/src/parity/parity.ts`, and
+`npm run check:parity` applies it to every coded component. Storybook's "All variants" stories
+force the CSS states so they can be compared with the Figma variant set.
+
+### Fonts change together
+
+Figma renders Inter 3.19, and the coded layer bundles the same version
+(`inter-ui`, loaded in `ui/src/styles/fonts.css`), so text has the same width on both sides. Inter 4
+is about 2% narrower at Medium and Semi Bold, which is enough to change the width of every button.
+If the Figma text styles move to another Inter version, change the package in the same release.
+(Figma also rounds each text box up to a whole pixel, so a text-sized control can still be up to
+1px wider in Figma.)
+
+### Links and shared text properties
+
+A text property stores styling along with
+its characters. When several variants bind a layer to the same text property, a text style or
+decoration written on one variant's layer is copied to every variant that shares the property: an
+underline written on the small Link made the medium Link small as well. Rewriting the property's
+default returns each layer to its own text style and drops anything written on the layer itself.
+Unbinding, styling, and rebinding doesn't help; rebinding re-applies the shared styling.
+
+So Sterling never writes a decoration on a bound text layer. A link's underline is part of its text
+style (`Label-link`, `Body-link`), which each variant keeps and instances follow, and the plugin
+rewrites every text property default before rebuilding a component set and again when wiring it.
+Code has no such constraint; it uses the same two styles so the names match.
+
+The same care applies to instances. A decoration or text style written straight on an instance's
+text pins its styling: the text stops following the component, Figma doesn't list it as an override,
+and resetting the instance's overrides doesn't clear it. Writing the component's own text style on
+that text releases it. Both builds fail their checks if a Link or bulk action bar instance's link
+text differs from its component's.
+
+### Right-aligned grid headers
+
+The rule is: the header label is flush with the numbers below it,
 and the sort icon sits immediately to the label's left. In code that's one flex row: the label
 shrinks and truncates when the column is narrow, and the icon stays beside it at any width.
 
@@ -441,7 +551,9 @@ The intent, as Guidelines states it, is that **the sort icon always sits next to
 does that for both alignments. Figma approximates it: a left-aligned header's icon sits at the
 cell's right edge, away from a short label, because the label fills the cell.
 
-**Grids are data tables.** Sterling's grids are used to read and compare rows, sort them, select
+### Grids are data tables
+
+Sterling's grids are used to read and compare rows, sort them, select
 some, and act on the selection. Nothing is edited in place, and a row holds one control (its
 checkbox). So the coded Data grid is a native `<table>`, not an interactive grid (`role="grid"`):
 
@@ -455,7 +567,9 @@ Sterling would move to `role="grid"` when cells become editable or hold more tha
 arrow keys between cells are worth their cost. Until then the body cell's focus variants in Figma
 (`focus`, `warning-focus`, `error-focus`) have no trigger in code. Focus variants are for future editable cells; read-only grids show focus on header buttons and row checkboxes only.
 
-**Data grid and bulk action bar.** The coded Data grid is driven by data (`columns`, `rows`, `sort`,
+### Data grid and bulk action bar
+
+The coded Data grid is driven by data (`columns`, `rows`, `sort`,
 `selected`), using the same dataset shape and placeholder data as the plugin (`definitions/grid.ts`);
 in Figma a grid is instances with overridden values. It reports what the person asks for and leaves
 sorting, paging, and storing the selection to the application. In the bulk action bar:
@@ -467,7 +581,9 @@ sorting, paging, and storing the selection to the application. In the bulk actio
 - Focus is never dropped: after "Select all N matching" it moves to the count, and when clearing the
   selection removes the bar, the screen moves it to the grid's select-all checkbox.
 
-**Loading, empty, and paging.** In Figma, skeleton rows and the empty state are instances placed under
+### Loading, empty, and paging
+
+In Figma, skeleton rows and the empty state are instances placed under
 the header. In code they are the Data grid's `loading` and `empty` props: `loading` shows skeleton
 rows, marks the table busy, and hides the skeleton rows from assistive technology, and a status
 region that is always in the page says "Loading rows…", then why the grid is empty if it is.
@@ -475,45 +591,42 @@ Pagination's Previous and Next, which Figma exposes as button instances, are pro
 announced when the page changes, and focus moves to the other button when the one in use becomes
 disabled. A skeleton bar is half its column's width (60% for numbers) rather than a fixed size.
 
-**Grid cells.** The coded cells are table cells (`<th>`, `<td>`), so they only work inside a table.
+### Grid cells
+
+The coded cells are table cells (`<th>`, `<td>`), so they only work inside a table.
 In a chip or checkbox cell, the chip or checkbox is `children`; in Figma it is an exposed nested
 instance. Error and warning are one prop, `validation`, as on the inputs.
 
-**States.** Figma shows each state as a variant (`State=hover`). Code has no `state` prop: hover,
-pressed, and focus come from CSS (`:hover`, `:active`, `:focus-visible`), and disabled is the
-`disabled` prop. The mapping is written down once, in `ui/src/parity/parity.ts`, and
-`npm run check:parity` applies it to every coded component. Storybook's "All variants" stories
-force the CSS states so they can be compared with the Figma variant set.
+### Input content
 
-**Fonts change together.** Figma renders Inter 3.19, and the coded layer bundles the same version
-(`inter-ui`, loaded in `ui/src/styles/fonts.css`), so text has the same width on both sides. Inter 4
-is about 2% narrower at Medium and Semi Bold, which is enough to change the width of every button.
-If the Figma text styles move to another Inter version, change the package in the same release.
-(Figma also rounds each text box up to a whole pixel, so a text-sized control can still be up to
-1px wider in Figma.)
-
-**Input content.** Figma's Input/Text has a Content property (value / placeholder) so a mockup can show
+Figma's Input/Text has a Content property (value / placeholder) so a mockup can show
 either. In code there is nothing to choose: the field shows its placeholder whenever its value is
 empty. Error and warning are one prop, `validation`.
 
-**Tab list.** Code has a `TabList` with no Figma component. It gives its tabs the tablist role, an
-accessible name, and arrow-key navigation; in Figma, tabs are placed side by side in a frame.
-Differences like these are recorded with their reasons in `ui/src/parity/coded.ts` (`figmaOnly`,
-`codeOnly`, `CODE_ONLY_COMPONENTS`).
+### Select and its menu
 
-**Select and its menu.** The coded Select gets its keyboard behavior, typeahead, and screen-reader
+The coded Select gets its keyboard behavior, typeahead, and screen-reader
 semantics from React Aria (`react-aria` and `react-stately`, hooks only), because a custom listbox
 is easy to get subtly wrong. The look is Sterling's own CSS. It is the only component with a
 runtime dependency besides React. The choices are an `options` prop; in Figma they are the Option
 instances inside Input/Menu. While the menu is open React Aria treats it as modal, its default: the
 rest of the page is hidden from assistive technology and can't be scrolled until the menu closes.
 
-**Dialog.** The coded Dialog is a native `<dialog>` opened as a modal, so the browser keeps focus
+### Tab list
+
+Code has a `TabList` with no Figma component. It gives its tabs the tablist role, an
+accessible name, and arrow-key navigation; in Figma, tabs are placed side by side in a frame.
+Differences like these are recorded with their reasons in `ui/src/parity/coded.ts` (`figmaOnly`,
+`codeOnly`, `CODE_ONLY_COMPONENTS`).
+
+### Dialog
+
+The coded Dialog is a native `<dialog>` opened as a modal, so the browser keeps focus
 inside it, makes the page behind inert, closes on Escape, and returns focus. Figma's Body slot is
 `children`; the Cancel and Primary buttons, which Figma exposes as nested instances, are props
 (`cancelLabel`, `primaryLabel`, `primaryKind`, `primaryDisabled`). The backdrop is `surface/scrim`.
 
-**Chips, summary metric, and grouped menus.**
+### Chips, summary metric, and grouped menus
 
 - *Filter chip:* with Show remove on, the whole chip is the button that removes the filter, named
   "Remove filter: …" for screen readers. With it off, the chip is plain text. Figma draws both the
@@ -525,35 +638,20 @@ inside it, makes the page behind inert, closes on Escape, and returns focus. Fig
   options and names the group for screen readers; in Figma they are placed one after another.
 - *Option with description* has the keyboard focus look of Option; Figma has no focus variant for it.
 
-**Links and shared text properties (a Figma behavior).** A text property stores styling along with
-its characters. When several variants bind a layer to the same text property, a text style or
-decoration written on one variant's layer is copied to every variant that shares the property: an
-underline written on the small Link made the medium Link small as well. Rewriting the property's
-default returns each layer to its own text style and drops anything written on the layer itself.
-Unbinding, styling, and rebinding doesn't help; rebinding re-applies the shared styling.
+### Icon button tooltip
 
-So Sterling never writes a decoration on a bound text layer. A link's underline is part of its text
-style (`Label-link`, `Body-link`), which each variant keeps and instances follow, and the plugin
-rewrites every text property default before rebuilding a component set and again when wiring it.
-Code has no such constraint; it uses the same two styles so the names match.
-
-The same care applies to instances. A decoration or text style written straight on an instance's
-text pins its styling: the text stops following the component, Figma doesn't list it as an override,
-and resetting the instance's overrides doesn't clear it. Writing the component's own text style on
-that text releases it. Both builds fail their checks if a Link or bulk action bar instance's link
-text differs from its component's.
-
-**Icon button tooltip.** In Figma an icon button's Label is a hidden layer: its accessible name. In
+In Figma an icon button's Label is a hidden layer: its accessible name. In
 code the label is the `aria-label` and, for now, the browser's own tooltip (`title`). A Sterling
 Tooltip component is on the backlog ([reference](docs/reference.md#backlog)); when it exists, the
 icon button will use it instead.
 
 ---
 
-## 11. Versioning
+## 12. Versioning
 
-The version number lives in the root `package.json` (1.0.0). The plugin reads it at build
-time and prints it on the Cover and Read me pages and in the run notification.
-`check:tokens` fails if `tokens.json` says otherwise. CHANGELOG.md records every release;
+The version number lives in the root `package.json` (1.1.0). The plugin reads it at build
+time and prints it on the Cover and Read me pages and in the run notification; Storybook shows it
+in its title. `check:tokens` fails if `tokens.json`, `plugin/package.json`, or `ui/package.json`
+says otherwise. CHANGELOG.md records every release;
 CONTRIBUTING.md defines what counts as major, minor, or patch for a design system (renaming
 a layer or property is breaking).

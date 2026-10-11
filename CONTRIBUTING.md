@@ -1,8 +1,8 @@
 # Contributing to Sterling
 
 Every change to Sterling goes through the same four stages: **propose, build, check, release**.
-Sterling's Figma file is generated from this repo, so a change is always a change to the tokens or
-the plugin code, never an edit made by hand in Figma. [ARCHITECTURE.md](ARCHITECTURE.md) explains
+Sterling's Figma file and its coded components are both generated from this repo, so a change is
+always a change to the tokens, the definitions, or the code, never an edit made by hand in Figma. [ARCHITECTURE.md](ARCHITECTURE.md) explains
 why, and how the pieces fit together.
 
 Sterling is maintained by Michael Casey. Suggestions and bug reports are welcome as GitHub issues.
@@ -33,10 +33,24 @@ Work on a branch, in this order: **tokens → components → guidelines and patt
 |---|---|
 | A color, spacing step, size, density value, or text style | `tokens/tokens.json` |
 | A component's variants, properties, or their defaults | `definitions/components.ts` |
-| How a component is drawn | `plugin/src/library/components/` |
+| How a component is drawn in Figma | `plugin/src/library/components/` |
+| The React component, its CSS, and its stories | `ui/src/components/` |
+| How a coded component maps to its definition | `ui/src/parity/coded.ts` |
 | A component's description, usage text, or documentation link | `definitions/docRegistry.ts` |
 | A guideline or pattern | `plugin/src/library/pages/` |
 | The example | `plugin/src/example/loan-pooling/` |
+
+**A component change has three parts, in one pull request:**
+
+1. **The definition** (`definitions/components.ts`): the variant, property, or default.
+2. **The Figma spec** (`plugin/src/library/components/`): how the plugin draws it.
+3. **The React component** (`ui/src/components/`): the prop, its styling, and its stories, with
+   its entry in `ui/src/parity/coded.ts` updated.
+
+The checks hold you to it: the library check fails if the Figma component doesn't match its
+definition, and `check:parity` fails if the coded component doesn't, or doesn't exist. If Figma and
+code must differ, record the difference and the reason in `coded.ts` and in
+[ARCHITECTURE.md](ARCHITECTURE.md#11-where-figma-and-code-differ).
 
 Rules that keep a rebuild safe:
 
@@ -45,7 +59,11 @@ Rules that keep a rebuild safe:
 - **To rename** a component, variant, or property, use the rename support in
   `plugin/src/core/ensure.ts` (`previousNames`, `legacyVariantName`). It renames the existing node
   instead of making a new one.
-- **Bind everything to variables.** No raw colors, and no raw sizes where a token exists.
+- **Bind everything to variables.** No raw colors, and no raw sizes where a token exists. In code,
+  that means `var(--stl-…)` and the `stl-text-…` classes only; `check:css` enforces it.
+- **Never write a text decoration on a layer bound to a text property.** Figma copies it, with that
+  variant's text style, to every variant sharing the property. Use a text style that has it
+  (`Label-link`, `Body-link`).
 - **Document as you build.** A new published component needs an entry in `docRegistry.ts`: a
   one-sentence description, its details, when to use it and when not to, and the related guidance.
   Figma shows the description in the Assets Details panel (click a component in Assets) and in the
@@ -80,9 +98,38 @@ npm run typecheck
 npm run build
 ```
 
+For the coded components (run `npm install` in `ui/` once, then from the repo root):
+
+```bash
+npm run check:parity
+```
+
+```bash
+npm run check:css
+```
+
+```bash
+npm run check:a11y
+```
+
+```bash
+npm run check:docs
+```
+
+`check:a11y` builds Storybook and runs every story in Chrome, in Light and Dark; `check:docs` reads
+that build. Also run `npm run typecheck` in `ui/`.
+
 GitHub runs the same checks on every push and pull request.
 
-Then build in Figma, in a duplicate of the Sterling file (never the published one):
+Then look at the coded component in Storybook (`npm run storybook`):
+
+1. Compare its "All variants" story with the Figma variant set.
+2. Switch Theme and Density in the toolbar.
+3. Use it with the keyboard alone: Tab to it, operate it, and check where focus goes afterwards.
+4. Open the Accessibility panel. The automated run covers every story, but not what only appears
+   after you interact (an open menu, a dialog opened by a click).
+
+And build in Figma, in a duplicate of the Sterling file (never the published one):
 
 1. Run **Sterling → Build library**, then **Sterling → Build example**.
 2. Read both notifications. Each must end with its checks passing, and the link check must report
@@ -100,12 +147,13 @@ If a check fails, the notification says how many failed and the console
 ## 4. Release
 
 1. **Choose the version** using the rules below.
-2. **Set it in three places:** `package.json`, `plugin/package.json`, and `$meta.version` in
-   `tokens/tokens.json`. `npm run check:tokens` fails if they disagree. The Cover and Read me pages
-   pick it up from `package.json` on the next build.
+2. **Set it in four places:** `package.json`, `plugin/package.json`, `ui/package.json`, and
+   `$meta.version` in `tokens/tokens.json`. `npm run check:tokens` fails if they disagree. The Cover
+   and Read me pages and Storybook's title pick it up from `package.json` on the next build.
 3. **Update [CHANGELOG.md](CHANGELOG.md):** what was added, changed, fixed, or removed, written for
    someone who uses Sterling. For a breaking change, say what to do about it.
-4. **Merge to `main`.** The checks run again, and the token site is republished.
+4. **Merge to `main`.** The checks run again, and the site (the token reference and Storybook) is
+   republished.
 5. **Rebuild the Sterling Figma file** with both commands, confirm the checks pass, then publish
    the library from Figma's Assets panel with the changelog entry as the description.
 6. **Tag the release** `v<version>` on GitHub.
@@ -118,7 +166,7 @@ Sterling when it accepts the update.
 | Version | When | Examples |
 |---|---|---|
 | **Major** (2.0.0) | Existing instances lose something or change meaning | Removing a component, variant, or property; renaming a layer that instances override (the override is reset); removing or renaming a token; changing what a property value means |
-| **Minor** (1.1.0) | Something new, and nothing existing changes | A new component, variant, property, token, guideline, or pattern |
+| **Minor** (1.1.0) | Something new, and nothing existing changes | A new component, variant, property, token, guideline, or pattern; a component gaining its coded counterpart |
 | **Patch** (1.0.1) | A fix that keeps the same components and names | A visual fix, a contrast fix, a corrected description, a documentation change |
 
 Renames done with the plugin's rename support keep instances linked, but they still change the
