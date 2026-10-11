@@ -457,9 +457,9 @@ in Figma a grid is instances with overridden values. It reports what the person 
 sorting, paging, and storing the selection to the application. In the bulk action bar:
 
 - The actions are `children`; Figma exposes four button instances and a Show destructive toggle.
-- The mark beside the count is a picture of the selection, hidden from assistive technology. In
-  Figma it is a Checkbox instance. The count itself is a status that screen readers announce.
-- "Select all N matching" is underlined, like every link; Figma shows it in the accent color only.
+- The count is a status that screen readers announce. The bar is rendered all the time: with an
+  empty count it shows nothing, but the status region stays in the page, so the first selection is
+  announced as reliably as later ones. In Figma the bar is simply placed or not.
 - Focus is never dropped: after "Select all N matching" it moves to the count, and when clearing the
   selection removes the bar, the screen moves it to the grid's select-all checkbox.
 

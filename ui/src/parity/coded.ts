@@ -99,11 +99,10 @@ export const CODED: Record<string, CodedComponent> = {
   },
   "Grid/BulkActionBar": {
     source: "src/components/BulkActionBar.tsx",
-    props: ["count", "selectAll", "showSelectAll", "hint", "showHint", "onSelectAll", "allSelected", "hintId", "children"],
+    props: ["count", "selectAll", "showSelectAll", "hint", "showHint", "onSelectAll", "hintId", "children"],
     figmaOnly: { "Show destructive": "In code the actions are children: leave the destructive button out instead of hiding it." },
     codeOnly: {
       onSelectAll: "Called for \"Select all N matching\"; Figma has no behavior.",
-      allSelected: "Shows a check instead of a dash beside the count. In Figma, set on the nested checkbox.",
       hintId: "Lets a disabled action point to the hint that explains it (aria-describedby).",
       children: "The action Buttons. In Figma they are exposed button instances.",
     },

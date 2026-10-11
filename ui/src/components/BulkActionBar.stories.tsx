@@ -27,7 +27,7 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: `${docs(NAME)}\n\n**In code** the actions are children, the count is announced to screen readers when it changes, and the mark beside the count is a picture of the selection, not a control.`,
+        component: `${docs(NAME)}\n\n**In code** the actions are children. Render the bar all the time and pass an empty count while nothing is selected: it shows nothing then, but its status region stays in the page, so a screen reader announces the first selection as reliably as every later one.`,
       },
     },
     layout: "padded",
@@ -59,5 +59,5 @@ export const WithHint: Story = {
 /** Once every matching row is selected, the count says so and the offer to select them all goes away. */
 export const AllMatchingSelected: Story = {
   name: "All matching selected",
-  args: { count: "All 120 matching selected", showSelectAll: false, allSelected: true },
+  args: { count: "All 120 matching selected", showSelectAll: false },
 };

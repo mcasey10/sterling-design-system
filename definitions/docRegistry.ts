@@ -193,7 +193,8 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
   "Grid/BulkActionBar": {
     description: "Shows the selection count and the actions for the selected grid rows.",
     details:
-      "Shown above a grid while rows are selected. Count and Select all are text properties; Show select all hides the " +
+      "Shown above a grid while rows are selected. The count is text: select-all is the checkbox in the grid's header, so the " +
+      "bar has no checkbox of its own. Count and Select all are text properties; Show select all hides the " +
       "Select all link (e.g. once all matching rows are selected); Show destructive toggles the danger action. Hint and " +
       "Show hint (off by default) explain why an action is disabled. Action buttons are exposed instances — rename them " +
       "and set their state from the bar instance.",

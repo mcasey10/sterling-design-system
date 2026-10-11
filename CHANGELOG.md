@@ -5,6 +5,17 @@ All notable changes to Sterling are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) as defined for a design system in
 [CONTRIBUTING.md](CONTRIBUTING.md#versions).
 
+## [Unreleased]
+
+### Changed
+
+- **Bulk action bar:** removed the checkbox-like mark beside the count, in Grid/BulkActionBar and the
+  loan example's bars. It looked like a control and did nothing; select-all is the checkbox in the
+  grid's header. The count, the row highlights, and Clear selection carry the meaning. A correction to
+  1.0.0, which was never published.
+- **Bulk action bar:** "Select all N matching" is underlined, like every link, so it isn't marked by
+  color alone.
+
 ## [1.0.0] - 2026-10-10
 
 The first release.

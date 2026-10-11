@@ -62,12 +62,11 @@ export const WithBulkActions: Story = {
     const eligible = DATA.rows.filter((row) => selected.includes(row.values.id) && row.values.status === "Pending").length;
     return (
       <div className="stl-story-stack" ref={stack}>
-        {selected.length > 0 && (
-          <BulkActionBar
-            count={allMatching ? `All ${MATCHING} matching selected` : `${selected.length} selected`}
+        {/* Always rendered: with an empty count the bar shows nothing but keeps its status region in the page. */}
+        <BulkActionBar
+            count={selected.length === 0 ? "" : allMatching ? `All ${MATCHING} matching selected` : `${selected.length} selected`}
             selectAll={`Select all ${MATCHING} matching`}
             showSelectAll={!allMatching}
-            allSelected={allMatching}
             onSelectAll={() => {
               setSelected(DATA.rows.map((row) => row.values.id));
               setAllMatching(true);
@@ -85,8 +84,7 @@ export const WithBulkActions: Story = {
               disabled={eligible === 0}
               aria-describedby={eligible === 0 ? "bulk-hint" : undefined}
             />
-          </BulkActionBar>
-        )}
+        </BulkActionBar>
         <DataGrid {...args} rows={sortRows(args.rows, sort)} sort={sort} onSortChange={setSort} selected={selected} onSelectedChange={select} />
       </div>
     );

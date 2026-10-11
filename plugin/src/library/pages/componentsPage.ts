@@ -346,7 +346,7 @@ export async function buildComponentsPage(kit: Kit, page: PageNode): Promise<{ r
     kit, root, 9, "Bulk action bar",
     "N selected · Select all matching, plus actions. Rename the action buttons from the instance; Show destructive toggles the danger action."
   );
-  const bulkActionBar = await buildBulkActionBar(kit, page, bulkSection, 1, { button, checkbox, icons }, width, GENERIC_BAR);
+  const bulkActionBar = await buildBulkActionBar(kit, page, bulkSection, 1, { button, icons }, width, GENERIC_BAR);
   await usageNote(kit, bulkSection, 2, bulkActionBar.name);
   const filterChipSection = await ensureSection(kit, root, 10, "Filter chip", "Applied filter; Show remove toggles the x icon.");
   const filterChip = await ensureComponentSet(kit, page, filterChipSection, 1, filterChipSpec(kit, icons));

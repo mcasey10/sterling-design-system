@@ -811,7 +811,7 @@ export async function buildLoanExample(kit: Kit, page: PageNode, lib: Library): 
     data: CANDIDATE_DATA,
   });
   const poolBar = await buildBulkActionBar(
-    kit, page, holder, 7, { button: lib.button, checkbox: lib.checkbox, icons: lib.icons }, gridWidth(POOL_DATA), POOL_BAR
+    kit, page, holder, 7, { button: lib.button, icons: lib.icons }, gridWidth(POOL_DATA), POOL_BAR
   );
   // Bar states a and b need different selections; selecting through instance overrides drops the rows' other
   // overrides, so each is its own grid built from data that already has the selection.

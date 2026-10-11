@@ -311,7 +311,7 @@ async function bulkBar(kit: Kit, lib: Library, root: FrameNode) {
   p.canvas.appendChild(await text(kit, "No checkboxes and no bar: there is nothing to select.", "Body", "text/secondary"));
 
   await steps(kit, p.notes, [
-    "The count says how many rows are selected. Select all N matching extends the selection to every row that matches the filters, not only the page shown.",
+    "The count says how many rows are selected, in words. The bar has no checkbox: selecting every row on the page is the checkbox in the grid's header, and Clear selection is a button. Select all N matching extends the selection to every row that matches the filters, not only the page shown.",
     "Once everything matching is selected, the count says so and the Select all link is hidden. Before a destructive action on this selection, ask for confirmation: it reaches rows the person can't see (see Confirmation dialog).",
     "When an action can't apply to the selection, keep it in place, disabled, and say why in the hint beside it (Show hint). In code, link the hint to the button with aria-describedby.",
     "A read-only view has no checkboxes and no bar. Danger actions use status/critical; reversible ones use a secondary button.",

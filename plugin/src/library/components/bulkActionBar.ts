@@ -1,5 +1,5 @@
 // Bulk action bar — "N selected · Select all M matching" plus actions, shown above a grid while
-// rows are selected. Built from a spec so the Components page has a generic bar
+// rows are selected. The count is text only: select-all lives in the grid's header, so the bar has no checkbox. Built from a spec so the Components page has a generic bar
 // (Grid/BulkActionBar) and worked examples can define their own actions.
 // Properties: Count, Select all (text), Hint and Show hint (why an action is disabled; off by default), plus
 // one boolean per toggleable action. Action buttons are exposed instances, so their labels can be edited
@@ -58,7 +58,7 @@ export async function buildBulkActionBar(
   page: PageNode,
   parent: FrameNode,
   index: number,
-  sets: { button: ComponentSetNode; checkbox: ComponentSetNode; icons: IconIndex },
+  sets: { button: ComponentSetNode; icons: IconIndex },
   width: number,
   spec: BarSpec
 ): Promise<ComponentNode> {
@@ -79,11 +79,13 @@ export async function buildBulkActionBar(
     { direction: "HORIZONTAL", align: "CENTER", gap: density(kit, "control/gap") },
     0
   );
-  const box = await ensureInstance(selection, "Checkbox", variantOf(sets.checkbox, { Checked: "indeterminate", State: "default" }), 0);
-  const count = await ensureText(kit, selection, "Count", spec.count, "Body-strong", "text/primary", 1);
-  const dot = await ensureText(kit, selection, "Separator", "·", "Body", "text/secondary", 2);
-  const all = await ensureText(kit, selection, "Select all", spec.selectAll, "Body", "accent/default", 3);
-  prune(selection, [box, count, dot, all]);
+  const count = await ensureText(kit, selection, "Count", spec.count, "Body-strong", "text/primary", 0);
+  const dot = await ensureText(kit, selection, "Separator", "·", "Body", "text/secondary", 1);
+  const all = await ensureText(kit, selection, "Select all", spec.selectAll, "Body", "accent/default", 2);
+  // A link is underlined, so it is never marked by color alone.
+  if (all.textDecoration !== "UNDERLINE") all.textDecoration = "UNDERLINE";
+  // Removes the checkbox-like mark earlier versions drew beside the count: it looked like a control and did nothing.
+  prune(selection, [count, dot, all]);
 
   const actions = ensureFrame(
     comp, "Actions",

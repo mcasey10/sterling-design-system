@@ -1,15 +1,20 @@
 // Grid/BulkActionBar: the selection count and the actions for the selected rows, shown above a grid while
 // rows are selected. The actions are `children` (Buttons); in Figma they are exposed button instances.
+//
+// Render the bar all the time and give it an empty `count` while nothing is selected: it then shows nothing,
+// but its status region stays in the page, so a screen reader announces the first selection as reliably as
+// every later one.
 
 import { type HTMLAttributes, type ReactNode, useId, useRef } from "react";
 import { textClass } from "../tokens";
 import { cx } from "./classes";
-import { Icon } from "./Icon";
-import "./Checkbox.css";
 import "./DataGrid.css";
 
 export interface BulkActionBarProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
-  /** How many rows are selected, e.g. "2 selected". Announced to screen readers when it changes. */
+  /**
+   * How many rows are selected, e.g. "2 selected". Announced to screen readers when it changes. Pass an empty
+   * string while nothing is selected: the bar is then hidden.
+   */
   count: string;
   /** The offer to select every matching row, e.g. "Select all 120 matching". */
   selectAll?: string;
@@ -19,8 +24,6 @@ export interface BulkActionBarProps extends Omit<HTMLAttributes<HTMLDivElement>,
   /** Why an action is disabled, e.g. "No eligible items selected". */
   hint?: string;
   showHint?: boolean;
-  /** Every matching row is selected: the mark beside the count shows a check instead of a dash. */
-  allSelected?: boolean;
   /**
    * An id for the hint, so the disabled action it explains can point to it:
    * `<Button disabled aria-describedby={hintId} />`.
@@ -31,10 +34,11 @@ export interface BulkActionBarProps extends Omit<HTMLAttributes<HTMLDivElement>,
 }
 
 export function BulkActionBar({
-  count, selectAll, showSelectAll = true, onSelectAll, hint, showHint = false, allSelected = false, hintId, children, className, ...rest
+  count, selectAll, showSelectAll = true, onSelectAll, hint, showHint = false, hintId, children, className, ...rest
 }: BulkActionBarProps) {
   const generated = useId();
   const status = useRef<HTMLSpanElement>(null);
+  const active = count !== "";
   // Choosing "Select all N matching" usually removes that button. Focus moves to the count, which now says
   // what is selected, instead of being lost.
   const chooseAll = () => {
@@ -42,18 +46,18 @@ export function BulkActionBar({
     status.current?.focus();
   };
   return (
-    <div role="group" aria-label="Bulk actions" className={cx("stl-bulk-bar", className)} {...rest}>
+    <div
+      role={active ? "group" : undefined}
+      aria-label={active ? "Bulk actions" : undefined}
+      className={cx("stl-bulk-bar", !active && "stl-bulk-bar--empty", className)}
+      {...rest}
+    >
       <div className="stl-bulk-bar__selection">
-        {/* A picture of the selection, not a control: the count beside it says the same thing in words. */}
-        <span className={cx("stl-checkbox", allSelected ? "stl-checkbox--on" : "stl-checkbox--indeterminate")} aria-hidden="true">
-          <span className="stl-checkbox__box">
-            <Icon name={allSelected ? "check" : "minus"} />
-          </span>
-        </span>
+        {/* Always in the page, even when empty, so its first text is announced like any later change. */}
         <span ref={status} role="status" tabIndex={-1} className={cx("stl-bulk-bar__count", textClass("Body-strong"))}>
           {count}
         </span>
-        {showSelectAll && selectAll && (
+        {active && showSelectAll && selectAll && (
           <>
             <span className={cx("stl-bulk-bar__separator", textClass("Body"))} aria-hidden="true">
               ·
@@ -64,14 +68,16 @@ export function BulkActionBar({
           </>
         )}
       </div>
-      <div className="stl-bulk-bar__actions">
-        {showHint && hint && (
-          <span id={hintId ?? generated} className={cx("stl-bulk-bar__hint", textClass("Caption"))}>
-            {hint}
-          </span>
-        )}
-        {children}
-      </div>
+      {active && (
+        <div className="stl-bulk-bar__actions">
+          {showHint && hint && (
+            <span id={hintId ?? generated} className={cx("stl-bulk-bar__hint", textClass("Caption"))}>
+              {hint}
+            </span>
+          )}
+          {children}
+        </div>
+      )}
     </div>
   );
 }
