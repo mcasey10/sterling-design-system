@@ -241,28 +241,58 @@ export async function text(kit: Kit, chars: string, style: string, colorName = "
 /** The component set whose instances are links. */
 const LINK_SET = "Controls/Link";
 
+/** A link text inside an instance, with the same layer in the instance's component. */
+interface InstanceLink {
+  instance: InstanceNode;
+  text: TextNode;
+  source: TextNode;
+}
+
 /**
  * Link text inside instances on a page: the Label of every Controls/Link instance, and "Select all" in every
- * bulk action bar instance. Their underline comes from the link text styles (Label-link, Body-link), which
- * instances follow even when their text is overridden.
+ * bulk action bar instance, each with the layer it comes from in the component.
  */
-async function instanceLinkTexts(page: PageNode): Promise<TextNode[]> {
-  const texts: TextNode[] = [];
-  for (const inst of page.findAllWithCriteria({ types: ["INSTANCE"] })) {
-    const main = await inst.getMainComponentAsync();
+async function instanceLinks(page: PageNode): Promise<InstanceLink[]> {
+  const links: InstanceLink[] = [];
+  for (const instance of page.findAllWithCriteria({ types: ["INSTANCE"] })) {
+    const main = await instance.getMainComponentAsync();
     if (!main) continue;
     const isLink = main.parent?.type === "COMPONENT_SET" && main.parent.name === LINK_SET;
     const isBar = !!main.findChild((n) => n.name === "Selection") && !!main.findChild((n) => n.name === "Actions");
     if (!isLink && !isBar) continue;
-    const text = inst.findOne((n) => n.type === "TEXT" && n.name === (isLink ? "Label" : "Select all")) as TextNode | null;
-    if (text) texts.push(text);
+    const layer = isLink ? "Label" : "Select all";
+    const text = instance.findOne((n) => n.type === "TEXT" && n.name === layer) as TextNode | null;
+    const source = main.findOne((n) => n.type === "TEXT" && n.name === layer) as TextNode | null;
+    if (text && source) links.push({ instance, text, source });
   }
-  return texts;
+  return links;
 }
 
-/** How many link texts inside instances on a page aren't underlined (0 when all are). */
-export async function plainInstanceLinks(page: PageNode): Promise<number> {
-  return (await instanceLinkTexts(page)).filter((text) => text.textDecoration !== "UNDERLINE").length;
+/** True if an instance's link text has the text style and decoration of its component's layer. */
+const follows = ({ text, source }: InstanceLink) => text.textStyleId === source.textStyleId && text.textDecoration === source.textDecoration;
+
+/**
+ * Makes link text inside instances follow its component again. A decoration or text style written straight on
+ * an instance's text pins its styling: the text then ignores later changes to the component (Figma doesn't
+ * list it as an override, and resetting the instance's overrides doesn't clear it). Writing the component's
+ * own text style on that text releases it, and leaves its characters alone.
+ */
+export async function followLinkStyles(page: PageNode) {
+  for (const link of await instanceLinks(page)) {
+    if (follows(link) || typeof link.source.textStyleId !== "string") continue;
+    if (link.text.fontName !== figma.mixed) await figma.loadFontAsync(link.text.fontName);
+    await link.text.setTextStyleIdAsync(link.source.textStyleId);
+  }
+}
+
+/**
+ * Link text inside instances that doesn't follow its component: a text style or underline set straight on the
+ * instance's text. One message per instance; empty when every link follows its component.
+ */
+export async function linkInstanceProblems(page: PageNode): Promise<string[]> {
+  return (await instanceLinks(page))
+    .filter((link) => !follows(link))
+    .map(({ instance, text }) => `${page.name} / "${instance.name}" ("${text.characters}"): its link text has its own text style or underline instead of following the component`);
 }
 
 export function rect(name: string, width: number, height: number): RectangleNode {

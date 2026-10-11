@@ -533,6 +533,12 @@ style (`Label-link`, `Body-link`), which each variant keeps and instances follow
 rewrites every text property default before rebuilding a component set and again when wiring it.
 Code has no such constraint; it uses the same two styles so the names match.
 
+The same care applies to instances. A decoration or text style written straight on an instance's
+text pins its styling: the text stops following the component, Figma doesn't list it as an override,
+and resetting the instance's overrides doesn't clear it. Writing the component's own text style on
+that text releases it. Both builds fail their checks if a Link or bulk action bar instance's link
+text differs from its component's.
+
 **Icon button tooltip.** In Figma an icon button's Label is a hidden layer: its accessible name. In
 code the label is the `aria-label` and, for now, the browser's own tooltip (`title`). A Sterling
 Tooltip component is on the backlog ([reference](docs/reference.md#backlog)); when it exists, the

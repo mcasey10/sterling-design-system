@@ -2,7 +2,7 @@
 // variables, text styles, and components without changing them, so run "Build library" first.
 // Then runs the link check on the example page and the example checks (data and action triggers).
 
-import { useStrokeScale, ensurePage, plainInstanceLinks } from "../../core/helpers";
+import { useStrokeScale, ensurePage, followLinkStyles, linkInstanceProblems } from "../../core/helpers";
 import { loadKit, loadLibrary } from "../../library/libraryLoader";
 import { report, warn } from "../../core/log";
 import { snapshotInstances, compareInstances } from "../../core/linkCheck";
@@ -20,9 +20,10 @@ export async function buildExample(): Promise<{ summary: string; extra: string; 
   const instancesBefore = await snapshotInstances([EXAMPLE_PAGE]);
   const page = await ensurePage(EXAMPLE_PAGE);
   const root = await buildLoanExample(kit, page, lib);
-  // Link text inside instances must be underlined (it follows the link text styles).
-  const plain = await plainInstanceLinks(page);
-  if (plain) warn(`${CHECK_FAILED} — ${plain} link text(s) in instances aren't underlined`);
+  // Link text inside instances follows its component (and so the link text styles and their underline). An
+  // earlier build wrote an underline straight on these instances, which pinned their styling; release them.
+  await followLinkStyles(page);
+  for (const problem of await linkInstanceProblems(page)) warn(`${CHECK_FAILED} — ${problem}`);
 
   const links = await compareInstances(instancesBefore);
   const kept = [...links.values()].reduce((n, c) => n + c.kept, 0);

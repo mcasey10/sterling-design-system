@@ -12,7 +12,7 @@ import { buildCover } from "./pages/cover";
 import { buildComponentArchitecture } from "./pages/componentArchitecture";
 import {
   ensurePages, useStrokeScale, Kit, ARCHITECTURE_PAGE, COVER_PAGE, GUIDELINES_PAGE, PATTERNS_PAGE, REDRAWN_PAGES,
-  plainInstanceLinks,
+  linkInstanceProblems,
 } from "../core/helpers";
 import { buildGuidelines } from "./pages/guidelines";
 import { buildPatterns } from "./pages/patterns";
@@ -78,10 +78,9 @@ export async function buildLibrary(): Promise<{ summary: string; extra: string; 
   // Documentation links point at Guidelines and Patterns frames, which were just redrawn; then check the library.
   await applyDocLinks(pages.get("Components")!, pages);
   checkLibrary(kit, pages.get("Components")!);
-  // Link text inside instances must be underlined too (it follows the link text styles).
+  // Link text inside instances must follow its component (and so the link text styles and their underline).
   for (const p of LINK_PAGES.map((name) => pages.get(name)).filter((page): page is PageNode => !!page)) {
-    const plain = await plainInstanceLinks(p);
-    if (plain) warn(`${LIBRARY_CHECK_FAILED} — ${p.name}: ${plain} link text(s) in instances aren't underlined`);
+    for (const problem of await linkInstanceProblems(p)) warn(`${LIBRARY_CHECK_FAILED} — ${problem}`);
   }
 
   const links = await compareInstances(instancesBefore);
