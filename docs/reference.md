@@ -367,7 +367,7 @@ Not planned for a release yet:
   shows its label with the browser's own tooltip (`title`), which can't be styled, appears after a
   delay, and doesn't appear on keyboard focus.
 
-- **Input/Option with description and Input/Menu heading** aren't coded yet.
+- **Input/Option with description focus.** Figma has no focus variant for it; the coded option shows one.
 
 ## Known limitations
 

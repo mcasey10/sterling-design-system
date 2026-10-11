@@ -1,0 +1,63 @@
+/* Chip/Side and Chip/Filter. */
+
+/* ------------------------------------------------------------ Side chip */
+
+.stl-side-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--stl-space-2) var(--stl-space-8);
+  border-radius: var(--stl-radius-sm);
+  vertical-align: middle;
+}
+/* Buy and Sell are actions (blue / coral); the label says which, so color is never the only signal. */
+.stl-side-chip--buy {
+  background: var(--stl-color-finance-buy-subtle);
+  color: var(--stl-color-finance-buy-strong);
+}
+.stl-side-chip--sell {
+  background: var(--stl-color-finance-sell-subtle);
+  color: var(--stl-color-finance-sell-strong);
+}
+
+/* ------------------------------------------------------------ Filter chip */
+
+/* Height and padding follow Density (the small control size). */
+.stl-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--stl-space-4);
+  box-sizing: border-box;
+  height: var(--stl-control-height-sm);
+  margin: 0;
+  padding: 0 calc(var(--stl-control-padding-x-sm) - var(--stl-stroke-1));
+  border: var(--stl-stroke-1) solid var(--stl-color-border-strong);
+  border-radius: var(--stl-radius-pill);
+  background: var(--stl-color-surface-panel);
+  color: var(--stl-color-text-primary);
+  vertical-align: middle;
+}
+/* Long labels truncate at 240px. */
+.stl-filter-chip__label {
+  max-width: calc(var(--stl-size-40) * 6);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.stl-filter-chip .stl-icon {
+  width: var(--stl-size-12);
+  height: var(--stl-size-12);
+  color: var(--stl-color-text-secondary);
+}
+.stl-filter-chip--removable {
+  cursor: pointer;
+}
+.stl-filter-chip--removable:hover {
+  background: var(--stl-color-surface-hover);
+}
+.stl-filter-chip--removable:active {
+  background: var(--stl-color-surface-pressed);
+}
+.stl-filter-chip--removable:focus-visible {
+  outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);
+  outline-offset: var(--stl-stroke-1);
+}

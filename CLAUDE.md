@@ -114,7 +114,8 @@ ui/                       Sterling in code (React + Storybook, Vite). Own packag
                           grid (columns = State, forced with the pseudo-states addon), all from definitions/
   src/parity/             parity.ts (how definitions map to code: no `state` prop; hover / focus /
                           pressed are CSS, disabled is a boolean prop) and coded.ts (coded components)
-  scripts/check-parity.ts `npm run check:parity`: coded components follow definitions/components.ts
+  scripts/check-parity.ts `npm run check:parity`: every defined component is coded (24 of 24) and follows
+                          definitions/components.ts; a new Figma component fails it until it is coded
 scripts/contrast-check.mjs  Reports WCAG contrast for every pair in tokens.json
                           `contrast.rules`; fails if body text < 4.5:1 or large
                           text/UI < 3:1. Run: `npm run contrast` (repo root)

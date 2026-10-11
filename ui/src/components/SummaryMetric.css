@@ -1,0 +1,60 @@
+/* Summary/Summary metric. A card 220px wide as the library draws it; set a width to change it. */
+
+.stl-summary-metric {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--stl-space-8);
+  box-sizing: border-box;
+  width: calc(var(--stl-size-40) * 5.5);
+  padding: var(--stl-space-16);
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  border-radius: var(--stl-radius-md);
+  background: var(--stl-color-surface-panel);
+  color: var(--stl-color-text-primary);
+}
+.stl-summary-metric__label {
+  overflow: hidden;
+  color: var(--stl-color-text-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Truncate text, never numbers: the value keeps its full width. */
+.stl-summary-metric__value {
+  white-space: nowrap;
+}
+/* Loading: a bar in place of the value, 120 × 24px. */
+.stl-summary-metric__skeleton {
+  width: calc(var(--stl-size-40) * 3);
+  height: var(--stl-size-24);
+  border-radius: var(--stl-radius-xs);
+  background: var(--stl-color-surface-skeleton);
+}
+.stl-summary-metric__track {
+  height: var(--stl-size-4);
+  border-radius: var(--stl-radius-pill);
+  background: var(--stl-color-border-default);
+  overflow: hidden;
+}
+.stl-summary-metric__bar {
+  height: 100%;
+  border-radius: var(--stl-radius-pill);
+  background: var(--stl-color-accent-default);
+}
+.stl-summary-metric__detail {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--stl-space-4);
+  color: var(--stl-color-text-secondary);
+}
+.stl-summary-metric__detail .stl-icon {
+  width: var(--stl-size-12);
+  height: var(--stl-size-12);
+}
+
+/* Over target: a warning icon and warning text as well as the bar's color. */
+.stl-summary-metric--over-target .stl-summary-metric__bar {
+  background: var(--stl-color-status-warning-strong);
+}
+.stl-summary-metric--over-target .stl-summary-metric__detail {
+  color: var(--stl-color-status-warning-strong);
+}

@@ -63,3 +63,41 @@
   color: var(--stl-color-text-disabled);
   cursor: default;
 }
+
+/* Input/Option with description: two lines, so the row is as tall as its text plus 8px above and below. */
+.stl-option--described {
+  height: auto;
+  padding-top: var(--stl-space-8);
+  padding-bottom: var(--stl-space-8);
+}
+.stl-option__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--stl-space-2);
+  min-width: 0;
+}
+.stl-option__description {
+  overflow: hidden;
+  color: var(--stl-color-text-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.stl-option--disabled .stl-option__description {
+  color: var(--stl-color-text-disabled);
+}
+
+/* Input/Menu heading, and the group it names. */
+.stl-menu-heading {
+  padding: var(--stl-space-4) var(--stl-control-padding-x);
+  overflow: hidden;
+  color: var(--stl-color-text-secondary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.stl-menu-group,
+.stl-menu-group__options {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

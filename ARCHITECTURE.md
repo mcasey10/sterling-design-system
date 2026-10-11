@@ -194,7 +194,7 @@ From the repo root:
 | `npm run check:tokens` | Every published token has a description, no description is left over for a removed token, and the version in tokens.json matches package.json. |
 | `npm run tokens:css` | Writes the token CSS to `dist/tokens.css` |
 | `npm run tokens:site` | Writes the token reference site to `site/` (with the same CSS as `site/tokens.css`) |
-| `npm run check:parity` | Every coded component in `ui/` follows its definition; lists the components not coded yet. Needs `npm install` in `ui/` first. |
+| `npm run check:parity` | Every published component except the icons has a coded counterpart in `ui/` (24 of 24), and each one follows its definition. Needs `npm install` in `ui/` first. |
 | `npm run storybook` | Starts Storybook for `ui/` at http://localhost:6006 (regenerates the token CSS first) |
 
 GitHub runs the same checks on every push (`ci.yml`).
@@ -508,6 +508,18 @@ rest of the page is hidden from assistive technology and can't be scrolled until
 inside it, makes the page behind inert, closes on Escape, and returns focus. Figma's Body slot is
 `children`; the Cancel and Primary buttons, which Figma exposes as nested instances, are props
 (`cancelLabel`, `primaryLabel`, `primaryKind`, `primaryDisabled`). The backdrop is `surface/scrim`.
+
+**Chips, summary metric, and grouped menus.**
+
+- *Filter chip:* with Show remove on, the whole chip is the button that removes the filter, named
+  "Remove filter: …" for screen readers. With it off, the chip is plain text. Figma draws both the
+  same way, with or without the ×.
+- *Side chip and Summary metric:* the texts Figma keeps as layers to override (the chip's label; the
+  metric's value and detail) are props, and the metric's bar takes a `progress` from 0 to 1 where
+  Figma resizes a layer. The bar is a progress bar to screen readers, described by the detail.
+- *Menu heading:* code adds a `MenuGroup` with no Figma component. It puts a heading above its
+  options and names the group for screen readers; in Figma they are placed one after another.
+- *Option with description* has the keyboard focus look of Option; Figma has no focus variant for it.
 
 **Icon button tooltip.** In Figma an icon button's Label is a hidden layer: its accessible name. In
 code the label is the `aria-label` and, for now, the browser's own tooltip (`title`). A Sterling

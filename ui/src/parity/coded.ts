@@ -1,6 +1,6 @@
 // The coded components, by their Figma name, with the design props each takes from its definition. A
 // component is added here when it is built; `npm run check:parity` compares every entry with
-// definitions/components.ts and lists the components that aren't coded yet.
+// definitions/components.ts and fails if any defined component isn't coded.
 // Icons (Icon/<name>) have no properties, so they have no definition and no entry: <Icon name> takes any
 // name in definitions/icons.ts.
 
@@ -62,6 +62,35 @@ export const CODED: Record<string, CodedComponent> = {
     source: "src/components/Menu.tsx",
     props: ["label", "selected", "disabled"],
     stateProps: { selected: "selected" },
+  },
+  "Chip/Side": {
+    source: "src/components/Chips.tsx",
+    props: ["side", "label"],
+    codeOnly: { label: "\"Buy\" or \"Sell\" by default. In Figma, a text layer to override (for example with B / S)." },
+  },
+  "Chip/Filter": {
+    source: "src/components/Chips.tsx",
+    props: ["label", "showRemove", "onRemove"],
+    codeOnly: { onRemove: "Called when the chip is used to remove its filter; Figma has no behavior." },
+  },
+  "Summary/Summary metric": {
+    source: "src/components/SummaryMetric.tsx",
+    props: ["status", "label", "showProgress", "loading", "value", "detail", "progress"],
+    stateProps: { loading: "loading" },
+    codeOnly: {
+      value: "In Figma, a text layer to override: it differs per variant, so it isn't a property.",
+      detail: "In Figma, a text layer to override: it differs per variant, so it isn't a property.",
+      progress: "Progress toward the target, 0 to 1. In Figma, resize the Bar layer.",
+    },
+  },
+  "Input/Option with description": {
+    source: "src/components/Menu.tsx",
+    props: ["label", "description", "selected", "disabled"],
+    stateProps: { selected: "selected" },
+  },
+  "Input/Menu heading": {
+    source: "src/components/Menu.tsx",
+    props: ["label"],
   },
   "Grid/HeaderCell": {
     source: "src/components/HeaderCell.tsx",
@@ -162,4 +191,8 @@ export const CODE_ONLY_COMPONENTS: Record<string, string> = {
   TabList:
     "The row that holds Tabs: it gives them the tablist role, an accessible name, and arrow-key navigation. In Figma, " +
     "tabs are placed side by side in a frame.",
+  MenuGroup:
+    "A named group of options in a Menu: it ties a Menu heading to the options under it for screen readers. In Figma, " +
+    "a heading and its options are placed one after another.",
+  SelectField: "The select's label, field, and helper without behavior. Select is built on it; it also draws a select that isn't live.",
 };

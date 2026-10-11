@@ -111,3 +111,8 @@
   width: calc(var(--stl-size-40) * 16.8);
   border: var(--stl-stroke-1) solid var(--stl-color-border-default);
 }
+
+/* Menus with described options are 280px wide in the library. */
+.stl-story-menu--wide {
+  width: calc(var(--stl-size-40) * 7);
+}
