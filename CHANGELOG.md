@@ -5,6 +5,18 @@ All notable changes to Sterling are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) as defined for a design system in
 [CONTRIBUTING.md](CONTRIBUTING.md#versions).
 
+## [1.1.1] - 2026-10-11
+
+### Changed
+
+- **Documentation links** in Figma open the component's Docs page in Storybook, which shows the same
+  guidance beside the coded component. Each component keeps its entry under Guidelines › Component usage.
+
+### Fixed
+
+- **Token reference site:** it loads Inter itself (3.19, the files Storybook uses), so it looks the same
+  on machines without Inter installed.
+
 ## [1.1.0] - 2026-10-11
 
 Sterling in code: every component as a React component, documented in Storybook and built from the
@@ -114,5 +126,6 @@ The first release.
   published to GitHub Pages.
 - Continuous integration on every push and pull request.
 
+[1.1.1]: https://github.com/mcasey10/sterling-design-system/releases/tag/v1.1.1
 [1.1.0]: https://github.com/mcasey10/sterling-design-system/releases/tag/v1.1.0
 [1.0.0]: https://github.com/mcasey10/sterling-design-system/releases/tag/v1.0.0

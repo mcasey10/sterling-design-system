@@ -3,14 +3,17 @@
 //   site/tokens.css   The token CSS from scripts/lib/token-css.mjs (the same text `npm run tokens:css`
 //                     writes to dist/tokens.css)
 // With --storybook <address> (used by scripts/build-site.mjs), the page links to the Storybook beside it.
-//   site/index.html   Self-contained reference page (CSS inlined, no external requests):
+//   site/index.html   Self-contained reference page (CSS inlined, nothing loaded from another site):
 //                     color tokens in both modes with their alias, primitive ramps, scales,
 //                     density, type specimens, and every contrast pair with its ratio
+//   site/fonts/       Inter 3.19, the same files Storybook bundles (ui/node_modules/inter-ui), with its
+//                     license, so the page looks the same where Inter isn't installed. Skipped, with a
+//                     note, when ui/ has no node_modules: the page then uses Inter only if it's installed
 // The contrast results come from scripts/lib/tokens.mjs, the same code as `npm run contrast`.
 //
 // Usage: npm run tokens:site   (output in site/, which is gitignored)
 
-import { mkdirSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadTokens, entries, flattenPrimitives, resolveColor, aliasOf, evaluateContrast } from "./lib/tokens.mjs";
@@ -27,6 +30,16 @@ const DEFAULT_DENSITY = defaultDensity(tokens);
 // --storybook <address>: add a link to the Storybook published beside this page (the combined site).
 const storybookArg = process.argv.indexOf("--storybook");
 const STORYBOOK = storybookArg > 0 ? process.argv[storybookArg + 1] : null;
+
+// Inter, from the package ui/src/styles/fonts.css loads: weight → file. Change both together.
+const INTER = resolve(here, "../ui/node_modules/inter-ui");
+const FONT_FILES = { 400: "Inter-Regular.woff2", 500: "Inter-Medium.woff2", 600: "Inter-SemiBold.woff2" };
+const HAS_FONTS = Object.values(FONT_FILES).every((file) => existsSync(resolve(INTER, "Inter (web)", file)));
+const FONT_CSS = HAS_FONTS
+  ? Object.entries(FONT_FILES)
+      .map(([weight, file]) => `@font-face { font-family: "${tokens.typography.fontFamily}"; font-style: normal; font-weight: ${weight}; font-display: swap; src: url("fonts/${file}") format("woff2"); }`)
+      .join("\n")
+  : "";
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 // ------------------------------------------------------------ index.html
@@ -207,6 +220,7 @@ function buildHtml(css, results) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(meta.name ?? "Tokens")} tokens</title>
 <style>
+${FONT_CSS}
 ${css}
 ${PAGE_CSS}
 </style>
@@ -247,5 +261,12 @@ const results = evaluateContrast(tokens);
 mkdirSync(outDir, { recursive: true });
 writeFileSync(resolve(outDir, "tokens.css"), css);
 writeFileSync(resolve(outDir, "index.html"), buildHtml(css, results));
+if (HAS_FONTS) {
+  mkdirSync(resolve(outDir, "fonts"), { recursive: true });
+  for (const file of Object.values(FONT_FILES)) copyFileSync(resolve(INTER, "Inter (web)", file), resolve(outDir, "fonts", file));
+  copyFileSync(resolve(INTER, "LICENSE.txt"), resolve(outDir, "fonts", "LICENSE.txt"));
+} else {
+  console.log("Inter isn't installed in ui/node_modules, so site/fonts/ was skipped (run `npm install` in ui/ to include it).");
+}
 const failures = results.filter((r) => !r.pass).length;
 console.log(`Wrote site/index.html and site/tokens.css — ${results.length} contrast pairs, ${failures} failure(s).`);

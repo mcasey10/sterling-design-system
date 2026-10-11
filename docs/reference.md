@@ -360,11 +360,10 @@ The repository is private for now. When it's time to publish, in this order:
 5. **Check the Storybook address** matches `STORYBOOK_URL` in `definitions/docRegistry.ts`, and open
    one Docs link in that form, for example
    `…/storybook/?path=/docs/components-controls-button--docs`. Run `npm run check:docs`.
-6. **Switch the documentation links to Storybook** (optional): set `DOCS_TARGET` to `"storybook"` in
-   `definitions/docRegistry.ts`, build the plugin, and run **Build library**. Each component's
-   documentation link in Figma then opens its Storybook Docs page. Click one from the Component
-   documentation panel to confirm. Leave it on `"figma"` until the site is live: before that the
-   links are dead.
+6. **Point the documentation links at Storybook** (done in 1.1.1): `DOCS_TARGET` is `"storybook"` in
+   `definitions/docRegistry.ts`, so after **Build library** each component's documentation link in
+   Figma opens its Storybook Docs page. Click one from the Component documentation panel to confirm.
+   Set it back to `"figma"` if the site is ever taken down: without the site the links are dead.
 7. **Set the Figma file to "Anyone with the link can view":** Share → change the link's access.
 8. **Test the Figma link in a private browser window**, signed out, to confirm it opens without an
    account.

@@ -414,8 +414,8 @@ One setting in `definitions/docRegistry.ts` decides where every component's docu
 
 | `DOCS_TARGET` | The link opens | Use it when |
 |---|---|---|
-| `"figma"` (the default) | The component's own entry under Guidelines › Component usage, in the same file | Always safe: it works for anyone who can open the file |
-| `"storybook"` | The component's Docs page in the published Storybook | The site is public. Before that the links are dead |
+| `"storybook"` (the setting since 1.1.1) | The component's Docs page in the published Storybook, which shows the same guidance beside the coded component | The site is public. Without it the links are dead |
+| `"figma"` | The component's own entry under Guidelines › Component usage, in the same file | The site isn't published: it works for anyone who can open the file |
 
 To switch, change the setting, build the plugin, and run **Build library**. `npm run check:docs` fails
 if any published component has no Storybook Docs page for its link to open, whichever way the

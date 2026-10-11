@@ -45,11 +45,11 @@ definitions/              Plain data about components, with no Figma code (share
                           core/ensure.ts); a library check fails if a built component differs
   grid.ts                 Data grid datasets: Column / GridRow / Dataset types, the generic placeholder data,
                           which columns stretch, and numericColumnWidth(). Shared by the plugin and ui/
-  docRegistry.ts          Also holds DOCS_TARGET ("figma" | "storybook": where documentation links point; keep
-                          "figma" until the site is public) and STORYBOOK_URL. `npm run check:docs` checks the pages exist
+  docRegistry.ts          Also holds DOCS_TARGET ("figma" | "storybook": where documentation links point;
+                          "storybook" since 1.1.1) and STORYBOOK_URL. `npm run check:docs` checks the pages exist
   docRegistry.ts          THE table of component documentation: one-sentence description, details,
-                          use / don't use, related guidance. Every published component needs an entry;
-                          its documentation link opens its own entry under Guidelines › Component usage
+                          use / don't use, related guidance. Every published component needs an entry
+                          (shown under Guidelines › Component usage); its documentation link follows DOCS_TARGET
   icons.ts                Icon glyphs (original outline SVG path data)
 plugin/
   manifest.json           Figma plugin manifest ("Sterling"; no network access, dynamic-page access)
@@ -125,8 +125,9 @@ scripts/contrast-check.mjs  Reports WCAG contrast for every pair in tokens.json
 scripts/check-tokens.mjs  Token checks: every published token (color, spacing, size, density) has a
                           description in its group's "$descriptions"; versions agree. Run: `npm run check:tokens`
 scripts/build-token-css.mjs   Token CSS for code: `npm run tokens:css` writes dist/tokens.css (gitignored)
-scripts/build-token-site.mjs  Token reference site: `npm run tokens:site` writes site/index.html
-                          and site/tokens.css (gitignored; the same CSS)
+scripts/build-token-site.mjs  Token reference site: `npm run tokens:site` writes site/index.html,
+                          site/tokens.css (gitignored; the same CSS), and site/fonts/ (Inter 3.19 copied
+                          from ui/node_modules/inter-ui, when installed)
 scripts/build-site.mjs    `npm run site`: site/ = token reference + Storybook under storybook/ (what Pages
                           publishes); scripts/serve-site.mjs (`npm run site:serve`) shows it locally
 scripts/lib/tokens.mjs    Shared token loading, alias resolution, and contrast evaluation

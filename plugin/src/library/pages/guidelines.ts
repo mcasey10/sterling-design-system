@@ -12,7 +12,7 @@ import {
 import { para, definitions, docTable, doDont } from "../../core/docBlocks";
 import { variantOf, setProps } from "../../core/ensure";
 import type { Library } from "./componentsPage";
-import { COMPONENT_DOCS, ICON_DOC, DocTarget, targetLabel } from "../../../../definitions/docRegistry";
+import { COMPONENT_DOCS, DOCS_TARGET, ICON_DOC, DocTarget, targetLabel } from "../../../../definitions/docRegistry";
 import { created, updated } from "../../core/log";
 
 const ROOT = "Guidelines";
@@ -105,8 +105,11 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
   header.appendChild(await text(kit, "Guidelines", "Display"));
   await para(
     kit, header,
-    "The rules Sterling's components follow, and that screens built from them should follow too. Each component's " +
-      "documentation link opens its entry under Component usage, which links to the rules that apply to it. " +
+    "The rules Sterling's components follow, and that screens built from them should follow too. " +
+      (DOCS_TARGET === "storybook"
+        ? "Each component has an entry under Component usage that links to the rules that apply to it. " +
+          "The component's documentation link in Assets opens the same guidance in Storybook. "
+        : "Each component's documentation link opens its entry under Component usage, which links to the rules that apply to it. ") +
       `For complete compositions, see the ${PATTERNS_PAGE} page.`
   );
 
@@ -230,11 +233,13 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
 
   // ---------------------------------------------------------------- Component usage
   // One entry per published component, named "Component/<name>": each component's documentation link opens
-  // its own entry here (library/docLinks.ts).
+  // its own entry here when DOCS_TARGET is "figma" (library/docLinks.ts).
   const usage = await section(
     kit, root, "Component usage",
     "One entry per component: what it is, when to use it, when to use something else, and the rules that apply. " +
-      "Each component's documentation link opens its entry here."
+      (DOCS_TARGET === "storybook"
+        ? "Each component's documentation link opens its Docs page in Storybook, with the same guidance."
+        : "Each component's documentation link opens its entry here.")
   );
   const componentsPage = figma.root.children.find((p) => p.name === "Components");
   for (const [name, d] of Object.entries(COMPONENT_DOCS)) {

@@ -48,11 +48,11 @@ export type ResolvedDoc = ComponentDoc & { docs: DocTarget };
  * panel and Dev Mode, and the "Full guidance" line of its usage note):
  *   • "figma"      its own entry under Guidelines › Component usage, in the same file. Works for anyone who
  *                  can open the file, with nothing published.
- *   • "storybook"  its Docs page in the published Storybook (STORYBOOK_URL). Switch to this only once that
- *                  site is public: the link is a web address, and it is dead until the site exists.
+ *   • "storybook"  its Docs page in the published Storybook (STORYBOOK_URL), which shows the same guidance
+ *                  beside the coded component. The link is a web address, so it needs that site to be public.
  * After changing it, build the plugin and run Build library.
  */
-export const DOCS_TARGET: "figma" | "storybook" = "figma";
+export const DOCS_TARGET: "figma" | "storybook" = "storybook";
 
 /** Where the Storybook is published: the storybook/ folder of the GitHub Pages site. */
 export const STORYBOOK_URL = "https://mcasey10.github.io/sterling-design-system/storybook/";
