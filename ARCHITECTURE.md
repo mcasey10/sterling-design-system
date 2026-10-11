@@ -92,7 +92,9 @@ sterling-design-system/
 ├── ui/                     Sterling in code: React components documented in Storybook
 │   ├── .storybook/         Storybook setup: token CSS, Theme and Density toolbar, accessibility
 │   │                       checks, forced hover / focus / pressed states
-│   ├── scripts/check-parity.ts   Coded components follow definitions/components.ts
+│   ├── scripts/check-parity.ts   Every defined component is coded and follows definitions/components.ts
+│   ├── scripts/check-css.mjs     No raw values in the coded layer's CSS
+│   ├── scripts/check-a11y.mjs    axe on every story in every color mode (headless Chrome)
 │   └── src/
 │       ├── tokens.ts         Reads tokens/tokens.json for the Foundations pages and the toolbar
 │       ├── styles/           base.css, fonts.css (Inter 3.19, the version Figma renders), and
@@ -195,6 +197,8 @@ From the repo root:
 | `npm run tokens:css` | Writes the token CSS to `dist/tokens.css` |
 | `npm run tokens:site` | Writes the token reference site to `site/` (with the same CSS as `site/tokens.css`) |
 | `npm run check:parity` | Every published component except the icons has a coded counterpart in `ui/` (24 of 24), and each one follows its definition. Needs `npm install` in `ui/` first. |
+| `npm run check:css` | No raw values in the coded layer's CSS: every color, length, and font value is a token, and every `var(--stl-…)` names a real one. |
+| `npm run check:a11y` | Builds Storybook, then runs axe on every story in Light and Dark with headless Chrome (158 runs today). Fails on any violation or any story that doesn't render. |
 | `npm run storybook` | Starts Storybook for `ui/` at http://localhost:6006 (regenerates the token CSS first) |
 
 GitHub runs the same checks on every push (`ci.yml`).

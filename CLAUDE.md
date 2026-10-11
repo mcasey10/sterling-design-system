@@ -212,7 +212,8 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
 
 ## Verification
 - Type-check before finishing: `cd plugin && npm run typecheck` (runs `tsc --noEmit`). After changes in
-  `ui/` or `definitions/`: `cd ui && npm run typecheck && npm run check:parity`.
+  `ui/` or `definitions/`: `cd ui && npm run typecheck && npm run check:parity && npm run check:css`, then
+  `npm run build-storybook && npm run check:a11y` (axe on every story in Light and Dark; needs Chrome).
 - Run `npm run contrast` after any color token change; it must exit 0 (248 pairs today). When
   adding a new text/background combination to a component, add it to `contrast.rules` too.
 - Run `npm run check:tokens` after any token change; it must exit 0. Every new Color, Spacing, Size,

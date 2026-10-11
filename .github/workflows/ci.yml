@@ -1,7 +1,8 @@
 # Checks that need no Figma file, on every push and pull request:
 # the plugin type-checks and builds, every color pair meets WCAG contrast, every published
 # token has a description, and the token CSS and token site build. The coded layer (ui/) type-checks,
-# follows the component definitions, and its Storybook builds.
+# has a coded counterpart for every component definition, uses no raw values in its CSS, builds its
+# Storybook, and passes an accessibility run over every story in every color mode.
 name: CI
 
 on:
@@ -60,9 +61,15 @@ jobs:
       - name: Type-check the coded layer
         run: npm run typecheck
         working-directory: ui
-      - name: Coded components follow their definitions
+      - name: Every defined component is coded and follows its definition
         run: npm run check:parity
+        working-directory: ui
+      - name: No raw values in the coded layer's CSS
+        run: npm run check:css
         working-directory: ui
       - name: Build Storybook
         run: npm run build-storybook
+        working-directory: ui
+      - name: Accessibility (axe) on every story, in every color mode
+        run: npm run check:a11y
         working-directory: ui

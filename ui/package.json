@@ -15,7 +15,10 @@
     "prebuild-storybook": "npm run tokens",
     "build-storybook": "storybook build",
     "typecheck": "tsc --noEmit -p .",
-    "check:parity": "tsx scripts/check-parity.ts"
+    "check:parity": "tsx scripts/check-parity.ts",
+    "check:css": "node scripts/check-css.mjs",
+    "precheck:css": "npm run tokens",
+    "check:a11y": "node scripts/check-a11y.mjs"
   },
   "dependencies": {
     "inter-ui": "^3.19.3",
@@ -32,10 +35,12 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "axe-core": "^4.14.0",
     "storybook": "^10.6.1",
     "storybook-addon-pseudo-states": "^10.6.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
-    "vite": "^8.3.4"
+    "vite": "^8.3.4",
+    "ws": "^8.22.0"
   }
 }
