@@ -19,17 +19,15 @@ export function linkSpec(kit: Kit): ComponentSetSpec {
       const label = await ensureText(
         kit, comp, "Label", "Link", p.Size === "md" ? "Body" : "Label", p.State === "hover" ? "accent/hover" : "accent/default", 0
       );
+      // Underlined while the variant is built, before its Label property is wired (see underline()).
+      underline(label);
       const ring = ensureFocusRing(kit, comp, p.State === "focus", space(kit, "radius/xs"));
       prune(comp, ring ? [label, ring] : [label]);
     },
 
     wire(set: ComponentSetNode, variants: ComponentNode[]) {
       const labelKey = defineProp(set, "Label");
-      for (const comp of variants) {
-        reference(comp, "Label", "characters", labelKey);
-        // Underlined here, after the Label property is wired (see underline()).
-        underline(comp.findOne((n) => n.type === "TEXT" && n.name === "Label") as TextNode | null);
-      }
+      for (const comp of variants) reference(comp, "Label", "characters", labelKey);
     },
   };
 }

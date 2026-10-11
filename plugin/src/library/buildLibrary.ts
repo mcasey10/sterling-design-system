@@ -12,6 +12,7 @@ import { buildCover } from "./pages/cover";
 import { buildComponentArchitecture } from "./pages/componentArchitecture";
 import {
   ensurePages, useStrokeScale, Kit, ARCHITECTURE_PAGE, COVER_PAGE, GUIDELINES_PAGE, PATTERNS_PAGE, REDRAWN_PAGES,
+  underlineInstanceLinks, plainInstanceLinks,
 } from "../core/helpers";
 import { buildGuidelines } from "./pages/guidelines";
 import { buildPatterns } from "./pages/patterns";
@@ -52,6 +53,9 @@ function linkCheckPages(): string[] {
   return names;
 }
 
+/** Library pages whose instances can contain links (a Controls/Link, or a bulk action bar's Select all). */
+const LINK_PAGES = ["Components", "Template", ARCHITECTURE_PAGE, GUIDELINES_PAGE, PATTERNS_PAGE];
+
 export async function buildLibrary(): Promise<{ summary: string; extra: string; focus: SceneNode }> {
   // Record which variant every instance outside the redrawn pages uses, to confirm afterwards they're still linked.
   const instancesBefore = await snapshotInstances(linkCheckPages());
@@ -73,7 +77,14 @@ export async function buildLibrary(): Promise<{ summary: string; extra: string; 
   await buildCover(kit, pages.get(COVER_PAGE)!, lib);
   // Documentation links point at Guidelines and Patterns frames, which were just redrawn; then check the library.
   await applyDocLinks(pages.get("Components")!, pages);
+  // Link text inside instances keeps the styling it had when its text was set, so it is underlined here.
+  const withLinks = LINK_PAGES.map((name) => pages.get(name)).filter((p): p is PageNode => !!p);
+  for (const p of withLinks) await underlineInstanceLinks(p);
   checkLibrary(kit, pages.get("Components")!);
+  for (const p of withLinks) {
+    const plain = await plainInstanceLinks(p);
+    if (plain) warn(`${LIBRARY_CHECK_FAILED} — ${p.name}: ${plain} link text(s) in instances aren't underlined`);
+  }
 
   const links = await compareInstances(instancesBefore);
   const kept = [...links.values()].reduce((n, c) => n + c.kept, 0);

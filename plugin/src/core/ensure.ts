@@ -113,6 +113,9 @@ export function ensureProp(
     updated(`Renamed property ${owner.name} / ${old.split("#")[0]} → ${name}`);
   }
   if (key) {
+    // An unchanged text or boolean default is left alone: rewriting a text default re-applies the bound
+    // layer's text style, which clears styling the layer adds to it (a link's underline).
+    if (!preferredValues && defs[key].defaultValue === defaultValue) return key;
     return owner.editComponentProperty(key, preferredValues ? { defaultValue, preferredValues } : { defaultValue });
   }
   return owner.addComponentProperty(name, type, defaultValue, preferredValues ? { preferredValues } : undefined);

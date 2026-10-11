@@ -82,6 +82,8 @@ export async function buildBulkActionBar(
   const count = await ensureText(kit, selection, "Count", spec.count, "Body-strong", "text/primary", 0);
   const dot = await ensureText(kit, selection, "Separator", "·", "Body", "text/secondary", 1);
   const all = await ensureText(kit, selection, "Select all", spec.selectAll, "Body", "accent/default", 2);
+  // A link is underlined. Done while the layer is built, before its property is wired (see underline()).
+  underline(all);
   // Removes the checkbox-like mark earlier versions drew beside the count: it looked like a control and did nothing.
   prune(selection, [count, dot, all]);
 
@@ -109,8 +111,6 @@ export async function buildBulkActionBar(
   const showAll = ensureProp(comp, "Show select all", "BOOLEAN", true);
   reference(comp, "Separator", "visible", showAll);
   reference(comp, "Select all", "visible", showAll);
-  // A link is underlined. Done here, after the Select all property is wired (see underline()).
-  underline(all);
   if (spec.hint) {
     reference(comp, "Hint", "characters", ensureProp(comp, "Hint", "TEXT", spec.hint));
     reference(comp, "Hint", "visible", ensureProp(comp, "Show hint", "BOOLEAN", false));

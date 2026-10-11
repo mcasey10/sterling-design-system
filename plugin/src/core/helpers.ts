@@ -239,12 +239,50 @@ export async function text(kit: Kit, chars: string, style: string, colorName = "
 }
 
 /**
- * Underlines a link's text, so it is never marked by color alone. Call it after the text's component property
- * is wired: writing a text property's default re-applies the layer's text style, which clears an underline
- * set earlier in the same run.
+ * Underlines a link's text, so it is never marked by color alone. In a component, call it while the layer is
+ * built, before its text property is wired, and only there: once a variant's text is bound to a property that
+ * other variants share, a styling change made to one variant in the same run is copied to the others (a
+ * medium link took the small link's text style that way). ensureProp leaves an unchanged default alone, so
+ * nothing clears the underline afterwards.
  */
 export function underline(t: TextNode | null | undefined) {
   if (t && t.textDecoration !== "UNDERLINE") t.textDecoration = "UNDERLINE";
+}
+
+/** The component set whose instances are links. */
+const LINK_SET = "Controls/Link";
+
+/**
+ * Link text inside instances on a page: the Label of every Controls/Link instance, and "Select all" in every
+ * bulk action bar instance. An instance whose text is overridden keeps the styling it had when the text was
+ * set, so underlining the component doesn't reach it.
+ */
+async function instanceLinkTexts(page: PageNode): Promise<TextNode[]> {
+  const texts: TextNode[] = [];
+  for (const inst of page.findAllWithCriteria({ types: ["INSTANCE"] })) {
+    const main = await inst.getMainComponentAsync();
+    if (!main) continue;
+    const isLink = main.parent?.type === "COMPONENT_SET" && main.parent.name === LINK_SET;
+    const isBar = !!main.findChild((n) => n.name === "Selection") && !!main.findChild((n) => n.name === "Actions");
+    if (!isLink && !isBar) continue;
+    const text = inst.findOne((n) => n.type === "TEXT" && n.name === (isLink ? "Label" : "Select all")) as TextNode | null;
+    if (text) texts.push(text);
+  }
+  return texts;
+}
+
+/** Underlines the link text inside every instance on a page. Run it after the page is built. */
+export async function underlineInstanceLinks(page: PageNode) {
+  for (const text of await instanceLinkTexts(page)) {
+    if (text.textDecoration === "UNDERLINE") continue;
+    if (text.fontName !== figma.mixed) await figma.loadFontAsync(text.fontName);
+    underline(text);
+  }
+}
+
+/** How many link texts inside instances on a page aren't underlined (0 when all are). */
+export async function plainInstanceLinks(page: PageNode): Promise<number> {
+  return (await instanceLinkTexts(page)).filter((text) => text.textDecoration !== "UNDERLINE").length;
 }
 
 export function rect(name: string, width: number, height: number): RectangleNode {
