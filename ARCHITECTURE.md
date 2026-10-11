@@ -463,6 +463,14 @@ sorting, paging, and storing the selection to the application. In the bulk actio
 - Focus is never dropped: after "Select all N matching" it moves to the count, and when clearing the
   selection removes the bar, the screen moves it to the grid's select-all checkbox.
 
+**Loading, empty, and paging.** In Figma, skeleton rows and the empty state are instances placed under
+the header. In code they are the Data grid's `loading` and `empty` props: `loading` shows skeleton
+rows, marks the table busy, and hides the skeleton rows from assistive technology, and a status
+region that is always in the page says "Loading rows…", then why the grid is empty if it is.
+Pagination's Previous and Next, which Figma exposes as button instances, are props; its range is
+announced when the page changes, and focus moves to the other button when the one in use becomes
+disabled. A skeleton bar is half its column's width (60% for numbers) rather than a fixed size.
+
 **Grid cells.** The coded cells are table cells (`<th>`, `<td>`), so they only work inside a table.
 In a chip or checkbox cell, the chip or checkbox is `children`; in Figma it is an exposed nested
 instance. Error and warning are one prop, `validation`, as on the inputs.

@@ -1,0 +1,103 @@
+/* Grid/Pagination, Grid/Skeleton row, and Grid/Empty state. */
+
+/* ------------------------------------------------------------ Pagination */
+
+.stl-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--stl-space-16);
+  padding: var(--stl-space-4) 0;
+}
+.stl-pagination__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+}
+.stl-pagination__text {
+  color: var(--stl-color-text-secondary);
+}
+
+/* ------------------------------------------------------------ Skeleton row */
+
+/* Each cell is a body cell with a bar in place of its value; a skeleton row doesn't react to hover. */
+.stl-skeleton-row__cell,
+.stl-skeleton-row__cell:hover {
+  --stl-body-cell-fill: var(--stl-color-surface-panel);
+}
+.stl-skeleton-row__content {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+}
+.stl-skeleton-row__cell--numeric .stl-skeleton-row__content {
+  justify-content: flex-end;
+}
+.stl-skeleton-row__cell--checkbox .stl-skeleton-row__content {
+  justify-content: center;
+}
+/* A bar about half as wide as its column (a little wider for numbers), like the value it stands for. */
+.stl-skeleton-row__bar {
+  flex: none;
+  width: 50%;
+  height: var(--stl-size-12);
+  border-radius: var(--stl-radius-xs);
+  background: var(--stl-color-surface-skeleton);
+}
+.stl-skeleton-row__cell--numeric .stl-skeleton-row__bar {
+  width: 60%;
+}
+.stl-skeleton-row__cell--checkbox .stl-skeleton-row__bar {
+  width: var(--stl-size-16);
+  height: var(--stl-size-16);
+}
+.stl-skeleton-row__label {
+  color: var(--stl-color-text-secondary);
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------ Empty state */
+
+.stl-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--stl-space-8);
+  box-sizing: border-box;
+  padding: var(--stl-space-32) var(--stl-space-24);
+  background: var(--stl-color-surface-panel);
+  color: var(--stl-color-text-primary);
+  text-align: center;
+}
+.stl-empty-state > .stl-icon {
+  width: var(--stl-size-24);
+  height: var(--stl-size-24);
+  color: var(--stl-color-text-secondary);
+}
+.stl-empty-state--critical > .stl-icon {
+  color: var(--stl-color-status-critical);
+}
+.stl-empty-state__title,
+.stl-empty-state__message {
+  margin: 0;
+}
+.stl-empty-state__message {
+  color: var(--stl-color-text-secondary);
+}
+
+/* ------------------------------------------------------------ In a Data grid */
+
+/* The empty state fills the grid's body: one cell across every column. */
+.stl-data-grid__empty {
+  padding: 0;
+}
+/* Says what the grid is doing (loading, or why it is empty) to screen readers only. */
+.stl-data-grid__status {
+  position: absolute;
+  width: var(--stl-stroke-1);
+  height: var(--stl-stroke-1);
+  margin: calc(-1 * var(--stl-stroke-1));
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

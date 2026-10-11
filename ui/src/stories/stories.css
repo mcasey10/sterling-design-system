@@ -105,3 +105,9 @@
 .stl-story-stack--fill {
   width: auto;
 }
+
+/* The empty state shown by itself is as wide as the generic grid. */
+.stl-story-empty {
+  width: calc(var(--stl-size-40) * 16.8);
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+}

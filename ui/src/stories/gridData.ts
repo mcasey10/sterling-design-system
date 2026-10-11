@@ -21,3 +21,19 @@ export function sortRows(rows: GridRow[], sort: GridSort | undefined): GridRow[]
     return order * (numeric ? number(x) - number(y) : x.localeCompare(y));
   });
 }
+
+// A longer, fictional result set for the paging story: the placeholder rows, then more of the same kind.
+const MORE: [string, string, string, string][] = [
+  ["Brindle intake review", "475.00", "4.8%", "Active"],
+  ["Calloway renewal", "1,980.00", "19.8%", "Pending"],
+  ["Dunmore field visit", "320.00", "3.2%", "Draft"],
+  ["Evercrest onboarding", "1,105.00", "11.1%", "Active"],
+  ["Fennick quarterly audit", "2,640.00", "26.4%", "Flagged"],
+  ["Garrow site survey", "58.00", "0.6%", "Draft"],
+  ["Hollis migration", "905.00", "9.1%", "Pending"],
+];
+export const ALL_ROWS: GridRow[] = [
+  ...DATA.rows,
+  ...MORE.map(([name, amount, percent, status], index) => ({ values: { id: `INV-${20440 + index * 3}`, name, amount, percent, status } })),
+];
+export const PAGE_SIZE = 5;

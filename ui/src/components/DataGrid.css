@@ -20,6 +20,7 @@
 /* ------------------------------------------------------------ Data grid */
 
 .stl-data-grid {
+  position: relative;
   display: inline-block;
   max-width: 100%;
   border: var(--stl-stroke-1) solid var(--stl-color-border-default);

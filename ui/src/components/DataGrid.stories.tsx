@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useRef, useState } from "react";
-import { DATA, INITIALLY_SELECTED, MATCHING, sortRows } from "../stories/gridData";
+import { ALL_ROWS, DATA, INITIALLY_SELECTED, MATCHING, PAGE_SIZE, sortRows } from "../stories/gridData";
 import { docs } from "../stories/definitions";
 import { BulkActionBar } from "./BulkActionBar";
 import { Button } from "./Button";
 import { DataGrid, type DataGridProps, type GridSort } from "./DataGrid";
+import { EmptyState, Pagination } from "./GridStates";
 import "../stories/stories.css";
 
 const NAME = "Grid/Data grid";
@@ -95,4 +96,75 @@ export const WithBulkActions: Story = {
 export const FillTheWidth: Story = {
   name: "Fill the width",
   args: { fill: true },
+};
+
+/**
+ * A page of a longer result set, with Pagination under the grid. Previous is disabled on the first page and
+ * Next on the last; the range is announced to screen readers when the page changes.
+ */
+export const WithPagination: Story = {
+  name: "With pagination",
+  parameters: { controls: { disable: true } },
+  render: function Paging(args: DataGridProps) {
+    const [page, setPage] = useState(0);
+    const [selected, setSelected] = useState<string[]>([]);
+    const pages = Math.ceil(ALL_ROWS.length / PAGE_SIZE);
+    const rows = ALL_ROWS.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+    return (
+      <div className="stl-story-stack">
+        <DataGrid {...args} rows={rows} sort={{ key: "id", direction: "asc" }} selected={selected} onSelectedChange={setSelected} />
+        <Pagination
+          range={`Showing ${page * PAGE_SIZE + 1}–${page * PAGE_SIZE + rows.length} of ${ALL_ROWS.length}`}
+          page={`Page ${page + 1} of ${pages}`}
+          previousDisabled={page === 0}
+          nextDisabled={page === pages - 1}
+          onPrevious={() => setPage(page - 1)}
+          onNext={() => setPage(page + 1)}
+        />
+      </div>
+    );
+  },
+};
+
+/** While rows load: placeholder rows under the header, the first with a label, and the grid marked busy. */
+export const Loading: Story = {
+  args: { rows: [], loading: true },
+};
+
+/** No rows match: the empty state takes the place of the rows and offers a way out. */
+export const NoResults: Story = {
+  name: "No results",
+  args: { rows: [], empty: <EmptyState />, emptyLabel: "No results" },
+};
+
+/** Loading failed: the critical tone says so with its icon and title, and offers Retry. */
+export const LoadError: Story = {
+  name: "Load error",
+  args: { rows: [], empty: <EmptyState tone="critical" />, emptyLabel: "Couldn't load rows" },
+};
+
+/** Loading, then rows, no results, or an error: what a screen sees over time. The buttons stand in for the network. */
+export const LoadingThenLoaded: Story = {
+  name: "Loading, then loaded",
+  parameters: { controls: { disable: true } },
+  render: function Loads(args: DataGridProps) {
+    const [state, setState] = useState<"loading" | "rows" | "none" | "error">("loading");
+    return (
+      <div className="stl-story-stack">
+        <div className="stl-story-row">
+          <Button kind="secondary" label="Load" onClick={() => setState("loading")} />
+          <Button kind="secondary" label="Finish with rows" onClick={() => setState("rows")} />
+          <Button kind="secondary" label="Finish with no results" onClick={() => setState("none")} />
+          <Button kind="secondary" label="Fail" onClick={() => setState("error")} />
+        </div>
+        <DataGrid
+          {...args}
+          rows={state === "rows" ? DATA.rows : []}
+          loading={state === "loading"}
+          empty={<EmptyState tone={state === "error" ? "critical" : "neutral"} onAction={() => setState("loading")} />}
+          emptyLabel={state === "error" ? "Couldn't load rows" : "No results"}
+        />
+      </div>
+    );
+  },
 };

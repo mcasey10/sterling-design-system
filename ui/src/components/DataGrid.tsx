@@ -3,11 +3,12 @@
 // data tables"). It shows the rows, sort, and selection it is given and reports what the person asks for;
 // the application owns the data.
 
-import { type HTMLAttributes, type KeyboardEvent, type MouseEvent, useRef } from "react";
+import { type HTMLAttributes, type KeyboardEvent, type MouseEvent, type ReactNode, useRef } from "react";
 import { type Column, type Dataset, type GridRow, gridWidth, stretches } from "../../../definitions/grid";
 import { BodyCell } from "./BodyCell";
 import { Checkbox } from "./Checkbox";
 import { cx } from "./classes";
+import { SkeletonRow } from "./GridStates";
 import { HeaderCell } from "./HeaderCell";
 import { StatusChip, type StatusChipTone } from "./StatusChip";
 import "./GridCells.css";
@@ -61,11 +62,19 @@ export interface DataGridProps extends Omit<HTMLAttributes<HTMLDivElement>, "chi
   unsortable?: readonly string[];
   /** Fill the available width: descriptive text columns take up the extra. Off: columns keep their widths. */
   fill?: boolean;
+  /** Rows are loading: shows placeholder rows (5, or the number given) and marks the grid busy. */
+  loading?: boolean | number;
+  /** What the first placeholder row and screen readers say while loading. */
+  loadingLabel?: string;
+  /** Shown in place of the rows when there are none: an EmptyState. */
+  empty?: ReactNode;
+  /** What screen readers hear when the empty state appears, e.g. "No results". */
+  emptyLabel?: string;
 }
 
 export function DataGrid({
   label, columns, rows, tones = {}, rowKey, selected = [], onSelectedChange, sort, onSortChange, unsortable = [], fill = false,
-  className, ...rest
+  loading = false, loadingLabel = "Loading rows…", empty, emptyLabel = "", className, ...rest
 }: DataGridProps) {
   const idKey = rowKey ?? columns.find((column) => column.identifier)?.key ?? columns.find((column) => column.type === "text")?.key ?? "";
   const idOf = (row: GridRow, index: number) => row.values[idKey] ?? String(index);
@@ -99,11 +108,14 @@ export function DataGrid({
 
   const sortBy = (key: string) => onSortChange?.({ key, direction: sort?.key === key && sort.direction === "asc" ? "desc" : "asc" });
   const width = gridWidth({ columns, rows, tones });
+  const placeholders = loading === true ? 5 : loading || 0;
+  const isEmpty = !loading && rows.length === 0;
 
   return (
     <div className={cx("stl-data-grid", fill && "stl-data-grid--fill", className)} {...rest}>
       <table
         aria-label={label}
+        aria-busy={loading ? true : undefined}
         className="stl-data-grid__table"
         // At least as wide as its columns; with `fill`, as wide as its container.
         style={{ minWidth: width, width: fill ? "100%" : width }}
@@ -143,7 +155,17 @@ export function DataGrid({
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, index) => {
+          {Array.from({ length: placeholders }, (_, index) => (
+            <SkeletonRow key={index} columns={columns} label={loadingLabel} showLabel={index === 0} />
+          ))}
+          {isEmpty && empty && (
+            <tr>
+              <td colSpan={columns.length} className="stl-data-grid__empty">
+                {empty}
+              </td>
+            </tr>
+          )}
+          {!loading && rows.map((row, index) => {
             const id = ids[index];
             const isSelected = selected.includes(id);
             return (
@@ -177,6 +199,10 @@ export function DataGrid({
           })}
         </tbody>
       </table>
+      {/* Always in the page, so a change of state is announced: loading, then nothing, or why the grid is empty. */}
+      <div role="status" className="stl-data-grid__status">
+        {loading ? loadingLabel : isEmpty ? emptyLabel : ""}
+      </div>
     </div>
   );
 }

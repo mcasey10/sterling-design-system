@@ -3,6 +3,7 @@
 // draws the grid) and the coded Data grid (which renders it).
 
 import type { VariantValue } from "./components";
+import type { IconName } from "./icons";
 
 /** The kinds of cell: the Type values of Grid/BodyCell. */
 export type CellType = VariantValue<"Grid/BodyCell", "Type">;
@@ -93,3 +94,25 @@ export function numericColumnWidth(longestValue: string, opts: { icon?: boolean 
   // column whose cells can be flagged.
   return Math.ceil((longestValue.length * 7.5 + 24 + (opts.icon ? 16 : 0)) / 8) * 8;
 }
+
+/** What the empty state shows for each tone: its icon and ink (a Color token), and its default copy. */
+export interface EmptyStateContent {
+  icon: IconName;
+  ink: string;
+  title: string;
+  message: string;
+  action: string;
+  actionIcon?: IconName;
+}
+
+/** Grid/Empty state, by Tone: neutral for no results or nothing yet, critical for a load error. */
+export const EMPTY_STATES: Record<VariantValue<"Grid/Empty state", "Tone">, EmptyStateContent> = {
+  neutral: {
+    icon: "search", ink: "text/secondary", title: "No results",
+    message: "Nothing matches these filters. Try changing or clearing them.", action: "Clear filters",
+  },
+  critical: {
+    icon: "circle-x", ink: "status/critical", title: "Couldn't load rows",
+    message: "Something went wrong while loading. Check your connection and try again.", action: "Retry", actionIcon: "refresh",
+  },
+};

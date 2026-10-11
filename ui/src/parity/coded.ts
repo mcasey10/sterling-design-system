@@ -82,7 +82,10 @@ export const CODED: Record<string, CodedComponent> = {
   },
   "Grid/Data grid": {
     source: "src/components/DataGrid.tsx",
-    props: ["label", "columns", "rows", "tones", "rowKey", "selected", "onSelectedChange", "sort", "onSortChange", "unsortable", "fill"],
+    props: [
+      "label", "columns", "rows", "tones", "rowKey", "selected", "onSelectedChange", "sort", "onSortChange", "unsortable", "fill",
+      "loading", "loadingLabel", "empty", "emptyLabel",
+    ],
     codeOnly: {
       label: "The grid's accessible name.",
       columns: "The application owns the data: the grid shows what it is given and reports what the person asks for. In Figma, columns are edited on the instance.",
@@ -95,6 +98,35 @@ export const CODED: Record<string, CodedComponent> = {
       onSortChange: "Reports a request to sort; Figma has no behavior.",
       unsortable: "Columns that can't be sorted. In Figma, each header cell's Show sort.",
       fill: "Stretches descriptive text columns to fill the container, as the plugin does when it fits a grid to a screen.",
+      loading: "Shows skeleton rows and marks the grid busy. In Figma, place Grid/Skeleton row instances under the header.",
+      loadingLabel: "What the first skeleton row and screen readers say while loading.",
+      empty: "The EmptyState shown when there are no rows. In Figma, place Grid/Empty state under the header.",
+      emptyLabel: "What screen readers hear when the empty state appears.",
+    },
+  },
+  "Grid/Pagination": {
+    source: "src/components/GridStates.tsx",
+    props: ["range", "page", "onPrevious", "onNext", "previousDisabled", "nextDisabled"],
+    codeOnly: {
+      onPrevious: "Called for Previous; Figma has no behavior.",
+      onNext: "Called for Next; Figma has no behavior.",
+      previousDisabled: "On the first page. In Figma, set on the exposed Previous button instance (State).",
+      nextDisabled: "On the last page. In Figma, set on the exposed Next button instance (State).",
+    },
+  },
+  "Grid/Skeleton row": {
+    source: "src/components/GridStates.tsx",
+    props: ["label", "showLabel", "columns"],
+    codeOnly: { columns: "The grid's columns, one bar each. In Figma the row is drawn for the generic grid's columns." },
+  },
+  "Grid/Empty state": {
+    source: "src/components/GridStates.tsx",
+    props: ["tone", "showAction", "title", "message", "actionLabel", "onAction"],
+    codeOnly: {
+      title: "In Figma, a text layer to override.",
+      message: "In Figma, a text layer to override.",
+      actionLabel: "In Figma, set on the exposed Action button instance.",
+      onAction: "Called for the action; Figma has no behavior.",
     },
   },
   "Grid/BulkActionBar": {

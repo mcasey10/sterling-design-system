@@ -14,7 +14,7 @@ import { warn } from "../../core/log";
 import { describe } from "../../../../definitions/docRegistry";
 
 // The dataset types, the placeholder data, and which columns stretch are shared with the coded Data grid.
-import { NUMERIC_TYPES, stretches, gridWidth, GENERIC_DATA } from "../../../../definitions/grid";
+import { NUMERIC_TYPES, stretches, gridWidth, GENERIC_DATA, EMPTY_STATES } from "../../../../definitions/grid";
 import type { CellType, Column, GridRow, Dataset } from "../../../../definitions/grid";
 
 export { stretches, gridWidth, GENERIC_DATA };
@@ -465,16 +465,8 @@ export async function buildSkeletonRow(
   return comp;
 }
 
-const EMPTY_TONES: Record<string, { icon: string; ink: string; title: string; message: string; action: string; actionIcon?: string }> = {
-  neutral: {
-    icon: "search", ink: "text/secondary", title: "No results",
-    message: "Nothing matches these filters. Try changing or clearing them.", action: "Clear filters",
-  },
-  critical: {
-    icon: "circle-x", ink: "status/critical", title: "Couldn't load rows",
-    message: "Something went wrong while loading. Check your connection and try again.", action: "Retry", actionIcon: "refresh",
-  },
-};
+// The icon, ink, and default copy of each tone are shared with the coded empty state.
+const EMPTY_TONES: Record<string, { icon: string; ink: string; title: string; message: string; action: string; actionIcon?: string }> = EMPTY_STATES;
 
 /** Grid/Empty state: Tone (neutral / critical) — no results / nothing yet, or a load error. */
 export function emptyStateSpec(kit: Kit, deps: { icons: IconIndex; button: ComponentSetNode }, width: number): ComponentSetSpec {
