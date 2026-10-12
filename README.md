@@ -9,7 +9,7 @@ depend on, such as grids, filters, bulk actions, and numbers that always line up
 - **Figma file (view only):** [Sterling Design System](https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System)
 - **Storybook (coded components):** [mcasey10.github.io/sterling-design-system/storybook](https://mcasey10.github.io/sterling-design-system/storybook/)
 - **Token reference site:** [mcasey10.github.io/sterling-design-system](https://mcasey10.github.io/sterling-design-system/)
-- **Version:** 1.1.0 ([changelog](CHANGELOG.md))
+- **Version:** see the [latest release](https://github.com/mcasey10/sterling-design-system/releases/latest) and the [changelog](CHANGELOG.md)
 
 ## What's in it
 

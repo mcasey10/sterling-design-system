@@ -189,7 +189,7 @@ Figma loads `plugin/dist/code.js` fresh each time you run a command, so there is
 
 The notification at the end summarizes the run, in this shape:
 
-> Sterling 1.1.0 library: N variables, N text styles, N pages · links: N kept, 0 changed · library checks: pass
+> Sterling N.N.N library: N variables, N text styles, N pages · links: N kept, 0 changed · library checks: pass
 
 > Sterling example: loan pooling · links: N kept, 0 changed · example checks: pass
 
@@ -649,7 +649,7 @@ icon button will use it instead.
 
 ## 12. Versioning
 
-The version number lives in the root `package.json` (1.1.0). The plugin reads it at build
+The version number lives in the root `package.json`. The plugin reads it at build
 time and prints it on the Cover and Read me pages and in the run notification; Storybook shows it
 in its title. `check:tokens` fails if `tokens.json`, `plugin/package.json`, or `ui/package.json`
 says otherwise. CHANGELOG.md records every release;
