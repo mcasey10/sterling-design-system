@@ -348,7 +348,7 @@ builds the token site; and for the coded layer it type-checks, runs the parity, 
 
 ## Going public
 
-The repository went public on 2026-10-11. The steps, in order, with what is done and what is still open:
+The repository went public on 2026-10-11. The steps, in order; all are done:
 
 1. ✓ Done. **Check the README** still describes what Sterling includes.
 2. ✓ Done. **Make the repository public:** GitHub → Settings → General → Danger Zone → Change visibility.
@@ -365,13 +365,9 @@ The repository went public on 2026-10-11. The steps, in order, with what is done
    Figma opens its Storybook Docs page. Click one from the Component documentation panel to confirm.
    Set it back to `"figma"` if the site is ever taken down: without the site the links are dead.
 7. ✓ Done. **Set the Figma file to "Anyone with the link can view":** Share → change the link's access.
-8. Open. **Test the Figma link in a private browser window**, signed out, to confirm it opens without an
+8. ✓ Done. **Test the Figma link in a private browser window**, signed out, to confirm it opens without an
    account.
-9. Part done. **Verify the three links in the README:** the Figma file, Storybook, and the token site.
-   Storybook and the token site open; the Figma file waits on step 8.
-
-Also open: delete the renamed private copy of the repository, `sterling-design-system-old`, which holds
-the history from before the move.
+9. ✓ Done. **Verify the three links in the README:** the Figma file, Storybook, and the token site.
 
 ## Backlog
 

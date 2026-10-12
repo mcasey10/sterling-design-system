@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { COMPONENTS } from "../../../definitions/components";
+import { FIGMA_FILE_URL } from "../../../definitions/docRegistry";
 import { Link } from "../components/Link";
 import { VERSION, textClass } from "../tokens";
 import "./foundations.css";
@@ -38,6 +39,13 @@ function IntroductionPage() {
           </p>
         </section>
       )}
+      <section>
+        <h2 className={textClass("Heading")}>Figma library</h2>
+        <p>
+          The same components as a Figma library, with the guidelines, patterns, and an example screen:{" "}
+          <Link label="View in Figma" size="md" href={FIGMA_FILE_URL} target="_top" />
+        </p>
+      </section>
     </div>
   );
 }

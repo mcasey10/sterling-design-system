@@ -57,6 +57,9 @@ export const DOCS_TARGET: "figma" | "storybook" = "storybook";
 /** Where the Storybook is published: the storybook/ folder of the GitHub Pages site. */
 export const STORYBOOK_URL = "https://mcasey10.github.io/sterling-design-system/storybook/";
 
+/** The published Sterling Figma file (view only). */
+export const FIGMA_FILE_URL = "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System";
+
 /** A Storybook title as it appears in a story id: lowercase, with every run of other characters as one hyphen. */
 const storyId = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 

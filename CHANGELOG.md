@@ -5,6 +5,12 @@ All notable changes to Sterling are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) as defined for a design system in
 [CONTRIBUTING.md](CONTRIBUTING.md#versions).
 
+## [Unreleased]
+
+### Added
+
+- **Storybook:** the Introduction page links to the Figma library ("View in Figma").
+
 ## [1.1.1] - 2026-10-11
 
 ### Changed

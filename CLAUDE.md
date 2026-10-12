@@ -46,7 +46,7 @@ definitions/              Plain data about components, with no Figma code (share
   grid.ts                 Data grid datasets: Column / GridRow / Dataset types, the generic placeholder data,
                           which columns stretch, and numericColumnWidth(). Shared by the plugin and ui/
   docRegistry.ts          Also holds DOCS_TARGET ("figma" | "storybook": where documentation links point;
-                          "storybook" since 1.1.1) and STORYBOOK_URL. `npm run check:docs` checks the pages exist
+                          "storybook" since 1.1.1) STORYBOOK_URL, and FIGMA_FILE_URL. `npm run check:docs` checks the pages exist
   docRegistry.ts          THE table of component documentation: one-sentence description, details,
                           use / don't use, related guidance. Every published component needs an entry
                           (shown under Guidelines › Component usage); its documentation link follows DOCS_TARGET
