@@ -19,6 +19,7 @@ import {
 } from "../../../definitions/docRegistry";
 import { GUIDELINES, PATTERNS, sentence } from "../../../definitions/guidelines";
 import { ICONS } from "../../../definitions/icons";
+import { TOOL_NAMES } from "../../../mcp/src/tool-names";
 import { cssClass, cssVar } from "../../../scripts/lib/token-names.mjs";
 import { CODED } from "../../src/parity/coded";
 import { CSS_STATES, DISABLED, REST, propName, stateParts, type CodedComponent } from "../../src/parity/parity";
@@ -425,6 +426,20 @@ function buildIndex(version: string, counts: { components: number; icons: number
           links: [
             { title: "index.json", url: `${AI_URL}index.json`, note: "What the export contains, its version, and how to use the files. Start here." },
             ...files.map((f) => ({ title: f.file, url: f.url, note: f.contains })),
+          ],
+        },
+        {
+          title: "MCP server",
+          text: [
+            "Sterling includes a small read-only MCP server that answers questions about its components, tokens, guidelines, and " +
+              "patterns from this same export. It runs on your machine over stdio and makes no network requests. It isn't published " +
+              "to a package registry: clone the repository, then run `npm install` and `npm run build` in `mcp/`.",
+            "Connect it to Claude Code with `claude mcp add sterling -- node <repository>/mcp/dist/server.js`. In any other MCP " +
+              "client, add a stdio server whose command is `node` with that file as its argument.",
+            `Tools: ${TOOL_NAMES.join(", ")}.`,
+          ],
+          links: [
+            { title: "Setup and tools", url: rawUrl("mcp/README.md"), note: "How to build and connect the server, and what each tool returns." },
           ],
         },
         {

@@ -122,10 +122,15 @@ npm run check:docs
 npm run check:ai
 ```
 
+```bash
+npm run check:mcp
+```
+
 `check:a11y` builds Storybook and runs every story in Chrome, in Light and Dark; `check:docs` reads
 that build. `check:ai` fails when the export in `ai/` no longer matches the sources: after changing a
 token, a definition, or guideline text, run `npm run export:ai` and commit the result with the change.
-Also run `npm run typecheck` in `ui/`.
+`check:mcp` (run `npm install` in `mcp/` once) rebuilds the MCP server from `ai/` and tests it, so run it
+after `export:ai`. Also run `npm run typecheck` in `ui/`.
 
 GitHub runs the same checks on every push and pull request.
 
@@ -155,8 +160,8 @@ If a check fails, the notification says how many failed and the console
 ## 4. Release
 
 1. **Choose the version** using the rules below.
-2. **Set it in four places:** `package.json`, `plugin/package.json`, `ui/package.json`, and
-   `$meta.version` in `tokens/tokens.json`. `npm run check:tokens` fails if they disagree. The Cover
+2. **Set it in five places:** `package.json`, `plugin/package.json`, `ui/package.json`,
+   `mcp/package.json`, and `$meta.version` in `tokens/tokens.json`. `npm run check:tokens` fails if they disagree. The Cover
    and Read me pages and Storybook's title pick it up from `package.json` on the next build.
 3. **Update [CHANGELOG.md](CHANGELOG.md):** what was added, changed, fixed, or removed, written for
    someone who uses Sterling. For a breaking change, say what to do about it.

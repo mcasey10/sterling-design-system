@@ -211,6 +211,7 @@ From the repo root:
 | `npm run check:docs` | Every published component has the Storybook Docs page its documentation link can open. Needs a Storybook build |
 | `npm run export:ai` | Writes the machine-readable export to `ai/`: components, tokens (DTCG format), guidelines, and an index, all from the sources |
 | `npm run check:ai` | The committed `ai/` files match the sources, every published component has a complete entry, and `llms.txt` links every file |
+| `npm run check:mcp` | Type-checks, builds, and tests the MCP server in `mcp/`: every tool, its bundled copy of the export, and that it has no network code. Needs `npm install` in `mcp/` first |
 | `npm run check:parity` | Every published component except the icons has a coded counterpart in `ui/` (24 of 24), and each one follows its definition. Needs `npm install` in `ui/` first. |
 | `npm run check:css` | No raw values in the coded layer's CSS: every color, length, and font value is a token, and every `var(--stl-…)` names a real one. |
 | `npm run check:a11y` | Builds Storybook, then runs axe on every story in Light and Dark with headless Chrome (158 runs today). Fails on any violation or any story that doesn't render. |
@@ -474,6 +475,7 @@ does the same.
 | `npm run check:a11y` | any story has an axe violation, in Light or Dark, or doesn't render |
 | `npm run check:docs` | a published component has no Storybook Docs page for its documentation link |
 | `npm run check:ai` | the export in `ai/` differs from what the sources give, or a published component has no complete entry in it |
+| `npm run check:mcp` | an MCP tool returns the wrong result, the server's copy of the export is stale, or the built server contains network code |
 
 **Dependencies.** React, and for the Select only, React Aria (`react-aria`, `react-stately`), which
 supplies its keyboard behavior and screen-reader semantics. Inter 3.19 is bundled (`inter-ui`).

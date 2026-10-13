@@ -127,6 +127,14 @@ ui/                       Sterling in code (React + Storybook, Vite). Own packag
 ai/                       The machine-readable export for AI tools (committed, generated: never hand-edit):
                           index.json, components.json, tokens.dtcg.json (DTCG 2025.10), guidelines.json.
                           Regenerate with `npm run export:ai` after changing tokens, definitions/, or coded.ts
+mcp/                      A read-only MCP server over the export, for AI tools. Own package.json (exact dependency
+                          versions: @modelcontextprotocol/sdk, zod); stdio only, NO network access, nothing on npm
+  scripts/build.mjs       Copies ai/ into data/ (gitignored) and bundles everything into dist/server.js (gitignored)
+  src/tools.ts            THE table of the eight tools: name, description (what a client reads), arguments, logic.
+                          src/tool-names.ts lists the names (also used by llms.txt); src/lookup.ts matches names
+                          and finds the closest for an unknown one; src/server.ts wires tools to the protocol
+  test/                   `npm run check:mcp` (root): every tool, the bundled data against ai/, no network code,
+                          and the built file running alone in an empty folder. Rebuild after `npm run export:ai`
 scripts/contrast-check.mjs  Reports WCAG contrast for every pair in tokens.json
                           `contrast.rules`; fails if body text < 4.5:1 or large
                           text/UI < 3:1. Run: `npm run contrast` (repo root)
@@ -229,14 +237,15 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
 ## Verification
 - Type-check before finishing: `cd plugin && npm run typecheck` (runs `tsc --noEmit`). After changes in
   `ui/` or `definitions/`: `cd ui && npm run typecheck && npm run check:parity && npm run check:css && npm run check:ai`, then
+  `npm run check:mcp` (root; rebuilds the MCP server from ai/ and tests it), and
   `npm run build-storybook && npm run check:a11y` (axe on every story in Light and Dark; needs Chrome).
 - Run `npm run contrast` after any color token change; it must exit 0 (248 pairs today). When
   adding a new text/background combination to a component, add it to `contrast.rules` too.
 - Run `npm run check:tokens` after any token change; it must exit 0. Every new Color, Spacing, Size,
   or Density token needs a description in that group's `"$descriptions"` in tokens.json (Primitives
   need none: they're hidden).
-- When a release changes the version, set it in package.json, plugin/package.json, ui/package.json, and
-  tokens.json `$meta.version`, and add a CHANGELOG.md entry (see CONTRIBUTING.md).
+- When a release changes the version, set it in package.json, plugin/package.json, ui/package.json,
+  mcp/package.json, and tokens.json `$meta.version`, and add a CHANGELOG.md entry (see CONTRIBUTING.md).
 - Before committing, grep for the banned terms (see Hard rules → Naming); there must be none.
 
 ## Loan-pooling example (approved)

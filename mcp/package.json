@@ -1,0 +1,27 @@
+{
+  "name": "sterling-mcp",
+  "version": "1.1.1",
+  "private": true,
+  "license": "MIT",
+  "description": "A read-only MCP server for Sterling: its components, tokens, guidelines, and patterns, from the export in ../ai. Runs locally over stdio. No network access.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "data": "node scripts/build.mjs --data-only",
+    "build": "node scripts/build.mjs",
+    "typecheck": "npm run data && tsc --noEmit -p .",
+    "test": "npm run build && tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.43",
+    "esbuild": "0.28.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}

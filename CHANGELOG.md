@@ -18,6 +18,10 @@ All notable changes to Sterling are recorded here. The format follows
 - **`llms.txt`** at the root of the site: a short description of Sterling for AI tools, with links to the
   export, the written documentation, Storybook, and the Figma library. The site build writes it from
   `ai/index.json`, so it always lists the current files.
+- **An MCP server** in `mcp/`: a small, read-only server that lets an AI tool ask Sterling what it contains
+  and how to use it. Eight tools: `list_components`, `get_component`, `get_tokens`, `get_token`,
+  `list_guidelines`, `get_guideline`, `get_pattern`, and `search`. It runs locally over stdio, makes no
+  network requests, and carries its own copy of the export. See `mcp/README.md`.
 - `definitions/guidelines.ts`: the text of the Guidelines sections and the Patterns, as plain data read by
   the plugin and the export. The Guidelines and Patterns pages in Figma are unchanged.
 

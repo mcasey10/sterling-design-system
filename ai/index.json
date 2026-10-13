@@ -74,6 +74,21 @@
         ]
       },
       {
+        "title": "MCP server",
+        "text": [
+          "Sterling includes a small read-only MCP server that answers questions about its components, tokens, guidelines, and patterns from this same export. It runs on your machine over stdio and makes no network requests. It isn't published to a package registry: clone the repository, then run `npm install` and `npm run build` in `mcp/`.",
+          "Connect it to Claude Code with `claude mcp add sterling -- node <repository>/mcp/dist/server.js`. In any other MCP client, add a stdio server whose command is `node` with that file as its argument.",
+          "Tools: list_components, get_component, get_tokens, get_token, list_guidelines, get_guideline, get_pattern, search."
+        ],
+        "links": [
+          {
+            "title": "Setup and tools",
+            "url": "https://raw.githubusercontent.com/mcasey10/sterling-design-system/main/mcp/README.md",
+            "note": "How to build and connect the server, and what each tool returns."
+          }
+        ]
+      },
+      {
         "title": "Documentation",
         "links": [
           {

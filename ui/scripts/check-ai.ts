@@ -5,7 +5,8 @@
 //     entry covers the 20 icons, and must list every one;
 //   • a related link points to a section, pattern, or component the export doesn't contain.
 //   • llms.txt, as the site build would write it from ai/index.json, doesn't link every file in ai/, links a
-//     repository document that doesn't exist, has a relative link, or lacks its title and summary.
+//     repository document that doesn't exist, has a relative link, lacks its title and summary, or doesn't
+//     name every tool of the MCP server (mcp/src/tool-names.ts).
 // The Storybook Docs pages are checked against storybook-static/index.json when that build exists.
 //
 // Usage: npm run check:ai   (run `npm run build-storybook` first to include the Docs page check)
@@ -18,6 +19,7 @@ import { storybookDocsId } from "../../definitions/docRegistry";
 import { REPOSITORY_URL } from "../../definitions/docRegistry";
 import { ICONS } from "../../definitions/icons";
 import { llmsLinks, renderLlmsTxt } from "../../scripts/lib/llms.mjs";
+import { TOOL_NAMES } from "../../mcp/src/tool-names";
 import { FILES, buildExport } from "./lib/ai-export";
 
 const ui = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -82,6 +84,7 @@ if (title !== `# ${index.name}` || !summary.startsWith("> ")) problems.push("llm
 for (const file of FILES) {
   if (!links.some((link) => link.url === `${index.links.export}${file}`)) problems.push(`llms.txt: no link to ai/${file}`);
 }
+for (const tool of TOOL_NAMES) if (!llms.includes(tool)) problems.push(`llms.txt: doesn't name the MCP server's ${tool} tool`);
 const raw = `${REPOSITORY_URL.replace("https://github.com/", "https://raw.githubusercontent.com/")}/main/`;
 for (const link of links) {
   if (!/^https:\/\//.test(link.url)) problems.push(`llms.txt: "${link.title}" isn't an absolute https link`);

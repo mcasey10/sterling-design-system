@@ -19,6 +19,7 @@
     "check:docs": "npm --prefix ui run check:docs",
     "export:ai": "npm --prefix ui run export:ai",
     "check:ai": "npm --prefix ui run check:ai",
+    "check:mcp": "npm --prefix mcp run typecheck && npm --prefix mcp test",
     "storybook": "npm --prefix ui run storybook"
   }
 }

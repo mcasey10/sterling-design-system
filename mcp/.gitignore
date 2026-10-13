@@ -1,0 +1,4 @@
+node_modules/
+dist/
+# A copy of ../ai, made by the build.
+data/
