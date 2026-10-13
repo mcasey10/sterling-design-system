@@ -60,6 +60,9 @@ export const STORYBOOK_URL = "https://mcasey10.github.io/sterling-design-system/
 /** The published Sterling Figma file (view only). */
 export const FIGMA_FILE_URL = "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System";
 
+/** The public repository: the source of everything, and where the written documentation lives. */
+export const REPOSITORY_URL = "https://github.com/mcasey10/sterling-design-system";
+
 /** Sterling's page in the Figma Community, where the library can be opened and duplicated. */
 export const FIGMA_COMMUNITY_URL = "https://www.figma.com/community/file/1691833753587232312";
 

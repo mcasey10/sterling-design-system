@@ -4,6 +4,8 @@
 //     one related link, a React component its source file exports, a Storybook Docs page). The single Icon
 //     entry covers the 20 icons, and must list every one;
 //   • a related link points to a section, pattern, or component the export doesn't contain.
+//   • llms.txt, as the site build would write it from ai/index.json, doesn't link every file in ai/, links a
+//     repository document that doesn't exist, has a relative link, or lacks its title and summary.
 // The Storybook Docs pages are checked against storybook-static/index.json when that build exists.
 //
 // Usage: npm run check:ai   (run `npm run build-storybook` first to include the Docs page check)
@@ -13,7 +15,9 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { COMPONENTS } from "../../definitions/components";
 import { storybookDocsId } from "../../definitions/docRegistry";
+import { REPOSITORY_URL } from "../../definitions/docRegistry";
 import { ICONS } from "../../definitions/icons";
+import { llmsLinks, renderLlmsTxt } from "../../scripts/lib/llms.mjs";
 import { FILES, buildExport } from "./lib/ai-export";
 
 const ui = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -69,11 +73,29 @@ entryProblems("Icon/*", data.icons, "Icon/plus");
 const listed = new Set<string>(data.icons.names);
 for (const icon of Object.keys(ICONS)) if (!listed.has(`Icon/${icon}`)) problems.push(`Icon/${icon}: not listed in the Icon entry`);
 
+// 3. llms.txt, rendered from the index exactly as the site build does.
+const index = JSON.parse(fresh["index.json"]);
+const llms = renderLlmsTxt(index);
+const links = llmsLinks(llms);
+const [title, , summary] = llms.split("\n");
+if (title !== `# ${index.name}` || !summary.startsWith("> ")) problems.push("llms.txt: must start with the name as a heading, then the summary as a quote");
+for (const file of FILES) {
+  if (!links.some((link) => link.url === `${index.links.export}${file}`)) problems.push(`llms.txt: no link to ai/${file}`);
+}
+const raw = `${REPOSITORY_URL.replace("https://github.com/", "https://raw.githubusercontent.com/")}/main/`;
+for (const link of links) {
+  if (!/^https:\/\//.test(link.url)) problems.push(`llms.txt: "${link.title}" isn't an absolute https link`);
+  else if (link.url.startsWith(raw) && !existsSync(resolve(ui, "..", link.url.slice(raw.length)))) {
+    problems.push(`llms.txt: "${link.title}" links ${link.url.slice(raw.length)}, which isn't in the repository`);
+  }
+}
+
 for (const problem of problems) console.error(`  ✗ ${problem}`);
 const published = Object.keys(COMPONENTS).length + Object.keys(ICONS).length;
 console.log(
   `ai/: ${matching} of ${FILES.length} files match the sources; ${published} published components covered ` +
-    `(${Object.keys(COMPONENTS).length} entries and the Icon entry for ${Object.keys(ICONS).length} icons) — ${problems.length} problem(s).` +
+    `(${Object.keys(COMPONENTS).length} entries and the Icon entry for ${Object.keys(ICONS).length} icons); llms.txt links ` +
+    `${links.length} addresses — ${problems.length} problem(s).` +
     (docsPages ? "" : " Storybook Docs pages not checked: storybook-static/ is missing (run npm run build-storybook).")
 );
 process.exit(problems.length ? 1 : 0);

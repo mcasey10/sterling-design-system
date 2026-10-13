@@ -46,7 +46,7 @@ definitions/              Plain data about components, with no Figma code (share
   grid.ts                 Data grid datasets: Column / GridRow / Dataset types, the generic placeholder data,
                           which columns stretch, and numericColumnWidth(). Shared by the plugin and ui/
   docRegistry.ts          Also holds DOCS_TARGET ("figma" | "storybook": where documentation links point;
-                          "storybook" since 1.1.1), STORYBOOK_URL, and FIGMA_FILE_URL. `npm run check:docs` checks the pages exist
+                          "storybook" since 1.1.1), STORYBOOK_URL, FIGMA_FILE_URL, FIGMA_COMMUNITY_URL, and REPOSITORY_URL. `npm run check:docs` checks the pages exist
   docRegistry.ts          THE table of component documentation: one-sentence description, details,
                           use / don't use, related guidance. Every published component needs an entry
                           (shown under Guidelines › Component usage); its documentation link follows DOCS_TARGET
@@ -137,7 +137,9 @@ scripts/build-token-site.mjs  Token reference site: `npm run tokens:site` writes
                           site/tokens.css (gitignored; the same CSS), and site/fonts/ (Inter 3.19 copied
                           from ui/node_modules/inter-ui, when installed)
 scripts/build-site.mjs    `npm run site`: site/ = token reference + Storybook under storybook/ + a copy of ai/
-                          (what Pages publishes); scripts/serve-site.mjs (`npm run site:serve`) shows it locally
+                          + llms.txt (what Pages publishes); scripts/serve-site.mjs (`npm run site:serve`) shows it
+scripts/lib/llms.mjs      Renders llms.txt from ai/index.json (`llmsTxt`: intro, guidance, sections of text and
+                          links). To add a section, add it in ui/scripts/lib/ai-export.ts; check:ai validates it
 scripts/lib/tokens.mjs    Shared token loading, alias resolution, and contrast evaluation
 scripts/lib/token-names.mjs  Token name → CSS name (no imports; shared with ui/)
 scripts/lib/token-css.mjs The one generator of the token CSS. CSS names carry the `stl-` code prefix

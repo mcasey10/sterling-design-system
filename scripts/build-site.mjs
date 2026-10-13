@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 // Builds the published site into site/: the token reference at the root and Storybook under storybook/, each
-// with a link to the other, and the machine-readable export under ai/ (a copy of the committed ai/ folder,
-// which `npm run check:ai` keeps in step with the sources). This is what the Pages workflow publishes.
+// with a link to the other, the machine-readable export under ai/ (a copy of the committed ai/ folder,
+// which `npm run check:ai` keeps in step with the sources), and llms.txt at the root, written from
+// ai/index.json (scripts/lib/llms.mjs). This is what the Pages workflow publishes.
 //
 // Usage: npm run site   (needs `npm install` in ui/ first)
 
 import { spawnSync } from "node:child_process";
-import { cpSync } from "node:fs";
+import { cpSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { renderLlmsTxt } from "./lib/llms.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 function run(command, args, options = {}) {
@@ -25,4 +27,6 @@ run("npm", ["run", "build-storybook", "--", "--output-dir", "../site/storybook"]
 });
 // The export for AI tools, as committed.
 cpSync(resolve(root, "ai"), resolve(root, "site/ai"), { recursive: true });
-console.log("Wrote site/ (token reference), site/storybook/ (Storybook), and site/ai/ (the export).");
+// llms.txt: the entry point for AI tools, from the export's index.
+writeFileSync(resolve(root, "site/llms.txt"), renderLlmsTxt(JSON.parse(readFileSync(resolve(root, "ai/index.json"), "utf8"))));
+console.log("Wrote site/ (token reference), site/storybook/ (Storybook), site/ai/ (the export), and site/llms.txt.");

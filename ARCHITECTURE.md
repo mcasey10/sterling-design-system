@@ -207,10 +207,10 @@ From the repo root:
 | `npm run check:tokens` | Every published token has a description, no description is left over for a removed token, and the version in tokens.json matches package.json. |
 | `npm run tokens:css` | Writes the token CSS to `dist/tokens.css` |
 | `npm run tokens:site` | Writes the token reference site to `site/` (with the same CSS as `site/tokens.css`) |
-| `npm run site` | Builds the whole site into `site/`: the token reference, with Storybook under `storybook/`. `npm run site:serve` shows it locally |
+| `npm run site` | Builds the whole site into `site/`: the token reference, with Storybook under `storybook/`, the export under `ai/`, and `llms.txt` (written from `ai/index.json`). `npm run site:serve` shows it locally |
 | `npm run check:docs` | Every published component has the Storybook Docs page its documentation link can open. Needs a Storybook build |
 | `npm run export:ai` | Writes the machine-readable export to `ai/`: components, tokens (DTCG format), guidelines, and an index, all from the sources |
-| `npm run check:ai` | The committed `ai/` files match the sources, and every published component has a complete entry |
+| `npm run check:ai` | The committed `ai/` files match the sources, every published component has a complete entry, and `llms.txt` links every file |
 | `npm run check:parity` | Every published component except the icons has a coded counterpart in `ui/` (24 of 24), and each one follows its definition. Needs `npm install` in `ui/` first. |
 | `npm run check:css` | No raw values in the coded layer's CSS: every color, length, and font value is a token, and every `var(--stl-…)` names a real one. |
 | `npm run check:a11y` | Builds Storybook, then runs axe on every story in Light and Dark with headless Chrome (158 runs today). Fails on any violation or any story that doesn't render. |

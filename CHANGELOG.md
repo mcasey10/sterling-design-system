@@ -15,6 +15,9 @@ All notable changes to Sterling are recorded here. The format follows
   CSS name (`tokens.dtcg.json`); the guidelines and patterns (`guidelines.json`); and an index
   (`index.json`). `npm run export:ai` writes it from the sources, and `npm run check:ai` fails if it is out
   of date or a published component has no complete entry.
+- **`llms.txt`** at the root of the site: a short description of Sterling for AI tools, with links to the
+  export, the written documentation, Storybook, and the Figma library. The site build writes it from
+  `ai/index.json`, so it always lists the current files.
 - `definitions/guidelines.ts`: the text of the Guidelines sections and the Patterns, as plain data read by
   the plugin and the export. The Guidelines and Patterns pages in Figma are unchanged.
 
