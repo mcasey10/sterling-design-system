@@ -60,6 +60,9 @@ export const STORYBOOK_URL = "https://mcasey10.github.io/sterling-design-system/
 /** The published Sterling Figma file (view only). */
 export const FIGMA_FILE_URL = "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System";
 
+/** Sterling's page in the Figma Community, where the library can be opened and duplicated. */
+export const FIGMA_COMMUNITY_URL = "https://www.figma.com/community/file/1691833753587232312";
+
 /** A Storybook title as it appears in a story id: lowercase, with every run of other characters as one hyphen. */
 const storyId = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 

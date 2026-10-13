@@ -1,0 +1,4338 @@
+{
+  "$description": "Sterling's design tokens in the Design Tokens (DTCG) format, version 2025.10. Group paths follow the token names (surface/background is color.surface.background). The format has no modes, so each Color and Density token's $value is its default mode (Light, Default) and every mode is listed under $extensions[\"io.github.mcasey10.sterling\"].modes, with the value it resolves to. The same block gives the name in Figma and the CSS custom property or class.",
+  "$extensions": {
+    "io.github.mcasey10.sterling": {
+      "version": "1.1.1",
+      "modes": {
+        "color": [
+          "Light",
+          "Dark"
+        ],
+        "density": [
+          "Compact",
+          "Default",
+          "Comfortable"
+        ]
+      },
+      "defaultModes": {
+        "color": "Light",
+        "density": "Default"
+      },
+      "css": "tokens.css sets the default modes on :root, the other color mode under prefers-color-scheme and [data-theme], and each other density under a class (.stl-density-compact)."
+    }
+  },
+  "primitives": {
+    "$description": "The raw color ramps. Hidden in Figma: components use the semantic Color tokens, never these.",
+    "neutral": {
+      "0": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "hex": "#FFFFFF"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "neutral/0",
+            "collection": "Primitives",
+            "cssVar": "--stl-neutral-0",
+            "published": false
+          }
+        }
+      },
+      "50": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9686,
+            0.9725,
+            0.9804
+          ],
+          "hex": "#F7F8FA"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "neutral/50",
+            "collection": "Primitives",
+            "cssVar": "--stl-neutral-50",
+            "published": false
+          }
+        }
+      },
+      "100": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9333,
+            0.9412,
+            0.9529
+          ],
+          "hex": "#EEF0F3"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "neutral/100",
+            "collection": "Primitives",
+            "cssVar": "--stl-neutral-100",
+            "published": false
+          }
+        }
+      },
+      "200": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8667,
+            0.8824,
+            0.902
+          ],
+          "hex": "#DDE1E6"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "neutral/200",
+            "collection": "Primitives",
+            "cssVar": "--stl-neutral-200",
+            "published": false
+          }
+        }
+      },
+      "300": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7647,
+            0.7882,
+            0.8196
+          ],
+          "hex": "#C3C9D1"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "neutral/300",
+            "collection": "Primitives",
+            "cssVar": "--stl-neutral-300",
+            "published": false
+          }
+        }
+      },
+      "400": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6039,
+            0.6392,
+            0.6824
+          ],
+          "hex": "#9AA3AE"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "neutral/400",
+            "collection": "Primitives",
+            "cssVar": "--stl-neutral-400",
+            "published": false
+          }
+        }
+      },
+      "500": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.4353,
+            0.4745,
+            0.5216
+          ],
+          "hex": "#6F7985"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "neutral/500",
+            "collection": "Primitives",
+            "cssVar": "--stl-neutral-500",
+            "published": false
+          }
+        }
+      },
+      "600": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3255,
+            0.3608,
+            0.4039
+          ],
+          "hex": "#535C67"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "neutral/600",
+            "collection": "Primitives",
+            "cssVar": "--stl-neutral-600",
+            "published": false
+          }
+        }
+      },
+      "700": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2314,
+            0.2627,
+            0.298
+          ],
+          "hex": "#3B434C"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "neutral/700",
+            "collection": "Primitives",
+            "cssVar": "--stl-neutral-700",
+            "published": false
+          }
+        }
+      },
+      "750": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1647,
+            0.1882,
+            0.2196
+          ],
+          "hex": "#2A3038"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "neutral/750",
+            "collection": "Primitives",
+            "cssVar": "--stl-neutral-750",
+            "published": false
+          }
+        }
+      },
+      "800": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1373,
+            0.1608,
+            0.1882
+          ],
+          "hex": "#232930"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "neutral/800",
+            "collection": "Primitives",
+            "cssVar": "--stl-neutral-800",
+            "published": false
+          }
+        }
+      },
+      "900": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0784,
+            0.0941,
+            0.1137
+          ],
+          "hex": "#14181D"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "neutral/900",
+            "collection": "Primitives",
+            "cssVar": "--stl-neutral-900",
+            "published": false
+          }
+        }
+      }
+    },
+    "blue": {
+      "50": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9333,
+            0.9569,
+            1
+          ],
+          "hex": "#EEF4FF"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "blue/50",
+            "collection": "Primitives",
+            "cssVar": "--stl-blue-50",
+            "published": false
+          }
+        }
+      },
+      "75": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8941,
+            0.9294,
+            1
+          ],
+          "hex": "#E4EDFF"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "blue/75",
+            "collection": "Primitives",
+            "cssVar": "--stl-blue-75",
+            "published": false
+          }
+        }
+      },
+      "100": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.851,
+            0.902,
+            1
+          ],
+          "hex": "#D9E6FF"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "blue/100",
+            "collection": "Primitives",
+            "cssVar": "--stl-blue-100",
+            "published": false
+          }
+        }
+      },
+      "200": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7255,
+            0.8118,
+            0.9804
+          ],
+          "hex": "#B9CFFA"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "blue/200",
+            "collection": "Primitives",
+            "cssVar": "--stl-blue-200",
+            "published": false
+          }
+        }
+      },
+      "300": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5608,
+            0.698,
+            0.9608
+          ],
+          "hex": "#8FB2F5"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "blue/300",
+            "collection": "Primitives",
+            "cssVar": "--stl-blue-300",
+            "published": false
+          }
+        }
+      },
+      "400": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.4196,
+            0.6078,
+            0.949
+          ],
+          "hex": "#6B9BF2"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "blue/400",
+            "collection": "Primitives",
+            "cssVar": "--stl-blue-400",
+            "published": false
+          }
+        }
+      },
+      "500": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1843,
+            0.4353,
+            0.9216
+          ],
+          "hex": "#2F6FEB"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "blue/500",
+            "collection": "Primitives",
+            "cssVar": "--stl-blue-500",
+            "published": false
+          }
+        }
+      },
+      "600": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1216,
+            0.3529,
+            0.8196
+          ],
+          "hex": "#1F5AD1"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "blue/600",
+            "collection": "Primitives",
+            "cssVar": "--stl-blue-600",
+            "published": false
+          }
+        }
+      },
+      "700": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0941,
+            0.2824,
+            0.6667
+          ],
+          "hex": "#1848AA"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "blue/700",
+            "collection": "Primitives",
+            "cssVar": "--stl-blue-700",
+            "published": false
+          }
+        }
+      },
+      "800": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0824,
+            0.2275,
+            0.5216
+          ],
+          "hex": "#153A85"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "blue/800",
+            "collection": "Primitives",
+            "cssVar": "--stl-blue-800",
+            "published": false
+          }
+        }
+      },
+      "850": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1137,
+            0.1843,
+            0.3216
+          ],
+          "hex": "#1D2F52"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "blue/850",
+            "collection": "Primitives",
+            "cssVar": "--stl-blue-850",
+            "published": false
+          }
+        }
+      },
+      "900": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.102,
+            0.1647,
+            0.2902
+          ],
+          "hex": "#1A2A4A"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "blue/900",
+            "collection": "Primitives",
+            "cssVar": "--stl-blue-900",
+            "published": false
+          }
+        }
+      }
+    },
+    "green": {
+      "50": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9216,
+            0.9686,
+            0.9412
+          ],
+          "hex": "#EBF7F0"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "green/50",
+            "collection": "Primitives",
+            "cssVar": "--stl-green-50",
+            "published": false
+          }
+        }
+      },
+      "100": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8196,
+            0.9333,
+            0.8667
+          ],
+          "hex": "#D1EEDD"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "green/100",
+            "collection": "Primitives",
+            "cssVar": "--stl-green-100",
+            "published": false
+          }
+        }
+      },
+      "200": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.651,
+            0.8667,
+            0.7451
+          ],
+          "hex": "#A6DDBE"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "green/200",
+            "collection": "Primitives",
+            "cssVar": "--stl-green-200",
+            "published": false
+          }
+        }
+      },
+      "300": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5255,
+            0.8392,
+            0.6784
+          ],
+          "hex": "#86D6AD"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "green/300",
+            "collection": "Primitives",
+            "cssVar": "--stl-green-300",
+            "published": false
+          }
+        }
+      },
+      "400": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.298,
+            0.7647,
+            0.5412
+          ],
+          "hex": "#4CC38A"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "green/400",
+            "collection": "Primitives",
+            "cssVar": "--stl-green-400",
+            "published": false
+          }
+        }
+      },
+      "500": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1216,
+            0.6157,
+            0.3333
+          ],
+          "hex": "#1F9D55"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "green/500",
+            "collection": "Primitives",
+            "cssVar": "--stl-green-500",
+            "published": false
+          }
+        }
+      },
+      "600": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0784,
+            0.4784,
+            0.2706
+          ],
+          "hex": "#147A45"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "green/600",
+            "collection": "Primitives",
+            "cssVar": "--stl-green-600",
+            "published": false
+          }
+        }
+      },
+      "700": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0706,
+            0.4,
+            0.2314
+          ],
+          "hex": "#12663B"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "green/700",
+            "collection": "Primitives",
+            "cssVar": "--stl-green-700",
+            "published": false
+          }
+        }
+      },
+      "800": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0549,
+            0.3098,
+            0.1804
+          ],
+          "hex": "#0E4F2E"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "green/800",
+            "collection": "Primitives",
+            "cssVar": "--stl-green-800",
+            "published": false
+          }
+        }
+      },
+      "900": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0706,
+            0.1882,
+            0.1216
+          ],
+          "hex": "#12301F"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "green/900",
+            "collection": "Primitives",
+            "cssVar": "--stl-green-900",
+            "published": false
+          }
+        }
+      }
+    },
+    "amber": {
+      "50": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.9647,
+            0.898
+          ],
+          "hex": "#FFF6E5"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "amber/50",
+            "collection": "Primitives",
+            "cssVar": "--stl-amber-50",
+            "published": false
+          }
+        }
+      },
+      "100": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.9137,
+            0.749
+          ],
+          "hex": "#FFE9BF"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "amber/100",
+            "collection": "Primitives",
+            "cssVar": "--stl-amber-100",
+            "published": false
+          }
+        }
+      },
+      "200": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9922,
+            0.8275,
+            0.5412
+          ],
+          "hex": "#FDD38A"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "amber/200",
+            "collection": "Primitives",
+            "cssVar": "--stl-amber-200",
+            "published": false
+          }
+        }
+      },
+      "300": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9686,
+            0.7294,
+            0.3098
+          ],
+          "hex": "#F7BA4F"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "amber/300",
+            "collection": "Primitives",
+            "cssVar": "--stl-amber-300",
+            "published": false
+          }
+        }
+      },
+      "400": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9216,
+            0.6353,
+            0.1216
+          ],
+          "hex": "#EBA21F"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "amber/400",
+            "collection": "Primitives",
+            "cssVar": "--stl-amber-400",
+            "published": false
+          }
+        }
+      },
+      "500": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.851,
+            0.5569,
+            0.0157
+          ],
+          "hex": "#D98E04"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "amber/500",
+            "collection": "Primitives",
+            "cssVar": "--stl-amber-500",
+            "published": false
+          }
+        }
+      },
+      "600": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6902,
+            0.4471,
+            0.0118
+          ],
+          "hex": "#B07203"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "amber/600",
+            "collection": "Primitives",
+            "cssVar": "--stl-amber-600",
+            "published": false
+          }
+        }
+      },
+      "700": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.549,
+            0.3569,
+            0.0118
+          ],
+          "hex": "#8C5B03"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "amber/700",
+            "collection": "Primitives",
+            "cssVar": "--stl-amber-700",
+            "published": false
+          }
+        }
+      },
+      "800": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.4196,
+            0.2745,
+            0.0078
+          ],
+          "hex": "#6B4602"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "amber/800",
+            "collection": "Primitives",
+            "cssVar": "--stl-amber-800",
+            "published": false
+          }
+        }
+      },
+      "900": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2275,
+            0.1647,
+            0.0549
+          ],
+          "hex": "#3A2A0E"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "amber/900",
+            "collection": "Primitives",
+            "cssVar": "--stl-amber-900",
+            "published": false
+          }
+        }
+      }
+    },
+    "red": {
+      "50": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9922,
+            0.9294,
+            0.9373
+          ],
+          "hex": "#FDEDEF"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "red/50",
+            "collection": "Primitives",
+            "cssVar": "--stl-red-50",
+            "published": false
+          }
+        }
+      },
+      "100": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9804,
+            0.8314,
+            0.8471
+          ],
+          "hex": "#FAD4D8"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "red/100",
+            "collection": "Primitives",
+            "cssVar": "--stl-red-100",
+            "published": false
+          }
+        }
+      },
+      "200": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9608,
+            0.6824,
+            0.7098
+          ],
+          "hex": "#F5AEB5"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "red/200",
+            "collection": "Primitives",
+            "cssVar": "--stl-red-200",
+            "published": false
+          }
+        }
+      },
+      "300": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.949,
+            0.5451,
+            0.5608
+          ],
+          "hex": "#F28B8F"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "red/300",
+            "collection": "Primitives",
+            "cssVar": "--stl-red-300",
+            "published": false
+          }
+        }
+      },
+      "400": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8784,
+            0.3216,
+            0.3686
+          ],
+          "hex": "#E0525E"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "red/400",
+            "collection": "Primitives",
+            "cssVar": "--stl-red-400",
+            "published": false
+          }
+        }
+      },
+      "500": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.851,
+            0.2078,
+            0.2706
+          ],
+          "hex": "#D93545"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "red/500",
+            "collection": "Primitives",
+            "cssVar": "--stl-red-500",
+            "published": false
+          }
+        }
+      },
+      "600": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7529,
+            0.149,
+            0.2275
+          ],
+          "hex": "#C0263A"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "red/600",
+            "collection": "Primitives",
+            "cssVar": "--stl-red-600",
+            "published": false
+          }
+        }
+      },
+      "700": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6196,
+            0.1216,
+            0.1882
+          ],
+          "hex": "#9E1F30"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "red/700",
+            "collection": "Primitives",
+            "cssVar": "--stl-red-700",
+            "published": false
+          }
+        }
+      },
+      "800": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.4784,
+            0.0941,
+            0.1412
+          ],
+          "hex": "#7A1824"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "red/800",
+            "collection": "Primitives",
+            "cssVar": "--stl-red-800",
+            "published": false
+          }
+        }
+      },
+      "900": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2902,
+            0.102,
+            0.1216
+          ],
+          "hex": "#4A1A1F"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "red/900",
+            "collection": "Primitives",
+            "cssVar": "--stl-red-900",
+            "published": false
+          }
+        }
+      }
+    },
+    "coral": {
+      "50": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9843,
+            0.9294,
+            0.9176
+          ],
+          "hex": "#FBEDEA"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "coral/50",
+            "collection": "Primitives",
+            "cssVar": "--stl-coral-50",
+            "published": false
+          }
+        }
+      },
+      "100": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9725,
+            0.8471,
+            0.8196
+          ],
+          "hex": "#F8D8D1"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "coral/100",
+            "collection": "Primitives",
+            "cssVar": "--stl-coral-100",
+            "published": false
+          }
+        }
+      },
+      "200": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9765,
+            0.7608,
+            0.7216
+          ],
+          "hex": "#F9C2B8"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "coral/200",
+            "collection": "Primitives",
+            "cssVar": "--stl-coral-200",
+            "published": false
+          }
+        }
+      },
+      "300": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9608,
+            0.6118,
+            0.5451
+          ],
+          "hex": "#F59C8B"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "coral/300",
+            "collection": "Primitives",
+            "cssVar": "--stl-coral-300",
+            "published": false
+          }
+        }
+      },
+      "400": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.949,
+            0.4392,
+            0.3529
+          ],
+          "hex": "#F2705A"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "coral/400",
+            "collection": "Primitives",
+            "cssVar": "--stl-coral-400",
+            "published": false
+          }
+        }
+      },
+      "500": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8784,
+            0.3333,
+            0.2392
+          ],
+          "hex": "#E0553D"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "coral/500",
+            "collection": "Primitives",
+            "cssVar": "--stl-coral-500",
+            "published": false
+          }
+        }
+      },
+      "600": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7451,
+            0.2392,
+            0.1647
+          ],
+          "hex": "#BE3D2A"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "coral/600",
+            "collection": "Primitives",
+            "cssVar": "--stl-coral-600",
+            "published": false
+          }
+        }
+      },
+      "700": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.651,
+            0.2157,
+            0.149
+          ],
+          "hex": "#A63726"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "coral/700",
+            "collection": "Primitives",
+            "cssVar": "--stl-coral-700",
+            "published": false
+          }
+        }
+      },
+      "800": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.4784,
+            0.1647,
+            0.1137
+          ],
+          "hex": "#7A2A1D"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "coral/800",
+            "collection": "Primitives",
+            "cssVar": "--stl-coral-800",
+            "published": false
+          }
+        }
+      },
+      "900": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2902,
+            0.1255,
+            0.098
+          ],
+          "hex": "#4A2019"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "coral/900",
+            "collection": "Primitives",
+            "cssVar": "--stl-coral-900",
+            "published": false
+          }
+        }
+      }
+    },
+    "alpha": {
+      "neutral-900-50": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0784,
+            0.0941,
+            0.1137
+          ],
+          "alpha": 0.5,
+          "hex": "#14181D"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "alpha/neutral-900-50",
+            "collection": "Primitives",
+            "cssVar": "--stl-alpha-neutral-900-50",
+            "published": false
+          }
+        }
+      },
+      "black-60": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0,
+            0
+          ],
+          "alpha": 0.6,
+          "hex": "#000000"
+        },
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "alpha/black-60",
+            "collection": "Primitives",
+            "cssVar": "--stl-alpha-black-60",
+            "published": false
+          }
+        }
+      }
+    }
+  },
+  "color": {
+    "$description": "Semantic colors. $value is the Light mode; every mode is in $extensions.",
+    "surface": {
+      "background": {
+        "$type": "color",
+        "$value": "{primitives.neutral.50}",
+        "$description": "Page and app background, behind panels.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "surface/background",
+            "collection": "Color",
+            "cssVar": "--stl-color-surface-background",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.50}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9686,
+                    0.9725,
+                    0.9804
+                  ],
+                  "hex": "#F7F8FA"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.900}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0784,
+                    0.0941,
+                    0.1137
+                  ],
+                  "hex": "#14181D"
+                }
+              }
+            }
+          }
+        }
+      },
+      "panel": {
+        "$type": "color",
+        "$value": "{primitives.neutral.0}",
+        "$description": "Background of panels, cards, grid rows, and input fields.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "surface/panel",
+            "collection": "Color",
+            "cssVar": "--stl-color-surface-panel",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.0}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "hex": "#FFFFFF"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.800}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.1373,
+                    0.1608,
+                    0.1882
+                  ],
+                  "hex": "#232930"
+                }
+              }
+            }
+          }
+        }
+      },
+      "raised": {
+        "$type": "color",
+        "$value": "{primitives.neutral.0}",
+        "$description": "Background of surfaces that sit above the page: menus and dialogs.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "surface/raised",
+            "collection": "Color",
+            "cssVar": "--stl-color-surface-raised",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.0}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "hex": "#FFFFFF"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.750}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.1647,
+                    0.1882,
+                    0.2196
+                  ],
+                  "hex": "#2A3038"
+                }
+              }
+            }
+          }
+        }
+      },
+      "hover": {
+        "$type": "color",
+        "$value": "{primitives.neutral.100}",
+        "$description": "Background of a hovered row, cell, menu option, or ghost control.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "surface/hover",
+            "collection": "Color",
+            "cssVar": "--stl-color-surface-hover",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.100}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9333,
+                    0.9412,
+                    0.9529
+                  ],
+                  "hex": "#EEF0F3"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.750}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.1647,
+                    0.1882,
+                    0.2196
+                  ],
+                  "hex": "#2A3038"
+                }
+              }
+            }
+          }
+        }
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": "{primitives.neutral.100}",
+        "$description": "Background of disabled controls and fields.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "surface/disabled",
+            "collection": "Color",
+            "cssVar": "--stl-color-surface-disabled",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.100}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9333,
+                    0.9412,
+                    0.9529
+                  ],
+                  "hex": "#EEF0F3"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.700}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.2314,
+                    0.2627,
+                    0.298
+                  ],
+                  "hex": "#3B434C"
+                }
+              }
+            }
+          }
+        }
+      },
+      "pressed": {
+        "$type": "color",
+        "$value": "{primitives.neutral.200}",
+        "$description": "Background of a pressed secondary or ghost control.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "surface/pressed",
+            "collection": "Color",
+            "cssVar": "--stl-color-surface-pressed",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.8667,
+                    0.8824,
+                    0.902
+                  ],
+                  "hex": "#DDE1E6"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.700}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.2314,
+                    0.2627,
+                    0.298
+                  ],
+                  "hex": "#3B434C"
+                }
+              }
+            }
+          }
+        }
+      },
+      "skeleton": {
+        "$type": "color",
+        "$value": "{primitives.neutral.200}",
+        "$description": "Loading placeholder bars. Decorative, so pair them with a loading label.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "surface/skeleton",
+            "collection": "Color",
+            "cssVar": "--stl-color-surface-skeleton",
+            "note": "Loading placeholder bars. Decorative: pair with a loading label or aria-busy, never color alone.",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.8667,
+                    0.8824,
+                    0.902
+                  ],
+                  "hex": "#DDE1E6"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.700}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.2314,
+                    0.2627,
+                    0.298
+                  ],
+                  "hex": "#3B434C"
+                }
+              }
+            }
+          }
+        }
+      },
+      "scrim": {
+        "$type": "color",
+        "$value": "{primitives.alpha.neutral-900-50}",
+        "$description": "Translucent layer that dims the page behind a modal dialog.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "surface/scrim",
+            "collection": "Color",
+            "cssVar": "--stl-color-surface-scrim",
+            "note": "The only translucent color. alpha/* primitives are 8-digit hex (#RRGGBBAA): neutral/900 at 50% in Light, black at 60% in Dark, where the page is already neutral/900.",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.alpha.neutral-900-50}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0784,
+                    0.0941,
+                    0.1137
+                  ],
+                  "alpha": 0.5,
+                  "hex": "#14181D"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.alpha.black-60}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "alpha": 0.6,
+                  "hex": "#000000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "border": {
+      "default": {
+        "$type": "color",
+        "$value": "{primitives.neutral.200}",
+        "$description": "Dividers and the borders of panels, cards, and grid rows.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "border/default",
+            "collection": "Color",
+            "cssVar": "--stl-color-border-default",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.8667,
+                    0.8824,
+                    0.902
+                  ],
+                  "hex": "#DDE1E6"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.700}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.2314,
+                    0.2627,
+                    0.298
+                  ],
+                  "hex": "#3B434C"
+                }
+              }
+            }
+          }
+        }
+      },
+      "strong": {
+        "$type": "color",
+        "$value": "{primitives.neutral.500}",
+        "$description": "Borders people need to see to use a control: input fields, checkboxes, chips, and the grid header rule.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "border/strong",
+            "collection": "Color",
+            "cssVar": "--stl-color-border-strong",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.500}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.4353,
+                    0.4745,
+                    0.5216
+                  ],
+                  "hex": "#6F7985"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.400}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.6039,
+                    0.6392,
+                    0.6824
+                  ],
+                  "hex": "#9AA3AE"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "text": {
+      "primary": {
+        "$type": "color",
+        "$value": "{primitives.neutral.900}",
+        "$description": "Main text: values, labels, and headings.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "text/primary",
+            "collection": "Color",
+            "cssVar": "--stl-color-text-primary",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.900}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0784,
+                    0.0941,
+                    0.1137
+                  ],
+                  "hex": "#14181D"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.50}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9686,
+                    0.9725,
+                    0.9804
+                  ],
+                  "hex": "#F7F8FA"
+                }
+              }
+            }
+          }
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "{primitives.neutral.600}",
+        "$description": "Supporting text: field labels, captions, placeholders, and inactive column headers.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "text/secondary",
+            "collection": "Color",
+            "cssVar": "--stl-color-text-secondary",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.600}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.3255,
+                    0.3608,
+                    0.4039
+                  ],
+                  "hex": "#535C67"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.300}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.7647,
+                    0.7882,
+                    0.8196
+                  ],
+                  "hex": "#C3C9D1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": "{primitives.neutral.400}",
+        "$description": "Text and icons in disabled controls. Exempt from contrast minimums.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "text/disabled",
+            "collection": "Color",
+            "cssVar": "--stl-color-text-disabled",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.400}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.6039,
+                    0.6392,
+                    0.6824
+                  ],
+                  "hex": "#9AA3AE"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.500}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.4353,
+                    0.4745,
+                    0.5216
+                  ],
+                  "hex": "#6F7985"
+                }
+              }
+            }
+          }
+        }
+      },
+      "inverse": {
+        "$type": "color",
+        "$value": "{primitives.neutral.0}",
+        "$description": "Text and icons on every solid fill (accent, danger, buy, sell).",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "text/inverse",
+            "collection": "Color",
+            "cssVar": "--stl-color-text-inverse",
+            "note": "Foreground for every solid fill (accent, danger, buy, sell). Fills are chosen so this passes 4.5:1 in both modes.",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.0}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "hex": "#FFFFFF"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.900}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0784,
+                    0.0941,
+                    0.1137
+                  ],
+                  "hex": "#14181D"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "accent": {
+      "default": {
+        "$type": "color",
+        "$value": "{primitives.blue.600}",
+        "$description": "Primary actions, links, progress bars, and selected controls such as a checked checkbox or the selected tab.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "accent/default",
+            "collection": "Color",
+            "cssVar": "--stl-color-accent-default",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.blue.600}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.1216,
+                    0.3529,
+                    0.8196
+                  ],
+                  "hex": "#1F5AD1"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.blue.400}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.4196,
+                    0.6078,
+                    0.949
+                  ],
+                  "hex": "#6B9BF2"
+                }
+              }
+            }
+          }
+        }
+      },
+      "hover": {
+        "$type": "color",
+        "$value": "{primitives.blue.700}",
+        "$description": "Hover state of accent fills and links.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "accent/hover",
+            "collection": "Color",
+            "cssVar": "--stl-color-accent-hover",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.blue.700}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0941,
+                    0.2824,
+                    0.6667
+                  ],
+                  "hex": "#1848AA"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.blue.300}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.5608,
+                    0.698,
+                    0.9608
+                  ],
+                  "hex": "#8FB2F5"
+                }
+              }
+            }
+          }
+        }
+      },
+      "pressed": {
+        "$type": "color",
+        "$value": "{primitives.blue.800}",
+        "$description": "Pressed state of accent fills.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "accent/pressed",
+            "collection": "Color",
+            "cssVar": "--stl-color-accent-pressed",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.blue.800}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0824,
+                    0.2275,
+                    0.5216
+                  ],
+                  "hex": "#153A85"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.blue.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.7255,
+                    0.8118,
+                    0.9804
+                  ],
+                  "hex": "#B9CFFA"
+                }
+              }
+            }
+          }
+        }
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": "{primitives.blue.50}",
+        "$description": "Tinted background for accent areas: the bulk action bar, the selected menu option, and the selected tab's count.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "accent/subtle",
+            "collection": "Color",
+            "cssVar": "--stl-color-accent-subtle",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.blue.50}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9333,
+                    0.9569,
+                    1
+                  ],
+                  "hex": "#EEF4FF"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.blue.900}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.102,
+                    0.1647,
+                    0.2902
+                  ],
+                  "hex": "#1A2A4A"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "focus": {
+      "ring": {
+        "$type": "color",
+        "$value": "{primitives.blue.500}",
+        "$description": "The 2px keyboard focus outline on every interactive control.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "focus/ring",
+            "collection": "Color",
+            "cssVar": "--stl-color-focus-ring",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.blue.500}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.1843,
+                    0.4353,
+                    0.9216
+                  ],
+                  "hex": "#2F6FEB"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.blue.300}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.5608,
+                    0.698,
+                    0.9608
+                  ],
+                  "hex": "#8FB2F5"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "selection": {
+      "row": {
+        "$type": "color",
+        "$value": "{primitives.blue.50}",
+        "$description": "Background of a selected grid row.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "selection/row",
+            "collection": "Color",
+            "cssVar": "--stl-color-selection-row",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.blue.50}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9333,
+                    0.9569,
+                    1
+                  ],
+                  "hex": "#EEF4FF"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.blue.900}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.102,
+                    0.1647,
+                    0.2902
+                  ],
+                  "hex": "#1A2A4A"
+                }
+              }
+            }
+          }
+        }
+      },
+      "row-hover": {
+        "$type": "color",
+        "$value": "{primitives.blue.75}",
+        "$description": "Background of a selected grid row while hovered.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "selection/row-hover",
+            "collection": "Color",
+            "cssVar": "--stl-color-selection-row-hover",
+            "note": "Hover on a selected row. blue/75 and blue/850 sit between the ramp steps so every text color on rows still passes 4.5:1.",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.blue.75}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.8941,
+                    0.9294,
+                    1
+                  ],
+                  "hex": "#E4EDFF"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.blue.850}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.1137,
+                    0.1843,
+                    0.3216
+                  ],
+                  "hex": "#1D2F52"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "positive": {
+        "$type": "color",
+        "$value": "{primitives.green.600}",
+        "$description": "Positive status (success, ready): icons and borders.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/positive",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-positive",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.green.600}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0784,
+                    0.4784,
+                    0.2706
+                  ],
+                  "hex": "#147A45"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.green.400}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.298,
+                    0.7647,
+                    0.5412
+                  ],
+                  "hex": "#4CC38A"
+                }
+              }
+            }
+          }
+        }
+      },
+      "positive-subtle": {
+        "$type": "color",
+        "$value": "{primitives.green.50}",
+        "$description": "Tinted background for positive status, as in status chips.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/positive-subtle",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-positive-subtle",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.green.50}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9216,
+                    0.9686,
+                    0.9412
+                  ],
+                  "hex": "#EBF7F0"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.green.900}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0706,
+                    0.1882,
+                    0.1216
+                  ],
+                  "hex": "#12301F"
+                }
+              }
+            }
+          }
+        }
+      },
+      "positive-strong": {
+        "$type": "color",
+        "$value": "{primitives.green.800}",
+        "$description": "Text and icons for positive status on its subtle background.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/positive-strong",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-positive-strong",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.green.800}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0549,
+                    0.3098,
+                    0.1804
+                  ],
+                  "hex": "#0E4F2E"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.green.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.651,
+                    0.8667,
+                    0.7451
+                  ],
+                  "hex": "#A6DDBE"
+                }
+              }
+            }
+          }
+        }
+      },
+      "warning": {
+        "$type": "color",
+        "$value": "{primitives.amber.600}",
+        "$description": "Warning status (needs attention): icons, and the border of flagged cells and fields.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/warning",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-warning",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.amber.600}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.6902,
+                    0.4471,
+                    0.0118
+                  ],
+                  "hex": "#B07203"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.amber.400}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9216,
+                    0.6353,
+                    0.1216
+                  ],
+                  "hex": "#EBA21F"
+                }
+              }
+            }
+          }
+        }
+      },
+      "warning-subtle": {
+        "$type": "color",
+        "$value": "{primitives.amber.50}",
+        "$description": "Tinted background for warning status: chips and flagged cells.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/warning-subtle",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-warning-subtle",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.amber.50}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    1,
+                    0.9647,
+                    0.898
+                  ],
+                  "hex": "#FFF6E5"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.amber.900}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.2275,
+                    0.1647,
+                    0.0549
+                  ],
+                  "hex": "#3A2A0E"
+                }
+              }
+            }
+          }
+        }
+      },
+      "warning-strong": {
+        "$type": "color",
+        "$value": "{primitives.amber.800}",
+        "$description": "Text and icons for warning status on its subtle background, and the over-target progress bar.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/warning-strong",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-warning-strong",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.amber.800}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.4196,
+                    0.2745,
+                    0.0078
+                  ],
+                  "hex": "#6B4602"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.amber.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9922,
+                    0.8275,
+                    0.5412
+                  ],
+                  "hex": "#FDD38A"
+                }
+              }
+            }
+          }
+        }
+      },
+      "critical": {
+        "$type": "color",
+        "$value": "{primitives.red.600}",
+        "$description": "Critical status (error, destructive): error icons and borders, and the fill of danger buttons.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/critical",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-critical",
+            "note": "Shares the crimson red ramp with finance/loss. Destructive (danger) buttons use status/critical, never finance/sell.",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.red.600}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.7529,
+                    0.149,
+                    0.2275
+                  ],
+                  "hex": "#C0263A"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.red.300}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.949,
+                    0.5451,
+                    0.5608
+                  ],
+                  "hex": "#F28B8F"
+                }
+              }
+            }
+          }
+        }
+      },
+      "critical-hover": {
+        "$type": "color",
+        "$value": "{primitives.red.700}",
+        "$description": "Hover state of danger buttons.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/critical-hover",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-critical-hover",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.red.700}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.6196,
+                    0.1216,
+                    0.1882
+                  ],
+                  "hex": "#9E1F30"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.red.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9608,
+                    0.6824,
+                    0.7098
+                  ],
+                  "hex": "#F5AEB5"
+                }
+              }
+            }
+          }
+        }
+      },
+      "critical-pressed": {
+        "$type": "color",
+        "$value": "{primitives.red.800}",
+        "$description": "Pressed state of danger buttons.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/critical-pressed",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-critical-pressed",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.red.800}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.4784,
+                    0.0941,
+                    0.1412
+                  ],
+                  "hex": "#7A1824"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.red.100}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9804,
+                    0.8314,
+                    0.8471
+                  ],
+                  "hex": "#FAD4D8"
+                }
+              }
+            }
+          }
+        }
+      },
+      "critical-subtle": {
+        "$type": "color",
+        "$value": "{primitives.red.50}",
+        "$description": "Tinted background for critical status: chips and error cells.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/critical-subtle",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-critical-subtle",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.red.50}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9922,
+                    0.9294,
+                    0.9373
+                  ],
+                  "hex": "#FDEDEF"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.red.900}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.2902,
+                    0.102,
+                    0.1216
+                  ],
+                  "hex": "#4A1A1F"
+                }
+              }
+            }
+          }
+        }
+      },
+      "critical-strong": {
+        "$type": "color",
+        "$value": "{primitives.red.800}",
+        "$description": "Text and icons for critical status on its subtle background.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/critical-strong",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-critical-strong",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.red.800}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.4784,
+                    0.0941,
+                    0.1412
+                  ],
+                  "hex": "#7A1824"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.red.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9608,
+                    0.6824,
+                    0.7098
+                  ],
+                  "hex": "#F5AEB5"
+                }
+              }
+            }
+          }
+        }
+      },
+      "info": {
+        "$type": "color",
+        "$value": "{primitives.blue.600}",
+        "$description": "Informational status: icons and borders.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/info",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-info",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.blue.600}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.1216,
+                    0.3529,
+                    0.8196
+                  ],
+                  "hex": "#1F5AD1"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.blue.400}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.4196,
+                    0.6078,
+                    0.949
+                  ],
+                  "hex": "#6B9BF2"
+                }
+              }
+            }
+          }
+        }
+      },
+      "info-subtle": {
+        "$type": "color",
+        "$value": "{primitives.blue.50}",
+        "$description": "Tinted background for informational status, as in status chips.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/info-subtle",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-info-subtle",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.blue.50}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9333,
+                    0.9569,
+                    1
+                  ],
+                  "hex": "#EEF4FF"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.blue.900}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.102,
+                    0.1647,
+                    0.2902
+                  ],
+                  "hex": "#1A2A4A"
+                }
+              }
+            }
+          }
+        }
+      },
+      "info-strong": {
+        "$type": "color",
+        "$value": "{primitives.blue.800}",
+        "$description": "Text and icons for informational status on its subtle background.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/info-strong",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-info-strong",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.blue.800}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0824,
+                    0.2275,
+                    0.5216
+                  ],
+                  "hex": "#153A85"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.blue.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.7255,
+                    0.8118,
+                    0.9804
+                  ],
+                  "hex": "#B9CFFA"
+                }
+              }
+            }
+          }
+        }
+      },
+      "neutral": {
+        "$type": "color",
+        "$value": "{primitives.neutral.500}",
+        "$description": "Neutral status (draft, inactive): icons and borders.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/neutral",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-neutral",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.500}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.4353,
+                    0.4745,
+                    0.5216
+                  ],
+                  "hex": "#6F7985"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.400}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.6039,
+                    0.6392,
+                    0.6824
+                  ],
+                  "hex": "#9AA3AE"
+                }
+              }
+            }
+          }
+        }
+      },
+      "neutral-subtle": {
+        "$type": "color",
+        "$value": "{primitives.neutral.100}",
+        "$description": "Tinted background for neutral status, as in status chips and tab counts.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/neutral-subtle",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-neutral-subtle",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.100}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9333,
+                    0.9412,
+                    0.9529
+                  ],
+                  "hex": "#EEF0F3"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.700}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.2314,
+                    0.2627,
+                    0.298
+                  ],
+                  "hex": "#3B434C"
+                }
+              }
+            }
+          }
+        }
+      },
+      "neutral-strong": {
+        "$type": "color",
+        "$value": "{primitives.neutral.700}",
+        "$description": "Text and icons for neutral status on its subtle background.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "status/neutral-strong",
+            "collection": "Color",
+            "cssVar": "--stl-color-status-neutral-strong",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.neutral.700}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.2314,
+                    0.2627,
+                    0.298
+                  ],
+                  "hex": "#3B434C"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.neutral.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.8667,
+                    0.8824,
+                    0.902
+                  ],
+                  "hex": "#DDE1E6"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "finance": {
+      "buy": {
+        "$type": "color",
+        "$value": "{primitives.blue.600}",
+        "$description": "Buy side of an order or trade, which is an action. Never use it for gain.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "finance/buy",
+            "collection": "Color",
+            "cssVar": "--stl-color-finance-buy",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.blue.600}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.1216,
+                    0.3529,
+                    0.8196
+                  ],
+                  "hex": "#1F5AD1"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.blue.400}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.4196,
+                    0.6078,
+                    0.949
+                  ],
+                  "hex": "#6B9BF2"
+                }
+              }
+            }
+          }
+        }
+      },
+      "buy-subtle": {
+        "$type": "color",
+        "$value": "{primitives.blue.50}",
+        "$description": "Tinted background for the Buy side chip.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "finance/buy-subtle",
+            "collection": "Color",
+            "cssVar": "--stl-color-finance-buy-subtle",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.blue.50}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9333,
+                    0.9569,
+                    1
+                  ],
+                  "hex": "#EEF4FF"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.blue.900}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.102,
+                    0.1647,
+                    0.2902
+                  ],
+                  "hex": "#1A2A4A"
+                }
+              }
+            }
+          }
+        }
+      },
+      "buy-strong": {
+        "$type": "color",
+        "$value": "{primitives.blue.800}",
+        "$description": "Text on the Buy side chip.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "finance/buy-strong",
+            "collection": "Color",
+            "cssVar": "--stl-color-finance-buy-strong",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.blue.800}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0824,
+                    0.2275,
+                    0.5216
+                  ],
+                  "hex": "#153A85"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.blue.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.7255,
+                    0.8118,
+                    0.9804
+                  ],
+                  "hex": "#B9CFFA"
+                }
+              }
+            }
+          }
+        }
+      },
+      "sell": {
+        "$type": "color",
+        "$value": "{primitives.coral.600}",
+        "$description": "Sell side of an order or trade, which is an action. Never use it for loss or for destructive buttons.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "finance/sell",
+            "collection": "Color",
+            "cssVar": "--stl-color-finance-sell",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.coral.600}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.7451,
+                    0.2392,
+                    0.1647
+                  ],
+                  "hex": "#BE3D2A"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.coral.400}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.949,
+                    0.4392,
+                    0.3529
+                  ],
+                  "hex": "#F2705A"
+                }
+              }
+            }
+          }
+        }
+      },
+      "sell-subtle": {
+        "$type": "color",
+        "$value": "{primitives.coral.50}",
+        "$description": "Tinted background for the Sell side chip.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "finance/sell-subtle",
+            "collection": "Color",
+            "cssVar": "--stl-color-finance-sell-subtle",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.coral.50}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9843,
+                    0.9294,
+                    0.9176
+                  ],
+                  "hex": "#FBEDEA"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.coral.900}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.2902,
+                    0.1255,
+                    0.098
+                  ],
+                  "hex": "#4A2019"
+                }
+              }
+            }
+          }
+        }
+      },
+      "sell-strong": {
+        "$type": "color",
+        "$value": "{primitives.coral.800}",
+        "$description": "Text on the Sell side chip.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "finance/sell-strong",
+            "collection": "Color",
+            "cssVar": "--stl-color-finance-sell-strong",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.coral.800}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.4784,
+                    0.1647,
+                    0.1137
+                  ],
+                  "hex": "#7A2A1D"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.coral.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9765,
+                    0.7608,
+                    0.7216
+                  ],
+                  "hex": "#F9C2B8"
+                }
+              }
+            }
+          }
+        }
+      },
+      "gain": {
+        "$type": "color",
+        "$value": "{primitives.green.600}",
+        "$description": "A gain in a value, which is data: the up glyph and signed number in gain cells.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "finance/gain",
+            "collection": "Color",
+            "cssVar": "--stl-color-finance-gain",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.green.600}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0784,
+                    0.4784,
+                    0.2706
+                  ],
+                  "hex": "#147A45"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.green.400}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.298,
+                    0.7647,
+                    0.5412
+                  ],
+                  "hex": "#4CC38A"
+                }
+              }
+            }
+          }
+        }
+      },
+      "gain-subtle": {
+        "$type": "color",
+        "$value": "{primitives.green.50}",
+        "$description": "Tinted background for highlighting a gain.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "finance/gain-subtle",
+            "collection": "Color",
+            "cssVar": "--stl-color-finance-gain-subtle",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.green.50}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9216,
+                    0.9686,
+                    0.9412
+                  ],
+                  "hex": "#EBF7F0"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.green.900}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0706,
+                    0.1882,
+                    0.1216
+                  ],
+                  "hex": "#12301F"
+                }
+              }
+            }
+          }
+        }
+      },
+      "gain-strong": {
+        "$type": "color",
+        "$value": "{primitives.green.800}",
+        "$description": "Gain text and glyph on tinted backgrounds, such as flagged cells.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "finance/gain-strong",
+            "collection": "Color",
+            "cssVar": "--stl-color-finance-gain-strong",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.green.800}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.0549,
+                    0.3098,
+                    0.1804
+                  ],
+                  "hex": "#0E4F2E"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.green.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.651,
+                    0.8667,
+                    0.7451
+                  ],
+                  "hex": "#A6DDBE"
+                }
+              }
+            }
+          }
+        }
+      },
+      "loss": {
+        "$type": "color",
+        "$value": "{primitives.red.600}",
+        "$description": "A loss in a value, which is data: the down glyph and signed number in loss cells.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "finance/loss",
+            "collection": "Color",
+            "cssVar": "--stl-color-finance-loss",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.red.600}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.7529,
+                    0.149,
+                    0.2275
+                  ],
+                  "hex": "#C0263A"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.red.300}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.949,
+                    0.5451,
+                    0.5608
+                  ],
+                  "hex": "#F28B8F"
+                }
+              }
+            }
+          }
+        }
+      },
+      "loss-subtle": {
+        "$type": "color",
+        "$value": "{primitives.red.50}",
+        "$description": "Tinted background for highlighting a loss.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "finance/loss-subtle",
+            "collection": "Color",
+            "cssVar": "--stl-color-finance-loss-subtle",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.red.50}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9922,
+                    0.9294,
+                    0.9373
+                  ],
+                  "hex": "#FDEDEF"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.red.900}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.2902,
+                    0.102,
+                    0.1216
+                  ],
+                  "hex": "#4A1A1F"
+                }
+              }
+            }
+          }
+        }
+      },
+      "loss-strong": {
+        "$type": "color",
+        "$value": "{primitives.red.800}",
+        "$description": "Loss text and glyph on tinted backgrounds, such as flagged cells.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "finance/loss-strong",
+            "collection": "Color",
+            "cssVar": "--stl-color-finance-loss-strong",
+            "modes": {
+              "Light": {
+                "$value": "{primitives.red.800}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.4784,
+                    0.0941,
+                    0.1412
+                  ],
+                  "hex": "#7A1824"
+                }
+              },
+              "Dark": {
+                "$value": "{primitives.red.200}",
+                "resolved": {
+                  "colorSpace": "srgb",
+                  "components": [
+                    0.9608,
+                    0.6824,
+                    0.7098
+                  ],
+                  "hex": "#F5AEB5"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "spacing": {
+    "$description": "Spacing scale for gap and padding (scope: Gap), plus corner radii (scope: Corner radius). Published: applied directly in layouts.",
+    "space": {
+      "0": {
+        "$type": "dimension",
+        "$value": {
+          "value": 0,
+          "unit": "px"
+        },
+        "$description": "No gap or padding (0px).",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "space/0",
+            "collection": "Spacing",
+            "cssVar": "--stl-space-0"
+          }
+        }
+      },
+      "2": {
+        "$type": "dimension",
+        "$value": {
+          "value": 2,
+          "unit": "px"
+        },
+        "$description": "2px gap or padding, the smallest step.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "space/2",
+            "collection": "Spacing",
+            "cssVar": "--stl-space-2"
+          }
+        }
+      },
+      "4": {
+        "$type": "dimension",
+        "$value": {
+          "value": 4,
+          "unit": "px"
+        },
+        "$description": "4px gap or padding, for tightly related items such as an icon and its label.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "space/4",
+            "collection": "Spacing",
+            "cssVar": "--stl-space-4"
+          }
+        }
+      },
+      "6": {
+        "$type": "dimension",
+        "$value": {
+          "value": 6,
+          "unit": "px"
+        },
+        "$description": "6px gap or padding, used by compact controls and cells.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "space/6",
+            "collection": "Spacing",
+            "cssVar": "--stl-space-6"
+          }
+        }
+      },
+      "8": {
+        "$type": "dimension",
+        "$value": {
+          "value": 8,
+          "unit": "px"
+        },
+        "$description": "8px gap or padding, the default between related items.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "space/8",
+            "collection": "Spacing",
+            "cssVar": "--stl-space-8"
+          }
+        }
+      },
+      "12": {
+        "$type": "dimension",
+        "$value": {
+          "value": 12,
+          "unit": "px"
+        },
+        "$description": "12px gap or padding, for groups inside a panel.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "space/12",
+            "collection": "Spacing",
+            "cssVar": "--stl-space-12"
+          }
+        }
+      },
+      "16": {
+        "$type": "dimension",
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        },
+        "$description": "16px gap or padding, for panel padding, screen margins, and grid gutters.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "space/16",
+            "collection": "Spacing",
+            "cssVar": "--stl-space-16"
+          }
+        }
+      },
+      "24": {
+        "$type": "dimension",
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        },
+        "$description": "24px gap or padding, between sections.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "space/24",
+            "collection": "Spacing",
+            "cssVar": "--stl-space-24"
+          }
+        }
+      },
+      "32": {
+        "$type": "dimension",
+        "$value": {
+          "value": 32,
+          "unit": "px"
+        },
+        "$description": "32px gap or padding, for generous separation.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "space/32",
+            "collection": "Spacing",
+            "cssVar": "--stl-space-32"
+          }
+        }
+      },
+      "48": {
+        "$type": "dimension",
+        "$value": {
+          "value": 48,
+          "unit": "px"
+        },
+        "$description": "48px gap or padding, for page-level padding.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "space/48",
+            "collection": "Spacing",
+            "cssVar": "--stl-space-48"
+          }
+        }
+      }
+    },
+    "radius": {
+      "none": {
+        "$type": "dimension",
+        "$value": {
+          "value": 0,
+          "unit": "px"
+        },
+        "$description": "Square corners (0px).",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "radius/none",
+            "collection": "Spacing",
+            "cssVar": "--stl-radius-none"
+          }
+        }
+      },
+      "xs": {
+        "$type": "dimension",
+        "$value": {
+          "value": 2,
+          "unit": "px"
+        },
+        "$description": "2px corner radius, for very small elements.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "radius/xs",
+            "collection": "Spacing",
+            "cssVar": "--stl-radius-xs"
+          }
+        }
+      },
+      "sm": {
+        "$type": "dimension",
+        "$value": {
+          "value": 4,
+          "unit": "px"
+        },
+        "$description": "4px corner radius, for controls, chips, and fields.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "radius/sm",
+            "collection": "Spacing",
+            "cssVar": "--stl-radius-sm"
+          }
+        }
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": {
+          "value": 8,
+          "unit": "px"
+        },
+        "$description": "8px corner radius, for panels, cards, and dialogs.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "radius/md",
+            "collection": "Spacing",
+            "cssVar": "--stl-radius-md"
+          }
+        }
+      },
+      "pill": {
+        "$type": "dimension",
+        "$value": {
+          "value": 999,
+          "unit": "px"
+        },
+        "$description": "Fully rounded ends, for pill shapes such as filter chips.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "radius/pill",
+            "collection": "Spacing",
+            "cssVar": "--stl-radius-pill"
+          }
+        }
+      }
+    }
+  },
+  "size": {
+    "$description": "Dimension scale for fixed widths and heights (scope: Width & height). For heights that should follow Density, use Density/* instead.",
+    "size": {
+      "4": {
+        "$type": "dimension",
+        "$value": {
+          "value": 4,
+          "unit": "px"
+        },
+        "$description": "4px fixed width or height, for thin bars such as a progress track.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "size/4",
+            "collection": "Size",
+            "cssVar": "--stl-size-4"
+          }
+        }
+      },
+      "12": {
+        "$type": "dimension",
+        "$value": {
+          "value": 12,
+          "unit": "px"
+        },
+        "$description": "12px fixed width or height, for small icons.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "size/12",
+            "collection": "Size",
+            "cssVar": "--stl-size-12"
+          }
+        }
+      },
+      "16": {
+        "$type": "dimension",
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        },
+        "$description": "16px fixed width or height, for icons and checkboxes.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "size/16",
+            "collection": "Size",
+            "cssVar": "--stl-size-16"
+          }
+        }
+      },
+      "20": {
+        "$type": "dimension",
+        "$value": {
+          "value": 20,
+          "unit": "px"
+        },
+        "$description": "20px fixed width or height. For heights that should follow the Density mode, use Density instead.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "size/20",
+            "collection": "Size",
+            "cssVar": "--stl-size-20"
+          }
+        }
+      },
+      "24": {
+        "$type": "dimension",
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        },
+        "$description": "24px fixed width or height. For heights that should follow the Density mode, use Density instead.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "size/24",
+            "collection": "Size",
+            "cssVar": "--stl-size-24"
+          }
+        }
+      },
+      "32": {
+        "$type": "dimension",
+        "$value": {
+          "value": 32,
+          "unit": "px"
+        },
+        "$description": "32px fixed width or height. For heights that should follow the Density mode, use Density instead.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "size/32",
+            "collection": "Size",
+            "cssVar": "--stl-size-32"
+          }
+        }
+      },
+      "40": {
+        "$type": "dimension",
+        "$value": {
+          "value": 40,
+          "unit": "px"
+        },
+        "$description": "40px fixed width or height, such as the grid's checkbox column. For heights that should follow the Density mode, use Density instead.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "size/40",
+            "collection": "Size",
+            "cssVar": "--stl-size-40"
+          }
+        }
+      },
+      "56": {
+        "$type": "dimension",
+        "$value": {
+          "value": 56,
+          "unit": "px"
+        },
+        "$description": "56px fixed width or height, such as the app bar.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "size/56",
+            "collection": "Size",
+            "cssVar": "--stl-size-56"
+          }
+        }
+      }
+    },
+    "stroke": {
+      "1": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1,
+          "unit": "px"
+        },
+        "$description": "1px stroke for borders, dividers, and underlines.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "stroke/1",
+            "collection": "Size",
+            "cssVar": "--stl-stroke-1"
+          }
+        }
+      },
+      "2": {
+        "$type": "dimension",
+        "$value": {
+          "value": 2,
+          "unit": "px"
+        },
+        "$description": "2px stroke for focus rings and other emphasized lines.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "stroke/2",
+            "collection": "Size",
+            "cssVar": "--stl-stroke-2"
+          }
+        }
+      }
+    }
+  },
+  "density": {
+    "$description": "Sizes that follow the Density mode. $value is the Default mode; every mode is in $extensions. Every value is an alias of a Size or Spacing step.",
+    "row": {
+      "height": {
+        "$type": "dimension",
+        "$value": "{size.size.32}",
+        "$description": "Height of grid rows and header cells. Follows the Density mode.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "row/height",
+            "collection": "Density",
+            "cssVar": "--stl-row-height",
+            "modes": {
+              "Compact": {
+                "$value": "{size.size.24}",
+                "resolved": {
+                  "value": 24,
+                  "unit": "px"
+                }
+              },
+              "Default": {
+                "$value": "{size.size.32}",
+                "resolved": {
+                  "value": 32,
+                  "unit": "px"
+                }
+              },
+              "Comfortable": {
+                "$value": "{size.size.40}",
+                "resolved": {
+                  "value": 40,
+                  "unit": "px"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "cell": {
+      "padding-x": {
+        "$type": "dimension",
+        "$value": "{spacing.space.8}",
+        "$description": "Left and right padding inside grid cells. Follows the Density mode.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "cell/padding-x",
+            "collection": "Density",
+            "cssVar": "--stl-cell-padding-x",
+            "modes": {
+              "Compact": {
+                "$value": "{spacing.space.6}",
+                "resolved": {
+                  "value": 6,
+                  "unit": "px"
+                }
+              },
+              "Default": {
+                "$value": "{spacing.space.8}",
+                "resolved": {
+                  "value": 8,
+                  "unit": "px"
+                }
+              },
+              "Comfortable": {
+                "$value": "{spacing.space.12}",
+                "resolved": {
+                  "value": 12,
+                  "unit": "px"
+                }
+              }
+            }
+          }
+        }
+      },
+      "padding-y": {
+        "$type": "dimension",
+        "$value": "{spacing.space.6}",
+        "$description": "Top and bottom padding inside grid cells. Follows the Density mode.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "cell/padding-y",
+            "collection": "Density",
+            "cssVar": "--stl-cell-padding-y",
+            "modes": {
+              "Compact": {
+                "$value": "{spacing.space.2}",
+                "resolved": {
+                  "value": 2,
+                  "unit": "px"
+                }
+              },
+              "Default": {
+                "$value": "{spacing.space.6}",
+                "resolved": {
+                  "value": 6,
+                  "unit": "px"
+                }
+              },
+              "Comfortable": {
+                "$value": "{spacing.space.8}",
+                "resolved": {
+                  "value": 8,
+                  "unit": "px"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "control": {
+      "height": {
+        "$type": "dimension",
+        "$value": "{size.size.32}",
+        "$description": "Height of buttons, input fields, and menu options. Follows the Density mode.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "control/height",
+            "collection": "Density",
+            "cssVar": "--stl-control-height",
+            "modes": {
+              "Compact": {
+                "$value": "{size.size.24}",
+                "resolved": {
+                  "value": 24,
+                  "unit": "px"
+                }
+              },
+              "Default": {
+                "$value": "{size.size.32}",
+                "resolved": {
+                  "value": 32,
+                  "unit": "px"
+                }
+              },
+              "Comfortable": {
+                "$value": "{size.size.40}",
+                "resolved": {
+                  "value": 40,
+                  "unit": "px"
+                }
+              }
+            }
+          }
+        }
+      },
+      "padding-x": {
+        "$type": "dimension",
+        "$value": "{spacing.space.12}",
+        "$description": "Left and right padding inside buttons and input fields. Follows the Density mode.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "control/padding-x",
+            "collection": "Density",
+            "cssVar": "--stl-control-padding-x",
+            "modes": {
+              "Compact": {
+                "$value": "{spacing.space.8}",
+                "resolved": {
+                  "value": 8,
+                  "unit": "px"
+                }
+              },
+              "Default": {
+                "$value": "{spacing.space.12}",
+                "resolved": {
+                  "value": 12,
+                  "unit": "px"
+                }
+              },
+              "Comfortable": {
+                "$value": "{spacing.space.16}",
+                "resolved": {
+                  "value": 16,
+                  "unit": "px"
+                }
+              }
+            }
+          }
+        }
+      },
+      "height-sm": {
+        "$type": "dimension",
+        "$value": "{size.size.24}",
+        "$description": "Height of small controls, such as small buttons and filter chips. Follows the Density mode.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "control/height-sm",
+            "collection": "Density",
+            "cssVar": "--stl-control-height-sm",
+            "modes": {
+              "Compact": {
+                "$value": "{size.size.20}",
+                "resolved": {
+                  "value": 20,
+                  "unit": "px"
+                }
+              },
+              "Default": {
+                "$value": "{size.size.24}",
+                "resolved": {
+                  "value": 24,
+                  "unit": "px"
+                }
+              },
+              "Comfortable": {
+                "$value": "{size.size.32}",
+                "resolved": {
+                  "value": 32,
+                  "unit": "px"
+                }
+              }
+            }
+          }
+        }
+      },
+      "padding-x-sm": {
+        "$type": "dimension",
+        "$value": "{spacing.space.8}",
+        "$description": "Left and right padding inside small controls. Follows the Density mode.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "control/padding-x-sm",
+            "collection": "Density",
+            "cssVar": "--stl-control-padding-x-sm",
+            "modes": {
+              "Compact": {
+                "$value": "{spacing.space.6}",
+                "resolved": {
+                  "value": 6,
+                  "unit": "px"
+                }
+              },
+              "Default": {
+                "$value": "{spacing.space.8}",
+                "resolved": {
+                  "value": 8,
+                  "unit": "px"
+                }
+              },
+              "Comfortable": {
+                "$value": "{spacing.space.12}",
+                "resolved": {
+                  "value": 12,
+                  "unit": "px"
+                }
+              }
+            }
+          }
+        }
+      },
+      "gap": {
+        "$type": "dimension",
+        "$value": "{spacing.space.6}",
+        "$description": "Gap between the parts of a control, such as an icon and its label. Follows the Density mode.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "control/gap",
+            "collection": "Density",
+            "cssVar": "--stl-control-gap",
+            "modes": {
+              "Compact": {
+                "$value": "{spacing.space.4}",
+                "resolved": {
+                  "value": 4,
+                  "unit": "px"
+                }
+              },
+              "Default": {
+                "$value": "{spacing.space.6}",
+                "resolved": {
+                  "value": 6,
+                  "unit": "px"
+                }
+              },
+              "Comfortable": {
+                "$value": "{spacing.space.8}",
+                "resolved": {
+                  "value": 8,
+                  "unit": "px"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "icon": {
+      "size": {
+        "$type": "dimension",
+        "$value": "{size.size.16}",
+        "$description": "Width and height of icons inside controls. Follows the Density mode.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "icon/size",
+            "collection": "Density",
+            "cssVar": "--stl-icon-size",
+            "modes": {
+              "Compact": {
+                "$value": "{size.size.12}",
+                "resolved": {
+                  "value": 12,
+                  "unit": "px"
+                }
+              },
+              "Default": {
+                "$value": "{size.size.16}",
+                "resolved": {
+                  "value": 16,
+                  "unit": "px"
+                }
+              },
+              "Comfortable": {
+                "$value": "{size.size.16}",
+                "resolved": {
+                  "value": 16,
+                  "unit": "px"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "card": {
+      "padding": {
+        "$type": "dimension",
+        "$value": "{spacing.space.16}",
+        "$description": "Padding inside a card, such as a summary metric. Follows the Density mode.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "card/padding",
+            "collection": "Density",
+            "cssVar": "--stl-card-padding",
+            "modes": {
+              "Compact": {
+                "$value": "{spacing.space.12}",
+                "resolved": {
+                  "value": 12,
+                  "unit": "px"
+                }
+              },
+              "Default": {
+                "$value": "{spacing.space.16}",
+                "resolved": {
+                  "value": 16,
+                  "unit": "px"
+                }
+              },
+              "Comfortable": {
+                "$value": "{spacing.space.24}",
+                "resolved": {
+                  "value": 24,
+                  "unit": "px"
+                }
+              }
+            }
+          }
+        }
+      },
+      "gap": {
+        "$type": "dimension",
+        "$value": "{spacing.space.8}",
+        "$description": "Gap between the parts of a card, such as a metric's label, value, and caption. Follows the Density mode.",
+        "$extensions": {
+          "io.github.mcasey10.sterling": {
+            "figmaName": "card/gap",
+            "collection": "Density",
+            "cssVar": "--stl-card-gap",
+            "modes": {
+              "Compact": {
+                "$value": "{spacing.space.6}",
+                "resolved": {
+                  "value": 6,
+                  "unit": "px"
+                }
+              },
+              "Default": {
+                "$value": "{spacing.space.8}",
+                "resolved": {
+                  "value": 8,
+                  "unit": "px"
+                }
+              },
+              "Comfortable": {
+                "$value": "{spacing.space.12}",
+                "resolved": {
+                  "value": 12,
+                  "unit": "px"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "typography": {
+    "$description": "Text styles. Each is a class in tokens.css, named in $extensions.",
+    "Display": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 24,
+          "unit": "px"
+        },
+        "fontWeight": 600,
+        "letterSpacing": {
+          "value": -0.5,
+          "unit": "px"
+        },
+        "lineHeight": 1.3333
+      },
+      "$extensions": {
+        "io.github.mcasey10.sterling": {
+          "figmaName": "Display",
+          "cssClass": ".stl-text-display",
+          "lineHeightPx": 32
+        }
+      }
+    },
+    "Title": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 20,
+          "unit": "px"
+        },
+        "fontWeight": 600,
+        "letterSpacing": {
+          "value": -0.25,
+          "unit": "px"
+        },
+        "lineHeight": 1.4
+      },
+      "$extensions": {
+        "io.github.mcasey10.sterling": {
+          "figmaName": "Title",
+          "cssClass": ".stl-text-title",
+          "lineHeightPx": 28
+        }
+      }
+    },
+    "Heading": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 16,
+          "unit": "px"
+        },
+        "fontWeight": 600,
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.375
+      },
+      "$extensions": {
+        "io.github.mcasey10.sterling": {
+          "figmaName": "Heading",
+          "cssClass": ".stl-text-heading",
+          "lineHeightPx": 22
+        }
+      }
+    },
+    "Body": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 13,
+          "unit": "px"
+        },
+        "fontWeight": 400,
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.3846
+      },
+      "$extensions": {
+        "io.github.mcasey10.sterling": {
+          "figmaName": "Body",
+          "cssClass": ".stl-text-body",
+          "lineHeightPx": 18
+        }
+      }
+    },
+    "Body-strong": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 13,
+          "unit": "px"
+        },
+        "fontWeight": 600,
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.3846
+      },
+      "$extensions": {
+        "io.github.mcasey10.sterling": {
+          "figmaName": "Body-strong",
+          "cssClass": ".stl-text-body-strong",
+          "lineHeightPx": 18
+        }
+      }
+    },
+    "Body-link": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 13,
+          "unit": "px"
+        },
+        "fontWeight": 400,
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.3846
+      },
+      "$description": "For link text: underlined, so a link is never marked by color alone.",
+      "$extensions": {
+        "io.github.mcasey10.sterling": {
+          "figmaName": "Body-link",
+          "cssClass": ".stl-text-body-link",
+          "lineHeightPx": 18,
+          "textDecoration": "underline"
+        }
+      }
+    },
+    "Label": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 12,
+          "unit": "px"
+        },
+        "fontWeight": 500,
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.3333
+      },
+      "$extensions": {
+        "io.github.mcasey10.sterling": {
+          "figmaName": "Label",
+          "cssClass": ".stl-text-label",
+          "lineHeightPx": 16
+        }
+      }
+    },
+    "Label-link": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 12,
+          "unit": "px"
+        },
+        "fontWeight": 500,
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.3333
+      },
+      "$description": "For link text: underlined, so a link is never marked by color alone.",
+      "$extensions": {
+        "io.github.mcasey10.sterling": {
+          "figmaName": "Label-link",
+          "cssClass": ".stl-text-label-link",
+          "lineHeightPx": 16,
+          "textDecoration": "underline"
+        }
+      }
+    },
+    "Caption": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 11,
+          "unit": "px"
+        },
+        "fontWeight": 400,
+        "letterSpacing": {
+          "value": 0.1,
+          "unit": "px"
+        },
+        "lineHeight": 1.2727
+      },
+      "$extensions": {
+        "io.github.mcasey10.sterling": {
+          "figmaName": "Caption",
+          "cssClass": ".stl-text-caption",
+          "lineHeightPx": 14
+        }
+      }
+    },
+    "Numeric": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontSize": {
+          "value": 13,
+          "unit": "px"
+        },
+        "fontWeight": 400,
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.3846
+      },
+      "$description": "Intended for tabular figures: enable Type settings → Details → Numbers → Style → Monospace uppercase/lining (the plugin API cannot set this).",
+      "$extensions": {
+        "io.github.mcasey10.sterling": {
+          "figmaName": "Numeric",
+          "cssClass": ".stl-text-numeric",
+          "lineHeightPx": 18,
+          "tabularFigures": true
+        }
+      }
+    },
+    "Code": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Roboto Mono",
+        "fontSize": {
+          "value": 12,
+          "unit": "px"
+        },
+        "fontWeight": 400,
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.3333
+      },
+      "$extensions": {
+        "io.github.mcasey10.sterling": {
+          "figmaName": "Code",
+          "cssClass": ".stl-text-code",
+          "lineHeightPx": 16
+        }
+      }
+    }
+  }
+}

@@ -59,6 +59,7 @@ sterling-design-system/
 │   │                       and component properties with their defaults
 │   ├── docRegistry.ts      ONE TABLE: every published component's description,
 │   │                       usage note, and documentation link
+│   ├── guidelines.ts       The text of the Guidelines sections and the Patterns
 │   └── icons.ts            The 20 icon glyphs (SVG path data)
 │
 ├── plugin/                 The Figma plugin that generates the file
@@ -208,6 +209,8 @@ From the repo root:
 | `npm run tokens:site` | Writes the token reference site to `site/` (with the same CSS as `site/tokens.css`) |
 | `npm run site` | Builds the whole site into `site/`: the token reference, with Storybook under `storybook/`. `npm run site:serve` shows it locally |
 | `npm run check:docs` | Every published component has the Storybook Docs page its documentation link can open. Needs a Storybook build |
+| `npm run export:ai` | Writes the machine-readable export to `ai/`: components, tokens (DTCG format), guidelines, and an index, all from the sources |
+| `npm run check:ai` | The committed `ai/` files match the sources, and every published component has a complete entry |
 | `npm run check:parity` | Every published component except the icons has a coded counterpart in `ui/` (24 of 24), and each one follows its definition. Needs `npm install` in `ui/` first. |
 | `npm run check:css` | No raw values in the coded layer's CSS: every color, length, and font value is a token, and every `var(--stl-…)` names a real one. |
 | `npm run check:a11y` | Builds Storybook, then runs axe on every story in Light and Dark with headless Chrome (158 runs today). Fails on any violation or any story that doesn't render. |
@@ -447,6 +450,7 @@ sources as the Figma library, not from the Figma file.
 | `tokens/tokens.json` | create variables and text styles | generate `tokens.css` (custom properties and text classes with the `stl-` prefix) |
 | `definitions/components.ts` | create each component's variants and properties | type each component's props, and build its controls and "All variants" story |
 | `definitions/docRegistry.ts` | write descriptions, usage notes, and documentation links | write each Docs page |
+| `definitions/guidelines.ts` | write the Guidelines sections and the Patterns' text (it builds the examples itself) | (not used: Docs pages take their guidance from `docRegistry.ts`) |
 | `definitions/icons.ts` | draw the `Icon/*` components | render icons inline |
 | `definitions/grid.ts` | draw the generic data grid | render the Data grid, with the same placeholder data and column width rule |
 
@@ -469,6 +473,7 @@ does the same.
 | `npm run check:css` | a color, length, or font value in the CSS isn't a token, or a `var(--stl-…)` names no token |
 | `npm run check:a11y` | any story has an axe violation, in Light or Dark, or doesn't render |
 | `npm run check:docs` | a published component has no Storybook Docs page for its documentation link |
+| `npm run check:ai` | the export in `ai/` differs from what the sources give, or a published component has no complete entry in it |
 
 **Dependencies.** React, and for the Select only, React Aria (`react-aria`, `react-stately`), which
 supplies its keyboard behavior and screen-reader semantics. Inter 3.19 is bundled (`inter-ui`).

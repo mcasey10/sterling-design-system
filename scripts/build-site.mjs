@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 // Builds the published site into site/: the token reference at the root and Storybook under storybook/, each
-// with a link to the other. This is what the Pages workflow publishes.
+// with a link to the other, and the machine-readable export under ai/ (a copy of the committed ai/ folder,
+// which `npm run check:ai` keeps in step with the sources). This is what the Pages workflow publishes.
 //
 // Usage: npm run site   (needs `npm install` in ui/ first)
 
 import { spawnSync } from "node:child_process";
+import { cpSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -21,4 +23,6 @@ run("npm", ["run", "build-storybook", "--", "--output-dir", "../site/storybook"]
   cwd: resolve(root, "ui"),
   env: { ...process.env, STORYBOOK_TOKEN_SITE_URL: "../" },
 });
-console.log("Wrote site/ (token reference) and site/storybook/ (Storybook).");
+// The export for AI tools, as committed.
+cpSync(resolve(root, "ai"), resolve(root, "site/ai"), { recursive: true });
+console.log("Wrote site/ (token reference), site/storybook/ (Storybook), and site/ai/ (the export).");

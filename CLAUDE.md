@@ -51,6 +51,9 @@ definitions/              Plain data about components, with no Figma code (share
                           use / don't use, related guidance. Every published component needs an entry
                           (shown under Guidelines › Component usage); its documentation link follows DOCS_TARGET
   icons.ts                Icon glyphs (original outline SVG path data)
+  guidelines.ts           THE table of Guidelines and Patterns text: each section's summary, rules, and do /
+                          don't notes; each pattern's summary, use / don't use, and numbered steps. The plugin
+                          draws it and builds the examples (found by position: keep the order in step)
 plugin/
   manifest.json           Figma plugin manifest ("Sterling"; no network access, dynamic-page access)
   src/main.ts             Entry point — runs "Build library" or "Build example", reports results
@@ -119,6 +122,11 @@ ui/                       Sterling in code (React + Storybook, Vite). Own packag
                           pressed are CSS, disabled is a boolean prop) and coded.ts (coded components)
   scripts/check-parity.ts `npm run check:parity`: every defined component is coded (24 of 24) and follows
                           definitions/components.ts; a new Figma component fails it until it is coded
+  scripts/lib/ai-export.ts  Builds the export in ai/ from the sources; scripts/export-ai.ts writes it
+                          (`npm run export:ai`), scripts/check-ai.ts checks it (`npm run check:ai`)
+ai/                       The machine-readable export for AI tools (committed, generated: never hand-edit):
+                          index.json, components.json, tokens.dtcg.json (DTCG 2025.10), guidelines.json.
+                          Regenerate with `npm run export:ai` after changing tokens, definitions/, or coded.ts
 scripts/contrast-check.mjs  Reports WCAG contrast for every pair in tokens.json
                           `contrast.rules`; fails if body text < 4.5:1 or large
                           text/UI < 3:1. Run: `npm run contrast` (repo root)
@@ -128,8 +136,8 @@ scripts/build-token-css.mjs   Token CSS for code: `npm run tokens:css` writes di
 scripts/build-token-site.mjs  Token reference site: `npm run tokens:site` writes site/index.html,
                           site/tokens.css (gitignored; the same CSS), and site/fonts/ (Inter 3.19 copied
                           from ui/node_modules/inter-ui, when installed)
-scripts/build-site.mjs    `npm run site`: site/ = token reference + Storybook under storybook/ (what Pages
-                          publishes); scripts/serve-site.mjs (`npm run site:serve`) shows it locally
+scripts/build-site.mjs    `npm run site`: site/ = token reference + Storybook under storybook/ + a copy of ai/
+                          (what Pages publishes); scripts/serve-site.mjs (`npm run site:serve`) shows it locally
 scripts/lib/tokens.mjs    Shared token loading, alias resolution, and contrast evaluation
 scripts/lib/token-names.mjs  Token name → CSS name (no imports; shared with ui/)
 scripts/lib/token-css.mjs The one generator of the token CSS. CSS names carry the `stl-` code prefix
@@ -218,7 +226,7 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
 
 ## Verification
 - Type-check before finishing: `cd plugin && npm run typecheck` (runs `tsc --noEmit`). After changes in
-  `ui/` or `definitions/`: `cd ui && npm run typecheck && npm run check:parity && npm run check:css`, then
+  `ui/` or `definitions/`: `cd ui && npm run typecheck && npm run check:parity && npm run check:css && npm run check:ai`, then
   `npm run build-storybook && npm run check:a11y` (axe on every story in Light and Dark; needs Chrome).
 - Run `npm run contrast` after any color token change; it must exit 0 (248 pairs today). When
   adding a new text/background combination to a component, add it to `contrast.rules` too.

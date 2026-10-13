@@ -26,6 +26,8 @@ export const DISABLED = "disabled";
 export const REST = "default";
 
 export interface CodedComponent {
+  /** The React component's name, as its source file exports it. */
+  component: string;
   /** The component's source file, relative to ui/. */
   source: string;
   /** The component's design props, by code name. */

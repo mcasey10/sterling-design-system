@@ -76,3 +76,6 @@ jobs:
       - name: Every component has the Storybook Docs page its documentation link can open
         run: npm run check:docs
         working-directory: ui
+      - name: The export in ai/ matches the sources and covers every published component
+        run: npm run check:ai
+        working-directory: ui

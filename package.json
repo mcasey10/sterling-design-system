@@ -17,6 +17,8 @@
     "check:css": "npm --prefix ui run check:css",
     "check:a11y": "npm --prefix ui run build-storybook && npm --prefix ui run check:a11y",
     "check:docs": "npm --prefix ui run check:docs",
+    "export:ai": "npm --prefix ui run export:ai",
+    "check:ai": "npm --prefix ui run check:ai",
     "storybook": "npm --prefix ui run storybook"
   }
 }

@@ -38,7 +38,8 @@ Work on a branch, in this order: **tokens → components → guidelines and patt
 | The React component, its CSS, and its stories | `ui/src/components/` |
 | How a coded component maps to its definition | `ui/src/parity/coded.ts` |
 | A component's description, usage text, or documentation link | `definitions/docRegistry.ts` |
-| A guideline or pattern | `plugin/src/library/pages/` |
+| A guideline's or pattern's text | `definitions/guidelines.ts` |
+| A guideline's or pattern's examples | `plugin/src/library/pages/` |
 | The example | `plugin/src/example/loan-pooling/` |
 
 **A component change has three parts, made together:**
@@ -117,8 +118,14 @@ npm run check:a11y
 npm run check:docs
 ```
 
+```bash
+npm run check:ai
+```
+
 `check:a11y` builds Storybook and runs every story in Chrome, in Light and Dark; `check:docs` reads
-that build. Also run `npm run typecheck` in `ui/`.
+that build. `check:ai` fails when the export in `ai/` no longer matches the sources: after changing a
+token, a definition, or guideline text, run `npm run export:ai` and commit the result with the change.
+Also run `npm run typecheck` in `ui/`.
 
 GitHub runs the same checks on every push and pull request.
 

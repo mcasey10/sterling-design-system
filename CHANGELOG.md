@@ -10,6 +10,13 @@ All notable changes to Sterling are recorded here. The format follows
 ### Added
 
 - **Storybook:** the Introduction page links to the Figma library ("View in Figma").
+- **A machine-readable export** in `ai/`, for AI tools: every component with its guidance, Figma properties,
+  and React props (`components.json`); every token in the Design Tokens (DTCG) format, with its modes and
+  CSS name (`tokens.dtcg.json`); the guidelines and patterns (`guidelines.json`); and an index
+  (`index.json`). `npm run export:ai` writes it from the sources, and `npm run check:ai` fails if it is out
+  of date or a published component has no complete entry.
+- `definitions/guidelines.ts`: the text of the Guidelines sections and the Patterns, as plain data read by
+  the plugin and the export. The Guidelines and Patterns pages in Figma are unchanged.
 
 ## [1.1.1] - 2026-10-11
 
