@@ -261,15 +261,3 @@ ul {
   padding-left: var(--stl-space-16);
 }
 
-/* ------------------------------------------------------------ Demo settings */
-
-.pl-demo {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: var(--stl-space-16);
-  margin: 0 var(--stl-space-16);
-}
-.pl-demo > h2 {
-  flex-basis: 100%;
-}

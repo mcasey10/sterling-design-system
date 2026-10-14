@@ -14,7 +14,6 @@ import {
   Tab,
   TabList,
   TextInput,
-  densityClass,
 } from "sterling-ui";
 import {
   LENDERS,
@@ -74,10 +73,15 @@ const DEFAULT_SORT: Sort = { key: "id", direction: "asc" };
 const LATENCY = 600;
 const SKELETON_DELAY = 300;
 
-type Theme = "system" | "light" | "dark";
-type Density = "Compact" | "Default" | "Comfortable";
+export interface AppProps {
+  /**
+   * Make loading the list fail, to show the error state. Color mode and density aren't settings of the screen:
+   * they come from the page around it (data-theme on the root element, and a density class).
+   */
+  loadFails?: boolean;
+}
 
-export function App() {
+export function App({ loadFails = false }: AppProps) {
   // ---------------------------------------------------------------- Pool data
   const [poolState, setPoolState] = useState<PoolState>(initialPool);
   const [undoStack, setUndoStack] = useState<Removal[]>([]);
@@ -304,18 +308,13 @@ export function App() {
     announce({ text: `Submitted ${pool.name}: ${plural(summary.loanCount, "loan")}, ${formatMillions(summary.upb)}.` }, true);
   };
 
-  // ---------------------------------------------------------------- Demo settings
-  const [theme, setTheme] = useState<Theme>("system");
-  const [density, setDensity] = useState<Density>("Default");
+  // ---------------------------------------------------------------- A failing load, on request
+  // When loadFails turns on, the list loads again and that load fails; Retry then loads normally.
   useEffect(() => {
-    if (theme === "system") delete document.documentElement.dataset.theme;
-    else document.documentElement.dataset.theme = theme;
-  }, [theme]);
-
-  const simulateFailure = () => {
+    if (!loadFails) return;
     failNext.current = true;
     setRequest((r) => ({ ...r, attempt: r.attempt + 1 }));
-  };
+  }, [loadFails]);
 
   // ---------------------------------------------------------------- What the grid shows
   const loading = phase === "loading" && (skeleton || !shown);
@@ -374,7 +373,7 @@ export function App() {
   const readOnly = submitted;
 
   return (
-    <div className={`pl-app ${density === "Default" ? "" : densityClass(density)}`}>
+    <div className="pl-app">
       <header className="pl-header">
         <div className="pl-header__title">
           <nav aria-label="Breadcrumb" className="pl-breadcrumb stl-text-body">
@@ -609,31 +608,6 @@ export function App() {
           onFilterLender={(lender) => filterBy({ lender })}
         />
       </div>
-
-      <footer className="pl-card pl-demo" aria-labelledby="pl-demo-title">
-        <h2 id="pl-demo-title" className="stl-text-label pl-muted">
-          Demo settings (not part of the screen)
-        </h2>
-        <Select
-          label="Color mode"
-          showHelper={false}
-          options={[
-            { value: "system", label: "Follow the system" },
-            { value: "light", label: "Light" },
-            { value: "dark", label: "Dark" },
-          ]}
-          value={theme}
-          onValueChange={(value) => setTheme(value as Theme)}
-        />
-        <Select
-          label="Density"
-          showHelper={false}
-          options={["Compact", "Default", "Comfortable"].map((d) => ({ value: d, label: d }))}
-          value={density}
-          onValueChange={(value) => setDensity(value as Density)}
-        />
-        <Button kind="secondary" size="md" label="Reload and fail" showIcon icon="refresh" onClick={simulateFailure} />
-      </footer>
 
       <Dialog
         open={dialog === "signOff"}
