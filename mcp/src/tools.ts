@@ -3,7 +3,7 @@
 // data, so the tests call it directly; server.ts only wires it to the protocol.
 
 import { z } from "zod";
-import { COMPONENTS, EXTENSION, ICONS, PATTERNS, SECTIONS, TOKENS, type ComponentEntry, type TokenNode } from "./data";
+import { COMPONENTS, EXTENSION, ICONS, INDEX, PATTERNS, SECTIONS, TOKENS, type ComponentEntry, type TokenNode } from "./data";
 import { closest, indexBy, norm, type Candidate } from "./lookup";
 import { TOOL_NAMES, type ToolName } from "./tool-names";
 
@@ -43,7 +43,7 @@ const iconSummary = () => ({
 });
 
 export function listComponents(category?: string): Result {
-  if (!category) return ok({ count: COMPONENTS.length, categories: CATEGORIES, components: COMPONENTS.map(summaryOf), icons: iconSummary() });
+  if (!category) return ok({ count: COMPONENTS.length, categories: CATEGORIES, package: INDEX.package, components: COMPONENTS.map(summaryOf), icons: iconSummary() });
   const wanted = CATEGORIES.find((c) => norm(c) === norm(category) || norm(`${c}s`) === norm(category));
   if (!wanted) return fail(`No category named "${category}".`, [], `Categories: ${list(CATEGORIES)}.`);
   if (wanted === "Icon") return ok({ count: 0, category: wanted, components: [], icons: iconSummary() });
@@ -357,7 +357,8 @@ export const TOOLS: Tool[] = [
       "List Sterling's components with a one-line description of each. Call this first to see what exists before designing or coding " +
       "a screen: Sterling has no components beyond these. Optional `category` narrows the list to one folder: " +
       `${list(CATEGORIES.slice(0, -1))}, or ${CATEGORIES[CATEGORIES.length - 1]}. Returns each component's Figma name, React component ` +
-      "name, and description. Use get_component for the full entry.",
+      "name, and description, and, with no category, how to install the React package and import its components and styles. Use " +
+      "get_component for the full entry.",
     input: { category: z.string().optional().describe(`One of: ${list(CATEGORIES)}. Leave out for every component.`) },
     run: (args) => listComponents(args.category),
   },

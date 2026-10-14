@@ -1,0 +1,7 @@
+{
+  "about": "Copy this file to kit.local.json (which is never committed) and list the folders the demo session must not read: this repository, and anything else on this machine it could learn Sterling from. Write each as an absolute path in POSIX form with a leading double slash: on Windows, C:\\Users\\name\\project becomes //c/Users/name/project. The kit build turns each into Read and Edit deny rules in the kit's .claude/settings.json.",
+  "denyPaths": [
+    "//c/path/to/this/repository",
+    "//c/path/to/another/folder"
+  ]
+}

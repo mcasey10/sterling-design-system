@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "sterling": {
+      "command": "node",
+      "args": ["./mcp/server.js"]
+    }
+  }
+}

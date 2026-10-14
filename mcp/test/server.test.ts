@@ -41,6 +41,8 @@ test("a client sees the eight tools, each read-only, with a description and a sc
   assert.deepEqual(tools.find((t) => t.name === "get_component")!.inputSchema.required, ["name"]);
   assert.equal(client.getInstructions(), INSTRUCTIONS);
   assert.match(INSTRUCTIONS, /Use only the components and icons listed/);
+  assert.match(INSTRUCTIONS, /sterling-ui package.*styles\.css/);
+  assert.match(INSTRUCTIONS, /data-theme="dark".*stl-density-compact/);
   assert.equal(client.getServerVersion()?.name, "sterling");
   await close();
 });

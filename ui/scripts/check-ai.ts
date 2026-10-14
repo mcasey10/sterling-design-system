@@ -1,7 +1,8 @@
 // Checks the machine-readable export in ai/. Exits 1 if:
 //   • a committed file differs from what the sources give now (run `npm run export:ai` and commit the result);
 //   • a published component has no entry, or its entry is incomplete (description, use / don't use, at least
-//     one related link, a React component its source file exports, a Storybook Docs page). The single Icon
+//     one related link, a React component its source file and the sterling-ui package export, a Storybook
+//     Docs page). The single Icon
 //     entry covers the 20 icons, and must list every one;
 //   • a related link points to a section, pattern, or component the export doesn't contain.
 //   • llms.txt, as the site build would write it from ai/index.json, doesn't link every file in ai/, links a
@@ -20,7 +21,7 @@ import { REPOSITORY_URL } from "../../definitions/docRegistry";
 import { ICONS } from "../../definitions/icons";
 import { llmsLinks, renderLlmsTxt } from "../../scripts/lib/llms.mjs";
 import { TOOL_NAMES } from "../../mcp/src/tool-names";
-import { FILES, buildExport } from "./lib/ai-export";
+import { FILES, PACKAGE, buildExport } from "./lib/ai-export";
 
 const ui = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const dir = resolve(ui, "../ai");
@@ -49,6 +50,10 @@ const docsPages = existsSync(indexPath)
   ? new Set(Object.values(JSON.parse(readFileSync(indexPath, "utf8")).entries as Record<string, { id: string; type: string }>).filter((e) => e.type === "docs").map((e) => e.id))
   : null;
 
+// The names the sterling-ui package exports (src/index.ts), so a component the export names can be imported.
+const packageExports = new Set(
+  [...readFileSync(join(ui, "src/index.ts"), "utf8").matchAll(/export \{([^}]*)\}/g)].flatMap(([, names]) => names.split(",").map((n) => n.trim().replace(/^type /, "")))
+);
 const byName = new Map<string, any>(data.components.map((c: { name: string }) => [c.name, c]));
 const entryProblems = (label: string, entry: any, docsName: string) => {
   for (const field of ["description", "details", "useWhen", "dontUseWhen", "storybook"]) {
@@ -64,6 +69,8 @@ const entryProblems = (label: string, entry: any, docsName: string) => {
   else if (!new RegExp(`export (function|const) ${entry.react.component}\\b`).test(readFileSync(source, "utf8"))) {
     problems.push(`${label}: ${entry.react.source} doesn't export ${entry.react.component}`);
   }
+  if (entry.react?.component && !packageExports.has(entry.react.component)) problems.push(`${label}: ${entry.react.component} isn't exported from ui/src/index.ts, so the package doesn't have it`);
+  if (entry.react?.component && entry.react.import !== `import { ${entry.react.component} } from "${PACKAGE}";`) problems.push(`${label}: wrong import line`);
   if (docsPages && !docsPages.has(storybookDocsId(docsName))) problems.push(`${label}: no Storybook Docs page "${storybookDocsId(docsName)}"`);
 };
 for (const name of Object.keys(COMPONENTS)) {

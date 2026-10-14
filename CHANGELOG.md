@@ -22,6 +22,11 @@ All notable changes to Sterling are recorded here. The format follows
   and how to use it. Eight tools: `list_components`, `get_component`, `get_tokens`, `get_token`,
   `list_guidelines`, `get_guideline`, `get_pattern`, and `search`. It runs locally over stdio, makes no
   network requests, and carries its own copy of the export. See `mcp/README.md`.
+- **The `sterling-ui` package:** the React components with type declarations for every component and prop,
+  the token CSS, and Inter, built by `npm run package` into a tarball an application installs. It isn't
+  published to a package registry. The export and the MCP server say how to install it and import from it.
+- **A demo kit** (`npm run demo:kit`): the package, the MCP server, the loan example's data, and an empty app,
+  for testing whether an AI tool can build a screen from what Sterling publishes. See `demo/README.md`.
 - `definitions/guidelines.ts`: the text of the Guidelines sections and the Patterns, as plain data read by
   the plugin and the export. The Guidelines and Patterns pages in Figma are unchanged.
 

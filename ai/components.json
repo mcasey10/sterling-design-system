@@ -80,6 +80,8 @@
       },
       "react": {
         "component": "Button",
+        "package": "sterling-ui",
+        "import": "import { Button } from \"sterling-ui\";",
         "source": "ui/src/components/Button.tsx",
         "props": [
           {
@@ -232,6 +234,8 @@
       },
       "react": {
         "component": "IconButton",
+        "package": "sterling-ui",
+        "import": "import { IconButton } from \"sterling-ui\";",
         "source": "ui/src/components/IconButton.tsx",
         "props": [
           {
@@ -362,6 +366,8 @@
       },
       "react": {
         "component": "Link",
+        "package": "sterling-ui",
+        "import": "import { Link } from \"sterling-ui\";",
         "source": "ui/src/components/Link.tsx",
         "props": [
           {
@@ -469,6 +475,8 @@
       },
       "react": {
         "component": "Checkbox",
+        "package": "sterling-ui",
+        "import": "import { Checkbox } from \"sterling-ui\";",
         "source": "ui/src/components/Checkbox.tsx",
         "props": [
           {
@@ -590,6 +598,8 @@
       },
       "react": {
         "component": "StatusChip",
+        "package": "sterling-ui",
+        "import": "import { StatusChip } from \"sterling-ui\";",
         "source": "ui/src/components/StatusChip.tsx",
         "props": [
           {
@@ -660,6 +670,8 @@
       },
       "react": {
         "component": "SideChip",
+        "package": "sterling-ui",
+        "import": "import { SideChip } from \"sterling-ui\";",
         "source": "ui/src/components/Chips.tsx",
         "props": [
           {
@@ -740,6 +752,8 @@
       },
       "react": {
         "component": "FilterChip",
+        "package": "sterling-ui",
+        "import": "import { FilterChip } from \"sterling-ui\";",
         "source": "ui/src/components/Chips.tsx",
         "props": [
           {
@@ -862,6 +876,8 @@
       },
       "react": {
         "component": "HeaderCell",
+        "package": "sterling-ui",
+        "import": "import { HeaderCell } from \"sterling-ui\";",
         "source": "ui/src/components/HeaderCell.tsx",
         "props": [
           {
@@ -1006,6 +1022,8 @@
       },
       "react": {
         "component": "BodyCell",
+        "package": "sterling-ui",
+        "import": "import { BodyCell } from \"sterling-ui\";",
         "source": "ui/src/components/BodyCell.tsx",
         "props": [
           {
@@ -1154,6 +1172,8 @@
       },
       "react": {
         "component": "Row",
+        "package": "sterling-ui",
+        "import": "import { Row } from \"sterling-ui\";",
         "source": "ui/src/components/DataGrid.tsx",
         "props": [
           {
@@ -1238,6 +1258,8 @@
       },
       "react": {
         "component": "DataGrid",
+        "package": "sterling-ui",
+        "import": "import { DataGrid } from \"sterling-ui\";",
         "source": "ui/src/components/DataGrid.tsx",
         "props": [
           {
@@ -1371,6 +1393,8 @@
       },
       "react": {
         "component": "Pagination",
+        "package": "sterling-ui",
+        "import": "import { Pagination } from \"sterling-ui\";",
         "source": "ui/src/components/GridStates.tsx",
         "props": [
           {
@@ -1456,6 +1480,8 @@
       },
       "react": {
         "component": "SkeletonRow",
+        "package": "sterling-ui",
+        "import": "import { SkeletonRow } from \"sterling-ui\";",
         "source": "ui/src/components/GridStates.tsx",
         "props": [
           {
@@ -1526,6 +1552,8 @@
       },
       "react": {
         "component": "EmptyState",
+        "package": "sterling-ui",
+        "import": "import { EmptyState } from \"sterling-ui\";",
         "source": "ui/src/components/GridStates.tsx",
         "props": [
           {
@@ -1640,6 +1668,8 @@
       },
       "react": {
         "component": "BulkActionBar",
+        "package": "sterling-ui",
+        "import": "import { BulkActionBar } from \"sterling-ui\";",
         "source": "ui/src/components/BulkActionBar.tsx",
         "props": [
           {
@@ -1763,6 +1793,8 @@
       },
       "react": {
         "component": "SummaryMetric",
+        "package": "sterling-ui",
+        "import": "import { SummaryMetric } from \"sterling-ui\";",
         "source": "ui/src/components/SummaryMetric.tsx",
         "props": [
           {
@@ -1919,6 +1951,8 @@
       },
       "react": {
         "component": "TextInput",
+        "package": "sterling-ui",
+        "import": "import { TextInput } from \"sterling-ui\";",
         "source": "ui/src/components/TextInput.tsx",
         "props": [
           {
@@ -2125,6 +2159,8 @@
       },
       "react": {
         "component": "Select",
+        "package": "sterling-ui",
+        "import": "import { Select } from \"sterling-ui\";",
         "source": "ui/src/components/Select.tsx",
         "props": [
           {
@@ -2327,6 +2363,8 @@
       },
       "react": {
         "component": "Option",
+        "package": "sterling-ui",
+        "import": "import { Option } from \"sterling-ui\";",
         "source": "ui/src/components/Menu.tsx",
         "props": [
           {
@@ -2412,6 +2450,8 @@
       },
       "react": {
         "component": "Menu",
+        "package": "sterling-ui",
+        "import": "import { Menu } from \"sterling-ui\";",
         "source": "ui/src/components/Menu.tsx",
         "props": [],
         "states": [],
@@ -2464,6 +2504,8 @@
       },
       "react": {
         "component": "OptionWithDescription",
+        "package": "sterling-ui",
+        "import": "import { OptionWithDescription } from \"sterling-ui\";",
         "source": "ui/src/components/Menu.tsx",
         "props": [
           {
@@ -2555,6 +2597,8 @@
       },
       "react": {
         "component": "MenuHeading",
+        "package": "sterling-ui",
+        "import": "import { MenuHeading } from \"sterling-ui\";",
         "source": "ui/src/components/Menu.tsx",
         "props": [
           {
@@ -2633,6 +2677,8 @@
       },
       "react": {
         "component": "Tab",
+        "package": "sterling-ui",
+        "import": "import { Tab } from \"sterling-ui\";",
         "source": "ui/src/components/Tab.tsx",
         "props": [
           {
@@ -2764,6 +2810,8 @@
       },
       "react": {
         "component": "Dialog",
+        "package": "sterling-ui",
+        "import": "import { Dialog } from \"sterling-ui\";",
         "source": "ui/src/components/Dialog.tsx",
         "props": [
           {
@@ -2884,6 +2932,8 @@
     },
     "react": {
       "component": "Icon",
+      "package": "sterling-ui",
+      "import": "import { Icon } from \"sterling-ui\";",
       "source": "ui/src/components/Icon.tsx",
       "props": [
         {

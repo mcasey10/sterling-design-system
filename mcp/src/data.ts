@@ -55,7 +55,21 @@ export interface Pattern {
 export type TokenNode = { [key: string]: any };
 
 export const META = metaJson as { version: string; exportVersion: string; released: string; hash: string };
-export const INDEX = indexJson as { name: string; summary: string; version: string; released: string; howToUse: string[]; llmsTxt: { guidance: string[] } };
+/** How an application gets and uses the React components: the package, its styles, color mode, and density. */
+export interface PackageInfo {
+  name: string;
+  install: string;
+  note: string;
+  styles: string[];
+  stylesNote: string;
+  components: string;
+  types: string;
+  colorMode: string;
+  density: string;
+}
+export const INDEX = indexJson as {
+  name: string; summary: string; version: string; released: string; howToUse: string[]; package: PackageInfo; llmsTxt: { guidance: string[] };
+};
 export const COMPONENTS = (componentsJson as { components: ComponentEntry[] }).components;
 export const ICONS = (componentsJson as unknown as { icons: IconEntry }).icons;
 export const SECTIONS = (guidelinesJson as { sections: Section[] }).sections;

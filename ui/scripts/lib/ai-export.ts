@@ -35,6 +35,8 @@ const rawUrl = (file: string) => `${REPOSITORY_URL.replace("https://github.com/"
 const FICTIONAL = "All sample data in Sterling is fictional. Keep it that way in anything generated from these files.";
 /** The key for Sterling's own data in a token's $extensions (reverse-domain, as the format recommends). */
 export const EXTENSION = "io.github.mcasey10.sterling";
+/** The package the React components ship in (ui/scripts/build-package.mjs). It isn't on a package registry. */
+export const PACKAGE = "sterling-ui";
 export const FILES = ["index.json", "components.json", "tokens.dtcg.json", "guidelines.json"] as const;
 
 /** "Filters, grid, and bulk actions" → "filters-grid-and-bulk-actions": the id of a section, pattern, or component. */
@@ -158,6 +160,8 @@ function buildComponents() {
       },
       react: {
         component: coded.component,
+        package: PACKAGE,
+        import: `import { ${coded.component} } from "${PACKAGE}";`,
         source: `ui/${coded.source}`,
         props: reactProps(name, coded),
         states: (def.variants.State ?? []).map((value) => stateInCode(value, coded)),
@@ -187,6 +191,8 @@ function buildComponents() {
       figma: { name: "Icon/<name>", file: FIGMA_FILE_URL, variants: 1, variantProperties: [], componentProperties: [] },
       react: {
         component: "Icon",
+        package: PACKAGE,
+        import: `import { Icon } from "${PACKAGE}";`,
         source: "ui/src/components/Icon.tsx",
         props: [{ name: "name", figmaProperty: null, kind: "icon-name", values: iconNames, note: "Which icon: the part of the Figma name after Icon/." }],
         states: [],
@@ -401,11 +407,23 @@ function buildIndex(version: string, counts: { components: number; icons: number
       figmaCommunity: FIGMA_COMMUNITY_URL,
     },
     files,
+    // How an application gets and uses the React components.
+    package: {
+      name: PACKAGE,
+      install: `npm install ./${PACKAGE}-${version}.tgz`,
+      note: "Not on a package registry: install it from the tarball. It needs React 19 or newer.",
+      styles: [`import "${PACKAGE}/styles.css";`, `import "${PACKAGE}/fonts.css";`],
+      stylesNote: "Import styles.css once: it holds the tokens (--stl-… custom properties), the text style classes (.stl-text-…), and every component's CSS. fonts.css loads Inter.",
+      components: `import { Button, DataGrid, type Column, type GridRow } from "${PACKAGE}";`,
+      types: "Every component has a props type named after it (ButtonProps). The declarations are in the package's dist/types folder.",
+      colorMode: 'Follows the operating system. To set it, put data-theme="light" or data-theme="dark" on the root element.',
+      density: "Default unless a parent has the class stl-density-compact or stl-density-comfortable.",
+    },
     howToUse: [
       "Choose components from components.json: match the task to `description`, `useWhen`, and `dontUseWhen`. Use only components and icons that are listed; Sterling has no others.",
       "Follow a component's `related` entries into guidelines.json (by `id`) for the rules and patterns that apply to it.",
       "Build screens from the patterns in guidelines.json. Each pattern says when to use it and explains its parts step by step.",
-      "In code, use the React component and props under `react`. Prop values are the strings listed; there is no `state` prop (see `states`).",
+      "In code, import the React component from the package (`react.import`) and use the props under `react`. Prop values are the strings listed; there is no `state` prop (see `states`).",
       "Style only with tokens from tokens.dtcg.json, through the CSS custom property or class named in each token's $extensions. Never write a raw color, size, or font value.",
       "Use the semantic color tokens (color.*), never the primitives, and never rely on color alone for meaning: pair it with an icon, a sign, or a label.",
       FICTIONAL,
@@ -432,10 +450,12 @@ function buildIndex(version: string, counts: { components: number; icons: number
           title: "MCP server",
           text: [
             "Sterling includes a small read-only MCP server that answers questions about its components, tokens, guidelines, and " +
-              "patterns from this same export. It runs on your machine over stdio and makes no network requests. It isn't published " +
-              "to a package registry: clone the repository, then run `npm install` and `npm run build` in `mcp/`.",
-            "Connect it to Claude Code with `claude mcp add sterling -- node <repository>/mcp/dist/server.js`. In any other MCP " +
-              "client, add a stdio server whose command is `node` with that file as its argument.",
+              "patterns from this same export. It runs on your machine over stdio and makes no network requests. It is one " +
+              "self-contained file, `server.js`, with the export inside it: copy it anywhere and run it with Node.js 20 or newer. " +
+              "Nothing else needs installing. It isn't published to a package registry: to build the file, clone the repository, " +
+              "then run `npm install` and `npm run build` in `mcp/`, which writes `mcp/dist/server.js`.",
+            "Connect it to Claude Code with `claude mcp add sterling -- node /path/to/server.js`. In any other MCP client, add a " +
+              "stdio server whose command is `node` with that file as its argument.",
             `Tools: ${TOOL_NAMES.join(", ")}.`,
           ],
           links: [

@@ -122,11 +122,23 @@ ui/                       Sterling in code (React + Storybook, Vite). Own packag
                           pressed are CSS, disabled is a boolean prop) and coded.ts (coded components)
   scripts/check-parity.ts `npm run check:parity`: every defined component is coded (24 of 24) and follows
                           definitions/components.ts; a new Figma component fails it until it is coded
+  src/index.ts            Everything the sterling-ui package exports: every component, its props type, the
+                          grid's data types, numericColumnWidth, textClass, densityClass. A new component is
+                          added here too (check:ai fails otherwise)
+  scripts/build-package.mjs  `npm run package`: ui/package/ (gitignored) and sterling-ui-<version>.tgz, with
+                          dist/index.js, dist/types/, dist/styles.css (tokens + components), dist/fonts.css.
+                          Private: installed from the tarball, never published to a registry
+  scripts/export-demo-data.ts  Writes demo/data/pool-2026-07.json from the plugin's loan example (data and
+                          rules only); `npm run check:demo-data` fails if it is out of date
   scripts/lib/ai-export.ts  Builds the export in ai/ from the sources; scripts/export-ai.ts writes it
                           (`npm run export:ai`), scripts/check-ai.ts checks it (`npm run check:ai`)
 ai/                       The machine-readable export for AI tools (committed, generated: never hand-edit):
                           index.json, components.json, tokens.dtcg.json (DTCG 2025.10), guidelines.json.
                           Regenerate with `npm run export:ai` after changing tokens, definitions/, or coded.ts
+demo/                     The demo kit: a test of building a screen from what Sterling publishes (demo/README.md).
+                          template/ (empty app, the session's CLAUDE.md and settings), data/, prompt.md.
+                          `npm run demo:kit` builds demo/kit/ (gitignored). NEVER commit a local path: the
+                          folders the session must not read come from demo/kit.local.json (gitignored)
 mcp/                      A read-only MCP server over the export, for AI tools. Own package.json (exact dependency
                           versions: @modelcontextprotocol/sdk, zod); stdio only, NO network access, nothing on npm
   scripts/build.mjs       Copies ai/ into data/ (gitignored) and bundles everything into dist/server.js (gitignored)

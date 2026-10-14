@@ -30,6 +30,11 @@ test("list_components lists all 24 components and the icons", () => {
   assert.equal(all.count, 24);
   assert.equal(all.components.length, COMPONENTS.length);
   assert.equal(all.icons.names.length, 20);
+  // How to install the package and import components and styles comes with the full list.
+  assert.equal(all.package.name, "sterling-ui");
+  assert.match(all.package.install, /^npm install \.\/sterling-ui-\d+\.\d+\.\d+\.tgz$/);
+  assert.deepEqual(all.package.styles, ['import "sterling-ui/styles.css";', 'import "sterling-ui/fonts.css";']);
+  assert.equal(data(listComponents("Grid")).package, undefined);
   for (const c of all.components) assert.ok(c.name && c.react && c.description && c.category);
 });
 
@@ -63,6 +68,7 @@ test("get_component returns the full entry", () => {
   const grid = data(getComponent("DataGrid"));
   assert.equal(grid.name, "Grid/Data grid");
   assert.equal(grid.react.component, "DataGrid");
+  assert.equal(grid.react.import, 'import { DataGrid } from "sterling-ui";');
   assert.equal(grid.react.props.length, 15);
   assert.ok(grid.description && grid.useWhen && grid.dontUseWhen && grid.related.length && grid.storybook);
   assert.equal(data(getComponent("data grid")).name, "Grid/Data grid");

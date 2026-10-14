@@ -15,6 +15,8 @@ export const INSTRUCTIONS = [
   `${INDEX.summary} This server answers from Sterling ${META.exportVersion} (released ${META.released}).`,
   "Start with list_components and list_guidelines, or search. When generating designs or code with Sterling:",
   ...INDEX.llmsTxt.guidance.map((rule) => `- ${rule}`),
+  `In code, the React components come from the ${INDEX.package.name} package: ${INDEX.package.components} ${INDEX.package.stylesNote}`,
+  `Color mode: ${INDEX.package.colorMode} Density: ${INDEX.package.density}`,
 ].join("\n");
 
 export const VERSION_LINE = `Sterling MCP server ${META.version} · export ${META.exportVersion}, released ${META.released} · data ${META.hash}`;

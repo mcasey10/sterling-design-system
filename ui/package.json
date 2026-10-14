@@ -21,7 +21,10 @@
     "check:a11y": "node scripts/check-a11y.mjs",
     "check:docs": "tsx scripts/check-docs.ts",
     "export:ai": "tsx scripts/export-ai.ts",
-    "check:ai": "tsx scripts/check-ai.ts"
+    "check:ai": "tsx scripts/check-ai.ts",
+    "package": "node scripts/build-package.mjs",
+    "export:demo-data": "tsx scripts/export-demo-data.ts",
+    "check:demo-data": "tsx scripts/export-demo-data.ts --check"
   },
   "dependencies": {
     "inter-ui": "^3.19.3",

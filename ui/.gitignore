@@ -3,3 +3,5 @@ storybook-static/
 # Generated from tokens/tokens.json by `npm run tokens`; never edit or commit it.
 src/styles/tokens.css
 a11y-report.json
+# The sterling-ui package and its tarball, built by `npm run package`.
+package/

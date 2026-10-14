@@ -79,6 +79,12 @@ jobs:
       - name: The export in ai/ matches the sources and covers every published component
         run: npm run check:ai
         working-directory: ui
+      - name: The demo kit's data matches the plugin's example
+        run: npm run check:demo-data
+        working-directory: ui
+      - name: Build the sterling-ui package (components, type declarations, styles)
+        run: npm run package
+        working-directory: ui
 
   mcp:
     runs-on: ubuntu-latest

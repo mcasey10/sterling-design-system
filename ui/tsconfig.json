@@ -13,5 +13,6 @@
     "skipLibCheck": true,
     "types": ["vite/client", "node"]
   },
-  "include": ["src", ".storybook", "scripts"]
+  "include": ["src", ".storybook", "scripts"],
+  "exclude": ["scripts/export-demo-data.ts"]
 }

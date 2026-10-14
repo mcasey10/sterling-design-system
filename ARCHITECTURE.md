@@ -211,6 +211,8 @@ From the repo root:
 | `npm run check:docs` | Every published component has the Storybook Docs page its documentation link can open. Needs a Storybook build |
 | `npm run export:ai` | Writes the machine-readable export to `ai/`: components, tokens (DTCG format), guidelines, and an index, all from the sources |
 | `npm run check:ai` | The committed `ai/` files match the sources, every published component has a complete entry, and `llms.txt` links every file |
+| `npm run package` | Builds the `sterling-ui` package into `ui/package/` and packs it into a tarball: components, type declarations, the token CSS, and Inter. Not published |
+| `npm run demo:kit` | Builds the demo kit into `demo/kit/`: the package, the MCP server, the loan example's data, and an empty app (see `demo/README.md`) |
 | `npm run check:mcp` | Type-checks, builds, and tests the MCP server in `mcp/`: every tool, its bundled copy of the export, and that it has no network code. Needs `npm install` in `mcp/` first |
 | `npm run check:parity` | Every published component except the icons has a coded counterpart in `ui/` (24 of 24), and each one follows its definition. Needs `npm install` in `ui/` first. |
 | `npm run check:css` | No raw values in the coded layer's CSS: every color, length, and font value is a token, and every `var(--stl-…)` names a real one. |

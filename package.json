@@ -20,6 +20,9 @@
     "export:ai": "npm --prefix ui run export:ai",
     "check:ai": "npm --prefix ui run check:ai",
     "check:mcp": "npm --prefix mcp run typecheck && npm --prefix mcp test",
+    "package": "npm --prefix ui run package",
+    "check:demo-data": "npm --prefix ui run check:demo-data",
+    "demo:kit": "node scripts/build-demo-kit.mjs",
     "storybook": "npm --prefix ui run storybook"
   }
 }

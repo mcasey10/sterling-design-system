@@ -119,7 +119,7 @@ interface PoolLoan {
  * (12 of 58); the Exceptions view shows both open exceptions. Every Exception and Signed-off loan in
  * the pool is in this sample (2 and 3), so those views are complete.
  */
-const POOL_LOANS: PoolLoan[] = [
+export const POOL_LOANS: PoolLoan[] = [
   { id: "LN-204207", lender: "Harbor Point Lending", upb: 198400, fico: 728, ltv: 76.0 },
   { id: "LN-204219", lender: "Harbor Point Lending", upb: 264750, fico: 744, ltv: 81.5, selected: true },
   { id: "LN-204233", lender: "Harbor Point Lending", upb: 175900, fico: 701, ltv: 88.0 },
