@@ -1063,6 +1063,12 @@
             ]
           },
           {
+            "name": "description",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "What a screen reader hears after the value, such as why a flagged cell is flagged. Figma draws what people see, so it has no property for text that is only read aloud."
+          },
+          {
             "name": "children",
             "figmaProperty": null,
             "kind": "code-only",
@@ -1278,7 +1284,7 @@
             "name": "rows",
             "figmaProperty": null,
             "kind": "code-only",
-            "note": "The application owns the data: the grid shows what it is given and reports what the person asks for. In Figma, rows are instances with overridden values."
+            "note": "The application owns the data: the grid shows what it is given and reports what the person asks for. In Figma, rows are instances with overridden values. A row's `warning` and `error` flag cells by column key, and its `descriptions` give each cell text a screen reader hears after the value: say why a flagged cell is flagged there, as the Warning and exception cells pattern asks."
           },
           {
             "name": "tones",

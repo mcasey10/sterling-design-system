@@ -117,9 +117,13 @@ export const CODED: Record<string, CodedComponent> = {
   "Grid/BodyCell": {
     component: "BodyCell",
     source: "src/components/BodyCell.tsx",
-    props: ["type", "value", "selected", "validation", "children"],
+    props: ["type", "value", "selected", "validation", "description", "children"],
     stateProps: { selected: "selected", warning: "validation", error: "validation" },
-    codeOnly: { children: "The StatusChip or Checkbox of a chip or checkbox cell. In Figma it is an exposed nested instance." },
+    codeOnly: {
+      description:
+        "What a screen reader hears after the value, such as why a flagged cell is flagged. Figma draws what people see, so it has no property for text that is only read aloud.",
+      children: "The StatusChip or Checkbox of a chip or checkbox cell. In Figma it is an exposed nested instance.",
+    },
   },
   "Grid/Row": {
     component: "Row",
@@ -138,7 +142,8 @@ export const CODED: Record<string, CodedComponent> = {
     codeOnly: {
       label: "The grid's accessible name.",
       columns: "The application owns the data: the grid shows what it is given and reports what the person asks for. In Figma, columns are edited on the instance.",
-      rows: "The application owns the data: the grid shows what it is given and reports what the person asks for. In Figma, rows are instances with overridden values.",
+      rows:
+        "The application owns the data: the grid shows what it is given and reports what the person asks for. In Figma, rows are instances with overridden values. A row's `warning` and `error` flag cells by column key, and its `descriptions` give each cell text a screen reader hears after the value: say why a flagged cell is flagged there, as the Warning and exception cells pattern asks.",
       tones: "The tone of each chip label. In Figma, set on each chip.",
       rowKey: "Which column identifies a row, for selection.",
       selected: "The selected rows. In Figma, each row's State.",

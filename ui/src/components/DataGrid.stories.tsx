@@ -37,6 +37,20 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 /**
+ * A flagged cell carries its reason for screen readers: each row's `descriptions`, by column. The error cell
+ * here reads "Error, -35.00, Negative: an amount must be above zero". Show the reason on screen too, in a
+ * neighboring column; the Warning and exception cells pattern has the rest.
+ */
+export const FlaggedWithReasons: Story = {
+  name: "Flagged, with reasons",
+  args: {
+    rows: DATA.rows.map((row) =>
+      row.error?.length ? { ...row, descriptions: Object.fromEntries(row.error.map((key) => [key, "Negative: an amount must be above zero"])) } : row
+    ),
+  },
+};
+
+/**
  * Selecting rows shows the bulk action bar above the grid; clearing the selection removes it and moves focus
  * to the grid's select-all checkbox. The bar says how many rows are selected, offers every matching row, and
  * explains why its main action is disabled.

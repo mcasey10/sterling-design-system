@@ -27,6 +27,10 @@ All notable changes to Sterling are recorded here. The format follows
   published to a package registry. The export and the MCP server say how to install it and import from it.
 - **A demo kit** (`npm run demo:kit`): the package, the MCP server, the loan example's data, and an empty app,
   for testing whether an AI tool can build a screen from what Sterling publishes. See `demo/README.md`.
+- **Data grid, in code:** a flagged cell can carry its reason for screen readers. A row's `descriptions`
+  (by column) reach `BodyCell`'s new `description` prop, read after the value and its flag, so the Warning and
+  exception cells pattern can be followed with `DataGrid` itself. Figma is unchanged: the description is
+  only read aloud.
 - `definitions/guidelines.ts`: the text of the Guidelines sections and the Patterns, as plain data read by
   the plugin and the export. The Guidelines and Patterns pages in Figma are unchanged.
 

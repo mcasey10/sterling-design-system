@@ -173,9 +173,10 @@ export function DataGrid({
                 {columns.map((column) => {
                   const value = row.values[column.key] ?? "";
                   const validation = row.error?.includes(column.key) ? "error" : row.warning?.includes(column.key) ? "warning" : undefined;
+                  const description = row.descriptions?.[column.key];
                   if (column.type === "checkbox") {
                     return (
-                      <BodyCell key={column.key} type="checkbox" validation={validation}>
+                      <BodyCell key={column.key} type="checkbox" validation={validation} description={description}>
                         <Checkbox
                           label={`Select ${id}`}
                           checked={isSelected ? "on" : "off"}
@@ -187,12 +188,12 @@ export function DataGrid({
                   }
                   if (column.type === "chip") {
                     return (
-                      <BodyCell key={column.key} type="chip" validation={validation}>
+                      <BodyCell key={column.key} type="chip" validation={validation} description={description}>
                         <StatusChip tone={(tones[value] ?? "neutral") as StatusChipTone} label={value} />
                       </BodyCell>
                     );
                   }
-                  return <BodyCell key={column.key} type={column.type} value={value} validation={validation} />;
+                  return <BodyCell key={column.key} type={column.type} value={value} validation={validation} description={description} />;
                 })}
               </Row>
             );

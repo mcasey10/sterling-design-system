@@ -94,6 +94,16 @@ button.stl-header-cell__content {
 }
 
 /* Truncate text, never numbers. */
+/* Read by screen readers after the value, and not drawn: kept in the layout's flow at no size. */
+.stl-body-cell__description {
+  position: absolute;
+  width: var(--stl-stroke-1);
+  height: var(--stl-stroke-1);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .stl-body-cell--text .stl-body-cell__value {
   min-width: 0;
   overflow: hidden;
