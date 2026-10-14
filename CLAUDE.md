@@ -128,6 +128,10 @@ ui/                       Sterling in code (React + Storybook, Vite). Own packag
   scripts/build-package.mjs  `npm run package`: ui/package/ (gitignored) and sterling-ui-<version>.tgz, with
                           dist/index.js, dist/types/, dist/styles.css (tokens + components), dist/fonts.css.
                           Private: installed from the tarball, never published to a registry
+  src/examples/<name>/    Example screens written against the sterling-ui package (Storybook resolves it to
+                          src/index.ts). Examples › Pool loans is the demo session's screen: committed as
+                          delivered, then corrected one commit at a time. `npm run check:examples`: only
+                          sterling-ui, React, and its own files; never a component's internal stl- classes
   scripts/export-demo-data.ts  Writes demo/data/pool-2026-07.json from the plugin's loan example (data and
                           rules only); `npm run check:demo-data` fails if it is out of date
   scripts/lib/ai-export.ts  Builds the export in ai/ from the sources; scripts/export-ai.ts writes it

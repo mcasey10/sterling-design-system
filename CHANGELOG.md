@@ -27,6 +27,9 @@ All notable changes to Sterling are recorded here. The format follows
   published to a package registry. The export and the MCP server say how to install it and import from it.
 - **A demo kit** (`npm run demo:kit`): the package, the MCP server, the loan example's data, and an empty app,
   for testing whether an AI tool can build a screen from what Sterling publishes. See `demo/README.md`.
+- **Examples › Pool loans** in Storybook: the loan pooling example's screen, built by an AI session outside
+  this repository from the package and the MCP server alone (see `demo/`), then corrected. `npm run
+  check:examples` keeps example screens to the package's public API.
 - **Data grid, in code:** a flagged cell can carry its reason for screen readers. A row's `descriptions`
   (by column) reach `BodyCell`'s new `description` prop, read after the value and its flag, so the Warning and
   exception cells pattern can be followed with `DataGrid` itself. Figma is unchanged: the description is

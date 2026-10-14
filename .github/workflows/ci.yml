@@ -67,6 +67,9 @@ jobs:
       - name: No raw values in the coded layer's CSS
         run: npm run check:css
         working-directory: ui
+      - name: Example screens use only the sterling-ui package, never its internal markup
+        run: npm run check:examples
+        working-directory: ui
       - name: Build Storybook
         run: npm run build-storybook
         working-directory: ui

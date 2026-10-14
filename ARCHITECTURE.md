@@ -477,6 +477,7 @@ does the same.
 | `npm run check:a11y` | any story has an axe violation, in Light or Dark, or doesn't render |
 | `npm run check:docs` | a published component has no Storybook Docs page for its documentation link |
 | `npm run check:ai` | the export in `ai/` differs from what the sources give, or a published component has no complete entry in it |
+| `npm run check:examples` | an example screen (`ui/src/examples/`) imports anything but `sterling-ui`, React, and its own files, or uses a component's internal class names |
 | `npm run check:mcp` | an MCP tool returns the wrong result, the server's copy of the export is stale, or the built server contains network code |
 
 **Dependencies.** React, and for the Select only, React Aria (`react-aria`, `react-stately`), which
