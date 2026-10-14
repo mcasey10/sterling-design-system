@@ -26,17 +26,21 @@ export const TONES: Record<Status, StatusChipTone> = {
  */
 
 // Widths follow Sterling's numericColumnWidth rule; columns whose cells can be flagged add the icon allowance.
+// The columns fit the grid's 8 of 12 columns at 1440px: Loan ID is never flagged, so it takes no icon
+// allowance; UPB is sized to the longest balance a loan in this pool can have (under $1M); and Exception, a
+// descriptive text column, starts narrow and takes the extra width, truncating with its full text in a tooltip.
 const COLUMNS: (Column & { sortKey?: SortKey })[] = [
   { key: "select", label: "Select", type: "checkbox", width: numericColumnWidth("", { icon: true }) },
-  { key: "id", label: "Loan ID", type: "text", identifier: true, width: numericColumnWidth("LN-000000", { icon: true }), sortKey: "id" },
+  { key: "id", label: "Loan ID", type: "text", identifier: true, width: numericColumnWidth("LN-000000"), sortKey: "id" },
   { key: "lender", label: "Lender", type: "text", width: numericColumnWidth("Harbor Point Lending"), sortKey: "lender" },
-  { key: "upb", label: "UPB", type: "numeric", width: numericColumnWidth("9,999,999.00"), sortKey: "upb" },
+  { key: "upb", label: "UPB", type: "numeric", width: numericColumnWidth("999,999.00"), sortKey: "upb" },
   { key: "fico", label: "FICO", type: "numeric", width: numericColumnWidth("850", { icon: true }), sortKey: "fico" },
   { key: "ltv", label: "LTV", type: "numeric", width: numericColumnWidth("100.0%", { icon: true }), sortKey: "ltv" },
   { key: "status", label: "Status", type: "chip", width: numericColumnWidth("Signed off", { icon: true }), sortKey: "status" },
-  { key: "exception", label: "Exception", type: "text", width: numericColumnWidth("LTV 93.0% — above 90%") },
+  { key: "exception", label: "Exception", type: "text", width: 120 },
 ];
-const STRETCH = new Set(["lender", "exception"]);
+// Lender keeps its width, so the longest lender name shows in full; Exception takes the rest.
+const STRETCH = new Set(["exception"]);
 
 interface Props {
   rows: Loan[];
