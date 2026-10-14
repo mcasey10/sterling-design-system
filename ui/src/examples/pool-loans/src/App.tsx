@@ -216,7 +216,7 @@ export function App({ loadFails = false }: AppProps) {
     load(cleared);
     // The chip is gone: focus the next one, or the group.
     requestAnimationFrame(() => {
-      const chips = chipsRef.current?.querySelectorAll<HTMLElement>(".stl-filter-chip");
+      const chips = chipsRef.current?.querySelectorAll<HTMLElement>("[data-filter-chip]");
       (chips?.[Math.min(index, (chips?.length ?? 1) - 1)] ?? chipsRef.current)?.focus();
     });
   };
@@ -436,6 +436,7 @@ export function App({ loadFails = false }: AppProps) {
           >
             <Select
               label="Lender"
+              className="pl-field"
               showHelper={false}
               options={[{ value: "any", label: "Any lender" }, ...LENDERS.map((l) => ({ value: l, label: shortLender(l) }))]}
               value={draft.lender ?? "any"}
@@ -443,6 +444,7 @@ export function App({ loadFails = false }: AppProps) {
             />
             <Select
               label="Status"
+              className="pl-field"
               showHelper={false}
               options={[{ value: "any", label: "Any status" }, ...STATUSES.map((s) => ({ value: s, label: s }))]}
               value={draft.status ?? "any"}
@@ -450,6 +452,7 @@ export function App({ loadFails = false }: AppProps) {
             />
             <TextInput
               label="FICO"
+              className="pl-field"
               placeholder="e.g. 660-679"
               inputMode="numeric"
               value={draft.fico}
@@ -459,6 +462,7 @@ export function App({ loadFails = false }: AppProps) {
             />
             <TextInput
               label="LTV"
+              className="pl-field"
               placeholder="e.g. > 90%"
               value={draft.ltv}
               onChange={(event) => setDraft((d) => ({ ...d, ltv: event.target.value }))}
@@ -504,7 +508,7 @@ export function App({ loadFails = false }: AppProps) {
               <div ref={chipsRef} tabIndex={-1} role="group" aria-label="Applied filters" className="pl-chips">
                 {chips.length === 0 && <span className="stl-text-caption pl-muted">No filters: every pool loan</span>}
                 {chips.map((chip, index) => (
-                  <FilterChip key={chip.field} label={chip.label} onRemove={() => removeFilter(chip.field, index)} />
+                  <FilterChip key={chip.field} data-filter-chip label={chip.label} onRemove={() => removeFilter(chip.field, index)} />
                 ))}
                 {chips.length > 1 && <Button kind="ghost" label="Clear all" onClick={() => applyFilters(NO_FILTERS)} />}
               </div>
@@ -558,7 +562,7 @@ export function App({ loadFails = false }: AppProps) {
             <div ref={noticeRef} tabIndex={-1} className="pl-notice-region" role="status">
               {notice && (
                 <div className="pl-notice stl-text-body">
-                  <Icon name={notice.undo ? "info" : "circle-check"} />
+                  <Icon name={notice.undo ? "info" : "circle-check"} className="pl-notice__icon" />
                   <span>{notice.text}</span>
                   {notice.undo && undoStack.length > 0 && (
                     <Button kind="ghost" label="Undo" onClick={notice.undo} />
@@ -634,6 +638,7 @@ export function App({ loadFails = false }: AppProps) {
             id="pl-note"
             data-autofocus=""
             label="Note"
+            className="pl-field"
             placeholder="e.g. 12 mo reserves"
             value={note}
             required
@@ -681,6 +686,7 @@ export function App({ loadFails = false }: AppProps) {
             id="pl-view-name"
             data-autofocus=""
             label="View name"
+            className="pl-field"
             placeholder="e.g. Harbor Point exceptions"
             value={viewName}
             onChange={(event) => {

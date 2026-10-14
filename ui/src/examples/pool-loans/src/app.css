@@ -143,7 +143,7 @@ ul {
   flex-direction: column;
   gap: var(--stl-space-12);
 }
-.pl-filters .stl-field {
+.pl-filters .pl-field {
   width: 100%;
 }
 .pl-filters__actions {
@@ -189,7 +189,7 @@ ul {
   border-radius: var(--stl-radius-sm);
   background: var(--stl-color-surface-panel);
 }
-.pl-notice > .stl-icon {
+.pl-notice > .pl-notice__icon {
   color: var(--stl-color-status-info);
 }
 .pl-notice > span {
@@ -251,7 +251,7 @@ ul {
   flex-direction: column;
   gap: var(--stl-space-12);
 }
-.pl-dialog-body .stl-field {
+.pl-dialog-body .pl-field {
   width: 100%;
 }
 .pl-list {
