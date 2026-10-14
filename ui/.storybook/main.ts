@@ -13,6 +13,9 @@ const config: StorybookConfig = {
   viteFinal: (vite) => {
     // tokens/, definitions/ and scripts/lib/ sit beside ui/, so the dev server must be allowed to read them.
     vite.server = { ...vite.server, fs: { ...vite.server?.fs, allow: [...(vite.server?.fs?.allow ?? []), repoRoot] } };
+    // Examples are written against the sterling-ui package, as an application outside Sterling would write them
+    // (src/examples/). Here the package is its source, src/index.ts, so an example runs unchanged.
+    vite.resolve = { ...vite.resolve, alias: { ...(vite.resolve?.alias as Record<string, string> | undefined), "sterling-ui": resolve(repoRoot, "ui/src/index.ts") } };
     return vite;
   },
 };

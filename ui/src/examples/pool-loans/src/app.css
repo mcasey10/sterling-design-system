@@ -1,0 +1,275 @@
+/*
+ * Layout for the Pool loans screen. Every value is a Sterling token: --stl-… custom properties, or a
+ * multiple of one where Sterling has no layout token (column widths, see the notes below).
+ */
+
+.pl-app {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-16);
+  box-sizing: border-box;
+  padding-bottom: var(--stl-space-24);
+  background: var(--stl-color-surface-background);
+  color: var(--stl-color-text-primary);
+}
+
+.pl-muted {
+  color: var(--stl-color-text-secondary);
+}
+
+/* Sterling has no visually-hidden utility; this mirrors the one its grid and bulk bar use internally. */
+.pl-visually-hidden {
+  position: absolute;
+  width: var(--stl-stroke-1);
+  height: var(--stl-stroke-1);
+  margin: calc(-1 * var(--stl-stroke-1));
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+h1,
+h2,
+h3,
+p,
+ul {
+  margin: 0;
+}
+
+/* Sterling has no card or panel component: a panel is surface/panel with border/default and radius/md,
+   the same look as Summary metric. */
+.pl-card {
+  box-sizing: border-box;
+  padding: var(--stl-card-padding);
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  border-radius: var(--stl-radius-md);
+  background: var(--stl-color-surface-panel);
+}
+
+/* ------------------------------------------------------------ Header */
+
+.pl-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--stl-space-16);
+  padding: var(--stl-space-12) var(--stl-space-16);
+  border-bottom: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  background: var(--stl-color-surface-panel);
+}
+.pl-header__title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-4);
+  min-width: 0;
+}
+.pl-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stl-space-8);
+}
+.pl-criteria {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--stl-space-4);
+}
+.pl-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stl-space-12);
+}
+
+/* The issue count in the header: an icon and words, so the warning isn't carried by color. */
+.pl-issue-count {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--stl-space-4);
+  border-radius: var(--stl-radius-sm);
+  text-decoration: underline;
+  text-underline-offset: var(--stl-space-2);
+}
+.pl-issue-count--warning {
+  color: var(--stl-color-status-warning-strong);
+}
+.pl-issue-count--positive {
+  color: var(--stl-color-status-positive-strong);
+}
+.pl-issue-count:focus-visible,
+.pl-grid-anchor:focus-visible,
+.pl-issues:focus-visible,
+.pl-chips:focus-visible,
+.pl-notice-region:focus-visible {
+  outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);
+  outline-offset: var(--stl-space-2);
+}
+
+/* ------------------------------------------------------------ Body: filters, list, summary */
+
+/* The Filters, grid, and bulk actions pattern puts filters in 2 of 12 columns. Sterling has no layout or
+   breakpoint tokens, so the three areas wrap with flex bases built from size tokens. */
+.pl-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--stl-space-16);
+  padding: 0 var(--stl-space-16);
+}
+.pl-filters {
+  flex: 1 1 calc(var(--stl-size-40) * 5.5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-16);
+}
+.pl-main {
+  flex: 6 1 calc(var(--stl-size-40) * 16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+  min-width: 0;
+}
+.pl-summary {
+  flex: 1 1 calc(var(--stl-size-40) * 5.5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+
+.pl-filters__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+.pl-filters .stl-field {
+  width: 100%;
+}
+.pl-filters__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--stl-space-8);
+}
+
+/* ------------------------------------------------------------ Tabs and toolbar */
+
+.pl-tabs {
+  border-bottom: var(--stl-stroke-1) solid var(--stl-color-border-default);
+}
+.pl-tabpanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+.pl-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stl-space-8);
+}
+.pl-chips {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stl-space-8);
+  border-radius: var(--stl-radius-sm);
+}
+
+/* ------------------------------------------------------------ Notice (Sterling has no toast or inline message) */
+
+.pl-notice {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+  padding: var(--stl-space-4) var(--stl-space-4) var(--stl-space-4) var(--stl-space-12);
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  border-left: var(--stl-stroke-2) solid var(--stl-color-status-info);
+  border-radius: var(--stl-radius-sm);
+  background: var(--stl-color-surface-panel);
+}
+.pl-notice > .stl-icon {
+  color: var(--stl-color-status-info);
+}
+.pl-notice > span {
+  flex: 1 1 auto;
+}
+
+/* ------------------------------------------------------------ Grid */
+
+.pl-grid-anchor {
+  border-radius: var(--stl-radius-sm);
+}
+.pl-table {
+  border-radius: var(--stl-radius-sm);
+}
+
+/* ------------------------------------------------------------ Summary */
+
+.pl-summary__title {
+  padding: var(--stl-space-4) 0;
+}
+.pl-metric {
+  width: 100%;
+}
+.pl-card:not(.pl-metric) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-card-gap);
+}
+.pl-card__label {
+  color: var(--stl-color-text-secondary);
+}
+.pl-inline-list {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: var(--stl-space-4);
+}
+.pl-issues__title {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-6);
+}
+.pl-issues__title--warning {
+  color: var(--stl-color-status-warning-strong);
+}
+.pl-issues__title--positive {
+  color: var(--stl-color-status-positive-strong);
+}
+.pl-issue {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--stl-space-2);
+}
+
+/* ------------------------------------------------------------ Dialogs */
+
+.pl-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+.pl-dialog-body .stl-field {
+  width: 100%;
+}
+.pl-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-4);
+  padding-left: var(--stl-space-16);
+}
+
+/* ------------------------------------------------------------ Demo settings */
+
+.pl-demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--stl-space-16);
+  margin: 0 var(--stl-space-16);
+}
+.pl-demo > h2 {
+  flex-basis: 100%;
+}
