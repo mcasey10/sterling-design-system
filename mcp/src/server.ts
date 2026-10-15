@@ -2,7 +2,7 @@
 // to use it. It runs locally over stdio, answers from the export bundled into this file, and opens no
 // network connection and reads no file.
 //
-//   node dist/server.js             Serve over stdio (what an MCP client runs)
+//   node dist/server.js             Serve over stdio (what an MCP client runs; Releases name it sterling-mcp.js)
 //   node dist/server.js --version   Print the version, the export's release date, and the data's hash
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -39,8 +39,11 @@ export function createServer(): McpServer {
   return server;
 }
 
-// Run only as the program itself, so the tests can import createServer without starting it.
-if (process.argv[1] && /server\.(js|ts)$/.test(process.argv[1])) {
+// Run only as the program itself, so the tests can import createServer without starting it: when the file Node
+// started is this file, whatever it's named (each Release attaches it as sterling-mcp.js).
+const ownName = decodeURIComponent(new URL(import.meta.url).pathname.split("/").pop() ?? "");
+const startedName = (process.argv[1] ?? "").split(/[\\/]/).pop();
+if (startedName && startedName === ownName) {
   if (process.argv.includes("--version")) {
     console.log(VERSION_LINE);
   } else {

@@ -126,10 +126,12 @@ test("the built server imports no network module and never calls fetch", () => {
 const temp = mkdtempSync(join(tmpdir(), "sterling-mcp-"));
 after(() => rmSync(temp, { recursive: true, force: true }));
 
-test("the built server runs over stdio from a folder with nothing else in it", async () => {
-  copyFileSync(bundle, join(temp, "server.js"));
-  assert.deepEqual(readdirSync(temp), ["server.js"]);
-  const transport = new StdioClientTransport({ command: process.execPath, args: [join(temp, "server.js")], cwd: temp });
+test("the built server runs over stdio from a folder with nothing else in it, under its Release name", async () => {
+  // Each Release attaches dist/server.js as sterling-mcp.js: it must run under that name too.
+  copyFileSync(bundle, join(temp, "sterling-mcp.js"));
+  assert.deepEqual(readdirSync(temp), ["sterling-mcp.js"]);
+  assert.match(execFileSync(process.execPath, [join(temp, "sterling-mcp.js"), "--version"], { cwd: temp, encoding: "utf8" }), /^Sterling MCP server /);
+  const transport = new StdioClientTransport({ command: process.execPath, args: [join(temp, "sterling-mcp.js")], cwd: temp });
   const client = new Client({ name: "test", version: "0.0.0" });
   await client.connect(transport);
   assert.deepEqual((await client.listTools()).tools.map((t) => t.name), [...TOOL_NAMES]);
