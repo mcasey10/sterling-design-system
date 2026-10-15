@@ -315,13 +315,16 @@ description check against the variables in the file.
 npm run tokens:site
 ```
 
-Writes two files to `site/` (gitignored), generated from `tokens/tokens.json`:
+Writes the token reference to `site/` (gitignored), generated from `tokens/tokens.json`. `npm run site`
+builds it as part of the whole website (Start here, Install sterling-ui, the token reference, Storybook, the AI files, and
+llms.txt), and `npm run check:site` checks every page: axe in Light and Dark, phone width, and every
+internal link and anchor.
 
-- **`site/index.html`**: a self-contained reference page with inline CSS and no network
-  requests. It shows color tokens in Light and Dark with their primitive alias and hex,
-  primitive ramps, spacing / radius / size scales, the Density table, type specimens, and
-  every contrast pair with its ratio and result. A System / Light / Dark toggle switches
-  the page itself, which is styled with the same tokens.
+- **`site/tokens/index.html`**: the token reference, in the website's page shell
+  (`scripts/lib/page-shell.mjs`), with inline CSS and nothing loaded from another site. It shows color
+  tokens in Light and Dark with their primitive alias and hex, primitive ramps, spacing / radius / size
+  scales, the Density table, type specimens, and every contrast pair with its ratio and result. Its
+  section links used to be on the site's home page (`/#color` and the rest); Start here forwards them.
 - **`site/tokens.css`**: CSS custom properties for code. `npm run tokens:css` writes the same file
   to `dist/tokens.css` without building the page; both come from one generator,
   `scripts/lib/token-css.mjs`, so never edit either by hand. Everything carries Sterling's

@@ -142,6 +142,14 @@ npm run check:urls
 npm run package
 ```
 
+```bash
+npm run site
+```
+
+```bash
+npm run check:site
+```
+
 `check:a11y` builds Storybook and runs every story in Chrome, in Light and Dark; `check:docs` reads
 that build. `check:ai` fails when the export in `ai/` no longer matches the sources: after changing a
 token, a definition, or guideline text, run `npm run export:ai` and commit the result with the change.
@@ -149,7 +157,8 @@ token, a definition, or guideline text, run `npm run export:ai` and commit the r
 after `export:ai`. `check:examples` keeps example screens to the sterling-ui package's public API;
 `check:demo-data` keeps the demo kit's data in step with the plugin's example; `check:urls` fails if a
 Sterling address is written anywhere but `definitions/site.ts`, or if the view-only Figma file is linked
-where the Figma Community page belongs; `package` builds the sterling-ui tarball. Also run
+where the Figma Community page belongs; `package` builds the sterling-ui tarball; `site` builds the
+website and `check:site` checks every page (axe in Light and Dark, phone width, and every link). Also run
 `npm run typecheck` in `ui/`.
 
 GitHub runs the same checks on every push and pull request.

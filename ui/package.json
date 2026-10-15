@@ -25,6 +25,8 @@
     "package": "node scripts/build-package.mjs",
     "check:examples": "node scripts/check-examples.mjs",
     "check:urls": "tsx scripts/check-urls.ts",
+    "pages": "tsx scripts/build-pages.ts",
+    "check:site": "node scripts/check-site.mjs",
     "export:demo-data": "tsx scripts/export-demo-data.ts",
     "check:demo-data": "tsx scripts/export-demo-data.ts --check"
   },

@@ -73,6 +73,10 @@ jobs:
       - name: Sterling's addresses are written once, in definitions/site.ts
         run: npm run check:urls
         working-directory: ui
+      - name: Build the website
+        run: npm run site
+      - name: The website passes axe in every color mode, fits a phone's width, and has no broken links
+        run: npm run check:site
       - name: Build Storybook
         run: npm run build-storybook
         working-directory: ui

@@ -61,7 +61,8 @@ sterling-design-system/
 │   ├── docRegistry.ts      ONE TABLE: every published component's description,
 │   │                       usage note, and documentation link
 │   ├── site.ts             Sterling's public addresses (website, repository, Figma Community, the
-│   │                       Release downloads) and the audience matrix the website's Start here draws
+│   │                       Release downloads)
+│   ├── audiences.ts        The audience matrix the website's Start here draws
 │   ├── guidelines.ts       The text of the Guidelines sections and the Patterns
 │   └── icons.ts            The 20 icon glyphs (SVG path data)
 │
@@ -221,8 +222,9 @@ From the repo root:
 | `npm run contrast` | Every text/background pair in both color modes meets WCAG (4.5:1 text, 3:1 large text and UI). 248 pairs today, 0 failures. |
 | `npm run check:tokens` | Every published token has a description, no description is left over for a removed token, and the version in tokens.json matches package.json. |
 | `npm run tokens:css` | Writes the token CSS to `dist/tokens.css` |
-| `npm run tokens:site` | Writes the token reference site to `site/` (with the same CSS as `site/tokens.css`) |
-| `npm run site` | Builds the whole site into `site/`: the token reference, with Storybook under `storybook/`, the export under `ai/`, and `llms.txt` (written from `ai/index.json`). `npm run site:serve` shows it locally |
+| `npm run tokens:site` | Writes the token reference to `site/tokens/` (and the token CSS to `site/tokens.css`) |
+| `npm run site` | Builds the whole website into `site/`: Start here at the root, Install sterling-ui under `install/`, the token reference under `tokens/`, Storybook under `storybook/`, the export under `ai/`, and `llms.txt` (written from `ai/index.json`). `npm run site:serve` shows it locally |
+| `npm run check:site` | Every website page passes axe in Light and Dark, fits a phone's width without scrolling sideways, and every internal link and anchor goes somewhere. Needs `npm run site` first |
 | `npm run check:docs` | Every published component has the Storybook Docs page its documentation link can open. Needs a Storybook build |
 | `npm run export:ai` | Writes the machine-readable export to `ai/`: components, tokens (DTCG format), guidelines, and an index, all from the sources |
 | `npm run check:ai` | The committed `ai/` files match the sources, every published component has a complete entry, and `llms.txt` links every file |
@@ -498,9 +500,12 @@ does the same.
 **Dependencies.** React, and for the Select only, React Aria (`react-aria`, `react-stately`), which
 supplies its keyboard behavior and screen-reader semantics. Inter 3.19 is bundled (`inter-ui`).
 
-**The site.** `npm run site` builds `site/`: the token reference at the root and Storybook under
-`storybook/`, each linking to the other. `npm run site:serve` shows it at http://localhost:6008.
-The Pages workflow publishes it on every push to `main`, once the repository is public.
+**The website.** `npm run site` builds `site/`: Start here at the root (who Sterling is for, and where
+each reader starts, drawn from `definitions/audiences.ts`), Install sterling-ui under `install/` (from
+`definitions/setup.ts`), the token reference under `tokens/`, and Storybook
+under `storybook/`, all in one page shell with the same navigation. `npm run site:serve` shows it at
+http://localhost:6008, and `npm run check:site` checks it. The Pages workflow publishes it on every push
+to `main`.
 
 ---
 

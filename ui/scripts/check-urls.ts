@@ -1,4 +1,5 @@
-// Address check: Sterling's public addresses are written once, in definitions/site.ts. Fails if:
+// Address check: Sterling's public addresses are written once, in definitions/site.ts (or, for the two the
+// Figma plugin uses, definitions/pluginAddresses.ts, which site.ts re-exports). Fails if:
 //   • source code (a .ts, .tsx, .mjs, or .js file) writes a Sterling address itself instead of importing it
 //     from definitions/site.ts;
 //   • the view-only Figma file is linked anywhere but site.ts and the maintainer documents (ARCHITECTURE.md,
@@ -23,6 +24,7 @@ const files = execFileSync("git", ["ls-files", "--cached", "--others", "--exclud
   .filter((f) => f && !/package-lock\.json$|\.(png|svg|jpg|woff2?|tgz|ico)$/i.test(f));
 
 const SITE_FILE = "definitions/site.ts";
+const PLUGIN_ADDRESSES = "definitions/pluginAddresses.ts";
 const THIS_FILE = "ui/scripts/check-urls.ts";
 const MAINTAINER_DOCS = new Set(["ARCHITECTURE.md", "CONTRIBUTING.md", "docs/reference.md", SITE_FILE]);
 const FIGMA_FILE_ID = FIGMA_FILE_URL.split("/design/")[1].split("/")[0];
@@ -44,7 +46,7 @@ const allowed = (url: string, file: string) => {
 const problems: string[] = [];
 let checked = 0;
 for (const file of files) {
-  if (file === SITE_FILE || file === THIS_FILE) continue;
+  if (file === SITE_FILE || file === PLUGIN_ADDRESSES || file === THIS_FILE) continue;
   let text: string;
   try {
     text = readFileSync(resolve(root, file), "utf8");

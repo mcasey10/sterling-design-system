@@ -37,8 +37,12 @@ jobs:
         run: npm run contrast:failures
       - name: Token checks (descriptions, version)
         run: npm run check:tokens
-      - name: Build the site (token reference and Storybook)
+      - name: Build the site (Start here, the token reference, Storybook, the AI files, llms.txt)
         run: npm run site
+      # The site is only published when every page passes axe in every color mode, fits a phone's width,
+      # and every internal link and anchor goes somewhere.
+      - name: Check the website
+        run: npm run check:site
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

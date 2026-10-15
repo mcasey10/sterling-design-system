@@ -1,23 +1,26 @@
 #!/usr/bin/env node
-// Builds a static token reference from tokens/tokens.json:
+// Builds the website's token reference from tokens/tokens.json:
+//   site/tokens/index.html  The token reference, in the website's page shell (scripts/lib/page-shell.mjs):
+//                     color tokens in both modes with their alias, primitive ramps, scales, density, type
+//                     specimens, and every contrast pair with its ratio. CSS inlined; nothing is loaded from
+//                     another site
 //   site/tokens.css   The token CSS from scripts/lib/token-css.mjs (the same text `npm run tokens:css`
 //                     writes to dist/tokens.css)
-// With --storybook <address> (used by scripts/build-site.mjs), the page links to the Storybook beside it.
-//   site/index.html   Self-contained reference page (CSS inlined, nothing loaded from another site):
-//                     color tokens in both modes with their alias, primitive ramps, scales,
-//                     density, type specimens, and every contrast pair with its ratio
 //   site/fonts/       Inter 3.19, the same files Storybook bundles (ui/node_modules/inter-ui), with its
-//                     license, so the page looks the same where Inter isn't installed. Skipped, with a
-//                     note, when ui/ has no node_modules: the page then uses Inter only if it's installed
+//                     license, for every page of the website. Skipped, with a note, when ui/ has no
+//                     node_modules: the pages then use Inter only if it's installed
+// The site's addresses come from ai/index.json (generated from definitions/site.ts), so this script needs no
+// TypeScript. The rest of the website is built by ui/scripts/build-pages.ts.
 // The contrast results come from scripts/lib/tokens.mjs, the same code as `npm run contrast`.
 //
 // Usage: npm run tokens:site   (output in site/, which is gitignored)
 
-import { copyFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadTokens, entries, flattenPrimitives, resolveColor, aliasOf, evaluateContrast } from "./lib/tokens.mjs";
 import { PREFIX, cssVar, cssClass, defaultDensity, buildTokenCss } from "./lib/token-css.mjs";
+import { FONT_FILES, esc, renderPage } from "./lib/page-shell.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const outDir = resolve(here, "../site");
@@ -27,21 +30,12 @@ const [LIGHT, DARK] = tokens.color.$modes;
 const DENSITY_MODES = tokens.density.$modes;
 const DEFAULT_DENSITY = defaultDensity(tokens);
 
-// --storybook <address>: add a link to the Storybook published beside this page (the combined site).
-const storybookArg = process.argv.indexOf("--storybook");
-const STORYBOOK = storybookArg > 0 ? process.argv[storybookArg + 1] : null;
-
-// Inter, from the package ui/src/styles/fonts.css loads: weight → file. Change both together.
+// Inter, from the package ui/src/styles/fonts.css loads (FONT_FILES in page-shell.mjs). Change both together.
 const INTER = resolve(here, "../ui/node_modules/inter-ui");
-const FONT_FILES = { 400: "Inter-Regular.woff2", 500: "Inter-Medium.woff2", 600: "Inter-SemiBold.woff2" };
 const HAS_FONTS = Object.values(FONT_FILES).every((file) => existsSync(resolve(INTER, "Inter (web)", file)));
-const FONT_CSS = HAS_FONTS
-  ? Object.entries(FONT_FILES)
-      .map(([weight, file]) => `@font-face { font-family: "${tokens.typography.fontFamily}"; font-style: normal; font-weight: ${weight}; font-display: swap; src: url("fonts/${file}") format("woff2"); }`)
-      .join("\n")
-  : "";
-
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+/** The website's addresses, as the export wrote them from definitions/site.ts. */
+const LINKS = JSON.parse(readFileSync(resolve(here, "../ai/index.json"), "utf8")).links;
+const VERSION = tokens.$meta?.version ?? "?";
 // ------------------------------------------------------------ index.html
 
 const colorNotes = tokens.color.$notes ?? {};
@@ -144,7 +138,10 @@ function contrastSection(results) {
       const status = r.exempt ? "Info" : r.pass ? "Pass" : "Fail";
       const icon = r.exempt ? "ⓘ" : r.pass ? "✓" : "✕";
       const req = r.min === null ? "reported only" : `${r.min}:1`;
-      return `<tr><td>${esc(r.mode)}</td><td>${esc(r.rule)}</td><td><span class="pair" style="color:${r.fgHex};background:${r.bgHex}">Aa</span></td><td><code>${esc(r.fg)}</code><br><span class="muted">on</span> <code>${esc(r.bg)}</code></td><td class="num">${r.ratio.toFixed(2)}:1</td><td>${esc(r.level)} · ${req}</td><td><span class="status status-${status.toLowerCase()}">${icon} ${status}</span></td></tr>`;
+      // The sample is drawn the way the rule judges it: large (24px) for the 3:1 levels, and marked disabled
+      // for disabled content, which WCAG exempts (so automated contrast checks skip it, as they should).
+      const sample = `<span class="pair${r.level === "body" ? "" : " pair--large"}" style="color:${r.fgHex};background:${r.bgHex}"${r.exempt ? ' aria-disabled="true"' : ""}>Aa</span>`;
+      return `<tr><td>${esc(r.mode)}</td><td>${esc(r.rule)}</td><td>${sample}</td><td><code>${esc(r.fg)}</code><br><span class="muted">on</span> <code>${esc(r.bg)}</code></td><td class="num">${r.ratio.toFixed(2)}:1</td><td>${esc(r.level)} · ${req}</td><td><span class="status status-${status.toLowerCase()}">${icon} ${status}</span></td></tr>`;
     })
     .join("");
   return `
@@ -159,27 +156,18 @@ function contrastSection(results) {
   </section>`;
 }
 
+// The token reference's own styles; the page shell styles the rest. Short token names (--color-…), which the
+// shell prefixes.
 const PAGE_CSS = `
-*, *::before, *::after { box-sizing: border-box; }
-body { margin: 0; background: var(--color-surface-background); color: var(--color-text-primary); font: 400 14px/1.5 var(--font-family); }
-header, main { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
-header { padding-top: 32px; display: flex; flex-wrap: wrap; gap: 16px; align-items: end; justify-content: space-between; }
-h1 { font-size: 28px; line-height: 36px; margin: 0; }
-h2 { font-size: 20px; line-height: 28px; margin: 0 0 4px; }
-h3 { font-size: 14px; margin: 16px 0 8px; text-transform: capitalize; }
-p { color: var(--color-text-secondary); margin: 0 0 16px; max-width: 72ch; }
-nav { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 16px auto 0; max-width: 1120px; padding: 0 16px; }
-nav a { color: var(--color-accent-default); }
-nav a.out { margin-left: auto; font-weight: 600; }
-section { background: var(--color-surface-panel); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); padding: 24px; margin: 24px 0; }
-.table-wrap { overflow-x: auto; }
-table { border-collapse: collapse; width: 100%; }
-th, td { text-align: left; vertical-align: top; padding: 8px 12px 8px 0; border-top: 1px solid var(--color-border-default); }
-thead th { border-top: 0; color: var(--color-text-secondary); font-weight: 600; font-size: 12px; }
+.intro { margin-bottom: 8px; }
+.sections { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 16px 0 0; padding: 0; list-style: none; }
+main section { background: var(--color-surface-panel); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); padding: 24px; margin: 24px 0; scroll-margin-top: 16px; }
+main section h2 { margin-bottom: 4px; }
+main section p { color: var(--color-text-secondary); }
+h3 { font-size: 14px; text-transform: capitalize; }
 th[scope="row"] { font-weight: 600; }
-code { font: 12px/16px "Roboto Mono", ui-monospace, monospace; }
-.muted, .note { color: var(--color-text-secondary); font-size: 12px; font-weight: 400; }
-.note { max-width: 36ch; }
+td code, th code { font-size: 12px; line-height: 16px; background: none; padding: 0; }
+.note { color: var(--color-text-secondary); font-size: 12px; font-weight: 400; max-width: 36ch; }
 .token-value { display: flex; gap: 8px; align-items: center; }
 .swatch { display: inline-block; width: 32px; height: 32px; flex: none; border-radius: var(--radius-sm); border: 1px solid var(--color-border-default); }
 .ramp ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
@@ -188,79 +176,50 @@ code { font: 12px/16px "Roboto Mono", ui-monospace, monospace; }
 .bar { display: inline-block; height: 12px; background: var(--color-accent-default); border-radius: 2px; min-width: 1px; }
 .radius-demo { display: inline-block; width: 48px; height: 32px; border: 2px solid var(--color-accent-default); }
 .pair { display: inline-block; padding: 4px 8px; border-radius: var(--radius-sm); font-weight: 600; border: 1px solid var(--color-border-default); }
+.pair--large { font-size: 24px; line-height: 28px; }
 .num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
 .status { font-weight: 600; white-space: nowrap; }
 .status-pass { color: var(--color-status-positive-strong); }
 .status-fail { color: var(--color-status-critical-strong); }
 .status-info { color: var(--color-text-secondary); }
-.theme { display: flex; gap: 4px; }
-.theme button { font: inherit; padding: 4px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border-strong); background: var(--color-surface-panel); color: var(--color-text-primary); cursor: pointer; }
-.theme button[aria-pressed="true"] { background: var(--color-accent-default); color: var(--color-text-inverse); border-color: transparent; }
-.theme button:focus-visible, nav a:focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: 2px; }
-footer { max-width: 1120px; margin: 0 auto 32px; padding: 0 16px; color: var(--color-text-secondary); font-size: 12px; }
-`.replace(/var\(--/g, `var(--${PREFIX}-`); // the page styles itself with the prefixed tokens
-
-const THEME_JS = `
-const root = document.documentElement;
-const buttons = document.querySelectorAll(".theme button");
-function setTheme(t) {
-  if (t === "system") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", t);
-  buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.theme === t)));
-}
-buttons.forEach((b) => b.addEventListener("click", () => setTheme(b.dataset.theme)));
-setTheme("system");
+@media (max-width: 640px) { main section { padding: 16px; } }
 `;
 
-function buildHtml(css, results) {
-  const meta = tokens.$meta ?? {};
-  return `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(meta.name ?? "Tokens")} tokens</title>
-<style>
-${FONT_CSS}
-${css}
-${PAGE_CSS}
-</style>
-</head>
-<body>
-<header>
-  <div>
-    <h1>${esc(meta.name ?? "Tokens")} — token reference</h1>
-    <p>Generated from tokens/tokens.json (version ${esc(meta.version ?? "?")}). The same tokens drive the Figma library and <code>tokens.css</code>.</p>
-  </div>
-  <div class="theme" role="group" aria-label="Color mode">
-    <button type="button" data-theme="system">System</button>
-    <button type="button" data-theme="light">${esc(LIGHT)}</button>
-    <button type="button" data-theme="dark">${esc(DARK)}</button>
-  </div>
-</header>
-<nav aria-label="Sections">
-  <a href="#color">Color</a><a href="#primitives">Primitives</a><a href="#scales">Spacing, radius, size</a>
-  <a href="#density">Density</a><a href="#type">Typography</a><a href="#contrast">Contrast</a>${STORYBOOK ? `\n  <a class="out" href="${esc(STORYBOOK)}">Components in Storybook →</a>` : ""}
-</nav>
-<main>
+
+function buildHtml(results) {
+  const main = `
+<h1>Token reference</h1>
+<p class="lead intro">Every Sterling token, with its value in ${esc(LIGHT)} and ${esc(DARK)}, and the contrast of every text and
+background pair. Generated from tokens/tokens.json, version ${esc(VERSION)}. The same tokens drive the Figma library, the React
+components, and <code>tokens.css</code>.</p>
+<nav aria-label="Token sections"><ul class="sections">
+  <li><a href="#color">Color</a></li><li><a href="#primitives">Primitives</a></li><li><a href="#scales">Spacing, radius, size</a></li>
+  <li><a href="#density">Density</a></li><li><a href="#type">Typography</a></li><li><a href="#contrast">Contrast</a></li>
+</ul></nav>
 ${colorSection()}
 ${primitivesSection()}
 ${scaleSection()}
 ${densitySection()}
 ${typeSection()}
-${contrastSection(results)}
-</main>
-<footer>Generated by scripts/build-token-site.mjs — run <code>npm run tokens:site</code> after changing tokens.json. Fictional data; no real brands.</footer>
-<script>${THEME_JS}</script>
-</body>
-</html>
-`;
+${contrastSection(results)}`;
+  return renderPage({
+    title: "Sterling tokens",
+    description: "Every Sterling design token, with its value in each color mode, and the contrast of every text and background pair.",
+    base: "../",
+    current: "tokens",
+    main,
+    css: PAGE_CSS,
+    version: VERSION,
+    repositoryUrl: LINKS.repository,
+    releasesUrl: LINKS.releases,
+  });
 }
 
 const css = buildTokenCss(tokens);
 const results = evaluateContrast(tokens);
-mkdirSync(outDir, { recursive: true });
+mkdirSync(resolve(outDir, "tokens"), { recursive: true });
 writeFileSync(resolve(outDir, "tokens.css"), css);
-writeFileSync(resolve(outDir, "index.html"), buildHtml(css, results));
+writeFileSync(resolve(outDir, "tokens/index.html"), buildHtml(results));
 if (HAS_FONTS) {
   mkdirSync(resolve(outDir, "fonts"), { recursive: true });
   for (const file of Object.values(FONT_FILES)) copyFileSync(resolve(INTER, "Inter (web)", file), resolve(outDir, "fonts", file));
@@ -269,4 +228,4 @@ if (HAS_FONTS) {
   console.log("Inter isn't installed in ui/node_modules, so site/fonts/ was skipped (run `npm install` in ui/ to include it).");
 }
 const failures = results.filter((r) => !r.pass).length;
-console.log(`Wrote site/index.html and site/tokens.css — ${results.length} contrast pairs, ${failures} failure(s).`);
+console.log(`Wrote site/tokens/index.html and site/tokens.css — ${results.length} contrast pairs, ${failures} failure(s).`);

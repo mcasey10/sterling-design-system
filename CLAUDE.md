@@ -46,12 +46,14 @@ definitions/              Plain data about components, with no Figma code (share
   grid.ts                 Data grid datasets: Column / GridRow / Dataset types, the generic placeholder data,
                           which columns stretch, and numericColumnWidth(). Shared by the plugin and ui/
   site.ts                 THE public addresses (website and its pages, repository, raw files, Release downloads,
-                          Figma Community, the view-only file for maintainers) and the audience matrix (AUDIENCES).
+                          Figma Community, the view-only file for maintainers). The plugin doesn't bundle it: the two
+                          addresses the plugin uses (website, Storybook) are in pluginAddresses.ts, which site.ts
+                          re-exports and docRegistry.ts imports. The audience matrix (AUDIENCES) is in audiences.ts.
                           Never write a Sterling address anywhere else: `npm run check:urls` fails. Link the
                           Figma Community page, not the view-only file, except in maintainer docs
   docRegistry.ts          Also holds DOCS_TARGET ("figma" | "storybook": where documentation links point;
-                          "storybook" since 1.1.1) and re-exports the four addresses it used to define from
-                          site.ts. `npm run check:docs` checks the pages exist
+                          "storybook" since 1.1.1) and re-exports STORYBOOK_URL from pluginAddresses.ts (never import
+                          site.ts here: the plugin bundles this file). `npm run check:docs` checks the pages exist
   docRegistry.ts          THE table of component documentation: one-sentence description, details,
                           use / don't use, related guidance. Every published component needs an entry
                           (shown under Guidelines › Component usage); its documentation link follows DOCS_TARGET
@@ -162,11 +164,19 @@ scripts/contrast-check.mjs  Reports WCAG contrast for every pair in tokens.json
 scripts/check-tokens.mjs  Token checks: every published token (color, spacing, size, density) has a
                           description in its group's "$descriptions"; versions agree. Run: `npm run check:tokens`
 scripts/build-token-css.mjs   Token CSS for code: `npm run tokens:css` writes dist/tokens.css (gitignored)
-scripts/build-token-site.mjs  Token reference site: `npm run tokens:site` writes site/index.html,
+scripts/build-token-site.mjs  The token reference: `npm run tokens:site` writes site/tokens/index.html,
                           site/tokens.css (gitignored; the same CSS), and site/fonts/ (Inter 3.19 copied
-                          from ui/node_modules/inter-ui, when installed)
-scripts/build-site.mjs    `npm run site`: site/ = token reference + Storybook under storybook/ + a copy of ai/
-                          + llms.txt (what Pages publishes); scripts/serve-site.mjs (`npm run site:serve`) shows it
+                          from ui/node_modules/inter-ui, when installed). Addresses from ai/index.json
+scripts/lib/page-shell.mjs  The website's page shell: head, fonts, token CSS, the site navigation, the Light /
+                          Dark switch, the footer. Every website page uses it; phone width up
+ui/scripts/build-pages.ts `npm run pages` (in ui/): Start here (site/index.html) from AUDIENCES in
+                          definitions/audiences.ts, and Install sterling-ui (site/install/) from definitions/setup.ts
+definitions/setup.ts      THE setup instructions (Where / You need / Do / Scope / It worked if / If it didn't),
+                          shown by the website, README, and Storybook
+ui/scripts/check-site.mjs `npm run check:site`: every website page, axe in Light and Dark (system preference
+                          emulated), no sideways scroll at 375px, every internal link and anchor
+scripts/build-site.mjs    `npm run site`: site/ = Start here + tokens/ + Storybook under storybook/ + a copy of
+                          ai/ + llms.txt (what Pages publishes); scripts/serve-site.mjs (`npm run site:serve`)
 scripts/lib/llms.mjs      Renders llms.txt from ai/index.json (`llmsTxt`: intro, guidance, sections of text and
                           links). To add a section, add it in ui/scripts/lib/ai-export.ts; check:ai validates it
 scripts/lib/tokens.mjs    Shared token loading, alias resolution, and contrast evaluation

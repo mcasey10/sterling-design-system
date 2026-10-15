@@ -12,7 +12,7 @@
 //     send one component somewhere else.
 // Components whose names start with "_" (demo and example components) aren't published and need no entry.
 
-import { STORYBOOK_URL } from "./site";
+import { STORYBOOK_URL } from "./pluginAddresses";
 
 /** Sections of the Guidelines page; each is a frame named "Guideline/<section>". */
 export type GuidelineSection =
@@ -56,8 +56,9 @@ export type ResolvedDoc = ComponentDoc & { docs: DocTarget };
  */
 export const DOCS_TARGET: "figma" | "storybook" = "storybook";
 
-// Sterling's public addresses live in site.ts; these four are re-exported here, where they used to be.
-export { FIGMA_COMMUNITY_URL, FIGMA_FILE_URL, REPOSITORY_URL, STORYBOOK_URL } from "./site";
+// Sterling's public addresses live in site.ts. This file imports only pluginAddresses.ts, the part the plugin
+// needs, so the plugin doesn't bundle the rest. STORYBOOK_URL is re-exported here, where it used to be.
+export { STORYBOOK_URL } from "./pluginAddresses";
 
 /** A Storybook title as it appears in a story id: lowercase, with every run of other characters as one hyphen. */
 const storyId = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
