@@ -186,6 +186,22 @@ And build in Figma, in a duplicate of the Sterling file (never the published one
 If a check fails, the notification says how many failed and the console
 (**Plugins → Development → Show/Hide console**) names each one.
 
+When a change should leave the Figma output alone (a refactor, or a change for the website or the code only)
+but changes the built plugin (`plugin/dist/code.js`), prove it with a fingerprint of the duplicate: every
+library page layer by layer, every variable, and every text style, each as a hash.
+
+```bash
+npm run figma:fingerprint -- <file key>
+```
+
+It prints a call for an AI tool connected to Figma's MCP server, which runs the read-only code in
+`scripts/lib/figma-fingerprint.js` in that file. Save the result before Build library and again after it,
+then compare them; every row must be the same:
+
+```bash
+npm run figma:fingerprint -- compare before.json after.json
+```
+
 ## 4. Release
 
 1. **Choose the version** using the rules below.
@@ -199,7 +215,9 @@ If a check fails, the notification says how many failed and the console
 5. **Merge to `main`.** The checks run again, and the website (Start here, the token reference,
    Storybook, the AI files, and llms.txt) is republished. Open it and follow its links.
 6. **Rebuild the Sterling Figma file** with both commands, confirm the checks pass, then publish
-   the library from Figma's Assets panel with the changelog entry as the description.
+   the library from Figma's Assets panel with the changelog entry as the description. Fingerprint the
+   file before and after the rebuild (`npm run figma:fingerprint`, see [Check](#3-check)): only the
+   pages this release changes may differ, such as the Cover and Read me, which show the version.
 7. **Tag the release** `v<version>` on GitHub, and attach its two downloads: the package
    (`npm run package` writes `ui/package/sterling-ui-<version>.tgz`) and the MCP server
    (`npm run check:mcp` builds it; attach it as `sterling-mcp.js`).

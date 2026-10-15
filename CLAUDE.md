@@ -177,6 +177,9 @@ ui/scripts/check-site.mjs `npm run check:site`: every website page, axe in Light
                           emulated), no sideways scroll at 375px, every internal link and anchor
 scripts/build-site.mjs    `npm run site`: site/ = Start here + tokens/ + Storybook under storybook/ + a copy of
                           ai/ + llms.txt (what Pages publishes); scripts/serve-site.mjs (`npm run site:serve`)
+scripts/figma-fingerprint.mjs  `npm run figma:fingerprint -- <file key>`: the call that fingerprints a Figma file
+                          (read-only code in scripts/lib/figma-fingerprint.js: every library page, variable, text
+                          style); `-- compare before.json after.json` compares two. Never commit a file key
 scripts/lib/llms.mjs      Renders llms.txt from ai/index.json (`llmsTxt`: intro, guidance, sections of text and
                           links). To add a section, add it in ui/scripts/lib/ai-export.ts; check:ai validates it
 scripts/lib/tokens.mjs    Shared token loading, alias resolution, and contrast evaluation
