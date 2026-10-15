@@ -67,7 +67,9 @@ export const installPackage = (version: string): SetupBlock => ({
       what: "A React 19 project",
       check: "npm ls react",
       expect: "`react@19…`",
-      get: "upgrade the project to React 19, or start a new one with Vite.",
+      get:
+        "start a new one with Vite: run `npm create vite@latest my-app -- --template react-ts`, then `cd my-app` and " +
+        "`npm install`, then continue with the steps below.",
     },
   ],
   steps: [
@@ -81,10 +83,15 @@ export const installPackage = (version: string): SetupBlock => ({
     { command: `npm install ./vendor/sterling-ui-${version}.tgz` },
     { text: "Then, once, at the top of your app's entry file (for example `src/main.tsx`):" },
     { command: 'import "sterling-ui/styles.css";\nimport "sterling-ui/fonts.css";' },
+    {
+      text:
+        "In a new Vite project, also remove `import './index.css'` from `src/main.tsx`: the starter's own styles change " +
+        "Sterling's layout.",
+    },
   ],
   worked:
     "`package.json` lists `sterling-ui`, and a Sterling button shows: `import { Button } from \"sterling-ui\"`, then " +
-    `\`<Button label="Save" kind="primary" />\`. Next: each component's Docs page in Storybook (${STORYBOOK_URL}).`,
+    `\`<Button label="Save" kind="primary" />\`, for example in \`src/App.tsx\`. Next: each component's Docs page in Storybook (${STORYBOOK_URL}).`,
   failed: [
     "`ERESOLVE` mentioning React: the project isn't on React 19. Check with `npm ls react`.",
     "`404` or \"not found\": check the version number in the address.",
@@ -136,7 +143,8 @@ export const mcpServer = (version: string): SetupBlock => ({
   ],
   scope:
     "`--scope user` makes Sterling available in every project, which is right for most people. To share it with a team " +
-    "through one repository instead, put the JSON above in that project's `.mcp.json`, with a path that works for everyone.",
+    "through one repository instead, put the JSON above in that project's `.mcp.json`, with a path that works for everyone. " +
+    "Claude Code asks each person to approve a project's servers the first time.",
   worked:
     'Your tool lists `sterling` as connected (in Claude Code, run `/mcp`). Then ask: "Which Sterling component shows a ' +
     'record\'s status?" It should answer Chip/Status, from the server.',

@@ -49,7 +49,7 @@ claude mcp add --scope user sterling -- node "/full/path/to/sterling-mcp.js"
 
 ### Scope
 
-`--scope user` makes Sterling available in every project, which is right for most people. To share it with a team through one repository instead, put the JSON above in that project's `.mcp.json`, with a path that works for everyone.
+`--scope user` makes Sterling available in every project, which is right for most people. To share it with a team through one repository instead, put the JSON above in that project's `.mcp.json`, with a path that works for everyone. Claude Code asks each person to approve a project's servers the first time.
 
 ### It worked if
 

@@ -180,8 +180,12 @@ It worked if each command's notification ends with its checks passing.
 
 ### The website and the checks
 
-The website (Start here, the token reference, the AI page, Storybook, and the AI files) builds into `site/`;
-it needs `npm install` in `ui/` and in `mcp/` first.
+The website (Start here, the token reference, the AI page, Storybook, and the AI files) builds into `site/`.
+It also needs the MCP server's dependencies, once (Storybook's are installed above):
+
+```bash
+npm install --prefix mcp
+```
 
 ```bash
 npm run site
