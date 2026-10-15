@@ -24,7 +24,8 @@ all come from files in this repo:
 | How a component is drawn (layers, layout, which tokens it uses) | `plugin/src/library/components/<name>.ts` | build, then run **Build library** |
 | A component's description or documentation link | `definitions/docRegistry.ts` (one table) | build, then run **Build library** |
 | An icon's glyph | `definitions/icons.ts` | build, then run **Build library** |
-| Guidelines or Patterns content | `plugin/src/library/pages/guidelines.ts` / `patterns.ts` | build, then run **Build library** |
+| Guidelines or Patterns text | `definitions/guidelines.ts` (one table) | build, then run **Build library** |
+| Guidelines or Patterns examples (the instances shown) | `plugin/src/library/pages/guidelines.ts` / `patterns.ts` | build, then run **Build library** |
 | Example data, rules, or counts | `plugin/src/example/loan-pooling/loanData.ts` | build, then run **Build example** |
 
 If you change something in Figma by hand that the plugin owns, the next build puts it
@@ -59,6 +60,8 @@ sterling-design-system/
 │   │                       and component properties with their defaults
 │   ├── docRegistry.ts      ONE TABLE: every published component's description,
 │   │                       usage note, and documentation link
+│   ├── site.ts             Sterling's public addresses (website, repository, Figma Community, the
+│   │                       Release downloads) and the audience matrix the website's Start here draws
 │   ├── guidelines.ts       The text of the Guidelines sections and the Patterns
 │   └── icons.ts            The 20 icon glyphs (SVG path data)
 │
@@ -125,7 +128,19 @@ sterling-design-system/
 │   ├── serve-site.mjs         Serves site/ locally
 │   ├── lib/tokens.mjs         Shared token loading and contrast math
 │   ├── lib/token-names.mjs    How a token name becomes a CSS name (shared with ui/)
-│   └── lib/token-css.mjs      The one generator of the token CSS (stl- prefix)
+│   ├── lib/token-css.mjs      The one generator of the token CSS (stl- prefix)
+│   ├── lib/llms.mjs           Writes llms.txt from ai/index.json
+│   ├── build-demo-kit.mjs     The demo kit → demo/kit/ (see demo/README.md)
+│   └── demo-transcript.mjs    Reads a demo session's transcript: its MCP calls and an isolation audit
+│
+├── ai/                     The machine-readable export for AI tools (generated; committed): index.json,
+│                           components.json, tokens.dtcg.json, guidelines.json. Published at /ai/
+│
+├── mcp/                    A read-only MCP server over the export, built into one file (dist/server.js) and
+│                           attached to each Release as sterling-mcp.js. Own package.json; npm run check:mcp
+│
+├── demo/                   The demo kit: an empty app, the session's rules, the loan example's data, and the
+│                           product request, for testing what Sterling publishes from outside the repository
 │
 ├── docs/
 │   ├── reference.md           Every collection, component, property, and tool option
@@ -135,7 +150,7 @@ sterling-design-system/
 │
 └── .github/workflows/
     ├── ci.yml                 Plugin and token checks, and the coded layer's checks, on every push
-    └── pages.yml              Publishes the site: token reference and Storybook (runs only once the repo is public)
+    └── pages.yml              Publishes the site from main: the website, Storybook, the AI files, and llms.txt
 ```
 
 **The one-way rule:** `example/` may use `library/` and `core/`. `library/` and `core/` never
@@ -216,7 +231,7 @@ From the repo root:
 | `npm run check:mcp` | Type-checks, builds, and tests the MCP server in `mcp/`: every tool, its bundled copy of the export, and that it has no network code. Needs `npm install` in `mcp/` first |
 | `npm run check:parity` | Every published component except the icons has a coded counterpart in `ui/` (24 of 24), and each one follows its definition. Needs `npm install` in `ui/` first. |
 | `npm run check:css` | No raw values in the coded layer's CSS: every color, length, and font value is a token, and every `var(--stl-…)` names a real one. |
-| `npm run check:a11y` | Builds Storybook, then runs axe on every story in Light and Dark with headless Chrome (158 runs today). Fails on any violation or any story that doesn't render. |
+| `npm run check:a11y` | Builds Storybook, then runs axe on every story in Light and Dark with headless Chrome. Fails on any violation or any story that doesn't render. |
 | `npm run storybook` | Starts Storybook for `ui/` at http://localhost:6006 (regenerates the token CSS first) |
 
 GitHub runs the same checks on every push (`ci.yml`).
@@ -661,7 +676,7 @@ icon button will use it instead.
 
 The version number lives in the root `package.json`. The plugin reads it at build
 time and prints it on the Cover and Read me pages and in the run notification; Storybook shows it
-in its title. `check:tokens` fails if `tokens.json`, `plugin/package.json`, or `ui/package.json`
-says otherwise. CHANGELOG.md records every release;
+in its title. `check:tokens` fails if `tokens.json`, `plugin/package.json`, `ui/package.json`, or
+`mcp/package.json` says otherwise. CHANGELOG.md records every release;
 CONTRIBUTING.md defines what counts as major, minor, or patch for a design system (renaming
 a layer or property is breaking).

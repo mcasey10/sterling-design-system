@@ -5,12 +5,13 @@
   "version": "1.1.1",
   "released": "2026-10-11",
   "links": {
+    "website": "https://mcasey10.github.io/sterling-design-system/",
     "export": "https://mcasey10.github.io/sterling-design-system/ai/",
     "llmsTxt": "https://mcasey10.github.io/sterling-design-system/llms.txt",
     "repository": "https://github.com/mcasey10/sterling-design-system",
+    "releases": "https://github.com/mcasey10/sterling-design-system/releases",
     "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/",
-    "tokenReference": "https://mcasey10.github.io/sterling-design-system/",
-    "figmaFile": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+    "tokenReference": "https://mcasey10.github.io/sterling-design-system/tokens/",
     "figmaCommunity": "https://www.figma.com/community/file/1691833753587232312"
   },
   "files": [
@@ -32,8 +33,8 @@
   ],
   "package": {
     "name": "sterling-ui",
-    "install": "npm install ./sterling-ui-1.1.1.tgz",
-    "note": "Not on a package registry: install it from the tarball. It needs React 19 or newer.",
+    "install": "npm install https://github.com/mcasey10/sterling-design-system/releases/download/v1.1.1/sterling-ui-1.1.1.tgz",
+    "note": "Not on a package registry: npm installs it from the GitHub Release. It needs React 19 or newer.",
     "styles": [
       "import \"sterling-ui/styles.css\";",
       "import \"sterling-ui/fonts.css\";"
@@ -131,14 +132,14 @@
             "note": "The React components running in the browser, with a Docs page for each. An interactive site, not plain text."
           },
           {
-            "title": "Token reference",
+            "title": "Website",
             "url": "https://mcasey10.github.io/sterling-design-system/",
-            "note": "Every token with its value in both color modes, and the contrast of every text and background pair."
+            "note": "Start here: every way into Sterling, for each kind of reader."
           },
           {
-            "title": "Figma file",
-            "url": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
-            "note": "The published library, view only."
+            "title": "Token reference",
+            "url": "https://mcasey10.github.io/sterling-design-system/tokens/",
+            "note": "Every token with its value in both color modes, and the contrast of every text and background pair."
           },
           {
             "title": "Figma Community",

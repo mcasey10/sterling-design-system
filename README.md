@@ -6,9 +6,10 @@ depend on, such as grids, filters, bulk actions, and numbers that always line up
 
 ![Sterling's cover: the name, tagline, and version beside a data grid, a bulk action bar, and summary metrics built from Sterling components](docs/images/cover.png)
 
-- **Figma file (view only):** [Sterling Design System](https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System)
+- **Website:** [mcasey10.github.io/sterling-design-system](https://mcasey10.github.io/sterling-design-system/)
+- **Figma library:** [Sterling on Figma Community](https://www.figma.com/community/file/1691833753587232312)
 - **Storybook (coded components):** [mcasey10.github.io/sterling-design-system/storybook](https://mcasey10.github.io/sterling-design-system/storybook/)
-- **Token reference site:** [mcasey10.github.io/sterling-design-system](https://mcasey10.github.io/sterling-design-system/)
+- **Token reference:** [mcasey10.github.io/sterling-design-system/tokens](https://mcasey10.github.io/sterling-design-system/tokens/)
 - **Version:** see the [latest release](https://github.com/mcasey10/sterling-design-system/releases/latest) and the [changelog](CHANGELOG.md)
 
 ## What's in it

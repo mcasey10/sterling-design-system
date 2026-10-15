@@ -221,7 +221,7 @@ in Figma, and where to compare each step with the generated file.
 
 ## Build
 
-Requires Node 18+.
+Requires Node.js 20.19 or later (check with `node --version`).
 
 ```bash
 cd plugin

@@ -13,12 +13,13 @@ import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { COMPONENTS, variantCount, type PropertyDef } from "../../../definitions/components";
-import {
-  FIGMA_COMMUNITY_URL, FIGMA_FILE_URL, ICON_DOC, REPOSITORY_URL, STORYBOOK_URL, docFor, storybookDocsUrl,
-  type DocTarget,
-} from "../../../definitions/docRegistry";
+import { ICON_DOC, docFor, storybookDocsUrl, type DocTarget } from "../../../definitions/docRegistry";
 import { GUIDELINES, PATTERNS, sentence } from "../../../definitions/guidelines";
 import { ICONS } from "../../../definitions/icons";
+import {
+  AI_FILES_URL, FIGMA_COMMUNITY_URL, LLMS_TXT_URL, RAW_URL, RELEASES_URL, REPOSITORY_URL, STORYBOOK_URL, TOKENS_URL, WEBSITE_URL,
+  packageUrl,
+} from "../../../definitions/site";
 import { TOOL_NAMES } from "../../../mcp/src/tool-names";
 import { cssClass, cssVar } from "../../../scripts/lib/token-names.mjs";
 import { CODED } from "../../src/parity/coded";
@@ -28,10 +29,9 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 const read = (file: string) => readFileSync(resolve(root, file), "utf8");
 
 /** Where the export is published: the ai/ folder of the site, beside Storybook. */
-export const AI_URL = STORYBOOK_URL.replace(/storybook\/$/, "ai/");
-const SITE_URL = STORYBOOK_URL.replace(/storybook\/$/, "");
+export const AI_URL = AI_FILES_URL;
 /** A file on the repository's main branch as plain text, which is what a tool reading llms.txt wants. */
-const rawUrl = (file: string) => `${REPOSITORY_URL.replace("https://github.com/", "https://raw.githubusercontent.com/")}/main/${file}`;
+const rawUrl = (file: string) => `${RAW_URL}${file}`;
 const FICTIONAL = "All sample data in Sterling is fictional. Keep it that way in anything generated from these files.";
 /** The key for Sterling's own data in a token's $extensions (reverse-domain, as the format recommends). */
 export const EXTENSION = "io.github.mcasey10.sterling";
@@ -149,7 +149,7 @@ function buildComponents() {
       related: doc.related.map(related),
       figma: {
         name,
-        file: FIGMA_FILE_URL,
+        file: FIGMA_COMMUNITY_URL,
         variants: variantCount(def),
         variantProperties: Object.entries(def.variants).map(([property, values]) => ({ name: property, values: [...values] })),
         componentProperties: def.properties.map((p) => ({
@@ -188,7 +188,7 @@ function buildComponents() {
       useWhen: sentence(ICON_DOC.use),
       dontUseWhen: sentence(ICON_DOC.dont),
       related: [related(ICON_DOC.docs), ...ICON_DOC.related.map(related)],
-      figma: { name: "Icon/<name>", file: FIGMA_FILE_URL, variants: 1, variantProperties: [], componentProperties: [] },
+      figma: { name: "Icon/<name>", file: FIGMA_COMMUNITY_URL, variants: 1, variantProperties: [], componentProperties: [] },
       react: {
         component: "Icon",
         package: PACKAGE,
@@ -398,20 +398,21 @@ function buildIndex(version: string, counts: { components: number; icons: number
     // The date this version was released (from CHANGELOG.md), not the time the files were written.
     released: releaseDate(version),
     links: {
+      website: WEBSITE_URL,
       export: AI_URL,
-      llmsTxt: `${SITE_URL}llms.txt`,
+      llmsTxt: LLMS_TXT_URL,
       repository: REPOSITORY_URL,
+      releases: RELEASES_URL,
       storybook: STORYBOOK_URL,
-      tokenReference: SITE_URL,
-      figmaFile: FIGMA_FILE_URL,
+      tokenReference: TOKENS_URL,
       figmaCommunity: FIGMA_COMMUNITY_URL,
     },
     files,
     // How an application gets and uses the React components.
     package: {
       name: PACKAGE,
-      install: `npm install ./${PACKAGE}-${version}.tgz`,
-      note: "Not on a package registry: install it from the tarball. It needs React 19 or newer.",
+      install: `npm install ${packageUrl(version)}`,
+      note: "Not on a package registry: npm installs it from the GitHub Release. It needs React 19 or newer.",
       styles: [`import "${PACKAGE}/styles.css";`, `import "${PACKAGE}/fonts.css";`],
       stylesNote: "Import styles.css once: it holds the tokens (--stl-… custom properties), the text style classes (.stl-text-…), and every component's CSS. fonts.css loads Inter.",
       components: `import { Button, DataGrid, type Column, type GridRow } from "${PACKAGE}";`,
@@ -474,8 +475,8 @@ function buildIndex(version: string, counts: { components: number; icons: number
           title: "Optional",
           links: [
             { title: "Storybook", url: STORYBOOK_URL, note: "The React components running in the browser, with a Docs page for each. An interactive site, not plain text." },
-            { title: "Token reference", url: SITE_URL, note: "Every token with its value in both color modes, and the contrast of every text and background pair." },
-            { title: "Figma file", url: FIGMA_FILE_URL, note: "The published library, view only." },
+            { title: "Website", url: WEBSITE_URL, note: "Start here: every way into Sterling, for each kind of reader." },
+            { title: "Token reference", url: TOKENS_URL, note: "Every token with its value in both color modes, and the contrast of every text and background pair." },
             { title: "Figma Community", url: FIGMA_COMMUNITY_URL, note: "Open or duplicate the library." },
             { title: "Changelog", url: rawUrl("CHANGELOG.md"), note: "What changed in each release." },
           ],

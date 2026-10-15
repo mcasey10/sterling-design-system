@@ -30,7 +30,7 @@
       ],
       "figma": {
         "name": "Controls/Button",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 40,
         "variantProperties": [
           {
@@ -190,7 +190,7 @@
       ],
       "figma": {
         "name": "Controls/Icon button",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 30,
         "variantProperties": [
           {
@@ -337,7 +337,7 @@
       ],
       "figma": {
         "name": "Controls/Link",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 6,
         "variantProperties": [
           {
@@ -439,7 +439,7 @@
       ],
       "figma": {
         "name": "Controls/Checkbox",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 12,
         "variantProperties": [
           {
@@ -569,7 +569,7 @@
       ],
       "figma": {
         "name": "Chip/Status",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 5,
         "variantProperties": [
           {
@@ -655,7 +655,7 @@
       ],
       "figma": {
         "name": "Chip/Side",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 2,
         "variantProperties": [
           {
@@ -724,7 +724,7 @@
       ],
       "figma": {
         "name": "Chip/Filter",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 4,
         "variantProperties": [
           {
@@ -834,7 +834,7 @@
       ],
       "figma": {
         "name": "Grid/HeaderCell",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 18,
         "variantProperties": [
           {
@@ -983,7 +983,7 @@
       ],
       "figma": {
         "name": "Grid/BodyCell",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 54,
         "variantProperties": [
           {
@@ -1161,7 +1161,7 @@
       ],
       "figma": {
         "name": "Grid/Row",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 4,
         "variantProperties": [
           {
@@ -1257,7 +1257,7 @@
       ],
       "figma": {
         "name": "Grid/Data grid",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 1,
         "variantProperties": [],
         "componentProperties": []
@@ -1381,7 +1381,7 @@
       ],
       "figma": {
         "name": "Grid/Pagination",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 1,
         "variantProperties": [],
         "componentProperties": [
@@ -1468,7 +1468,7 @@
       ],
       "figma": {
         "name": "Grid/Skeleton row",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 1,
         "variantProperties": [],
         "componentProperties": [
@@ -1537,7 +1537,7 @@
       ],
       "figma": {
         "name": "Grid/Empty state",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 2,
         "variantProperties": [
           {
@@ -1636,7 +1636,7 @@
       ],
       "figma": {
         "name": "Grid/BulkActionBar",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 1,
         "variantProperties": [],
         "componentProperties": [
@@ -1766,7 +1766,7 @@
       ],
       "figma": {
         "name": "Summary/Summary metric",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 4,
         "variantProperties": [
           {
@@ -1898,7 +1898,7 @@
       ],
       "figma": {
         "name": "Input/Text",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 16,
         "variantProperties": [
           {
@@ -2105,7 +2105,7 @@
       ],
       "figma": {
         "name": "Input/Select",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 18,
         "variantProperties": [
           {
@@ -2345,7 +2345,7 @@
       ],
       "figma": {
         "name": "Input/Option",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 5,
         "variantProperties": [
           {
@@ -2449,7 +2449,7 @@
       ],
       "figma": {
         "name": "Input/Menu",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 1,
         "variantProperties": [],
         "componentProperties": []
@@ -2482,7 +2482,7 @@
       ],
       "figma": {
         "name": "Input/Option with description",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 4,
         "variantProperties": [
           {
@@ -2590,7 +2590,7 @@
       ],
       "figma": {
         "name": "Input/Menu heading",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 1,
         "variantProperties": [],
         "componentProperties": [
@@ -2648,7 +2648,7 @@
       ],
       "figma": {
         "name": "Tabs/Tab",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 6,
         "variantProperties": [
           {
@@ -2794,7 +2794,7 @@
       ],
       "figma": {
         "name": "Overlay/Dialog",
-        "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
         "variants": 1,
         "variantProperties": [],
         "componentProperties": [
@@ -2931,7 +2931,7 @@
     ],
     "figma": {
       "name": "Icon/<name>",
-      "file": "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System",
+      "file": "https://www.figma.com/community/file/1691833753587232312",
       "variants": 1,
       "variantProperties": [],
       "componentProperties": []

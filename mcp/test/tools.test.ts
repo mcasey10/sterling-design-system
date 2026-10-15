@@ -32,7 +32,7 @@ test("list_components lists all 24 components and the icons", () => {
   assert.equal(all.icons.names.length, 20);
   // How to install the package and import components and styles comes with the full list.
   assert.equal(all.package.name, "sterling-ui");
-  assert.match(all.package.install, /^npm install \.\/sterling-ui-\d+\.\d+\.\d+\.tgz$/);
+  assert.match(all.package.install, /^npm install https:\/\/github\.com\/mcasey10\/sterling-design-system\/releases\/download\/v(\d+\.\d+\.\d+)\/sterling-ui-\1\.tgz$/);
   assert.deepEqual(all.package.styles, ['import "sterling-ui/styles.css";', 'import "sterling-ui/fonts.css";']);
   assert.equal(data(listComponents("Grid")).package, undefined);
   for (const c of all.components) assert.ok(c.name && c.react && c.description && c.category);

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { COMPONENTS } from "../../../definitions/components";
-import { FIGMA_FILE_URL } from "../../../definitions/docRegistry";
+import { FIGMA_COMMUNITY_URL } from "../../../definitions/site";
 import { Link } from "../components/Link";
 import { VERSION, textClass } from "../tokens";
 import "./foundations.css";
@@ -35,7 +35,7 @@ function IntroductionPage() {
           <h2 className={textClass("Heading")}>Token reference</h2>
           <p>
             Every token with its value in both color modes, and the contrast of every text and background pair:{" "}
-            <Link label="Sterling token reference" size="md" href={TOKEN_SITE} target="_top" />
+            <Link label="Sterling token reference" size="md" href={`${TOKEN_SITE}tokens/`} target="_top" />
           </p>
         </section>
       )}
@@ -43,7 +43,7 @@ function IntroductionPage() {
         <h2 className={textClass("Heading")}>Figma library</h2>
         <p>
           The same components as a Figma library, with the guidelines, patterns, and an example screen:{" "}
-          <Link label="View in Figma" size="md" href={FIGMA_FILE_URL} target="_top" />
+          <Link label="Sterling on Figma Community" size="md" href={FIGMA_COMMUNITY_URL} target="_top" />
         </p>
       </section>
     </div>

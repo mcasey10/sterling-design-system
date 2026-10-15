@@ -17,7 +17,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { COMPONENTS } from "../../definitions/components";
 import { storybookDocsId } from "../../definitions/docRegistry";
-import { REPOSITORY_URL } from "../../definitions/docRegistry";
+import { RAW_URL } from "../../definitions/site";
 import { ICONS } from "../../definitions/icons";
 import { llmsLinks, renderLlmsTxt } from "../../scripts/lib/llms.mjs";
 import { TOOL_NAMES } from "../../mcp/src/tool-names";
@@ -92,7 +92,7 @@ for (const file of FILES) {
   if (!links.some((link) => link.url === `${index.links.export}${file}`)) problems.push(`llms.txt: no link to ai/${file}`);
 }
 for (const tool of TOOL_NAMES) if (!llms.includes(tool)) problems.push(`llms.txt: doesn't name the MCP server's ${tool} tool`);
-const raw = `${REPOSITORY_URL.replace("https://github.com/", "https://raw.githubusercontent.com/")}/main/`;
+const raw = RAW_URL;
 for (const link of links) {
   if (!/^https:\/\//.test(link.url)) problems.push(`llms.txt: "${link.title}" isn't an absolute https link`);
   else if (link.url.startsWith(raw) && !existsSync(resolve(ui, "..", link.url.slice(raw.length)))) {

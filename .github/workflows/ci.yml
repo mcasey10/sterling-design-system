@@ -70,6 +70,9 @@ jobs:
       - name: Example screens use only the sterling-ui package, never its internal markup
         run: npm run check:examples
         working-directory: ui
+      - name: Sterling's addresses are written once, in definitions/site.ts
+        run: npm run check:urls
+        working-directory: ui
       - name: Build Storybook
         run: npm run build-storybook
         working-directory: ui

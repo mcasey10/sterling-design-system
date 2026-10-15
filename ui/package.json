@@ -24,6 +24,7 @@
     "check:ai": "tsx scripts/check-ai.ts",
     "package": "node scripts/build-package.mjs",
     "check:examples": "node scripts/check-examples.mjs",
+    "check:urls": "tsx scripts/check-urls.ts",
     "export:demo-data": "tsx scripts/export-demo-data.ts",
     "check:demo-data": "tsx scripts/export-demo-data.ts --check"
   },

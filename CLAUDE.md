@@ -45,8 +45,13 @@ definitions/              Plain data about components, with no Figma code (share
                           core/ensure.ts); a library check fails if a built component differs
   grid.ts                 Data grid datasets: Column / GridRow / Dataset types, the generic placeholder data,
                           which columns stretch, and numericColumnWidth(). Shared by the plugin and ui/
+  site.ts                 THE public addresses (website and its pages, repository, raw files, Release downloads,
+                          Figma Community, the view-only file for maintainers) and the audience matrix (AUDIENCES).
+                          Never write a Sterling address anywhere else: `npm run check:urls` fails. Link the
+                          Figma Community page, not the view-only file, except in maintainer docs
   docRegistry.ts          Also holds DOCS_TARGET ("figma" | "storybook": where documentation links point;
-                          "storybook" since 1.1.1), STORYBOOK_URL, FIGMA_FILE_URL, FIGMA_COMMUNITY_URL, and REPOSITORY_URL. `npm run check:docs` checks the pages exist
+                          "storybook" since 1.1.1) and re-exports the four addresses it used to define from
+                          site.ts. `npm run check:docs` checks the pages exist
   docRegistry.ts          THE table of component documentation: one-sentence description, details,
                           use / don't use, related guidance. Every published component needs an entry
                           (shown under Guidelines › Component usage); its documentation link follows DOCS_TARGET

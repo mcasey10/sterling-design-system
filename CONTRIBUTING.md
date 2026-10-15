@@ -126,11 +126,31 @@ npm run check:ai
 npm run check:mcp
 ```
 
+```bash
+npm run check:examples
+```
+
+```bash
+npm run check:demo-data
+```
+
+```bash
+npm run check:urls
+```
+
+```bash
+npm run package
+```
+
 `check:a11y` builds Storybook and runs every story in Chrome, in Light and Dark; `check:docs` reads
 that build. `check:ai` fails when the export in `ai/` no longer matches the sources: after changing a
 token, a definition, or guideline text, run `npm run export:ai` and commit the result with the change.
 `check:mcp` (run `npm install` in `mcp/` once) rebuilds the MCP server from `ai/` and tests it, so run it
-after `export:ai`. Also run `npm run typecheck` in `ui/`.
+after `export:ai`. `check:examples` keeps example screens to the sterling-ui package's public API;
+`check:demo-data` keeps the demo kit's data in step with the plugin's example; `check:urls` fails if a
+Sterling address is written anywhere but `definitions/site.ts`, or if the view-only Figma file is linked
+where the Figma Community page belongs; `package` builds the sterling-ui tarball. Also run
+`npm run typecheck` in `ui/`.
 
 GitHub runs the same checks on every push and pull request.
 
@@ -163,13 +183,18 @@ If a check fails, the notification says how many failed and the console
 2. **Set it in five places:** `package.json`, `plugin/package.json`, `ui/package.json`,
    `mcp/package.json`, and `$meta.version` in `tokens/tokens.json`. `npm run check:tokens` fails if they disagree. The Cover
    and Read me pages and Storybook's title pick it up from `package.json` on the next build.
-3. **Update [CHANGELOG.md](CHANGELOG.md):** what was added, changed, fixed, or removed, written for
+3. **Regenerate what carries the version:** `npm run export:ai` (the AI files and llms.txt), then
+   `npm run check:mcp` (the MCP server's copy of them), and commit the result.
+4. **Update [CHANGELOG.md](CHANGELOG.md):** what was added, changed, fixed, or removed, written for
    someone who uses Sterling. For a breaking change, say what to do about it.
-4. **Merge to `main`.** The checks run again, and the site (the token reference and Storybook) is
-   republished.
-5. **Rebuild the Sterling Figma file** with both commands, confirm the checks pass, then publish
+5. **Merge to `main`.** The checks run again, and the website (Start here, the token reference,
+   Storybook, the AI files, and llms.txt) is republished. Open it and follow its links.
+6. **Rebuild the Sterling Figma file** with both commands, confirm the checks pass, then publish
    the library from Figma's Assets panel with the changelog entry as the description.
-6. **Tag the release** `v<version>` on GitHub.
+7. **Tag the release** `v<version>` on GitHub, and attach its two downloads: the package
+   (`npm run package` writes `ui/package/sterling-ui-<version>.tgz`) and the MCP server
+   (`npm run check:mcp` builds it; attach it as `sterling-mcp.js`).
+8. **Update the Figma Community page** with the text in `docs/figma-community.md`.
 
 ### Versions
 
