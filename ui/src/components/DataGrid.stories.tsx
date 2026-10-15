@@ -152,6 +152,16 @@ export const NoResults: Story = {
 };
 
 /** Loading failed: the critical tone says so with its icon and title, and offers Retry. */
+/**
+ * No rows, in a container narrower than the grid (about a phone's width): the grid scrolls sideways, and the empty
+ * state keeps to the width it shows, so its whole message stays in view.
+ */
+export const NoResultsNarrow: Story = {
+  name: "No results, scrolling sideways",
+  args: { rows: [], empty: <EmptyState />, emptyLabel: "No results" },
+  decorators: [(Story) => <div className="stl-story-narrow">{Story()}</div>],
+};
+
 export const LoadError: Story = {
   name: "Load error",
   args: { rows: [], empty: <EmptyState tone="critical" />, emptyLabel: "Couldn't load rows" },
