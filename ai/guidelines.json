@@ -393,7 +393,7 @@
         {
           "number": 1,
           "label": "Filter panel",
-          "note": "The panel has one field per commonly filtered column; Add filter offers the rest. Apply runs the query. Reset returns every field to the active saved view's filters, or empty if no view is active. Clear all removes every filter. Placeholders give an example of the expected value, never the label."
+          "note": "The panel has one field per commonly filtered column; Add filter offers the rest. Apply runs the query. Reset returns every field to the active saved view's filters, or empty if no view is active. Clear all removes every filter. A field left empty, or set to its \"Any …\" option, doesn't filter: it adds no condition and shows no chip. Placeholders give an example of the expected value, never the label."
         },
         {
           "number": 2,

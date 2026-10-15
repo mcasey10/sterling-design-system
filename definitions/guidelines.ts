@@ -241,7 +241,7 @@ export const PATTERNS: PatternDoc[] = [
     steps: [
       [
         "Filter panel",
-        "The panel has one field per commonly filtered column; Add filter offers the rest. Apply runs the query. Reset returns every field to the active saved view's filters, or empty if no view is active. Clear all removes every filter. Placeholders give an example of the expected value, never the label.",
+        "The panel has one field per commonly filtered column; Add filter offers the rest. Apply runs the query. Reset returns every field to the active saved view's filters, or empty if no view is active. Clear all removes every filter. A field left empty, or set to its \"Any …\" option, doesn't filter: it adds no condition and shows no chip. Placeholders give an example of the expected value, never the label.",
       ],
       [
         "Applied filters as chips",
