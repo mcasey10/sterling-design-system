@@ -5,7 +5,8 @@ by a local Figma plugin from one token file (`tokens/tokens.json`). The same fil
 **an example built with Sterling**: a loan pooling workflow on its own page at the end.
 
 Since 1.1 Sterling also exists in code: React components documented in Storybook (`ui/`), built
-from the same tokens and component definitions as the Figma library.
+from the same tokens and component definitions as the Figma library. Since 1.2 it also publishes what it
+contains for AI tools: files, llms.txt, and an MCP server (see [section 13](#13-sterling-for-ai-tools)).
 
 This document is written for designers first. Code paths are given so you can find things,
 but you don't need to read code to follow it.
@@ -689,3 +690,33 @@ in its title. `check:tokens` fails if `tokens.json`, `plugin/package.json`, `ui/
 `mcp/package.json` says otherwise. CHANGELOG.md records every release;
 CONTRIBUTING.md defines what counts as major, minor, or patch for a design system (renaming
 a layer or property is breaking).
+
+## 13. Sterling for AI tools
+
+Since 1.2, Sterling also publishes what it contains for AI tools, so an AI tool that writes a screen uses
+Sterling's components, tokens, and rules instead of inventing its own. Everything here is generated from the
+same sources as the Figma library and the React components, and checked.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/ai-layer.dark.svg">
+  <img src="docs/diagrams/ai-layer.svg" alt="Sterling's sources generate the AI files and the sterling-ui package. The AI files reach your AI tool two ways: read by URL from the website (llms.txt and /ai/), or through calls to the MCP server. Your AI tool writes your code, which imports sterling-ui.">
+</picture>
+
+- **The AI files** (`ai/`). `npm run export:ai` writes four JSON files from the tokens, `definitions/`, and the
+  coded components: every component with its guidance, Figma properties, and React props; every token in the
+  Design Tokens (DTCG) format; and the guidelines and patterns. They're committed, and `check:ai` fails if they
+  no longer match their sources.
+- **llms.txt**, at the website's root, is the plain-text entry point for tools that read by URL. It's written
+  from `ai/index.json`.
+- **The MCP server** (`mcp/`) answers the same questions as tools: eight read-only tools over a copy of the AI
+  files, in one file with no network access. Each Release attaches it as `sterling-mcp.js`; any MCP client can
+  register it. An MCP client calls the server and doesn't read llms.txt: they are two routes to the same files.
+- **The sterling-ui package** is what the code an AI tool writes imports: the React components and the token
+  CSS, attached to each Release.
+- **The website's AI page** (`/ai-tools/`) follows one component, Chip/Status, through all of this. Its
+  excerpts are read from the real files when the site builds, and its MCP exchange comes from the built server,
+  so the page can't drift from what it describes. Its last step shows code an AI session wrote with only the
+  package and the MCP server: the Pool loans screen in `ui/src/examples/pool-loans/`, as delivered.
+
+The diagram's source is `docs/diagrams/ai-layer.mmd`, rendered in Sterling's Light and Dark colors by
+`npm run diagrams`.

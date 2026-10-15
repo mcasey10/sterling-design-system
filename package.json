@@ -26,6 +26,8 @@
     "check:urls": "npm --prefix ui run check:urls",
     "check:site": "npm --prefix ui run check:site",
     "check:excerpts": "npm --prefix ui run check:excerpts",
+    "docs:sync": "npm --prefix ui run docs:sync",
+    "check:docs-sync": "npm --prefix ui run check:docs-sync",
     "diagrams": "node scripts/render-diagrams.mjs",
     "check:diagrams": "node scripts/check-diagrams.mjs",
     "demo:kit": "node scripts/build-demo-kit.mjs",

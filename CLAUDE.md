@@ -186,6 +186,10 @@ ui/scripts/check-site.mjs `npm run check:site`: every website page, axe in Light
 scripts/build-site.mjs    `npm run site`: site/ = Start here + install/ + tokens/ + ai-tools/ + Storybook under
                           storybook/ + a copy of ai/ + llms.txt (what Pages publishes); builds the MCP server first;
                           scripts/serve-site.mjs (`npm run site:serve`)
+ui/scripts/docs-sync.ts   `npm run docs:sync`: writes the generated parts of docs between `<!-- generated: … -->`
+                          markers: README's Start here table (AUDIENCES), mcp/README.md's setup block (setup.ts),
+                          and docs/figma-community.md's version and counts. `npm run check:docs-sync` fails if stale
+docs/figma-community.md   The Figma Community page text (pasted at release); docs/github-about.md: the About panel
 scripts/figma-fingerprint.mjs  `npm run figma:fingerprint -- <file key>`: the call that fingerprints a Figma file
                           (read-only code in scripts/lib/figma-fingerprint.js: every library page, variable, text
                           style); `-- compare before.json after.json` compares two. Never commit a file key

@@ -272,7 +272,7 @@ export function llmsExcerpt(): Excerpt {
     language: "text",
     text: someLines(
       text,
-      [/^# Sterling$/, /^> /, /^## Machine-readable export$/, /^- \[components\.json\]/, /^- \[guidelines\.json\]/, /^## MCP server$/, /^Tools: /],
+      [/^# Sterling$/, /^> /, /^## Machine-readable export$/, /^- \[components\.json\]/, /^- \[guidelines\.json\]/, /^## MCP server$/, /^Sterling has a small read-only MCP server/, /^Tools: /],
       "llms.txt"
     ),
   };

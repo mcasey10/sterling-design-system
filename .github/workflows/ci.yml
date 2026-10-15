@@ -91,6 +91,8 @@ jobs:
         run: npm run check:site
       - name: The AI page's excerpts match their sources, and its code is as delivered
         run: npm run check:excerpts
+      - name: The generated parts of the documentation are up to date
+        run: npm run check:docs-sync
       - name: Build Storybook
         run: npm run build-storybook
         working-directory: ui

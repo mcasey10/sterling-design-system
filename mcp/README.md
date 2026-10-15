@@ -1,76 +1,65 @@
 # Sterling MCP server
 
 A small, read-only [Model Context Protocol](https://modelcontextprotocol.io) server that lets an AI tool ask
-Sterling what it contains and how to use it: its components, tokens, guidelines, and patterns.
+Sterling what it contains and how to use it: its components, tokens, guidelines, and patterns. It reads no files:
+everything it answers from, a copy of Sterling's [AI files](https://github.com/mcasey10/sterling-design-system/tree/main/ai),
+is built into it.
 
-- It runs on your machine, over stdio. It opens no network connection and reads no file: everything it
-  answers from is inside the one built file, `dist/server.js`.
-- Its data is a copy of the export in [`ai/`](../ai), made when the server is built.
-- It isn't published to a package registry. Build it from this repository.
+## Set up
 
-## Build
+<!-- generated: setup (npm run docs:sync, from definitions/setup.ts) -->
+It works with any MCP client: Claude Code, Claude Desktop, editors with MCP support, and others. It's one file, `sterling-mcp.js`, that runs on your machine and makes no network requests.
 
-Node.js 20 or newer. From this folder:
+### Where
 
-```bash
-npm install
-```
+Any terminal: PowerShell on Windows, Terminal on macOS, or the terminal in your editor. No administrator rights needed. Any folder: the commands use the file's full path.
 
-```bash
-npm run build
-```
+### You need
 
-This writes `dist/server.js`. To see which version of Sterling it carries:
+- **Node.js 20 or later.** Check: `node --version` shows `v20` or higher. If not, install the LTS version from nodejs.org, then open a new terminal.
+- **An AI tool that supports MCP servers.** Any MCP client works. Its documentation says where to add an MCP server.
 
-```bash
-node dist/server.js --version
-```
+### Do
 
-It prints the server's version, the export's version and release date, and a hash of the data, for example
-`Sterling MCP server 1.1.1 · export 1.1.1, released 2026-10-11 · data 3f9c…` (64 characters in full).
+Download `sterling-mcp.js` from the latest GitHub Release (https://github.com/mcasey10/sterling-design-system/releases/latest/download/sterling-mcp.js). Put it in a folder where it can stay, for example a `tools` folder in your home folder, and note its full path.
 
-## Run it anywhere
-
-`dist/server.js` is one self-contained file: the server, the libraries it needs, and the export are all
-inside it. Copy that file to any folder, on any machine with Node.js 20 or newer, and run it from there.
-Nothing else needs installing, and it doesn't need this repository.
+Check that it runs. In any terminal, from any folder:
 
 ```bash
-node /path/to/server.js --version
+node "/full/path/to/sterling-mcp.js" --version
 ```
 
-## Connect
+It prints `Sterling MCP server 1.1.1 · …`. Then register it with your AI tool, once:
 
-**Claude Code.** Use the full path to the file, wherever you keep it:
+**Claude Code.** In any terminal, from any folder:
 
 ```bash
-claude mcp add sterling -- node /path/to/server.js
+claude mcp add --scope user sterling -- node "/full/path/to/sterling-mcp.js"
 ```
 
-To give one project the server without adding it for every project, put a `.mcp.json` file in that project's
-folder (the path can be relative to the folder):
+**Any other MCP client.** Add a server to the client's MCP settings: command `node`, argument the file's full path.
 
 ```json
 {
   "mcpServers": {
-    "sterling": { "command": "node", "args": ["./mcp/server.js"] }
+    "sterling": { "command": "node", "args": ["/full/path/to/sterling-mcp.js"] }
   }
 }
 ```
 
-**Any other MCP client.** Add a stdio server whose command is `node` and whose argument is the built file.
-Most clients take this as JSON:
+### Scope
 
-```json
-{
-  "mcpServers": {
-    "sterling": {
-      "command": "node",
-      "args": ["/path/to/server.js"]
-    }
-  }
-}
-```
+`--scope user` makes Sterling available in every project, which is right for most people. To share it with a team through one repository instead, put the JSON above in that project's `.mcp.json`, with a path that works for everyone.
+
+### It worked if
+
+Your tool lists `sterling` as connected (in Claude Code, run `/mcp`). Then ask: "Which Sterling component shows a record's status?" It should answer Chip/Status, from the server.
+
+### If it didn't
+
+- "node" not found: Node.js isn't installed, or the terminal was opened before it was. Install it, then open a new terminal.
+- The server doesn't start: the path is wrong, or it has spaces and isn't in quotes. In JSON on Windows, write the path with forward slashes: `C:/Users/…/sterling-mcp.js`.
+<!-- /generated: setup -->
 
 ## Tools
 
@@ -90,12 +79,29 @@ Every tool is read-only and returns JSON.
 Names are matched by their letters and digits, so `data grid`, `Grid/Data Grid`, and `DataGrid` all find the
 same component. An unknown name returns an error that lists the closest matches.
 
-## Keeping it current
+`node sterling-mcp.js --version` prints the server's version, the version and release date of the files it
+carries, and a hash of them, for example `Sterling MCP server 1.1.1 · export 1.1.1, released 2026-10-11 · data 3f9c…`.
 
-The server's data is copied from `ai/` each time it is built, so rebuild it after the export changes
-(`npm run export:ai` at the repository root, then `npm run build` here). `npm test` fails if the copy or the
-built file is older than `ai/`, and if the built file contains any network code.
+## For maintainers: build it from this repository
+
+From this folder (`mcp/`), with Node.js 20 or later:
+
+```bash
+npm install
+```
+
+```bash
+npm run build
+```
+
+This writes `dist/server.js`, the file each Release attaches as `sterling-mcp.js`: the server, the libraries it
+needs, and a copy of `ai/`, in one file. Its data is copied from `ai/` each time it is built, so rebuild it after
+the export changes (`npm run export:ai` at the repository root, then `npm run build` here). `npm test` fails if
+the copy or the built file is older than `ai/`, if the built file contains any network code, or if it doesn't run
+alone in an empty folder.
 
 ```bash
 npm test
 ```
+
+`scripts/exchange.mjs` calls the built server as a client would; the website's AI page shows the exchange.

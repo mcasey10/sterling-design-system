@@ -357,32 +357,62 @@ Actions**; the next push to `main` publishes the site.
 push and pull request: it type-checks and builds the plugin, runs the contrast and token checks, and
 builds the token site; and for the coded layer it type-checks, runs the parity, raw-value, accessibility, and documentation-link checks, and builds Storybook. The library and example checks need a Figma file, so they run in the plugin.
 
-## Going public
+## Files for AI tools, and the MCP server
 
-The repository went public on 2026-10-11. The steps, in order; all are done:
+- **The export** (`ai/`, committed, generated): `index.json`, `components.json`, `tokens.dtcg.json` (DTCG
+  2025.10), `guidelines.json`, written by `npm run export:ai` from the tokens, `definitions/`, and the coded
+  components (`ui/scripts/lib/ai-export.ts`). `npm run check:ai` fails if they no longer match the sources.
+- **llms.txt**, at the website's root, is rendered from `ai/index.json` (`llmsTxt`) by `scripts/lib/llms.mjs`.
+  To add a section, add it in `ai-export.ts`; `check:ai` validates every link in it.
+- **The MCP server** (`mcp/`): eight read-only tools over a copy of the export, in one file. Users download it
+  from the Release as `sterling-mcp.js` and register it with any MCP client; [mcp/README.md](../mcp/README.md)
+  has the setup and the tools. `npm run check:mcp` rebuilds and tests it.
+- **The AI page** (`/ai-tools/`) follows Chip/Status from the sources to code. Its excerpts are read from the
+  files when the site builds, and step 6 is a real exchange with the built server: `npm run check:excerpts`.
 
-1. ✓ Done. **Check the README** still describes what Sterling includes.
-2. ✓ Done. **Make the repository public:** GitHub → Settings → General → Danger Zone → Change visibility.
-3. ✓ Done. **Turn on Pages:** Settings → Pages → Build and deployment → Source: **GitHub Actions**. Then run
-   the "Site" workflow from the Actions tab, or push to `main`. It publishes the token reference at
-   the root and Storybook under `storybook/`.
-4. ✓ Done. **Open both parts of the site** and follow the link from each to the other: "Components in
-   Storybook" on the token reference, and the title or the Introduction page in Storybook.
-5. ✓ Done. **Check the Storybook address** matches `STORYBOOK_URL` in `definitions/docRegistry.ts`, and open
-   one Docs link in that form, for example
-   `…/storybook/?path=/docs/components-controls-button--docs`. Run `npm run check:docs`.
-6. ✓ Done in 1.1.1. **Point the documentation links at Storybook:** `DOCS_TARGET` is `"storybook"` in
-   `definitions/docRegistry.ts`, so after **Build library** each component's documentation link in
-   Figma opens its Storybook Docs page. Click one from the Component documentation panel to confirm.
-   Set it back to `"figma"` if the site is ever taken down: without the site the links are dead.
-7. ✓ Done. **Set the Figma file to "Anyone with the link can view":** Share → change the link's access.
-8. ✓ Done. **Test the Figma link in a private browser window**, signed out, to confirm it opens without an
-   account.
-9. ✓ Done. **Verify the three links in the README:** the Figma file, Storybook, and the token site.
+## The sterling-ui package
+
+`npm run package` builds `ui/package/` and `sterling-ui-<version>.tgz`: the components, their type
+declarations, `styles.css` (tokens and every component's CSS), and `fonts.css`. It isn't on a package registry;
+each Release attaches the tarball, and users install it from the Release address
+([Install sterling-ui](https://mcasey10.github.io/sterling-design-system/install/), from `definitions/setup.ts`).
+Example screens in `ui/src/examples/` import only from the package (`npm run check:examples`).
+
+## Documentation written once
+
+Some documentation is generated from data, between marker comments (`<!-- generated: … -->`), by
+`npm run docs:sync`; `npm run check:docs-sync` (in CI) fails if it's out of date:
+
+- the Start here table in the README, from `definitions/audiences.ts` (the website's Start here draws the same);
+- the setup block in `mcp/README.md`, from `definitions/setup.ts` (the website's AI page shows the same);
+- the version and the component and icon counts in `docs/figma-community.md`, the text pasted into the Figma
+  Community page at each release.
+
+`docs/github-about.md` holds the text for the repository's About panel, set by hand.
+
+## After a release: check the live site
+
+Once the Site workflow has published `main`:
+
+1. Open Start here, Install, Tokens, Storybook, and AI tools from the navigation, in Light and Dark.
+2. Follow every link on Start here, including the Figma Community page and the Release downloads
+   (`sterling-ui-<version>.tgz`, and `sterling-mcp.js` from `releases/latest/download/`).
+3. Fetch `llms.txt` and follow every link in it, including the raw files on `main`.
+4. Install sterling-ui from the Release address into a new React project, and set up the MCP server from the
+   download, following only the website.
+5. Open one component's documentation link from Figma (the Assets panel's component details); it opens its
+   Storybook Docs page.
 
 ## Backlog
 
 Not planned for a release yet:
+
+- **A Claude Code plugin** that carries the MCP server, so it's set up from inside Claude Code with one command,
+  and a **Claude Desktop extension** (`.mcpb`), opened with a double click. Both after 1.2; until then the
+  server is the Release download, registered with any MCP client.
+
+- **Components a session building a real screen missed:** a toast or inline message, a card or panel, a
+  screen-reader-only text class, layout tokens, and grouped options (and descriptions) in Select.
 
 - **Tooltip component.** A Sterling tooltip, in Figma and in code. Until then the coded Icon button
   shows its label with the browser's own tooltip (`title`), which can't be styled, appears after a
