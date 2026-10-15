@@ -515,7 +515,7 @@ export async function buildPatterns(kit: Kit, page: PageNode, lib: Library): Pro
   const footer = frame("Footer", {});
   root.appendChild(footer);
   footer.layoutSizingHorizontal = "FILL";
-  await para(kit, footer, "Generated from the plugin (src/patterns.ts). Redrawn on every run — change the source, not this frame.", "Caption");
+  await para(kit, footer, "Text from definitions/guidelines.ts; examples built by the plugin from Sterling instances. Redrawn on every run — change the source, not this frame.", "Caption");
 
   if (pos) updated("Page Patterns");
   else created("Page Patterns content");

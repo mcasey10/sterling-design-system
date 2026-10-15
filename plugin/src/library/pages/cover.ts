@@ -11,6 +11,7 @@ import { COLLECTIONS } from "../../core/variables";
 import { Kit, color, space, frame, bindFill, pinMode, takeOver, PLUGIN_KEY } from "../../core/helpers";
 import { variantOf, setProps, nested } from "../../core/ensure";
 import { NAME, TAGLINE, VERSION, CREDIT } from "../../core/meta";
+import { WEBSITE_URL } from "../../../../definitions/pluginAddresses";
 import type { Library } from "./componentsPage";
 import { created, updated, warn } from "../../core/log";
 
@@ -88,6 +89,11 @@ export async function buildCover(kit: Kit, page: PageNode, lib: Library): Promis
   });
   title.appendChild(version);
   version.appendChild(await coverText(kit, `Version ${VERSION}`, "Medium", 28, "text/primary"));
+  // The website, where every way into Sterling starts: a link, underlined so it isn't marked by color alone.
+  const address = await coverText(kit, WEBSITE_URL.replace(/^https:\/\//, "").replace(/\/$/, ""), "Regular", 28, "text/secondary");
+  address.textDecoration = "UNDERLINE";
+  address.hyperlink = { type: "URL", value: WEBSITE_URL };
+  title.appendChild(address);
 
   // Right: a montage of live components on a panel — summary metrics, then a bulk action bar, data grid,
   // and pagination.

@@ -2913,7 +2913,7 @@
     ],
     "description": "The \"<name>\" icon, a 16px outline glyph that takes its color from the component using it.",
     "details": "16px outline icon. Parent components recolor the Glyph layer; resize with icon/size or size/*.",
-    "useWhen": "Supporting a label, or as an instance-swap value in Button, Status badge, and similar components.",
+    "useWhen": "Supporting a label, or as the Icon value of Controls/Button and Controls/Icon button.",
     "dontUseWhen": "It's the only way to convey meaning — pair it with text or an accessible name.",
     "related": [
       {

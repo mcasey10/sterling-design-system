@@ -1,4 +1,4 @@
-// Address check: Sterling's public addresses are written once, in definitions/site.ts (or, for the two the
+// Address check: Sterling's public addresses are written once, in definitions/site.ts (or, for the ones the
 // Figma plugin uses, definitions/pluginAddresses.ts, which site.ts re-exports). Fails if:
 //   • source code (a .ts, .tsx, .mjs, or .js file) writes a Sterling address itself instead of importing it
 //     from definitions/site.ts;

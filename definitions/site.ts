@@ -1,12 +1,12 @@
-// Sterling's public addresses: the one place each is written (with pluginAddresses.ts, which holds the two the
+// Sterling's public addresses: the one place each is written (with pluginAddresses.ts, which holds the ones the
 // Figma plugin uses, re-exported here). Plain data, shared by the website build, the export in ai/ and
 // llms.txt, Storybook, and the checks. Import addresses from here. The plugin doesn't bundle this file, so
 // the website's pages can change without changing the plugin; the audience matrix is in audiences.ts.
 // `npm run check:urls` fails if a Sterling address is written anywhere else in source code, or if the
 // view-only Figma file is linked where the Figma Community page belongs.
 
-import { STORYBOOK_URL, WEBSITE_URL } from "./pluginAddresses";
-export { STORYBOOK_URL, WEBSITE_URL };
+import { CONTRIBUTING_URL, REPOSITORY_URL, STORYBOOK_URL, WEBSITE_URL } from "./pluginAddresses";
+export { CONTRIBUTING_URL, REPOSITORY_URL, STORYBOOK_URL, WEBSITE_URL };
 
 /** The token reference: every token with its values in both color modes, and every contrast pair. */
 export const TOKENS_URL = `${WEBSITE_URL}tokens/`;
@@ -17,8 +17,6 @@ export const AI_FILES_URL = `${WEBSITE_URL}ai/`;
 /** llms.txt: the plain-text entry point for AI tools that read by URL. */
 export const LLMS_TXT_URL = `${WEBSITE_URL}llms.txt`;
 
-/** The public repository: the source of everything above. */
-export const REPOSITORY_URL = "https://github.com/mcasey10/sterling-design-system";
 /** Released versions, with their downloads. */
 export const RELEASES_URL = `${REPOSITORY_URL}/releases`;
 /** A file on the repository's main branch, as GitHub shows it. */

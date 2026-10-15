@@ -46,9 +46,9 @@ definitions/              Plain data about components, with no Figma code (share
   grid.ts                 Data grid datasets: Column / GridRow / Dataset types, the generic placeholder data,
                           which columns stretch, and numericColumnWidth(). Shared by the plugin and ui/
   site.ts                 THE public addresses (website and its pages, repository, raw files, Release downloads,
-                          Figma Community, the view-only file for maintainers). The plugin doesn't bundle it: the two
-                          addresses the plugin uses (website, Storybook) are in pluginAddresses.ts, which site.ts
-                          re-exports and docRegistry.ts imports. The audience matrix (AUDIENCES) is in audiences.ts.
+                          Figma Community, the view-only file for maintainers). The plugin doesn't bundle it: the
+                          addresses the plugin uses (website, Storybook, repository, CONTRIBUTING) are in
+                          pluginAddresses.ts, which site.ts re-exports and docRegistry.ts and the plugin import. The audience matrix (AUDIENCES) is in audiences.ts.
                           Never write a Sterling address anywhere else: `npm run check:urls` fails. Link the
                           Figma Community page, not the view-only file, except in maintainer docs
   docRegistry.ts          Also holds DOCS_TARGET ("figma" | "storybook": where documentation links point;

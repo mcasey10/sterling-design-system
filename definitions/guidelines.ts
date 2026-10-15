@@ -189,7 +189,7 @@ export const PATTERNS: PatternDoc[] = [
     steps: [
       [
         "Filters panel",
-        "Filters sit on the left (2 of 12 columns). Inputs and selects narrow the rows; Apply runs the query and Reset clears it. Placeholders give examples, never labels.",
+        "Filters sit on the left (2 of 12 columns). Inputs and selects narrow the rows. Apply runs the query. Reset returns every field to the active saved view's filters, or empty if no view is active. Placeholders give examples, never labels.",
       ],
       [
         "View and applied filters",
@@ -241,7 +241,7 @@ export const PATTERNS: PatternDoc[] = [
     steps: [
       [
         "Filter panel",
-        "The panel has one field per commonly filtered column; Add filter offers the rest. Apply runs the query and Reset clears every field. Placeholders give an example of the expected value, never the label.",
+        "The panel has one field per commonly filtered column; Add filter offers the rest. Apply runs the query. Reset returns every field to the active saved view's filters, or empty if no view is active. Clear all removes every filter. Placeholders give an example of the expected value, never the label.",
       ],
       [
         "Applied filters as chips",
@@ -261,7 +261,7 @@ export const PATTERNS: PatternDoc[] = [
       ],
       [
         "An edited view: Save view is enabled",
-        "Changing a view's filters keeps its name and adds \"· edited\". Save view becomes available and saves the current filter set under Saved by me.",
+        "Changing a view's filters keeps its name and adds \"· edited\". Save view becomes available and saves the current filter set under Saved by me. Reset returns to the view's own filters; Clear all removes every filter.",
       ],
       [
         "An unchanged view: Save view is disabled",

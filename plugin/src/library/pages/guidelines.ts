@@ -225,7 +225,7 @@ export async function buildGuidelines(kit: Kit, page: PageNode, lib: Library): P
   const footer = frame("Footer", {});
   root.appendChild(footer);
   footer.layoutSizingHorizontal = "FILL";
-  await para(kit, footer, "Generated from the plugin (src/guidelines.ts). Redrawn on every run — change the source, not this frame.", "Caption");
+  await para(kit, footer, "Text from definitions/guidelines.ts, drawn by the plugin. Redrawn on every run — change the source, not this frame.", "Caption");
 
   if (pos) updated("Page Guidelines");
   else created("Page Guidelines content");

@@ -5,13 +5,17 @@
 import { tokens } from "../../core/tokens";
 import { COLLECTIONS } from "../../core/variables";
 import { Kit, color, space, frame, text, pinMode, takeOver, ARCHITECTURE_PAGE, GUIDELINES_PAGE, PATTERNS_PAGE } from "../../core/helpers";
-import { para, docSection, definitions, steps } from "../../core/docBlocks";
+import { para, docSection, definitions, steps, link, linkPart } from "../../core/docBlocks";
 import { created, updated } from "../../core/log";
 import { NAME, TAGLINE, VERSION } from "../../core/meta";
+import { DOCS_TARGET } from "../../../../definitions/docRegistry";
+import { CONTRIBUTING_URL, REPOSITORY_URL, STORYBOOK_URL, WEBSITE_URL } from "../../../../definitions/pluginAddresses";
 
 const ROOT = "Read me";
 /** The example's page (built by "Build example"); named here only for the text below. */
 const EXAMPLE_PAGE = "Example: Loan pooling";
+/** An address as people read it: no scheme, no trailing slash. */
+const shown = (url: string) => url.replace(/^https:\/\//, "").replace(/\/$/, "");
 
 export async function buildReadme(kit: Kit, page: PageNode): Promise<FrameNode> {
   const pos = takeOver(page, ROOT);
@@ -40,13 +44,33 @@ export async function buildReadme(kit: Kit, page: PageNode): Promise<FrameNode> 
       "is generated from tokens/tokens.json by a local plugin. All data is hypothetical: names, IDs, and figures are fictional."
   );
 
+  // Where Sterling is outside this file: each address is a link.
+  const elsewhere = await docSection(kit, root, "Sterling elsewhere");
+  for (const [term, url, note] of [
+    ["Website", WEBSITE_URL, "Every way into Sterling, for designers, developers, and AI tools."],
+    ["Storybook", STORYBOOK_URL, "The same components in React, with a Docs page each."],
+    ["GitHub", REPOSITORY_URL, "The source this file is generated from."],
+  ]) {
+    const row = frame(`Row/${term}`, { direction: "HORIZONTAL", gap: space(kit, "space/16") });
+    elsewhere.appendChild(row);
+    row.layoutSizingHorizontal = "FILL";
+    const label = frame("Term", { width: 200 });
+    row.appendChild(label);
+    label.appendChild(await text(kit, term, "Body-strong"));
+    const body = frame("Description", { gap: space(kit, "space/4") });
+    row.appendChild(body);
+    body.layoutGrow = 1;
+    await link(kit, body, shown(url), url);
+    await para(kit, body, note);
+  }
+
   const contents = await docSection(kit, root, "What's in Sterling");
   await definitions(kit, contents, [
     ["Cover", "The file's cover and thumbnail: name, tagline, and version, beside a montage of live components."],
     ["Variables", "Primitives (color ramps) · Color (Light, Dark) · Spacing (space, radius) · Size (fixed widths and heights) · Density (Compact, Default, Comfortable). Color aliases Primitives; Density aliases Size and Spacing, so sizes stay on-scale. Every Color, Spacing, Size, and Density variable has a description saying what it's for; Primitives are hidden."],
-    ["Text styles", "Inter: Display, Title, Heading, Body, Body-strong, Label, Caption, Numeric. Roboto Mono: Code."],
+    ["Text styles", "Inter: Display, Title, Heading, Body, Body-strong, Body-link, Label, Label-link, Caption, Numeric. Roboto Mono: Code."],
     ["Foundations", "Color swatches for both modes, primitive ramps, type specimens, spacing, radius, and density panels."],
-    ["Components", "Icons, Button, Icon button, Status chip, Side chip, Checkbox, data grid (header cell, body cell with gain / loss, row, grid, pagination, skeleton row, empty state), bulk action bar, filter chip, summary metric, text input, select with menu and options, and tabs — with neutral placeholder content, every interactive state, loading and empty states, and an Edge cases section. Each has a one-sentence description (click a component in the Assets panel to see it in Details), a usage note (details, when to use it, and when not), and a documentation link to its entry on the Guidelines page."],
+    ["Components", `Icons, Button, Icon button, Status chip, Side chip, Checkbox, data grid (header cell, body cell with gain / loss, row, grid, pagination, skeleton row, empty state), bulk action bar, filter chip, summary metric, text input, select with menu and options, and tabs — with neutral placeholder content, every interactive state, loading and empty states, and an Edge cases section. Each has a one-sentence description (click a component in the Assets panel to see it in Details), a usage note (details, when to use it, and when not), and a documentation link to ${DOCS_TARGET === "storybook" ? "its Docs page in Storybook" : "its entry on the Guidelines page"}.`],
     [GUIDELINES_PAGE, "Design principles (good vs bad), accessibility, data display, naming, states, color, and icon rules, with do / don't pairs built from Sterling instances, plus Component usage: one entry per component."],
     [PATTERNS_PAGE, "Complete compositions from Sterling instances, with numbered notes and use / don't-use guidance: filters + grid + bulk actions, the bulk action bar's states, filter panel and chips, saved views, status chips, warning and exception cells, the confirmation dialog, form layout, and loading / empty / error states."],
     ["Template", "A blank 1440px desktop skeleton on a 12-column grid: app bar plus empty slots for filters | main content | summary."],
@@ -70,14 +94,16 @@ export async function buildReadme(kit: Kit, page: PageNode): Promise<FrameNode> 
       "leave it alone. The plugin API can't set it, so Build library reminds you in its run report until it's on.",
   ]);
 
-  const tweak = await docSection(kit, root, "Changing Sterling");
-  await para(
+  const tweak = await docSection(kit, root, "Changing Sterling (maintainers)");
+  const changing = await para(
     kit, tweak,
-    "Recolor or resize by changing tokens/tokens.json, running npm run build in plugin/, then rerunning the plugin " +
-      "(Plugins → Development → Sterling → Build library). Instances keep their overrides. " +
-      "Build example rebuilds only the example page, from the existing library. The repo README covers the details.",
+    "This file is generated from the GitHub repository by a local plugin, so restyling Sterling is maintainer work: " +
+      "change tokens/tokens.json there, build the plugin, and run Build library (Plugins → Development → Sterling). " +
+      "Instances keep their overrides; edits made by hand to Sterling's own values are reset. Build example rebuilds " +
+      "only the example page. Every step is in CONTRIBUTING.md.",
     "Body", "text/primary"
   );
+  await linkPart(kit, changing, "CONTRIBUTING.md", CONTRIBUTING_URL);
 
   const rules = await docSection(kit, root, "Rules");
   await definitions(kit, rules, [

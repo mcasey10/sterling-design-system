@@ -2,7 +2,34 @@
 // wrapping paragraphs, titled sections, definition lists, numbered steps, and a stage diagram.
 // Everything is bound to tokens like the rest of Sterling.
 
-import { Kit, color, space, frame, append, text, recolor } from "./helpers";
+import { Kit, color, space, frame, append, text, recolor, solid } from "./helpers";
+
+/** Loads every font a text uses, which Figma needs before a hyperlink is set. */
+async function loadFonts(t: TextNode) {
+  for (const font of t.getRangeAllFontNames(0, t.characters.length)) await figma.loadFontAsync(font);
+}
+
+/** A link on its own line: the Body-link text style (its underline is part of the style), in the accent color. */
+export async function link(kit: Kit, parent: FrameNode, chars: string, url: string) {
+  const t = await text(kit, chars, "Body-link", "accent/default");
+  parent.appendChild(t);
+  await loadFonts(t);
+  t.hyperlink = { type: "URL", value: url };
+  return t;
+}
+
+/** Makes one part of a paragraph a link, styled as `link` styles one. */
+export async function linkPart(kit: Kit, t: TextNode, part: string, url: string) {
+  const start = t.characters.indexOf(part);
+  if (start < 0) throw new Error(`"${part}" isn't in "${t.characters}"`);
+  const end = start + part.length;
+  const style = kit.styles.get("Body-link");
+  if (style) await t.setRangeTextStyleIdAsync(start, end, style.id);
+  const accent = color(kit, "accent/default");
+  if (accent) t.setRangeFills(start, end, [solid(accent)]);
+  await loadFonts(t);
+  t.setRangeHyperlink(start, end, { type: "URL", value: url });
+}
 
 /** Paragraph that wraps to its parent's width. */
 export async function para(kit: Kit, parent: FrameNode, chars: string, style = "Body", colorName = "text/secondary") {

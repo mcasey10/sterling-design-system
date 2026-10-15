@@ -334,7 +334,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
 export const ICON_DOC: Omit<ResolvedDoc, "description"> & { description: (name: string) => string } = {
   description: (name) => `The "${name}" icon, a 16px outline glyph that takes its color from the component using it.`,
   details: "16px outline icon. Parent components recolor the Glyph layer; resize with icon/size or size/*.",
-  use: "supporting a label, or as an instance-swap value in Button, Status badge, and similar components.",
+  use: "supporting a label, or as the Icon value of Controls/Button and Controls/Icon button.",
   dont: "it's the only way to convey meaning — pair it with text or an accessible name.",
   related: [guidelines("Accessibility")],
   docs: guidelines("Icons"),

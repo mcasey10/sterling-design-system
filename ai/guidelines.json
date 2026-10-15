@@ -305,7 +305,7 @@
         },
         {
           "term": "Use when",
-          "text": "Supporting a label, or as an instance-swap value in Button, Status badge, and similar components."
+          "text": "Supporting a label, or as the Icon value of Controls/Button and Controls/Icon button."
         },
         {
           "term": "Don't use when",
@@ -330,7 +330,7 @@
         {
           "number": 1,
           "label": "Filters panel",
-          "note": "Filters sit on the left (2 of 12 columns). Inputs and selects narrow the rows; Apply runs the query and Reset clears it. Placeholders give examples, never labels."
+          "note": "Filters sit on the left (2 of 12 columns). Inputs and selects narrow the rows. Apply runs the query. Reset returns every field to the active saved view's filters, or empty if no view is active. Placeholders give examples, never labels."
         },
         {
           "number": 2,
@@ -393,7 +393,7 @@
         {
           "number": 1,
           "label": "Filter panel",
-          "note": "The panel has one field per commonly filtered column; Add filter offers the rest. Apply runs the query and Reset clears every field. Placeholders give an example of the expected value, never the label."
+          "note": "The panel has one field per commonly filtered column; Add filter offers the rest. Apply runs the query. Reset returns every field to the active saved view's filters, or empty if no view is active. Clear all removes every filter. Placeholders give an example of the expected value, never the label."
         },
         {
           "number": 2,
@@ -417,7 +417,7 @@
         {
           "number": 2,
           "label": "An edited view: Save view is enabled",
-          "note": "Changing a view's filters keeps its name and adds \"· edited\". Save view becomes available and saves the current filter set under Saved by me."
+          "note": "Changing a view's filters keeps its name and adds \"· edited\". Save view becomes available and saves the current filter set under Saved by me. Reset returns to the view's own filters; Clear all removes every filter."
         },
         {
           "number": 3,
