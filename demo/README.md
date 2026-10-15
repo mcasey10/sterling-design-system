@@ -37,7 +37,7 @@ design/pool-loans.png         the designer's screen
 package.json, index.html, vite.config.ts, tsconfig.json, src/   an empty app
 CLAUDE.md                     the rules of the session
 .mcp.json                     the sterling server, and no other
-.claude/settings.json         denies the web, the Figma servers, and the folders in kit.local.json
+.claude/settings.json         denies the web, the Figma servers, Claude in Chrome, and the folders in kit.local.json
 ```
 
 ## Run the demo
@@ -63,7 +63,8 @@ claude --strict-mcp-config --mcp-config .mcp.json
 - **MCP servers.** `--strict-mcp-config` loads only the servers in the kit's `.mcp.json`, so servers set up
   for the user or for other projects (a Figma server, for example) aren't available. The settings also deny
   the `figma` and `figma-desktop` servers by name, in case the session is started another way.
-- **The web.** The settings deny `WebFetch` and `WebSearch`: the repository and Storybook are public.
+- **The web.** The settings deny `WebFetch` and `WebSearch`, and the Claude in Chrome tools
+  (`mcp__claude-in-chrome`), which drive the user's own browser: the repository and Storybook are public.
 - **Files.** The settings deny reading and editing the folders in `kit.local.json`.
 - **What this doesn't cover.** Deny rules apply to the file and web tools, not to every shell command, and the
   session needs the shell for `npm`. So the session's transcript is read afterwards, and every file it

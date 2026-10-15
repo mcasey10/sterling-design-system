@@ -6,9 +6,9 @@
 //   data/pool-2026-07.json        The example's data (demo/data/, checked against the plugin's example)
 //   design/pool-loans.png         The designer's screen (docs/images/example-pool-loans.png)
 //   the app scaffold, CLAUDE.md, .mcp.json, .claude/settings.json   (demo/template/)
-// The kit's settings deny the web and the Figma servers (in the template). The folders the session must not
-// read are this machine's own, so they come from demo/kit.local.json, which is never committed, and exist
-// only in the built kit.
+// The kit's settings deny the web, the Figma servers, and Claude in Chrome (in the template). The folders the
+// session must not read are this machine's own, so they come from demo/kit.local.json, which is never
+// committed, and exist only in the built kit.
 //
 // Usage: npm run demo:kit
 
@@ -67,7 +67,7 @@ if (existsSync(localPath)) {
 console.log(`\nBuilt demo/kit/ with ${tarball}, mcp/server.js, the data, and the design.`);
 console.log(
   denied.length
-    ? `Its settings deny reading ${denied.length} local folder(s) from demo/kit.local.json, the web, and the Figma servers.`
+    ? `Its settings deny reading ${denied.length} local folder(s) from demo/kit.local.json, the web, the Figma servers, and Claude in Chrome.`
     : "WARNING: demo/kit.local.json is missing, so the kit denies the web and the Figma servers but NO local folders.\n" +
         "Copy demo/kit.local.example.json to demo/kit.local.json, list this repository's path, and build again."
 );
