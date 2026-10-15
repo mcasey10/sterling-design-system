@@ -358,9 +358,16 @@ function buildTokens(tokens: Json) {
 
 // ---------------------------------------------------------------- index.json
 
-/** The date of a version's release, from its CHANGELOG heading ("## [1.1.1] - 2026-10-11"). */
+/**
+ * The date of a version's release, from its CHANGELOG heading ("## [1.2.0] - 2026-10-20"). Until the date is
+ * chosen the heading carries the placeholder RELEASE-DATE, copied as is; `npm run check:release-date` fails while
+ * it is anywhere, so nothing is pushed with it.
+ */
+/** Written in place of the release date until it is chosen. */
+export const RELEASE_DATE_PLACEHOLDER = "RELEASE-DATE";
+
 function releaseDate(version: string): string {
-  const match = new RegExp(`^## \\[${version.replace(/\./g, "\\.")}\\] - (\\d{4}-\\d{2}-\\d{2})$`, "m").exec(read("CHANGELOG.md"));
+  const match = new RegExp(`^## \\[${version.replace(/\./g, "\\.")}\\] - (\\d{4}-\\d{2}-\\d{2}|${RELEASE_DATE_PLACEHOLDER})$`, "m").exec(read("CHANGELOG.md"));
   if (!match) throw new Error(`CHANGELOG.md has no dated heading for version ${version}`);
   return match[1];
 }

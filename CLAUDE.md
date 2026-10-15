@@ -193,6 +193,9 @@ ui/scripts/docs-sync.ts   `npm run docs:sync`: writes the generated parts of doc
                           markers: README's Start here table (AUDIENCES), mcp/README.md's setup block (setup.ts),
                           and docs/figma-community.md's version and counts. `npm run check:docs-sync` fails if stale
 docs/figma-community.md   The Figma Community page text (pasted at release); docs/github-about.md: the About panel
+scripts/check-release-date.mjs  `npm run check:release-date`: fails while the placeholder RELEASE-DATE is in
+                          CHANGELOG.md, ai/, site/llms.txt, or mcp/dist/server.js. The version is set with the
+                          placeholder; the date is written in last. It must pass before any push
 scripts/figma-fingerprint.mjs  `npm run figma:fingerprint -- <file key>`: the call that fingerprints a Figma file
                           (read-only code in scripts/lib/figma-fingerprint.js: every library page, variable, text
                           style); `-- compare before.json after.json` compares two. Never commit a file key

@@ -422,6 +422,10 @@ Not planned for a release yet:
 
 ## Known limitations
 
+- **Component descriptions read back with `&quot;`:** Figma returns a description's quote marks as `&quot;` to
+  plugins and tools (for example `The &quot;check&quot; icon…`), though Assets › Details shows them as quote
+  marks. Only how Figma returns the text; nothing to fix.
+
 - **Tabular figures:** the plugin API can't turn on OpenType features for a text
   style, so the **Numeric** style doesn't have tabular figures enabled. To fix it
   once per file: select the Numeric style, click the edit icon, open **Type

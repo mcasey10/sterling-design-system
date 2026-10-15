@@ -1,6 +1,6 @@
 {
   "name": "sterling-design-system",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "private": true,
   "license": "MIT",
   "description": "Sterling Design System: tokens, a Figma component library, and guidelines for data-dense applications. Fictional data only.",
@@ -27,6 +27,7 @@
     "check:site": "npm --prefix ui run check:site",
     "check:excerpts": "npm --prefix ui run check:excerpts",
     "check:interactions": "npm --prefix ui run check:interactions",
+    "check:release-date": "node scripts/check-release-date.mjs",
     "docs:sync": "npm --prefix ui run docs:sync",
     "check:docs-sync": "npm --prefix ui run check:docs-sync",
     "diagrams": "node scripts/render-diagrams.mjs",

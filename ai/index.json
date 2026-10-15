@@ -2,8 +2,8 @@
   "name": "Sterling",
   "description": "A design system for data-dense applications: design tokens, a Figma library, the same components in React, and files and an MCP server for AI tools, all built from one set of definitions.",
   "summary": "Sterling is a design system for data-dense applications: design tokens, a Figma library, the same components in React (the sterling-ui package), and files and an MCP server for AI tools, all built from one set of definitions.",
-  "version": "1.1.1",
-  "released": "2026-10-11",
+  "version": "1.2.0",
+  "released": "RELEASE-DATE",
   "links": {
     "website": "https://mcasey10.github.io/sterling-design-system/",
     "export": "https://mcasey10.github.io/sterling-design-system/ai/",
@@ -34,7 +34,7 @@
   ],
   "package": {
     "name": "sterling-ui",
-    "install": "npm install https://github.com/mcasey10/sterling-design-system/releases/download/v1.1.1/sterling-ui-1.1.1.tgz",
+    "install": "npm install https://github.com/mcasey10/sterling-design-system/releases/download/v1.2.0/sterling-ui-1.2.0.tgz",
     "note": "Not on a package registry: npm installs it from the GitHub Release. It needs React 19 or newer.",
     "setup": "https://mcasey10.github.io/sterling-design-system/install/",
     "styles": [

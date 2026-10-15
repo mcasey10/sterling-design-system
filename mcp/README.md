@@ -29,7 +29,7 @@ Check that it runs. In any terminal, from any folder:
 node "/full/path/to/sterling-mcp.js" --version
 ```
 
-It prints `Sterling MCP server 1.1.1 · …`. Then register it with your AI tool, once:
+It prints `Sterling MCP server 1.2.0 · …`. Then register it with your AI tool, once:
 
 **Claude Code.** In any terminal, from any folder:
 
@@ -80,7 +80,7 @@ Names are matched by their letters and digits, so `data grid`, `Grid/Data Grid`,
 same component. An unknown name returns an error that lists the closest matches.
 
 `node sterling-mcp.js --version` prints the server's version, the version and release date of the files it
-carries, and a hash of them, for example `Sterling MCP server 1.1.1 · export 1.1.1, released 2026-10-11 · data 3f9c…`.
+carries, and a hash of them: `Sterling MCP server <version> · export <version>, released <date> · data <hash>`.
 
 ## For maintainers: build it from this repository
 

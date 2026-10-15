@@ -1,6 +1,6 @@
 {
   "name": "sterling-mcp",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "private": true,
   "license": "MIT",
   "description": "A read-only MCP server for Sterling: its components, tokens, guidelines, and patterns, from the export in ../ai. Runs locally over stdio. No network access.",

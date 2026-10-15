@@ -6,7 +6,7 @@ The text for Sterling's page on Figma Community. At each release, after the vers
 
 ## Description
 
-Sterling Design System 1.1.1
+Sterling Design System 1.2.0
 
 A design system for data-dense applications: design tokens, this Figma library, and the same components in React, all built from one set of definitions. Intentionally small: 24 components, 20 icons, and a data grid built as a data table (read, sort, select, and act; no inline editing or column resizing).
 

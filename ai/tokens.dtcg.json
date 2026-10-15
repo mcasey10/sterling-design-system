@@ -2,7 +2,7 @@
   "$description": "Sterling's design tokens in the Design Tokens (DTCG) format, version 2025.10. Group paths follow the token names (surface/background is color.surface.background). The format has no modes, so each Color and Density token's $value is its default mode (Light, Default) and every mode is listed under $extensions[\"io.github.mcasey10.sterling\"].modes, with the value it resolves to. The same block gives the name in Figma and the CSS custom property or class.",
   "$extensions": {
     "io.github.mcasey10.sterling": {
-      "version": "1.1.1",
+      "version": "1.2.0",
       "modes": {
         "color": [
           "Light",

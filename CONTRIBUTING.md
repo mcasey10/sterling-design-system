@@ -234,17 +234,22 @@ npm run figma:fingerprint -- compare before.json after.json
    `npm run check:mcp` (the MCP server's copy of them), then `npm run docs:sync` (the README, the MCP
    server's setup block, and the Community text), and commit the result.
 4. **Update [CHANGELOG.md](CHANGELOG.md):** what was added, changed, fixed, or removed, written for
-   someone who uses Sterling. For a breaking change, say what to do about it.
-5. **Merge to `main`.** The checks run again, and the website (Start here, the token reference,
+   someone who uses Sterling. For a breaking change, say what to do about it. Until the release date is
+   chosen, the heading carries `RELEASE-DATE` (`## [1.2.0] - RELEASE-DATE`), which the AI files, llms.txt, and
+   the MCP server copy from it.
+5. **Set the release date, last before pushing:** write it into the heading, run `npm run export:ai`,
+   `npm run docs:sync`, and `npm run check:mcp`, re-run the checks, and commit. `npm run check:release-date`
+   fails while `RELEASE-DATE` is anywhere; it must pass before a push.
+6. **Merge to `main`.** The checks run again, and the website (Start here, the token reference,
    Storybook, the AI files, and llms.txt) is republished. Open it and follow its links.
-6. **Rebuild the Sterling Figma file** with both commands, confirm the checks pass, then publish
+7. **Rebuild the Sterling Figma file** with both commands, confirm the checks pass, then publish
    the library from Figma's Assets panel with the changelog entry as the description. Fingerprint the
    file before and after the rebuild (`npm run figma:fingerprint`, see [Check](#3-check)): only the
    pages this release changes may differ, such as the Cover and Read me, which show the version.
-7. **Tag the release** `v<version>` on GitHub, and attach its two downloads: the package
+8. **Tag the release** `v<version>` on GitHub, and attach its two downloads: the package
    (`npm run package` writes `ui/package/sterling-ui-<version>.tgz`) and the MCP server
    (`npm run check:mcp` builds it; attach it as `sterling-mcp.js`).
-8. **Update the Figma Community page** with the text in `docs/figma-community.md`, and check
+9. **Update the Figma Community page** with the text in `docs/figma-community.md`, and check
    the live site (`docs/reference.md`, "After a release: check the live site").
 
 ### Versions

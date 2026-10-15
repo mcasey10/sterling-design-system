@@ -102,7 +102,8 @@ test("the built server reports its version and the hash of ai/", () => {
   const line = execFileSync(process.execPath, [bundle, "--version"], { encoding: "utf8" }).trim();
   assert.equal(line, VERSION_LINE);
   assert.ok(line.endsWith(`data ${sha(join(here, "../ai"))}`), "dist/server.js was built from an older ai/: run npm run build");
-  assert.match(line, /^Sterling MCP server \d+\.\d+\.\d+ · export \d+\.\d+\.\d+, released \d{4}-\d{2}-\d{2} · data [0-9a-f]{64}$/);
+  // The date is the release's, or RELEASE-DATE until it is set (npm run check:release-date keeps that out of a push).
+  assert.match(line, /^Sterling MCP server \d+\.\d+\.\d+ · export \d+\.\d+\.\d+, released (\d{4}-\d{2}-\d{2}|RELEASE-DATE) · data [0-9a-f]{64}$/);
 });
 
 test("the built server imports no network module and never calls fetch", () => {
