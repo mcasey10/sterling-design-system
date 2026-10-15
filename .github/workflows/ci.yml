@@ -99,6 +99,9 @@ jobs:
       - name: Accessibility (axe) on every story, in every color mode
         run: npm run check:a11y
         working-directory: ui
+      - name: Interaction tests (every story with a play function)
+        run: npm run check:interactions
+        working-directory: ui
       - name: Every component has the Storybook Docs page its documentation link can open
         run: npm run check:docs
         working-directory: ui

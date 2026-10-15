@@ -180,6 +180,9 @@ mcp/scripts/exchange.mjs  A real exchange with the built server (tools/list, get
                           for the AI page's step 6
 definitions/setup.ts      THE setup instructions (Where / You need / Do / Scope / It worked if / If it didn't),
                           shown by the website, README, and Storybook
+ui/scripts/check-interactions.mjs  `npm run check:interactions` (needs a Storybook build): runs every story with a play
+                          function (tagged play-fn) in headless Chrome; fails if it throws. Examples › Pool loans ›
+                          Filter counts checks the loan counts after a filter, Reset, "Any lender", and Clear all
 ui/scripts/check-site.mjs `npm run check:site`: every website page, axe in Light and Dark (system preference
                           emulated), as loaded and as without JavaScript (script-added parts marked data-script-added),
                           no sideways scroll at 375px, every internal link and anchor, the AI page's steps by keyboard

@@ -155,6 +155,10 @@ npm run check:excerpts
 ```
 
 ```bash
+npm run check:interactions
+```
+
+```bash
 npm run check:diagrams
 ```
 
@@ -171,7 +175,8 @@ after `export:ai`. `check:examples` keeps example screens to the sterling-ui pac
 Sterling address is written anywhere but `definitions/site.ts`, or if the view-only Figma file is linked
 where the Figma Community page belongs; `package` builds the sterling-ui tarball; `site` builds the
 website and `check:site` checks every page (axe in Light and Dark, phone width, and every link);
-`check:excerpts` fails if an excerpt on the AI page can no longer be read from its source, or if its code differs
+`check:interactions` runs every story with a play function (after `npm run build-storybook`) and fails if
+one throws; `check:excerpts` fails if an excerpt on the AI page can no longer be read from its source, or if its code differs
 from the commit it was delivered in; `check:diagrams` fails if a diagram's source changed without
 `npm run diagrams`; `check:docs-sync` fails if a generated part of the documentation (the README's Start
 here table, the MCP server's setup block, the Community text's version) is out of date: run `npm run docs:sync`.

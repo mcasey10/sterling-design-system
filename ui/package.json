@@ -28,6 +28,7 @@
     "pages": "tsx scripts/build-pages.ts",
     "check:site": "node scripts/check-site.mjs",
     "check:excerpts": "tsx scripts/check-excerpts.ts",
+    "check:interactions": "node scripts/check-interactions.mjs",
     "docs:sync": "tsx scripts/docs-sync.ts",
     "check:docs-sync": "tsx scripts/docs-sync.ts --check",
     "export:demo-data": "tsx scripts/export-demo-data.ts",

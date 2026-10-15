@@ -1,10 +1,11 @@
 import raw from "../data/pool-2026-07.json";
 
 /*
- * The data file holds the pool's totals and a sample of its loans: the first page of each saved view.
- * Everything else here is derived from those numbers. Loans outside the sample are never invented: they are
- * counted in two groups (the rest of Harbor Point, and the rest of the pool), and a query whose rows would
- * include them reports that its rows aren't in the sample.
+ * The data file holds the pool's totals and a sample of its loans: the first page of each saved view. As
+ * delivered, loans outside the sample were never invented: they were counted in two groups, and a query whose
+ * rows would include them said its rows weren't in the sample. In use that looked broken ("Any lender" showed
+ * no loans), so the rest of the pool is generated below (ADDED_LOANS): added after delivery, in correction e,
+ * to complete the sample. The data file itself is unchanged.
  */
 
 export type Status = "Ready" | "Exception" | "Signed off";
@@ -117,17 +118,6 @@ export function inRange(value: number, r: Range): boolean {
   return true;
 }
 
-/** How a filter range relates to the values [lo, hi]: all of them match, none do, or it depends. */
-function coverage(r: Range | null, lo: number, hi: number): "all" | "none" | "some" {
-  if (!r) return "all";
-  const belowLo = r.max !== null && (r.max < lo || (r.max === lo && !r.maxInclusive));
-  const aboveHi = r.min !== null && (r.min > hi || (r.min === hi && !r.minInclusive));
-  if (belowLo || aboveHi) return "none";
-  const coversLo = r.min === null || r.min < lo || (r.min === lo && r.minInclusive);
-  const coversHi = r.max === null || r.max > hi || (r.max === hi && r.maxInclusive);
-  return coversLo && coversHi ? "all" : "some";
-}
-
 export function describeRange(field: string, r: Range, unit = ""): string {
   const v = (n: number) => `${n}${unit}`;
   if (r.min !== null && r.max !== null) {
@@ -158,7 +148,7 @@ export function filterCount(f: Filters): number {
   return [f.lender, f.status, f.fico.trim(), f.ltv.trim()].filter(Boolean).length;
 }
 
-function matches(loan: Loan, f: Filters): boolean {
+function matches_(loan: Loan, f: Filters): boolean {
   if (f.lender && loan.lender !== f.lender) return false;
   if (f.status && statusOf(loan) !== f.status) return false;
   const fico = parseRange(f.fico);
@@ -188,56 +178,83 @@ export const PREDEFINED_VIEWS: View[] = raw.savedViews.map((view, index) => {
 
 // ------------------------------------------------------------------ The pool
 
-/**
- * Loans not in the sample, by group. Every one of them is Ready: all of the pool's exceptions and sign-offs
- * are in the sample (2 and 3 of them, matching the totals). Their FICO and LTV are unknown, but being Ready
- * puts them within the Ready limits.
- */
-export interface UnseenGroup {
-  key: "capped" | "other";
-  /** The lender, when the whole group has one. */
-  lender: string | null;
-  count: number;
-  upb: number;
+const sum = (loans: Loan[]) => loans.reduce((total, loan) => total + loan.upb, 0);
+
+/** A small seeded random number generator, so the added loans are the same on every load. */
+function seeded(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 }
 
-const sum = (loans: Loan[]) => loans.reduce((total, loan) => total + loan.upb, 0);
-const cappedSample = sampleLoans.filter((loan) => loan.lender === CAPPED_LENDER);
-const cappedView = raw.savedViews.find((view) =>
-  view.filters.length === 1 && view.filters[0].field === "Lender" && view.filters[0].value === CAPPED.lender,
-);
-const cappedCount = cappedView?.matchingLoans ?? cappedSample.length;
-const cappedUpb = (pool.upb * CAPPED.sharePercent) / 100;
+/**
+ * ADDED AFTER DELIVERY (correction e), to complete the sample: the 165 loans of the pool that the data file
+ * leaves out, generated once, deterministically, and fictional like the rest. They make the totals the data file
+ * states: the rest of Harbor Point's loans (its saved view's matchingLoans), and the rest of the pool spread over
+ * the sample's other lenders; together they bring Harbor Point to its share of the pool (lendersOverTheCap) and
+ * the pool to its UPB. Every one is Ready (FICO 680 and up, LTV up to 90%), since all of the pool's exceptions
+ * and sign-offs are in the sample. Their loan IDs follow the sample's, so each saved view's first page, sorted
+ * by loan ID, is still the sample the session had.
+ */
+export const ADDED_LOANS: Loan[] = (() => {
+  const random = seeded(202607);
+  const cappedSample = sampleLoans.filter((loan) => loan.lender === CAPPED_LENDER);
+  const cappedView = raw.savedViews.find(
+    (view) => view.filters.length === 1 && view.filters[0].field === "Lender" && view.filters[0].value === CAPPED.lender,
+  );
+  const cappedCount = cappedView?.matchingLoans ?? cappedSample.length;
+  const cappedUpb = (pool.upb * CAPPED.sharePercent) / 100;
+  const others = LENDERS.filter((lender) => lender !== CAPPED_LENDER);
+  const groups = [
+    { count: cappedCount - cappedSample.length, upb: cappedUpb - sum(cappedSample), lender: () => CAPPED_LENDER },
+    {
+      count: totals.loansInPool - cappedCount - (sampleLoans.length - cappedSample.length),
+      upb: pool.upb - cappedUpb - (sum(sampleLoans) - sum(cappedSample)),
+      lender: (i: number) => others[i % others.length],
+    },
+  ];
+  const added: Loan[] = [];
+  let id = Math.max(...sampleLoans.map((loan) => Number(loan.id.replace(/\D/g, ""))));
+  for (const group of groups) {
+    // Amounts vary around the group's average, in whole hundreds; the last loan takes the remainder, so the
+    // group adds up to its UPB exactly.
+    const weights = Array.from({ length: group.count }, () => 0.6 + random() * 0.8);
+    const scale = group.upb / weights.reduce((a, b) => a + b, 0);
+    let left = group.upb;
+    weights.forEach((weight, i) => {
+      const upb = i === group.count - 1 ? Math.round(left * 100) / 100 : Math.round((weight * scale) / 100) * 100;
+      left -= upb;
+      added.push({
+        id: `LN-${++id}`,
+        lender: group.lender(i),
+        upb,
+        fico: rules.ready.minFico + Math.floor(random() * 121),
+        ltvPercent: Math.round((55 + random() * (rules.ready.maxLtvPercent - 55)) * 10) / 10,
+      });
+    });
+  }
+  return added;
+})();
 
-export const UNSEEN: UnseenGroup[] = [
-  {
-    key: "capped",
-    lender: CAPPED_LENDER,
-    count: cappedCount - cappedSample.length,
-    upb: cappedUpb - sum(cappedSample),
-  },
-  {
-    key: "other",
-    lender: null,
-    count: totals.loansInPool - cappedCount - (sampleLoans.length - cappedSample.length),
-    upb: pool.upb - cappedUpb - (sum(sampleLoans) - sum(cappedSample)),
-  },
-];
+/** Every loan in the pool: the data file's sample, then the loans added to complete it. */
+export const POOL_LOANS: Loan[] = [...sampleLoans, ...ADDED_LOANS];
 
 export interface PoolState {
   loans: Loan[];
-  /** Sample loans removed from the pool. */
+  /** Loans removed from the pool. */
   removedIds: ReadonlySet<string>;
-  /** Unseen groups removed from the pool (through "all matching"). */
-  removedGroups: ReadonlySet<UnseenGroup["key"]>;
 }
 
 export function initialPool(): PoolState {
-  return { loans: sampleLoans.map((loan) => ({ ...loan })), removedIds: new Set(), removedGroups: new Set() };
+  return { loans: POOL_LOANS.map((loan) => ({ ...loan })), removedIds: new Set() };
 }
 
 const activeLoans = (state: PoolState) => state.loans.filter((loan) => !state.removedIds.has(loan.id));
-const activeGroups = (state: PoolState) => UNSEEN.filter((group) => !state.removedGroups.has(group.key));
 
 export interface PoolSummary {
   loanCount: number;
@@ -251,20 +268,15 @@ export interface PoolSummary {
 
 export function summarize(state: PoolState): PoolSummary {
   const loans = activeLoans(state);
-  const groups = activeGroups(state);
   const byStatus: Record<Status, number> = { Ready: 0, Exception: 0, "Signed off": 0 };
   for (const loan of loans) byStatus[statusOf(loan)]++;
-  byStatus.Ready += groups.reduce((n, g) => n + g.count, 0);
-  const upb = sum(loans) + groups.reduce((n, g) => n + g.upb, 0);
-  const cappedUpbNow =
-    sum(loans.filter((loan) => loan.lender === CAPPED_LENDER)) +
-    groups.filter((g) => g.lender === CAPPED_LENDER).reduce((n, g) => n + g.upb, 0);
-  const cappedShare = upb > 0 ? (cappedUpbNow / upb) * 100 : 0;
+  const upb = sum(loans);
+  const cappedShare = upb > 0 ? (sum(loans.filter((loan) => loan.lender === CAPPED_LENDER)) / upb) * 100 : 0;
   const openExceptions = loans.filter((loan) => statusOf(loan) === "Exception");
   // Compare in whole basis points so floating-point noise can't flip the limit.
   const overCap = Math.round(cappedShare * 100) > rules.lenderSharePercentCap * 100;
   return {
-    loanCount: loans.length + groups.reduce((n, g) => n + g.count, 0),
+    loanCount: loans.length,
     upb,
     byStatus,
     cappedShare,
@@ -283,14 +295,12 @@ export interface Sort {
 }
 
 export interface QueryResult {
-  /** How many loans match, or null if the sample can't say. */
-  total: number | null;
-  /** The sample loans that match, sorted. */
-  sampleMatches: Loan[];
-  /** Unseen groups whose loans all match. */
-  unseenMatches: UnseenGroup[];
-  /** The rows of the requested page, or null when they aren't in the sample. */
-  rows: Loan[] | null;
+  /** How many loans match. */
+  total: number;
+  /** Every loan that matches, sorted. */
+  matches: Loan[];
+  /** The rows of the requested page. */
+  rows: Loan[];
 }
 
 function compare(a: Loan, b: Loan, key: SortKey): number {
@@ -310,46 +320,12 @@ function compare(a: Loan, b: Loan, key: SortKey): number {
   }
 }
 
-/** Unseen loans are Ready: FICO 680 and up, LTV up to 90%. */
-const UNSEEN_FICO: [number, number] = [rules.ready.minFico, 850];
-const UNSEEN_LTV: [number, number] = [0, rules.ready.maxLtvPercent];
-
 export function query(state: PoolState, f: Filters, sort: Sort, page: number): QueryResult {
-  const sampleMatches = activeLoans(state)
-    .filter((loan) => matches(loan, f))
+  const matches = activeLoans(state)
+    .filter((loan) => matches_(loan, f))
     .sort((a, b) => compare(a, b, sort.key) * (sort.direction === "asc" ? 1 : -1));
-
-  let unknown = false;
-  const unseenMatches: UnseenGroup[] = [];
-  for (const group of activeGroups(state)) {
-    let fit: "all" | "none" | "some" = "all";
-    if (f.status && f.status !== "Ready") fit = "none";
-    if (f.lender && group.lender && f.lender !== group.lender) fit = "none";
-    if (fit !== "none" && f.lender && !group.lender) fit = f.lender === CAPPED_LENDER ? "none" : "some";
-    for (const c of [coverage(parseRange(f.fico), ...UNSEEN_FICO), coverage(parseRange(f.ltv), ...UNSEEN_LTV)]) {
-      if (fit === "none" || c === "all") continue;
-      fit = c;
-    }
-    if (fit === "all") unseenMatches.push(group);
-    if (fit === "some") unknown = true;
-  }
-
-  const total = unknown ? null : sampleMatches.length + unseenMatches.reduce((n, g) => n + g.count, 0);
-
-  // Rows are known when every match is in the sample, or for the first page of the saved view whose first
-  // page the sample holds (one lender, nothing else).
-  let rows: Loan[] | null = null;
   const start = page * PAGE_SIZE;
-  if (!unknown && unseenMatches.length === 0) {
-    rows = sampleMatches.slice(start, start + PAGE_SIZE);
-  } else if (!unknown && page === 0 && isSampledView(f)) {
-    rows = sampleMatches.slice(0, PAGE_SIZE);
-  }
-  return { total, sampleMatches, unseenMatches, rows };
-}
-
-function isSampledView(f: Filters): boolean {
-  return PREDEFINED_VIEWS.some((view) => sameFilters(view.filters, f));
+  return { total: matches.length, matches, rows: matches.slice(start, start + PAGE_SIZE) };
 }
 
 // ------------------------------------------------------------------ Formatting

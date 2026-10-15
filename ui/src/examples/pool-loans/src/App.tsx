@@ -41,7 +41,6 @@ import {
   type PoolState,
   type Sort,
   type Status,
-  type UnseenGroup,
   type View,
 } from "./data";
 import { LoanTable } from "./LoanTable";
@@ -60,7 +59,6 @@ interface Request {
 
 interface Removal {
   ids: string[];
-  groups: UnseenGroup["key"][];
   count: number;
 }
 
@@ -134,7 +132,7 @@ export function App({ loadFails = false }: AppProps) {
 
   // After removals, a page past the end moves back to the last one.
   useEffect(() => {
-    if (shown && result && result.total !== null && shown.page > 0 && shown.page >= pages) {
+    if (shown && result && shown.page > 0 && shown.page >= pages) {
       setRequest((r) => ({ ...r, page: Math.max(0, pages - 1) }));
     }
   }, [shown, result, pages]);
@@ -158,16 +156,11 @@ export function App({ loadFails = false }: AppProps) {
     });
   };
 
-  /** The selected sample loans, and the unseen groups selected through "all matching". */
+  /** The selected loans, including those selected through "all matching". */
   const selected = useMemo(() => {
-    if (!result) return { loans: [] as Loan[], groups: [] as UnseenGroup[] };
-    if (selection.mode === "all") {
-      return {
-        loans: result.sampleMatches.filter((loan) => !selection.except.has(loan.id)),
-        groups: result.unseenMatches,
-      };
-    }
-    return { loans: poolState.loans.filter((loan) => selection.ids.has(loan.id)), groups: [] };
+    if (!result) return { loans: [] as Loan[] };
+    if (selection.mode === "all") return { loans: result.matches.filter((loan) => !selection.except.has(loan.id)) };
+    return { loans: poolState.loans.filter((loan) => selection.ids.has(loan.id)) };
   }, [result, selection, poolState.loans]);
   const selectedExceptions = selected.loans.filter((loan) => statusOf(loan) === "Exception");
   const onScreen = new Set(rows.map((loan) => loan.id));
@@ -242,16 +235,8 @@ export function App({ loadFails = false }: AppProps) {
   const [viewNameError, setViewNameError] = useState(false);
 
   const remove = () => {
-    const removal: Removal = {
-      ids: selected.loans.map((loan) => loan.id),
-      groups: selected.groups.map((group) => group.key),
-      count: selectedCount,
-    };
-    setPoolState((s) => ({
-      ...s,
-      removedIds: new Set([...s.removedIds, ...removal.ids]),
-      removedGroups: new Set([...s.removedGroups, ...removal.groups]),
-    }));
+    const removal: Removal = { ids: selected.loans.map((loan) => loan.id), count: selectedCount };
+    setPoolState((s) => ({ ...s, removedIds: new Set([...s.removedIds, ...removal.ids]) }));
     setUndoStack((stack) => [...stack, removal]);
     setSelection(NONE);
     setDialog(null);
@@ -259,11 +244,7 @@ export function App({ loadFails = false }: AppProps) {
   };
 
   const undo = (removal: Removal) => {
-    setPoolState((s) => ({
-      ...s,
-      removedIds: new Set([...s.removedIds].filter((id) => !removal.ids.includes(id))),
-      removedGroups: new Set([...s.removedGroups].filter((key) => !removal.groups.includes(key))),
-    }));
+    setPoolState((s) => ({ ...s, removedIds: new Set([...s.removedIds].filter((id) => !removal.ids.includes(id))) }));
     setUndoStack((stack) => stack.filter((r) => r !== removal));
     announce({ text: `Put ${plural(removal.count, "loan")} back in the pool.` }, true);
   };
@@ -332,20 +313,6 @@ export function App({ loadFails = false }: AppProps) {
     );
   } else if (loading) {
     statusText = "Loading loans…";
-  } else if (result && result.rows === null) {
-    const back = shown!.page > 0;
-    statusText = "These loans aren't in the sample data.";
-    empty = (
-      <EmptyState
-        title="Not in the sample data"
-        message={
-          `This demo holds only the first page of each saved view. In the real tool, ` +
-          (result.total !== null ? `${plural(result.total, "matching loan")} would load here.` : `the matching loans would load here.`)
-        }
-        actionLabel={back ? "Back to page 1" : `Show ${PREDEFINED_VIEWS[0].name}`}
-        onAction={() => (back ? setRequest((r) => ({ ...r, page: 0 })) : chooseView(PREDEFINED_VIEWS[0].id))}
-      />
-    );
   } else if (result && rows.length === 0) {
     const filtered = filterCount(shown!.filters) > 0;
     statusText = filtered ? "No loans match these filters." : "There are no loans in the pool.";
@@ -365,7 +332,7 @@ export function App({ loadFails = false }: AppProps) {
   }
 
   const total = result?.total ?? null;
-  const showPagination = !!shown && phase !== "error" && total !== null && total > 0 && result?.rows !== null;
+  const showPagination = !!shown && phase !== "error" && total !== null && total > 0;
   const start = (shown?.page ?? 0) * PAGE_SIZE;
   const shownFilterCount = shown ? filterCount(shown.filters) : 0;
 
