@@ -23,7 +23,7 @@ follow its links.
 **Set up:** [Install sterling-ui](https://mcasey10.github.io/sterling-design-system/install/) to add the components to a React project · [Set up the MCP server](https://mcasey10.github.io/sterling-design-system/ai-tools/#set-up) to connect Sterling to your AI tool.
 <!-- /generated: start-here -->
 
-![Sterling's cover: the name, tagline, and version beside a data grid, a bulk action bar, and summary metrics built from Sterling components](docs/images/cover.png)
+![Sterling's cover: the name, tagline, version, and website address beside a data grid, a bulk action bar, and summary metrics built from Sterling components](docs/images/cover.png)
 
 I built Sterling with [Claude Code](https://claude.com/claude-code), under my direction: I set the scope, made
 the design decisions, and reviewed each step in Figma and in the browser. Claude Code wrote the plugin, the
