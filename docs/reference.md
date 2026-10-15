@@ -269,19 +269,24 @@ If your Figma plan limits modes per collection, the plugin creates only the
 first mode (Light, Compact), logs a warning, and leaves the other values in
 `tokens.json`. The Professional plan supports all modes Sterling uses.
 
-## Regenerating example diagrams
+## Diagrams
 
-Example planning diagrams are Mermaid sources (`.mmd`) rendered to SVG next to them,
-for example in `docs/examples/loan-pooling/`. After editing a `.mmd` file, re-render it
-with the Mermaid CLI from the repo root. The first run downloads a headless browser.
+Diagrams are Mermaid sources (`.mmd`) in `docs/`, rendered to SVG beside each. Those in `docs/diagrams/` (the AI
+layer overview, on the website's AI page) are rendered once per color mode in Sterling's own colors, read from the
+Color tokens: `ai-layer.svg` (Light) and `ai-layer.dark.svg` (Dark); the page shows the one for its theme. The
+example's planning diagrams in `docs/examples/loan-pooling/` are rendered once, in Mermaid's default colors.
+After editing a `.mmd` file, re-render from the repo root:
 
 ```bash
-npx -p @mermaid-js/mermaid-cli mmdc -i docs/examples/loan-pooling/pool-workflow.mmd -o docs/examples/loan-pooling/pool-workflow.svg -c docs/mermaid-config.json -C docs/mermaid.css -b white
+npm run diagrams
 ```
 
-Use the same command for each diagram. The shared config renders labels as plain SVG
-text (no embedded HTML) and the CSS makes edge-label backgrounds opaque, so the images
-display correctly in any Markdown viewer.
+It renders every diagram with the Mermaid CLI at a pinned version (`scripts/lib/diagrams.mjs`), through npx: the
+first run downloads it and a headless browser. To render one, add its path: `npm run diagrams -- docs/diagrams/ai-layer.mmd`.
+Each SVG's first line names its source and the hash of what it was rendered from (the source, and for a themed
+diagram its colors too), and `npm run check:diagrams` (in CI) fails if a source, or a color token a diagram uses,
+changed without a re-render. Labels are plain SVG text (no embedded HTML) and edge-label backgrounds are opaque, so
+the images display correctly in any Markdown viewer.
 
 ## Contrast check
 
@@ -316,9 +321,12 @@ npm run tokens:site
 ```
 
 Writes the token reference to `site/` (gitignored), generated from `tokens/tokens.json`. `npm run site`
-builds it as part of the whole website (Start here, Install sterling-ui, the token reference, Storybook, the AI files, and
-llms.txt), and `npm run check:site` checks every page: axe in Light and Dark, phone width, and every
-internal link and anchor.
+builds it as part of the whole website (Start here, Install sterling-ui, the token reference, Sterling and AI
+tools, Storybook, the AI files, and llms.txt), and `npm run check:site` checks every page: axe in Light and Dark
+(as loaded, and as without JavaScript), phone width, every internal link and anchor, and the AI page's steps by
+keyboard. `npm run check:excerpts` checks the AI page's excerpts: each is read from its source when the site
+builds, the code excerpts must be identical to the commit the page says they were delivered in (so it needs the
+repository's history), and the MCP exchange is made with the built server (`mcp/scripts/exchange.mjs`).
 
 - **`site/tokens/index.html`**: the token reference, in the website's page shell
   (`scripts/lib/page-shell.mjs`), with inline CSS and nothing loaded from another site. It shows color

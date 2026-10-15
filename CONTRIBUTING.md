@@ -150,6 +150,14 @@ npm run site
 npm run check:site
 ```
 
+```bash
+npm run check:excerpts
+```
+
+```bash
+npm run check:diagrams
+```
+
 `check:a11y` builds Storybook and runs every story in Chrome, in Light and Dark; `check:docs` reads
 that build. `check:ai` fails when the export in `ai/` no longer matches the sources: after changing a
 token, a definition, or guideline text, run `npm run export:ai` and commit the result with the change.
@@ -158,7 +166,10 @@ after `export:ai`. `check:examples` keeps example screens to the sterling-ui pac
 `check:demo-data` keeps the demo kit's data in step with the plugin's example; `check:urls` fails if a
 Sterling address is written anywhere but `definitions/site.ts`, or if the view-only Figma file is linked
 where the Figma Community page belongs; `package` builds the sterling-ui tarball; `site` builds the
-website and `check:site` checks every page (axe in Light and Dark, phone width, and every link). Also run
+website and `check:site` checks every page (axe in Light and Dark, phone width, and every link);
+`check:excerpts` fails if an excerpt on the AI page can no longer be read from its source, or if its code differs
+from the commit it was delivered in; `check:diagrams` fails if a diagram's source changed without
+`npm run diagrams`. Also run
 `npm run typecheck` in `ui/`.
 
 GitHub runs the same checks on every push and pull request.

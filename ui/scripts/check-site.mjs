@@ -1,6 +1,11 @@
 // Website check: opens every page of the built website (site/) in headless Chrome and fails if
 //   • a page has an axe violation, in any color mode (the system preference is emulated, as a reader's
-//     operating system would set it, and the page is confirmed to be in that mode before axe runs);
+//     operating system would set it, and the page is confirmed to be in that mode before axe runs), as it
+//     loads and as it is without JavaScript: a page that shows one part at a time shows all of it without, so
+//     every part is checked. (Its script marks what it adds, data-script-added, and the list it steps through,
+//     data-stepping; the check undoes both. Turning scripts off in Chrome would stop axe too.);
+//   • the AI page's step-through doesn't work by keyboard: Tab reaches Next, Enter and Space work it, and a
+//     step's button opens that step;
 //   • a page scrolls sideways at phone width (375px);
 //   • an internal link or anchor goes nowhere: every link on every page is followed to its file, and an
 //     anchor (#…) to an element with that id.
@@ -27,9 +32,9 @@ if (!existsSync(join(site, "index.html"))) {
 const THEMES = JSON.parse(readFileSync(resolve(ui, "../tokens/tokens.json"), "utf8")).color.$modes;
 /**
  * Pages linked before they are built: each is allowed to be missing, and the check says so. The list must be
- * empty before a release: remove a page from it in the change that builds it (ai-tools/: the AI page).
+ * empty before a release: remove a page from it in the change that builds it.
  */
-const PENDING = ["ai-tools/"];
+const PENDING = [];
 const axeSource = readFileSync(createRequire(import.meta.url).resolve("axe-core/axe.min.js"), "utf8");
 
 // ------------------------------------------------------------ the site, served as GitHub Pages serves it
@@ -63,7 +68,7 @@ const origin = `http://127.0.0.1:${server.address().port}`;
 // ------------------------------------------------------------ the pages, and every internal link on them
 
 /** The website's own pages: every index.html outside storybook/ and ai/. */
-const PAGES = ["", "tokens/", "install/", ...PENDING.filter((p) => existsSync(join(site, p, "index.html")))].filter((p) => existsSync(join(site, p, "index.html")));
+const PAGES = ["", "tokens/", "install/", "ai-tools/", ...PENDING.filter((p) => existsSync(join(site, p, "index.html")))].filter((p) => existsSync(join(site, p, "index.html")));
 const problems = [];
 const pending = new Set();
 const idsOf = (html) => new Set([...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
@@ -158,25 +163,65 @@ async function load(tab, url) {
   await tab.evaluate("document.fonts.ready.then(() => true)");
 }
 
+/** Presses a key in the page, as a keyboard does. */
+async function press(tab, key) {
+  const keys = { Tab: { code: "Tab", keyCode: 9 }, Enter: { code: "Enter", keyCode: 13, text: "\r" }, " ": { code: "Space", keyCode: 32, text: " " } };
+  const { code, keyCode, text } = keys[key];
+  await tab.send("Input.dispatchKeyEvent", { type: "keyDown", key, code, windowsVirtualKeyCode: keyCode, text });
+  await tab.send("Input.dispatchKeyEvent", { type: "keyUp", key, code, windowsVirtualKeyCode: keyCode });
+  await sleep(50);
+}
+
+/** The AI page's step-through, by keyboard alone. */
+async function checkSteps(tab, page) {
+  const shown = () => tab.evaluate(`[...document.querySelectorAll(".steps > li")].filter((s) => !s.hidden).map((s) => s.id).join(",")`);
+  const current = () => tab.evaluate(`document.querySelector('.stepper [aria-current="step"]')?.textContent ?? ""`);
+  await load(tab, `${origin}/${page}`);
+  if ((await shown()) !== "step-1") return problems.push(`/${page}: the step-through doesn't open on step 1 alone`);
+  let tabs = 0;
+  while (!(await tab.evaluate(`document.activeElement?.textContent === "Next"`))) {
+    if (++tabs > 300) return problems.push(`/${page}: Tab never reaches Next`);
+    await press(tab, "Tab");
+  }
+  await press(tab, "Enter");
+  if ((await shown()) !== "step-2" || !(await current()).startsWith("2.")) problems.push(`/${page}: Enter on Next doesn't open step 2`);
+  if (!(await tab.evaluate(`document.activeElement?.id === "step-2-title"`))) problems.push(`/${page}: after Next, focus isn't on the step's heading`);
+  await tab.evaluate(`[...document.querySelectorAll(".stepper button")][5].focus()`);
+  await press(tab, " ");
+  if ((await shown()) !== "step-6" || !(await current()).startsWith("6.")) problems.push(`/${page}: Space on step 6's button doesn't open it`);
+  await load(tab, `${origin}/${page}#step-4`);
+  if ((await shown()) !== "step-4") problems.push(`/${page}#step-4: the address doesn't open step 4`);
+}
+
 let runs = 0;
 try {
   const tab = await openTab();
   for (const page of PAGES) {
     for (const theme of THEMES) {
-      runs++;
-      await tab.send("Emulation.setDeviceMetricsOverride", { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
-      await tab.send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: theme.toLowerCase() }] });
-      await load(tab, `${origin}/${page}`);
-      const mode = await tab.evaluate(`document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")`);
-      if (mode !== theme.toLowerCase()) {
-        problems.push(`/${page} (${theme}): rendered in ${mode}`);
-        continue;
+      for (const script of [true, false]) {
+        runs++;
+        const where = `/${page} (${theme}${script ? "" : ", as without JavaScript"})`;
+        await tab.send("Emulation.setDeviceMetricsOverride", { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
+        await tab.send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: theme.toLowerCase() }] });
+        await load(tab, `${origin}/${page}`);
+        const mode = await tab.evaluate(`document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")`);
+        if (mode !== theme.toLowerCase()) {
+          problems.push(`${where}: rendered in ${mode}`);
+          continue;
+        }
+        if (!script)
+          await tab.evaluate(`document.querySelectorAll("[data-script-added]").forEach((e) => e.remove());
+            document.querySelectorAll("[data-stepping]").forEach((list) => { list.removeAttribute("data-stepping"); [...list.children].forEach((c) => (c.hidden = false)); });`);
+        await tab.evaluate(axeSource);
+        const violations = await tab.evaluate(
+          `axe.run(document).then((r) => r.violations.map((v) => ({ rule: v.id, impact: v.impact, help: v.help, nodes: v.nodes.slice(0, 3).map((n) => n.target.join(" ")) })))`
+        );
+        for (const v of violations) problems.push(`${where}: ${v.rule} [${v.impact}] — ${v.help}: ${v.nodes.join(", ")}`);
       }
-      await tab.evaluate(axeSource);
-      const violations = await tab.evaluate(
-        `axe.run(document).then((r) => r.violations.map((v) => ({ rule: v.id, impact: v.impact, help: v.help, nodes: v.nodes.slice(0, 3).map((n) => n.target.join(" ")) })))`
-      );
-      for (const v of violations) problems.push(`/${page} (${theme}): ${v.rule} [${v.impact}] — ${v.help}: ${v.nodes.join(", ")}`);
+    }
+    if (page === "ai-tools/") {
+      await tab.send("Emulation.setDeviceMetricsOverride", { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
+      await checkSteps(tab, page);
     }
     // Phone width: nothing may make the page scroll sideways.
     await tab.send("Emulation.setDeviceMetricsOverride", { width: 375, height: 812, deviceScaleFactor: 2, mobile: true });
@@ -193,6 +238,7 @@ try {
 for (const problem of problems) console.error(`  ✗ ${problem}`);
 const notYet = pending.size ? ` Not built yet, and allowed for now: ${[...pending].map((p) => `/${p}`).join(", ")}.` : "";
 console.log(
-  `${PAGES.length} pages × ${THEMES.length} color modes (${THEMES.join(", ")}) and phone width: ${runs} axe runs; ${links} internal links followed — ${problems.length} problem(s).${notYet}`
+  `${PAGES.length} pages × ${THEMES.length} color modes (${THEMES.join(", ")}), as loaded and as without JavaScript, and phone width: ${runs} axe runs; ` +
+    `the AI page's steps by keyboard; ${links} internal links followed — ${problems.length} problem(s).${notYet}`
 );
 process.exit(problems.length ? 1 : 0);

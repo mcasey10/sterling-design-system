@@ -27,6 +27,7 @@
     "check:urls": "tsx scripts/check-urls.ts",
     "pages": "tsx scripts/build-pages.ts",
     "check:site": "node scripts/check-site.mjs",
+    "check:excerpts": "tsx scripts/check-excerpts.ts",
     "export:demo-data": "tsx scripts/export-demo-data.ts",
     "check:demo-data": "tsx scripts/export-demo-data.ts --check"
   },

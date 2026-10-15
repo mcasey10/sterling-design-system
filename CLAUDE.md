@@ -170,13 +170,22 @@ scripts/build-token-site.mjs  The token reference: `npm run tokens:site` writes 
 scripts/lib/page-shell.mjs  The website's page shell: head, fonts, token CSS, the site navigation, the Light /
                           Dark switch, the footer. Every website page uses it; phone width up
 ui/scripts/build-pages.ts `npm run pages` (in ui/): Start here (site/index.html) from AUDIENCES in
-                          definitions/audiences.ts, and Install sterling-ui (site/install/) from definitions/setup.ts
+                          definitions/audiences.ts, Install sterling-ui (site/install/) from definitions/setup.ts, and
+                          Sterling and AI tools (site/ai-tools/): Chip/Status followed from source to code in seven
+                          steps, the MCP setup block, a first prompt. Needs the MCP server built (npm run build in mcp/)
+ui/scripts/lib/excerpts.ts  THE AI page's excerpts, read from the real files by selector (TS entry, JSON path, lines,
+                          code symbol); each must match once. Step 7's code must be identical to 2872cf0, as delivered.
+                          `npm run check:excerpts` runs them (needs git history and the built MCP server)
+mcp/scripts/exchange.mjs  A real exchange with the built server (tools/list, get_component, get_pattern), as JSON,
+                          for the AI page's step 6
 definitions/setup.ts      THE setup instructions (Where / You need / Do / Scope / It worked if / If it didn't),
                           shown by the website, README, and Storybook
 ui/scripts/check-site.mjs `npm run check:site`: every website page, axe in Light and Dark (system preference
-                          emulated), no sideways scroll at 375px, every internal link and anchor
-scripts/build-site.mjs    `npm run site`: site/ = Start here + tokens/ + Storybook under storybook/ + a copy of
-                          ai/ + llms.txt (what Pages publishes); scripts/serve-site.mjs (`npm run site:serve`)
+                          emulated), as loaded and as without JavaScript (script-added parts marked data-script-added),
+                          no sideways scroll at 375px, every internal link and anchor, the AI page's steps by keyboard
+scripts/build-site.mjs    `npm run site`: site/ = Start here + install/ + tokens/ + ai-tools/ + Storybook under
+                          storybook/ + a copy of ai/ + llms.txt (what Pages publishes); builds the MCP server first;
+                          scripts/serve-site.mjs (`npm run site:serve`)
 scripts/figma-fingerprint.mjs  `npm run figma:fingerprint -- <file key>`: the call that fingerprints a Figma file
                           (read-only code in scripts/lib/figma-fingerprint.js: every library page, variable, text
                           style); `-- compare before.json after.json` compares two. Never commit a file key
@@ -197,9 +206,14 @@ LICENSE, LICENSE-docs.md  MIT for code; CC BY 4.0 for documentation and design c
 .github/workflows/        ci.yml (checks on every push and pull request); pages.yml (publishes the token
                           site from main; skipped while the repo is private)
 ARCHITECTURE.md           How it fits together, for designers
-docs/mermaid-config.json, docs/mermaid.css   Shared settings for rendering example diagrams
-docs/examples/<name>/     Planning docs for an example: .mmd sources (source of truth) and
-                          rendered .svg — re-render after editing a .mmd (command in docs/reference.md)
+docs/mermaid-config.json, docs/mermaid.css   Shared settings for rendering diagrams
+docs/diagrams/            Library diagrams: ai-layer.mmd (how the AI layer is built and used; on the AI page),
+                          rendered per color mode in Sterling's colors from the tokens (ai-layer.svg, ai-layer.dark.svg)
+docs/examples/<name>/     Planning docs for an example: .mmd sources (source of truth) and rendered .svg
+scripts/render-diagrams.mjs  `npm run diagrams`: every .mmd in docs/ → SVG beside it (Mermaid CLI, pinned in
+                          scripts/lib/diagrams.mjs, which also builds the per-mode colors), stamped with the hash of
+                          the source (and colors). `npm run check:diagrams` fails if either changed without a
+                          re-render. Never hand-edit a rendered SVG
 ```
 
 ## Figma output

@@ -1,8 +1,9 @@
 # Checks that need no Figma file, on every push and pull request:
 # the plugin type-checks and builds, every color pair meets WCAG contrast, every published
-# token has a description, and the token CSS and token site build. The coded layer (ui/) type-checks,
-# has a coded counterpart for every component definition, uses no raw values in its CSS, builds its
-# Storybook, and passes an accessibility run over every story in every color mode.
+# token has a description, the token CSS and token site build, and every diagram is rendered from its
+# current source. The coded layer (ui/) type-checks, has a coded counterpart for every component definition,
+# uses no raw values in its CSS, builds its Storybook, and passes an accessibility run over every story in
+# every color mode. The website builds and passes its checks, including the AI page's excerpts.
 name: CI
 
 on:
@@ -41,20 +42,31 @@ jobs:
         run: npm run tokens:css
       - name: Build the token site
         run: npm run tokens:site
+      - name: Every diagram is rendered from its current source
+        run: npm run check:diagrams
 
   ui:
     runs-on: ubuntu-latest
     steps:
+      # The full history: the AI page shows code as delivered in an earlier commit, and checks it still is.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: ui/package-lock.json
+          cache-dependency-path: |
+            ui/package-lock.json
+            mcp/package-lock.json
 
       - name: Install ui dependencies
         run: npm ci
         working-directory: ui
+      # The website's AI page calls the built MCP server for a real exchange.
+      - name: Install the MCP server's dependencies
+        run: npm ci
+        working-directory: mcp
       - name: Generate the token CSS
         run: npm run tokens
         working-directory: ui
@@ -77,6 +89,8 @@ jobs:
         run: npm run site
       - name: The website passes axe in every color mode, fits a phone's width, and has no broken links
         run: npm run check:site
+      - name: The AI page's excerpts match their sources, and its code is as delivered
+        run: npm run check:excerpts
       - name: Build Storybook
         run: npm run build-storybook
         working-directory: ui
