@@ -470,7 +470,8 @@ export function App({ loadFails = false }: AppProps) {
               helper={draftErrors.ltv}
             />
             <div className="pl-filters__actions">
-              <Button kind="ghost" size="md" label="Reset" onClick={() => applyFilters(NO_FILTERS)} />
+              {/* Reset returns to the active view's own filters; Clear all, by the chips, removes every filter. */}
+              <Button kind="ghost" size="md" label="Reset" onClick={() => applyFilters(view.filters)} />
               <Button kind="primary" size="md" label="Apply" type="submit" />
             </div>
           </form>

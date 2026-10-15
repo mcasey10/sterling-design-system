@@ -512,7 +512,7 @@ export const FILTER_FIELDS: Record<"pool" | "add", { label: string; kind: "selec
 export const FILTER_MODEL: [string, string][] = [
   ["Filter", "One condition, e.g. Status is Exception."],
   ["Filter set", "The filters currently applied, always shown as chips above the grid. Edit it in the filter panel, or with the side panel's shortcuts."],
-  ["Filter panel", "One per tab (\"Filter pool loans\" / \"Filter candidates\"), and each tab keeps its own filters. It filters the grid only. Fields: Lender, Status (or Eligibility), FICO, LTV; + Add filter adds any other column; Reset clears, Apply applies. Panel and chips stay in sync: applied filters show as chips, removing a chip clears that field, and choosing a view fills both."],
+  ["Filter panel", "One per tab (\"Filter pool loans\" / \"Filter candidates\"), and each tab keeps its own filters. It filters the grid only. Fields: Lender, Status (or Eligibility), FICO, LTV; + Add filter adds any other column; Apply applies, and Reset returns the fields to the active view's filters. Panel and chips stay in sync: applied filters show as chips, removing a chip clears that field, and choosing a view fills both."],
   ["View", "A named filter set (plus columns and sort), predefined or saved. Choose one from the View menu; Save view saves the current filter set under Saved by me. Views set columns too: Exceptions to sign off and Signed off add the Sign-off note column."],
   ["Status", "Just a field. Shortcuts — the status counts and issue links in the side panel — add a normal filter chip."],
   ["Edited view", "Changing a view's filters keeps its name with \"· edited\" (e.g. All candidates · edited) and enables Save view. Save view is disabled while a view is unchanged."],
