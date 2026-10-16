@@ -1,8 +1,11 @@
 // Writes the parts of Sterling's documentation that come from data, so each is written once:
 //   README.md                 the Start here table, from AUDIENCES in definitions/audiences.ts (the website's matrix),
-//                             and the component and icon counts ("24 components and 20 icons"), from definitions/
+//                             the component and icon counts ("24 components and 20 icons"), from definitions/, and
+//                             the contrast pair count ("124 pairs, each in Light and Dark"), from tokens.json
 //   mcp/README.md             the setup block, from definitions/setup.ts (the website's #set-up), and the icon count
-//   docs/figma-community.md   the version (package.json) and the component and icon counts
+//   docs/figma-community.md   the version (package.json); the counts of contrast pairs (tokens.json contrast.rules, per
+//                             color mode), guideline sections, patterns, components, and icons; and the website, demo
+//                             page, and repository addresses (definitions/site.ts)
 // Each generated block sits between marker comments (`<!-- generated: name … -->` and `<!-- /generated: name -->`);
 // everything outside them is written by hand. Counts and the Community text's version line, inside sentences, are
 // found by their wording instead.
@@ -17,7 +20,9 @@ import { AUDIENCES, HOW, NO_SETUP, type How, type Place } from "../../definition
 import { COMPONENTS } from "../../definitions/components";
 import { ICONS } from "../../definitions/icons";
 import { mcpServer, type SetupBlock } from "../../definitions/setup";
-import { INSTALL_PACKAGE_URL, MCP_SETUP_URL } from "../../definitions/site";
+import { GUIDELINES, PATTERNS } from "../../definitions/guidelines";
+import { DEMO_PAGE_URL, INSTALL_PACKAGE_URL, MCP_SETUP_URL, REPOSITORY_URL, WEBSITE_URL } from "../../definitions/site";
+import { evaluateContrast, loadTokens } from "../../scripts/lib/tokens.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const VERSION = JSON.parse(readFileSync(resolve(root, "package.json"), "utf8")).version as string;
@@ -107,6 +112,9 @@ function oneLine(text: string, file: string, pattern: RegExp, line: string): str
 
 const COMPONENT_COUNT = Object.keys(COMPONENTS).length;
 const ICON_COUNT = Object.keys(ICONS).length;
+const TOKENS = loadTokens();
+/** Text and background pairs, each checked in every color mode (npm run contrast reports pairs × modes). */
+const CONTRAST_PAIRS = evaluateContrast(TOKENS).length / TOKENS.color.$modes.length;
 
 /** Every count matching `pattern` (with its numbers as \d+), set to `wording`; there must be at least `least`. */
 function counts(text: string, file: string, pattern: RegExp, wording: string, least: number): string {
@@ -116,20 +124,31 @@ function counts(text: string, file: string, pattern: RegExp, wording: string, le
 }
 
 update("README.md", (text) =>
-  counts(between(text, "README.md", "start-here", startHere()), "README.md", /\b\d+ components and \d+ icons\b/g, `${COMPONENT_COUNT} components and ${ICON_COUNT} icons`, 2)
+  counts(
+    counts(between(text, "README.md", "start-here", startHere()), "README.md", /\b\d+ components and \d+ icons\b/g, `${COMPONENT_COUNT} components and ${ICON_COUNT} icons`, 2),
+    "README.md",
+    /\b\d+ pairs, each in Light and Dark/g,
+    `${CONTRAST_PAIRS} pairs, each in Light and Dark`,
+    1
+  )
 );
 update("mcp/README.md", (text) =>
   counts(between(text, "mcp/README.md", "setup", setupMarkdown(mcpServer(VERSION), 3)), "mcp/README.md", /The \d+ icons share one entry/g, `The ${ICON_COUNT} icons share one entry`, 1)
 );
-update("docs/figma-community.md", (text) =>
-  counts(
-    oneLine(text, "docs/figma-community.md", /^Sterling Design System \d+\.\d+\.\d+$/, `Sterling Design System ${VERSION}`),
-    "docs/figma-community.md",
-    /Intentionally small: \d+ components, \d+ icons,/g,
-    `Intentionally small: ${COMPONENT_COUNT} components, ${ICON_COUNT} icons,`,
-    1
-  )
-);
+update("docs/figma-community.md", (text) => {
+  const file = "docs/figma-community.md";
+  let out = oneLine(text, file, /^Sterling Design System \d+\.\d+\.\d+$/, `Sterling Design System ${VERSION}`);
+  const each: [RegExp, string][] = [
+    [/Contrast for \d+ text and background pairs/g, `Contrast for ${CONTRAST_PAIRS} text and background pairs`],
+    [/\d+ guideline sections and \d+ patterns/g, `${GUIDELINES.length} guideline sections and ${PATTERNS.length} patterns`],
+    [/What's inside: \d+ components and \d+ icons\b/g, `What's inside: ${COMPONENT_COUNT} components and ${ICON_COUNT} icons`],
+    [/build a screen with it: \S+/g, `build a screen with it: ${DEMO_PAGE_URL}`],
+    [/start at \S+/g, `start at ${WEBSITE_URL}`],
+    [/Sterling's own values are reset on the next rebuild\. See \S+/g, `Sterling's own values are reset on the next rebuild. See ${REPOSITORY_URL}`],
+  ];
+  for (const [pattern, wording] of each) out = counts(out, file, pattern, wording, 1);
+  return out;
+});
 
 for (const problem of problems) console.error(`  ✗ ${problem}`);
 if (check) console.log(`README.md, mcp/README.md, docs/figma-community.md checked against their sources — ${problems.length} problem(s).${problems.length ? " Run npm run docs:sync." : ""}`);

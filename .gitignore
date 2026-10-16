@@ -6,3 +6,6 @@ site/
 # The demo kit: built output, and the local setting that holds this machine's paths (never committed).
 /demo/kit/
 /demo/kit.local.json
+
+# Working files for the Figma Community page images (not part of Sterling).
+/docs/images/community/

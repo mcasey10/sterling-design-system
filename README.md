@@ -59,7 +59,7 @@ generated from them. A component can't gain a variant in one place and not the o
 
 **Each build checks itself.** It reports a problem, and says where, if:
 
-- a text and background pair falls below WCAG contrast (248 pairs, in Light and Dark);
+- a text and background pair falls below WCAG contrast (124 pairs, each in Light and Dark);
 - a published component is missing its description or its documentation link, or a published
   variable is missing its description;
 - an instance loses the link to its main component;
