@@ -49,10 +49,15 @@ export function SummaryPanel({ summary, loading, onFilterStatus, onFilterLender 
           Loans by status
         </h3>
         <p className="stl-text-body pl-inline-list">
+          {/* Each separator follows its link, in the same unbreakable item, so a wrapped line never starts with one. */}
           {shownStatuses.map((status, index) => (
-            <span key={status}>
-              {index > 0 && <span aria-hidden="true"> · </span>}
+            <span key={status} className="pl-inline-list__item">
               <FilterLink label={`${summary.byStatus[status]} ${status}`} onApply={() => onFilterStatus(status)} />
+              {index < shownStatuses.length - 1 && (
+                <span aria-hidden="true" className="pl-inline-list__separator">
+                  ·
+                </span>
+              )}
             </span>
           ))}
         </p>

@@ -224,7 +224,13 @@ ul {
 .pl-inline-list {
   display: flex;
   flex-wrap: wrap;
-  row-gap: var(--stl-space-4);
+  gap: var(--stl-space-4);
+}
+.pl-inline-list__item {
+  white-space: nowrap;
+}
+.pl-inline-list__separator {
+  margin-inline-start: var(--stl-space-4);
 }
 .pl-issues__title {
   display: flex;

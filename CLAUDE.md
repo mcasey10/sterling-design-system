@@ -188,7 +188,8 @@ ui/scripts/demo-extract.ts  `npm run demo:extract -- <transcript.jsonl> --banned
                           the screen as delivered (rendered from 2872cf0's own Storybook), for the /demo/ page
 ui/scripts/check-interactions.mjs  `npm run check:interactions` (needs a Storybook build): runs every story with a play
                           function (tagged play-fn) in headless Chrome; fails if it throws. Examples › Pool loans ›
-                          Filter counts checks the loan counts after a filter, Reset, "Any lender", and Clear all
+                          Filter counts checks the loan counts after a filter, Reset, "Any lender", and Clear all;
+                          Loans by status, wrapped checks no wrapped line starts with a separator, at every width
 ui/scripts/check-site.mjs `npm run check:site`: every website page, axe in Light and Dark (system preference
                           emulated), as loaded and as without JavaScript (script-added parts marked data-script-added),
                           no sideways scroll at 375px, every internal link and anchor, the AI page's steps by keyboard

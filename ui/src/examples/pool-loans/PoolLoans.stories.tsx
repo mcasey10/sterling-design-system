@@ -120,3 +120,48 @@ export const FilterCounts: StoryObj<typeof meta> = {
     });
   },
 };
+
+// ---------------------------------------------------------------- Loans by status, wrapped (a layout test)
+
+/**
+ * The "Loans by status" links, wrapped at every width from one link per line to all on one: no line starts with a
+ * separator, and each separator has space on both sides. Runs in the Interactions panel and in CI.
+ */
+export const StatusListWraps: StoryObj<typeof meta> = {
+  name: "Loans by status, wrapped (test)",
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const card = await canvas.findByRole("region", { name: "Loans by status" });
+    const list = await waitFor(() => {
+      const links = within(card).getAllByRole("link");
+      expect(links.length).toBeGreaterThan(1);
+      return links[0].closest("p") as HTMLElement;
+    });
+    const box = (el: Element) => el.getBoundingClientRect();
+    // The separators are the list's aria-hidden text; each must sit on the same line as the link before it.
+    const problems = (width: number) => {
+      list.style.width = `${width}px`;
+      const found: string[] = [];
+      const links = within(list).getAllByRole("link");
+      const separators = [...list.querySelectorAll('[aria-hidden="true"]')].filter((el) => el.textContent?.includes("·"));
+      if (separators.length !== links.length - 1) found.push(`${separators.length} separators for ${links.length} links`);
+      separators.forEach((sep, i) => {
+        const before = box(links[i]);
+        const after = box(links[i + 1]);
+        const s = box(sep);
+        if (Math.abs(s.top - before.top) > 2) found.push(`separator ${i + 1} starts a line at ${width}px`);
+        else if (s.left - before.right < 2) found.push(`no space before separator ${i + 1} at ${width}px`);
+        if (Math.abs(after.top - s.top) <= 2 && after.left - s.right < 2) found.push(`no space after separator ${i + 1} at ${width}px`);
+      });
+      return found;
+    };
+
+    await step("At every width from 80px to the card's own, no line starts with a separator", async () => {
+      const full = box(list).width;
+      const found: string[] = [];
+      for (let width = 80; width <= full; width += 4) found.push(...problems(width));
+      list.style.width = "";
+      await expect(found).toEqual([]);
+    });
+  },
+};
