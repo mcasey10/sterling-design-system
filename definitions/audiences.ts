@@ -2,7 +2,7 @@
 // Start here draws it (ui/scripts/build-pages.ts), and the README's table is generated from it. Plain data on
 // top of the addresses in site.ts.
 
-import { AI_FILES_URL, FIGMA_COMMUNITY_URL, INSTALL_PACKAGE_URL, LLMS_TXT_URL, MCP_SETUP_URL, REPOSITORY_URL, STORYBOOK_URL, TOKENS_URL } from "./site";
+import { AI_FILES_URL, DEMO_PAGE_URL, FIGMA_COMMUNITY_URL, INSTALL_PACKAGE_URL, LLMS_TXT_URL, MCP_SETUP_URL, REPOSITORY_URL, STORYBOOK_URL, TOKENS_URL } from "./site";
 
 /** How a reader gets something: the pill beside each place on Start here. */
 export type How = "Browser" | "Duplicate" | "Read by URL" | "Install" | "Download and register once" | "Clone";
@@ -81,6 +81,7 @@ export const AUDIENCES: Audience[] = [
     role: "AI-assisted developer",
     why: "You build with an AI coding tool. Give it Sterling's components, tokens and rules, so the code it writes follows the system instead of inventing its own.",
     places: [
+      { links: [{ label: "Watch the demo", url: DEMO_PAGE_URL }], note: "An AI tool building a screen with Sterling", how: "Browser" },
       sterlingUi,
       {
         links: [{ label: "MCP server from the GitHub Release", url: MCP_SETUP_URL }],

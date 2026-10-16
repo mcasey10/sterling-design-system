@@ -93,6 +93,8 @@ jobs:
         run: npm run check:excerpts
       - name: The generated parts of the documentation are up to date
         run: npm run check:docs-sync
+      - name: The demo replay's record has no local path or unknown address
+        run: npm run check:demo-session
       - name: Build Storybook
         run: npm run build-storybook
         working-directory: ui

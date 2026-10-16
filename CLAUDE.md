@@ -172,7 +172,7 @@ scripts/lib/page-shell.mjs  The website's page shell: head, fonts, token CSS, th
 ui/scripts/build-pages.ts `npm run pages` (in ui/): Start here (site/index.html) from AUDIENCES in
                           definitions/audiences.ts, Install sterling-ui (site/install/) from definitions/setup.ts, and
                           Sterling and AI tools (site/ai-tools/): Chip/Status followed from source to code in seven
-                          steps, the MCP setup block, a first prompt. Needs the MCP server built (npm run build in mcp/)
+                          steps, the MCP setup block, a first prompt; and the demo replay (site/demo/). Needs the MCP server built (npm run build in mcp/)
 ui/scripts/lib/excerpts.ts  THE AI page's excerpts, read from the real files by selector (TS entry, JSON path, lines,
                           code symbol); each must match once. Step 7's code must be identical to 2872cf0, as delivered.
                           `npm run check:excerpts` runs them (needs git history and the built MCP server)
@@ -180,6 +180,12 @@ mcp/scripts/exchange.mjs  A real exchange with the built server (tools/list, get
                           for the AI page's step 6
 definitions/setup.ts      THE setup instructions (Where / You need / Do / Scope / It worked if / If it didn't),
                           shown by the website, README, and Storybook
+ui/scripts/demo-extract.ts  `npm run demo:extract -- <transcript.jsonl> --banned <file>`: writes docs/demo/session.json
+                          (the demo replay's record) from the demo session's transcript: the request, each MCP call with
+                          its answer shortened, the session's notes; no paths, no user messages, no reasoning. The banned
+                          terms come from a file outside the repo. Never commit a transcript. `npm run
+                          check:demo-session` (scripts/check-demo-session.mjs) checks the record. docs/demo/ also holds
+                          the screen as delivered (rendered from 2872cf0's own Storybook), for the /demo/ page
 ui/scripts/check-interactions.mjs  `npm run check:interactions` (needs a Storybook build): runs every story with a play
                           function (tagged play-fn) in headless Chrome; fails if it throws. Examples › Pool loans ›
                           Filter counts checks the loan counts after a filter, Reset, "Any lender", and Clear all

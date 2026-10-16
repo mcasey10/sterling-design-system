@@ -28,6 +28,7 @@
     "check:excerpts": "npm --prefix ui run check:excerpts",
     "check:interactions": "npm --prefix ui run check:interactions",
     "check:release-date": "node scripts/check-release-date.mjs",
+    "check:demo-session": "node scripts/check-demo-session.mjs",
     "docs:sync": "npm --prefix ui run docs:sync",
     "check:docs-sync": "npm --prefix ui run check:docs-sync",
     "diagrams": "node scripts/render-diagrams.mjs",

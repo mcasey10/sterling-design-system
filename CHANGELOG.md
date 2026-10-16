@@ -41,10 +41,19 @@ Sterling is for and how each reader starts.
 - **Data grid:** a flagged cell can carry its reason for screen readers (a row's `descriptions`, read after
   the value and its flag).
 
+**The demo**
+- **The demo replay** (`/demo/`): the session that built the Pool loans screen, step by step: the request, every
+  call to the MCP server with its answer (as the server gave it, from a pre-release build), the session's own
+  notes, and the screen as delivered. Linked from Start here and the AI page.
+- **The case study** (`docs/case-study/pool-loans.md`): what Sterling and 1.2 are for, how the session went, what
+  was corrected afterwards and whose each correction was, what the checks missed, how well it worked, and how
+  teams might apply it.
+
 **For maintainers**
 - Checks for everything above, in CI: the AI files against their sources, the MCP server's tools and its copy
   of the files, the website (axe in Light and Dark, phone width, every link), the AI page's excerpts, the
-  generated parts of the documentation, the diagrams, and Storybook's interaction tests.
+  generated parts of the documentation, the diagrams, Storybook's interaction tests, and the demo replay's
+  record (no local path or unknown address in it).
 - `npm run figma:fingerprint`, to show a rebuild changed nothing it shouldn't have.
 
 ### Changed

@@ -30,6 +30,7 @@
     "check:excerpts": "tsx scripts/check-excerpts.ts",
     "check:interactions": "node scripts/check-interactions.mjs",
     "docs:sync": "tsx scripts/docs-sync.ts",
+    "demo:extract": "tsx scripts/demo-extract.ts",
     "check:docs-sync": "tsx scripts/docs-sync.ts --check",
     "export:demo-data": "tsx scripts/export-demo-data.ts",
     "check:demo-data": "tsx scripts/export-demo-data.ts --check"

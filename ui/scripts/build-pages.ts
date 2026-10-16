@@ -2,6 +2,8 @@
 // (scripts/lib/page-shell.mjs):
 //   site/index.html            Start here, from the audience matrix in definitions/audiences.ts
 //   site/install/index.html    Install sterling-ui, from the setup block in definitions/setup.ts
+//   site/demo/index.html       The demo replay: the Pool loans session, from docs/demo/session.json (the request,
+//                              each MCP call and its answer, the session's notes) and the screen as delivered
 //   site/ai-tools/index.html   Sterling and AI tools: one component followed from the sources to code an AI tool
 //                              wrote, with excerpts read from the real files (lib/excerpts.ts), a real exchange
 //                              with the built MCP server (mcp/scripts/exchange.mjs), the overview diagram
@@ -20,7 +22,7 @@ import { AUDIENCES, HOW, NO_SETUP, type Audience, type How, type Place } from ".
 import { COMPONENTS } from "../../definitions/components";
 import { ICONS } from "../../definitions/icons";
 import {
-  AI_FILES_URL, INSTALL_PACKAGE_URL, LLMS_TXT_URL, MCP_SETUP_URL, RELEASES_URL, REPOSITORY_URL, WEBSITE_URL, commitUrl, historyUrl,
+  AI_FILES_URL, AI_PAGE_URL, DEMO_PAGE_URL, INSTALL_PACKAGE_URL, STORYBOOK_URL, LLMS_TXT_URL, MCP_SETUP_URL, RELEASES_URL, REPOSITORY_URL, WEBSITE_URL, commitUrl, historyUrl,
   repositoryFileUrl,
 } from "../../definitions/site";
 import {
@@ -288,6 +290,8 @@ ways.</p>
 </ul>
 <p>These are two separate routes to the same files. An MCP client doesn't read llms.txt, and a tool reading llms.txt doesn't
 use the MCP server. Use whichever your tool supports.</p>
+<p>To see it work first: ${link(DEMO_PAGE_URL, "the demo")} replays an AI session building a whole screen with Sterling, every
+call to the MCP server included.</p>
 <figure class="diagram">
   <div class="diagram-frame" tabindex="0" role="region" aria-label="Diagram: how the AI layer is built and used">
   ${DIAGRAM_MODES.map((d) => `<img class="for-${d.theme}" src="${d.file}" width="1325" height="320" alt="${DIAGRAM_ALT}">`).join("")}
@@ -333,6 +337,207 @@ ${setupHtml(mcpServer(VERSION), 2, base)}
     releasesUrl: RELEASES_URL,
   });
 }
+
+// ---------------------------------------------------------------- The demo replay
+
+interface DemoEvent {
+  at: number;
+  kind: "mcp" | "note" | "tool";
+  tool?: string;
+  arguments?: Record<string, unknown>;
+  answer?: string;
+  answerChars?: number;
+  what?: string;
+  text?: string;
+}
+interface DemoSession {
+  answersLabel: string;
+  session: { date: string; tool: string; model: string; mode: string; durationSeconds: number };
+  request: { opening: string; full: string };
+  report: string;
+  events: DemoEvent[];
+}
+
+/** The phases the replay steps through, in order. MCP calls go to the phase for their tool. */
+const PHASES = [
+  { id: "app", title: "Looking at the app", text: "The empty app, the data file, and the design picture." },
+  { id: "lists", title: "What Sterling has", text: "The list of components and the list of guidelines and patterns." },
+  { id: "patterns", title: "The patterns", text: "Every pattern: how a screen like this one is put together." },
+  { id: "guidelines", title: "The guidelines", text: "Every guideline section: the rules the components follow." },
+  { id: "components", title: "The components", text: "Each component it expected to use: what it's for, and its React props." },
+  { id: "tokens", title: "The tokens", text: "Color, spacing, size, density, and type." },
+  { id: "package", title: "Reading the package", text: "The installed package's types and built code, through shell commands." },
+  { id: "writing", title: "Writing the screen", text: "Six files: the data, the table, the summary, the screen, its styles, and the entry point." },
+  { id: "checking", title: "Checking it", text: "A build, a check of the numbers against the request, and a scan for raw values." },
+] as const;
+type PhaseId = (typeof PHASES)[number]["id"];
+
+const mcpPhase = (tool: string): PhaseId =>
+  tool.startsWith("list_") ? "lists" : tool === "get_pattern" ? "patterns" : tool === "get_guideline" ? "guidelines" : tool.startsWith("get_token") ? "tokens" : "components";
+
+/** Each event's phase: MCP calls by tool; other calls by when they happened; a note goes with what follows it. */
+function phases(events: DemoEvent[]): Map<PhaseId, DemoEvent[]> {
+  const firstMcp = Math.min(...events.filter((e) => e.kind === "mcp").map((e) => e.at));
+  const firstWrite = Math.min(...events.filter((e) => e.tool === "Write").map((e) => e.at));
+  const firstCheck = Math.min(...events.filter((e) => e.kind === "tool" && e.at > firstWrite && /build/i.test(e.what ?? "")).map((e) => e.at));
+  const phaseOf = (e: DemoEvent): PhaseId =>
+    e.kind === "mcp" ? mcpPhase(e.tool ?? "")
+    : e.at < firstMcp ? "app"
+    : e.at < firstWrite ? "package"
+    : e.at < firstCheck ? "writing"
+    : "checking";
+  const assigned = events.map((e) => (e.kind === "note" ? null : phaseOf(e)));
+  for (let i = events.length - 1; i >= 0; i--) if (assigned[i] === null) assigned[i] = assigned[i + 1] ?? "checking";
+  const out = new Map<PhaseId, DemoEvent[]>(PHASES.map((p) => [p.id, []]));
+  events.forEach((e, i) => out.get(assigned[i]!)!.push(e));
+  return out;
+}
+
+/** A paragraph of the request. A short first line without a full stop is a heading in the original ("What the screen is for"). */
+function requestParagraph(paragraph: string): string {
+  const [first, ...rest] = paragraph.split("\n");
+  const heading = rest.length > 0 && first.length < 40 && !/[.:]$/.test(first.trim());
+  return heading ? `<p><strong>${esc(first)}</strong><br>${esc(rest.join(" "))}</p>` : `<p>${esc(paragraph.replace(/\n/g, " "))}</p>`;
+}
+
+/** The session's own words, with its `backticks` shown as code. */
+const withCode = (text: string) => esc(text).replace(/`([^`]+)`/g, "<code>$1</code>");
+
+const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+
+function demoEvent(e: DemoEvent): string {
+  const when = `<span class="when">+${clock(e.at)}</span>`;
+  if (e.kind === "note") return `<li class="event event--note">${when}<blockquote><p>${withCode(e.text ?? "")}</p></blockquote></li>`;
+  if (e.kind === "tool") return `<li class="event event--tool">${when}<span>${esc(e.what ?? e.tool ?? "")}</span></li>`;
+  const args = JSON.stringify(e.arguments ?? {}).replace(/,"/g, ', "').replace(/":/g, '": ').replace(/^\{"/, '{ "').replace(/\}$/, " }");
+  const call = `${e.tool}(${args === "{}" ? "" : args})`;
+  return `<li class="event event--mcp">${when}<details><summary><code>${esc(call)}</code></summary>
+  <p class="answer-label">The answer, shortened (${(e.answerChars ?? 0).toLocaleString("en-US")} characters in full):</p>
+  <pre><code>${esc(e.answer ?? "")}</code></pre></details></li>`;
+}
+
+function demoPage(): string {
+  const base = "../";
+  const data = JSON.parse(readFileSync(resolve(root, "docs/demo/session.json"), "utf8")) as DemoSession;
+  const link = (url: string, label: string) => `<a href="${esc(local(url, base))}">${esc(label)}</a>`;
+  const byPhase = phases(data.events);
+  const mcpCount = data.events.filter((e) => e.kind === "mcp").length;
+  const mcpTimes = data.events.filter((e) => e.kind === "mcp").map((e) => e.at);
+  const mcpSpan = Math.max(...mcpTimes) - Math.min(...mcpTimes);
+  const s = data.session;
+  const date = new Date(`${s.date}T12:00:00Z`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  const steps = PHASES.filter((p) => byPhase.get(p.id)!.length).map((p, i) => {
+    const events = byPhase.get(p.id)!;
+    const calls = events.filter((e) => e.kind === "mcp").length;
+    return `<li class="step" id="step-${i + 1}" aria-labelledby="step-${i + 1}-title">
+  <h3 id="step-${i + 1}-title" tabindex="-1">${esc(p.title)}</h3>
+  <p>${esc(p.text)}${calls ? ` ${calls} ${calls === 1 ? "call" : "calls"} to the MCP server: open one to see its answer.` : ""}</p>
+  <ol class="events">${events.map(demoEvent).join("\n")}</ol>
+</li>`;
+  });
+  const mode = (file: string, theme: string) => `<img class="for-${theme}" src="${file}" width="1440" height="915" alt="The Pool loans screen as delivered: the filter panel, the Harbor Point loans view with twelve loans and one exception flagged, the pool summary with its three issues, and the session's own demo settings panel at the bottom.">`;
+  const main = `<div class="column">
+<p class="crumb">${link(AI_PAGE_URL, "Sterling and AI tools")} ›</p>
+<h1>The demo: an AI tool builds a screen with Sterling</h1>
+<p class="lead">Claude Code was asked to build the Pool loans screen of a loan pooling tool, with nothing but Sterling's
+package and its MCP server. This replays the session: the request, what it looked up, and what it built.</p>
+<ul class="facts">
+  <li>${esc(s.tool)}, ${esc(s.model)}, ${esc(s.mode)} mode, ${esc(date)}</li>
+  <li>${mcpCount} calls to Sterling's MCP server in ${mcpSpan} seconds</li>
+  <li>${Math.round(s.durationSeconds / 60)} minutes from the request to a working screen</li>
+</ul>
+
+<section class="panel" aria-labelledby="request-title">
+  <h2 id="request-title">The request</h2>
+  <blockquote class="request">${data.request.opening.split(/\n\s*\n/).map(requestParagraph).join("")}</blockquote>
+  <p>${link(repositoryFileUrl(data.request.full), "The whole request")} goes on to the screen's parts, its rules, and what the
+  trader can do. It describes them in product terms, not by Sterling's component names. With it, the session had an
+  empty app, the pool's data (a sample of 21 of its 186 loans), and a picture of the design:</p>
+  <figure class="shot">
+    <div class="shot-frame"><img src="design.png" width="1440" height="900" alt="The design picture, the Pool loans screen as designed: a filter panel on the left, the pool's loans in a grid with one exception flagged, the bulk action bar, and a pool summary on the right listing the three issues that block submission."></div>
+    <figcaption>The design picture: a PNG of the design from the Sterling Figma file's example page. <a href="design.png">Open it full size</a>.</figcaption>
+  </figure>
+</section>
+
+<section class="panel" aria-labelledby="session-title">
+  <h2 id="session-title">What it did</h2>
+  <p>Step by step, in order. Times are from the request. Quotations are the session's own notes; where one of its words
+  is replaced, the replacement is in square brackets. ${esc(data.answersLabel)}: they aren't regenerated from today's
+  server.</p>
+  <ol class="steps">
+${steps.join("\n")}
+  </ol>
+</section>
+
+<section class="panel" aria-labelledby="result-title">
+  <h2 id="result-title">What it built</h2>
+  <p>The session had no browser it could use, so it couldn't look at the app it built: the only one available, Claude in
+  Chrome, drives the user's own browser on the open web, and was turned off to keep the session to Sterling's package and
+  MCP server. Its report began:</p>
+  <blockquote class="request"><p>${withCode(data.report)}</p></blockquote>
+  <figure class="shot">
+    <div class="shot-frame">${mode("delivered-light.png", "light")}${mode("delivered-dark.png", "dark")}</div>
+    <figcaption>The screen as delivered, in commit ${link(commitUrl(DELIVERED), DELIVERED)}, rendered from that commit's own
+    Storybook. Two things corrected later show here: the Exception column is cut off at the right, and the session's own
+    demo settings panel sits at the bottom. <a class="for-light" href="delivered-light.png">Open it full size</a><a class="for-dark" href="delivered-dark.png">Open it full size</a>.</figcaption>
+  </figure>
+</section>
+
+<section class="panel" aria-labelledby="try-title">
+  <h2 id="try-title">Try it</h2>
+  <p>${link(`${STORYBOOK_URL}?path=/story/examples-pool-loans--pool-loans`, "Examples › Pool loans in Storybook")} is the
+  same screen, working. It's today's version: corrected afterwards in five commits (a to e), made with Claude Code under
+  my direction. ${link(historyUrl(DELIVERED_FOLDER), "The screen's history")} has every commit, and
+  ${link(repositoryFileUrl("docs/case-study/pool-loans.md"), "the case study")} says what each correction was, and whose.</p>
+</section>
+</div>`;
+  return renderPage({
+    title: "The Sterling demo",
+    description: "An AI tool builds a screen with Sterling: the request, every call to Sterling's MCP server, and the screen it built.",
+    base,
+    current: "ai-tools",
+    main,
+    css: AI_CSS + DEMO_CSS,
+    script: STEPS_JS,
+    version: VERSION,
+    repositoryUrl: REPOSITORY_URL,
+    releasesUrl: RELEASES_URL,
+  });
+}
+
+const DEMO_CSS = `
+.crumb { margin: 0 0 4px; font-size: 13px; }
+.facts { display: flex; flex-wrap: wrap; gap: 4px 24px; padding: 0; margin: 0 0 8px; list-style: none; color: var(--color-text-secondary); font-size: 13px; }
+.request { margin: 0 0 16px; padding: 12px 16px; border-left: 3px solid var(--color-accent-default); background: var(--color-surface-hover); }
+.request p { margin: 0 0 8px; }
+.request p:last-child { margin: 0; }
+.shot { margin: 16px 0 0; }
+.shot-frame { overflow-x: auto; border: 1px solid var(--color-border-default); border-radius: var(--radius-md); }
+.shot-frame:focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: 2px; }
+.shot img { display: block; width: 100%; height: auto; }
+.shot figcaption { margin-top: 8px; font-size: 13px; color: var(--color-text-secondary); }
+.shot .for-dark { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .shot .for-light { display: none; }
+  :root:not([data-theme="light"]) .shot img.for-dark { display: block; }
+  :root:not([data-theme="light"]) .shot a.for-dark { display: inline; }
+}
+:root[data-theme="dark"] .shot .for-light { display: none; }
+:root[data-theme="dark"] .shot img.for-dark { display: block; }
+:root[data-theme="dark"] .shot a.for-dark { display: inline; }
+.events { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 6px; }
+.event { display: grid; grid-template-columns: 4.5em 1fr; gap: 8px; align-items: baseline; font-size: 13px; }
+.when { color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
+.event blockquote { margin: 0; padding: 0 0 0 12px; border-left: 2px solid var(--color-border-strong); }
+.event blockquote p { margin: 0; }
+.event--tool span { color: var(--color-text-secondary); }
+.event details summary { cursor: pointer; }
+.event details summary code { font-size: 12px; }
+.answer-label { margin: 8px 0 4px; color: var(--color-text-secondary); }
+.event pre, .event pre code { white-space: pre-wrap; overflow-wrap: anywhere; }
+.event pre { margin: 0; }
+@media (max-width: 720px) { .event { grid-template-columns: 1fr; gap: 2px; } }
+`;
 
 const SETUP_CSS = `
 .setup h3, .setup--page h2 { font-size: 14px; margin-top: 16px; }
@@ -501,9 +706,12 @@ const FORWARD_JS = `
 })();
 `;
 
-for (const folder of ["install", "ai-tools"]) mkdirSync(resolve(site, folder), { recursive: true });
+for (const folder of ["install", "ai-tools", "demo"]) mkdirSync(resolve(site, folder), { recursive: true });
 writeFileSync(resolve(site, "index.html"), startHere());
 writeFileSync(resolve(site, "install/index.html"), installPage());
 writeFileSync(resolve(site, "ai-tools/index.html"), aiToolsPage());
 for (const { file } of DIAGRAM_MODES) copyFileSync(resolve(root, "docs/diagrams", file), resolve(site, "ai-tools", file));
-console.log("Wrote site/index.html (Start here), site/install/ (Install sterling-ui), and site/ai-tools/ (Sterling and AI tools).");
+writeFileSync(resolve(site, "demo/index.html"), demoPage());
+copyFileSync(resolve(root, "docs/images/example-pool-loans.png"), resolve(site, "demo/design.png"));
+for (const theme of ["light", "dark"]) copyFileSync(resolve(root, `docs/demo/delivered-${theme}.png`), resolve(site, `demo/delivered-${theme}.png`));
+console.log("Wrote site/index.html (Start here), site/install/ (Install sterling-ui), site/ai-tools/ (Sterling and AI tools), and site/demo/ (the demo replay).");
