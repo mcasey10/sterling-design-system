@@ -1,7 +1,8 @@
 # Sterling Design System
 
 A design system for data-dense applications: tokens, a Figma library, and the same components in React, all
-built from one set of definitions.
+from one set of definitions: a plugin builds the Figma library, the React components follow the same definitions,
+and a check fails if a component's variants or properties ever differ between Figma and code.
 
 **Website: [mcasey10.github.io/sterling-design-system](https://mcasey10.github.io/sterling-design-system/)**,
 with every way in, for each kind of reader. Find the row that matches what you want to do with Sterling, then
