@@ -270,7 +270,8 @@ function aiToolsPage(): string {
       id: "step-7",
       title: "The code an AI tool wrote",
       text:
-        `An AI session built the Pool loans screen using only the sterling-ui package and the MCP server. The lines shown are as ` +
+        `An AI session built the Pool loans screen from a request, a design picture and sample data, with the ` +
+        `sterling-ui package and the MCP server as its only sources for Sterling. The lines shown are as ` +
         `delivered, in commit ${link(commitUrl(DELIVERED), DELIVERED)}: each loan status with its chip tone, and the pool's ` +
         `status in the page header. The code around them was later changed to use DataGrid (${link(historyUrl(DELIVERED_FOLDER), "the screen's history")}).`,
       body: codeExcerpts().map(excerpt).join(""),
@@ -439,8 +440,9 @@ function demoPage(): string {
   const main = `<div class="column">
 <p class="crumb">${link(AI_PAGE_URL, "Sterling and AI tools")} ›</p>
 <h1>The demo: an AI tool builds a screen with Sterling</h1>
-<p class="lead">Claude Code was asked to build the Pool loans screen of a loan pooling tool, with nothing but Sterling's
-package and its MCP server. This replays the session: the request, what it looked up, and what it built.</p>
+<p class="lead">Claude Code was asked to build the Pool loans screen of a loan pooling tool. Sterling supplied the
+components and the guidance. The request, the design and the sample data came from the user, and Claude Code did the
+building. This replays the session: the request, what it looked up, and what it built.</p>
 <ul class="facts">
   <li>${esc(s.tool)}, ${esc(s.model)}, ${esc(s.mode)} mode, ${esc(date)}</li>
   <li>${mcpCount} calls to Sterling's MCP server in ${mcpSpan} seconds</li>

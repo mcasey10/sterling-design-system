@@ -715,8 +715,9 @@ same sources as the Figma library and the React components, and checked.
   CSS, attached to each Release.
 - **The website's AI page** (`/ai-tools/`) follows one component, Chip/Status, through all of this. Its
   excerpts are read from the real files when the site builds, and its MCP exchange comes from the built server,
-  so the page can't drift from what it describes. Its last step shows code an AI session wrote with only the
-  package and the MCP server: the Pool loans screen in `ui/src/examples/pool-loans/`, as delivered.
+  so the page can't drift from what it describes. Its last step shows code an AI session wrote with the package
+  and the MCP server as its only sources for Sterling: the Pool loans screen in `ui/src/examples/pool-loans/`, as
+  delivered.
 
 The diagram's source is `docs/diagrams/ai-layer.mmd`, rendered in Sterling's Light and Dark colors by
 `npm run diagrams`.

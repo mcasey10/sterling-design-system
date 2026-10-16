@@ -35,10 +35,10 @@ Sterling is for and how each reader starts.
 **In code**
 - **The `sterling-ui` package:** the React components with type declarations, the token CSS, and Inter, as a
   tarball attached to each Release and installed from its address. It isn't on a package registry.
-- **Examples › Pool loans** in Storybook: the loan example's screen, built by an AI session that had only the
-  package and the MCP server, then corrected in six commits (a to f). Its "Filter counts" test checks the loan
-  counts after a filter, Reset, "Any lender", and Clear all; "Loans by status, wrapped" checks that no wrapped line
-  of the summary's status links starts with a separator.
+- **Examples › Pool loans** in Storybook: the loan example's screen, built by an AI session whose only sources for
+  Sterling were the package and the MCP server, then corrected in six commits (a to f). Its "Filter counts" test
+  checks the loan counts after a filter, Reset, "Any lender", and Clear all; "Loans by status, wrapped" checks that
+  no wrapped line of the summary's status links starts with a separator.
 - **Data grid:** a flagged cell can carry its reason for screen readers (a row's `descriptions`, read after
   the value and its flag).
 

@@ -126,8 +126,8 @@ and submits it.
 - Every number on the page comes from one data file, and each loan's status is worked out from its
   figures, so the screens and the documentation can't disagree.
 
-The same screen was first built in code by an AI session that had only the `sterling-ui` package and the MCP
-server, then corrected in follow-up commits: see Examples › Pool loans in
+The same screen was first built in code by an AI session whose only sources for Sterling were the `sterling-ui`
+package and the MCP server, then corrected in follow-up commits: see Examples › Pool loans in
 [Storybook](https://mcasey10.github.io/sterling-design-system/storybook/).
 
 All data is fictional: the lenders, loans, and figures are made up.
