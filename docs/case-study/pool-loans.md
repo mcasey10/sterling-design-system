@@ -8,18 +8,18 @@ code. All three come from one set of definitions, so they always describe the sa
 fail if they drift apart.
 
 This case study is about version 1.2.0, which added an API for AI coding tools. To show what it does, an AI
-session was asked to build a sample application's screen with nothing but Sterling, and the result is part of
-the case study.
+session was given a request for a sample application's screen, a picture of the screen's design, and sample
+data, with Sterling's package and MCP server as its only Sterling references. What it built is part of the case
+study.
 
 ## Built for adoption and governance
 
 A design system only helps if teams use it, and use it correctly. Sterling is set up so that both are easier.
 
-- **One place to start, a way in for each reader.** The website's Start here page says who Sterling is for and
-  where each should go: an evaluator to the token reference and Storybook, a designer to the Figma library on
-  Figma Community, a developer to the `sterling-ui` package, an AI-assisted developer to the MCP server, and a
-  maintainer to the repository. Each setup is written to one standard: where to run it, what you need and how to
-  check it, what to do, and how you know it worked.
+- **One place to start, a way in for each reader.** The website's Start here page sends each reader where they
+  need to go: an evaluator to the token reference and Storybook, a designer to the Figma library, a developer to
+  the `sterling-ui` package, an AI-assisted developer to the MCP server, a maintainer to the repository. Every
+  setup is written to one standard, ending with how you know it worked.
 - **Correct use is checked, not just documented.** Every color pair is checked for contrast, every component
   for a description and a documentation link, Figma and code for the same variants and properties, the code for
   raw values where a token belongs, every story and website page for accessibility, and the files for AI tools
@@ -48,13 +48,20 @@ and developers use in code.
 
 That makes the design system the shared ground between roles. A designer, a developer, and an AI tool work from
 one set of definitions, so the hand-off between design and development shrinks: both sides build from the same
-components, and checks catch the places where they drift. It also lets people cross roles. A product manager
-can describe a screen in product terms, as this test's request did, and get one built from the real components.
+components, and checks catch the places where they drift. It also separates two jobs, owning the system and
+designing products with it, which "What it means for each role" below takes in turn.
 
-And it separates two jobs. Whoever owns the design system changes a component or a rule once, in one place, and
-every product built with it gets the change. Product designers design screens with the components without
-having to maintain them. Where the system doesn't cover what a screen needs, the tool says so, and that gap goes
-back to the system's owner instead of becoming a one-off inside a product.
+## What came before this test
+
+The test relied on two layers of earlier work.
+
+- **The system.** Versions 1.0 to 1.1.1 built Sterling itself: the tokens; 24 components, in Figma and, since
+  1.1, in React in Storybook, checked against each other for parity; the guidelines; and the nine patterns. 1.2
+  packaged the components as `sterling-ui` and added the AI files, `llms.txt`, and the MCP server.
+- **The product design.** The Pool loans screen was already designed in Figma with Sterling's library. A picture
+  of that design, the design picture below, was the session's reference.
+
+One person held both roles here: the system's owner and the product designer.
 
 ## The test
 
@@ -65,23 +72,30 @@ Sterling's component names, and asks the session to report the components it use
 missing. All data in it is fictional.
 
 **The kit** (`npm run demo:kit`, see [demo/README.md](../../demo/README.md)) gave the session an empty React
-app, the designer's screen as a picture, and three things from Sterling:
+app, the design picture, and three things from Sterling:
 
 - the `sterling-ui` package: the React components and the token CSS;
 - the MCP server, registered for the session;
 - the pool's data: its totals, its rules, and a sample of its loans, 21 of the 186 (the first page of each
   saved view), to keep the kit small.
 
-This is the designer's screen the session was given, from the Sterling Figma file's example page:
+This is the design picture the session was given, a PNG of the design from the Sterling Figma file's example
+page:
 
-![The designer's Pool loans screen: a filter panel on the left, the pool's loans in a grid with one exception flagged, the bulk action bar, and a pool summary on the right listing the three issues that block submission](../images/example-pool-loans.png)
+![The design picture, the Pool loans screen as designed: a filter panel on the left, the pool's loans in a grid with one exception flagged, the bulk action bar, and a pool summary on the right listing the three issues that block submission](../images/example-pool-loans.png)
 
-**Kept to the kit.** The session started with only the kit's MCP server. Its settings denied the web, the
-Figma servers, and the folders it must not read, this repository among them. Afterwards its transcript was read
-with `scripts/demo-transcript.mjs`: no other MCP server was called, nothing was fetched from the web, and no
-file outside the kit's folder was read or written. One gap showed: Claude in Chrome was still offered. At the
-end the session tried it, to look at the screen in a browser; the connection had been turned off by hand, so it
-couldn't, and no browser call was made. The kit's settings now deny Claude in Chrome too.
+**Kept to the kit.** The session had to learn Sterling only from the package and the MCP server, so it started
+with only the kit's MCP server, and its settings denied the web, the Figma servers, and this repository. Its
+transcript, read afterwards with `scripts/demo-transcript.mjs`, shows no other MCP server, nothing from the web,
+and no file outside the kit read or written.
+
+**What the session could and couldn't see.** It could see the design picture, which it read as an image. It
+couldn't see the app it built: looking at a running app takes a browser, and the only browser tool available,
+Claude in Chrome, drives the user's own Chrome, with their sign-ins and the open web. That would have broken the
+isolation, so it was turned off for the session. This was deliberate, and it had a cost: the session couldn't
+look at its own work, use it by keyboard, or check it with a screen reader. Near the end it tried Claude in
+Chrome, found it off, and checked its numbers through the code instead. The kit's settings now deny Claude in
+Chrome outright.
 
 ## The session
 
@@ -90,14 +104,14 @@ Claude Code 2.1.299, with Opus 5.5, in auto mode, on October 14. Times are from 
 | Time | What happened |
 |---|---|
 | 12:20:05 | The request |
-| 12:20:09 to 12:20:13 | It looked at the empty app, the data file, and the designer's screen |
+| 12:20:09 to 12:20:13 | It looked at the empty app, the data file, and the design picture |
 | 12:20:13 to 12:21:08 | **40 calls to Sterling's MCP server, in 55 seconds:** the component list and the guideline list; all 9 patterns; all 7 guideline sections; 16 components (the data grid and its parts, the bulk action bar, pagination, the status chip, summary metric, tabs, dialog, empty state, button, link, filter chip, select, and option); and the tokens, by collection |
 | 12:20:30 to 12:24:25 | Alongside, it read the installed package's built files through shell commands, as part of using the package: the type declarations, `index.js`, and `styles.css` |
-| 12:25:11 to 12:28:41 | It wrote the screen: six files |
+| 12:25:11 to 12:28:41 | It wrote the app: six files |
 | 12:28:46 to 12:29:25 | It built the app, started it, checked its data and query logic against the request's numbers, and scanned its CSS for raw values |
-| 12:29:44 | It reported the screen done |
+| 12:29:44 | It reported the app done |
 
-About ten minutes from the request to a working screen. The screen it delivered is committed unchanged
+About ten minutes from the request to a working app. The app it delivered is committed unchanged
 ([2872cf0](https://github.com/mcasey10/sterling-design-system/commit/2872cf0)) and is in Storybook as
 Examples › Pool loans, in its corrected form.
 
@@ -105,8 +119,8 @@ Examples › Pool loans, in its corrected form.
 
 As the request asked, it ended with a report, and the report was candid:
 
-- **What it couldn't check.** The browser wasn't available, so it said plainly that nothing had been checked
-  visually, with a keyboard, or with a screen reader. What it had checked was the numbers, by running its data
+- **What it couldn't check.** Without a browser, it said plainly that nothing in the app it built had been
+  checked visually, with a keyboard, or with a screen reader. What it had checked was the numbers, by running its data
   code: 186 loans, 181 Ready, 2 Exception, 3 Signed off, Harbor Point at 32%, 3 issues.
 - **The components it used:** 20 of Sterling's, among them the status chip, filter chip, bulk action bar,
   pagination, summary metric, select, dialog, and the grid's parts.
@@ -114,8 +128,7 @@ As the request asked, it ended with a report, and the report was candid:
 - **Seven gaps in Sterling:** the data grid couldn't give a flagged cell its reason for screen readers; no page
   checkbox outside the data grid; no grouped options or descriptions in Select; no toast or inline message; no
   card or panel; no screen-reader-only class or layout tokens; no tooltip.
-- **Its guesses,** listed one by one, from how sign-offs are recorded to what it left out because the request
-  didn't ask for it.
+- **Its guesses,** listed one by one.
 
 ## What it got right
 
@@ -150,7 +163,7 @@ Sterling's guidance, not in the session's reading of it. The patterns now say th
 the active saved view's filters, and Clear all removes every filter; correction d made the screen do so.
 
 **"Any lender" showed no loans.** Choosing "Any lender", or Clear all, showed the empty state for loans outside
-the sample: correct, but in use the screen looked broken, partly because the message explaining it was cut off
+the sample: correct, but in use the app looked broken, partly because the message explaining it was cut off
 when the grid scrolled sideways. The filter logic was right; the session had explained the gap rather than
 invented data. Correction e completed the fictional pool afterwards (marked in the code as added after
 delivery), and an interaction test now checks the loan counts after a filter, Reset, "Any lender", and Clear
@@ -167,46 +180,55 @@ name, and the test runs it as `sterling-mcp.js`
 
 ## How well it worked
 
-**It worked.** From a request written in product terms, with no component names, the session looked Sterling
-up, built a working screen from Sterling's own components in about ten minutes, and followed the patterns
-closely enough that most of the screen's behavior came from them. The MCP server did what it is for: the
-session asked before it built, and it asked about patterns most.
+**It worked.** From a request in product terms, the session looked Sterling up before it built, patterns most,
+and in about ten minutes built a working screen whose behavior came mostly from those patterns.
 
 **It built through the system, not around it.** The screen used 20 of Sterling's components, and when two
 problems turned out to be Sterling's (the data grid's missing capability and the Reset wording), they were fixed
 once, in Sterling, and the screen picked them up.
 
-**Most of what needed fixing was Sterling's, not the session's.** Of the five corrections, two were the
-session's own choices (column widths, an extra settings panel). The rest traced back to Sterling: a capability
-the data grid lacked, a pattern that said the wrong thing, and an empty state that hid its own message. The
-session's list of gaps became 1.2's data grid change and the backlog for later releases. Asking an AI tool to
-build with a design system turned out to be a good test of the design system itself: it reads the guidance
-literally, so it finds where the guidance is wrong or missing.
+**Most of what needed fixing was Sterling's, not the session's.** Two corrections were the session's own
+choices; the rest traced back to Sterling: a capability the data grid lacked, a pattern that said the wrong thing,
+an empty state that hid its message. An AI tool reads the guidance literally, so building with it tests the
+design system itself: it finds where the guidance is wrong or missing.
 
-**It still needed a person.** The session couldn't see the screen, and said so. The Reset problem was found by
-using the screen, not by any check. Each problem found that way now has a check, so the next session, or the
+**It still needed a person, for two different things.** Looking at the app and trying it: the session couldn't,
+for want of a browser, and said so; a browser that reaches only the local app would let the next session do it
+itself, and would probably have caught the cut-off column (correction b). Judging whether the behavior is right:
+the Reset problem was found by my own hands-on use of the app, not by any check, and a browser wouldn't have
+changed it, because the session had followed Sterling's guidance as written. Each problem found that way now has a check, so the next session, or the
 next team, is caught sooner.
 
-**The limits of this test.** One session, one screen, one model, and a sample of the data. Sterling was built,
-and the session directed, by one person; it hasn't yet been used by a team.
+**The limits of this test.** One session, one screen, one model, and a sample of the data. It started from a
+finished design and a system that already covered almost all of the screen: the session found seven gaps, and
+worked around each. A screen that needs a new component would first need the system's owner to add it. Two
+natural next tests: a run that can see the app it builds, with a browser restricted to the local app, and a run
+from the request alone, without the design picture. And Sterling was built, and the session directed, by one
+person; it hasn't yet been used by a team.
 
-## How teams might apply it
+## What it means for each role
 
-These are possibilities this test suggests, not things it showed.
-
-- **Developers** get an AI tool that already knows the system: which component, which props, which tokens, and
-  which rules, without leaving the editor.
-- **Designers** can turn a design and a short description into a working prototype built from the real
-  components, and ask the server which component or pattern a design calls for.
-- **People who don't write code**, such as product managers, analysts, or support staff, can describe a screen
-  in product terms, as this request did, and get a working version that follows the system to try with users or
-  hand to engineering.
-- **Design system teams** can run a session like this on every release, as an adoption test: what the session
-  can't find or gets wrong is where the guidance needs work, and its list of gaps is a roadmap.
-- **Reviewers** can ask the server what a rule actually says, instead of searching the documentation.
+- **The design system's owner.** Adding a component, a slide-out panel for example, is one piece of work in one
+  place: its definition and documentation entry, the Figma spec, the React component and its story. The checks
+  hold them together (parity between Figma and code, the AI files against their sources), the AI files and the
+  MCP server regenerate from the same definitions, and a release ships it. Until then an AI tool reports the gap
+  or works around it, as this session did with the grid, and the gap comes back to the owner. Running a session
+  like this on every release would make an adoption test, and its list of gaps a roadmap.
+- **The product designer** designs screens with the components that exist. Once a system matures, most new
+  screens need no new component; when one does, it's a request to the system's owner, not a one-off inside the
+  product. A change the owner makes to a component or a rule reaches every product built with it.
+- **Developers, with an AI tool or without,** build from the package with the system's guidance at hand: which
+  component, which props, which tokens, and which rules apply, without leaving the editor.
+- **People who don't write code**, such as product managers or analysts, could describe a screen in product
+  terms, as this request did, and get a working version built from the real components, to try with users or
+  hand to engineering. That is a possibility this test suggests; it wasn't tested here.
+- **Reviewers and evaluators** can ask the server what a rule actually says, instead of searching the
+  documentation.
 
 ## See also
 
+- [The demo replay](https://mcasey10.github.io/sterling-design-system/demo/): this session, step by step: the
+  request, every call to the MCP server with its answer, the session's own notes, and the screen as delivered.
 - [Sterling and AI tools](https://mcasey10.github.io/sterling-design-system/ai-tools/): one component,
   Chip/Status, followed from Sterling's sources to the code this session wrote.
 - [The screen's history](https://github.com/mcasey10/sterling-design-system/commits/main/ui/src/examples/pool-loans):
