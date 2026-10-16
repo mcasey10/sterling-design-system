@@ -152,6 +152,7 @@ Each correction is its own commit, made with Claude Code under my direction.
 | c | Demo settings became Storybook controls ([e180193](https://github.com/mcasey10/sterling-design-system/commit/e180193)) | The session added its own settings panel (color mode, density, a failed load) that overrode the page around it | The session |
 | d | Reset returns to the active view's filters ([3d9a291](https://github.com/mcasey10/sterling-design-system/commit/3d9a291)) | See "What the checks missed" | Sterling: its guidance |
 | e | The whole pool ([6e5aa99](https://github.com/mcasey10/sterling-design-system/commit/6e5aa99)) | See "What the checks missed" | The kit's sample data, and Sterling's data grid |
+| f | Status links wrap without a leading separator ([595c938](https://github.com/mcasey10/sterling-design-system/commit/595c938)) | In the summary's "Loans by status", a wrapped line began with "·", with no space before the first one; found while preparing the Community images | The session |
 
 ## What the checks missed
 
@@ -187,10 +188,10 @@ and in about ten minutes built a working screen whose behavior came mostly from 
 problems turned out to be Sterling's (the data grid's missing capability and the Reset wording), they were fixed
 once, in Sterling, and the screen picked them up.
 
-**Most of what needed fixing was Sterling's, not the session's.** Two corrections were the session's own
-choices; the rest traced back to Sterling: a capability the data grid lacked, a pattern that said the wrong thing,
-an empty state that hid its message. An AI tool reads the guidance literally, so building with it tests the
-design system itself: it finds where the guidance is wrong or missing.
+**Three of the six fixes were in Sterling itself.** Three corrections fixed the session's own work (column widths,
+an extra settings panel, a wrapping separator); the other three traced back to Sterling: a capability the data grid
+lacked, a pattern that said the wrong thing, an empty state that hid its message. An AI tool reads the guidance
+literally, so building with it tests the design system itself: it finds where the guidance is wrong or missing.
 
 **It still needed a person, for two different things.** Looking at the app and trying it: the session couldn't,
 for want of a browser, and said so; a browser that reaches only the local app would let the next session do it
