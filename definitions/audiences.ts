@@ -60,7 +60,7 @@ export const AUDIENCES: Audience[] = [
   },
   {
     id: "designer",
-    role: "Designer",
+    role: "Product designer",
     why: "You design screens in Figma. Start from components, variables and guidance that match the code, so what you hand off is what gets built.",
     places: [
       {
@@ -101,7 +101,7 @@ export const AUDIENCES: Audience[] = [
   },
   {
     id: "maintainer",
-    role: "Maintainer",
+    role: "Design system owner",
     why: "You change Sterling itself. Edit the source, and every output is regenerated and checked.",
     places: [{ links: [{ label: "GitHub repository", url: REPOSITORY_URL }], note: "The source everything above is generated from", how: "Clone" }],
   },

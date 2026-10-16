@@ -17,9 +17,9 @@ study.
 A design system only helps if teams use it, and use it correctly. Sterling is set up so that both are easier.
 
 - **One place to start, a way in for each reader.** The website's Start here page sends each reader where they
-  need to go: an evaluator to the token reference and Storybook, a designer to the Figma library, a developer to
-  the `sterling-ui` package, an AI-assisted developer to the MCP server, a maintainer to the repository. Every
-  setup is written to one standard, ending with how you know it worked.
+  need to go: an evaluator to the token reference and Storybook, a product designer to the Figma library, a
+  developer to the `sterling-ui` package, an AI-assisted developer to the MCP server, a design system owner to the
+  repository. Every setup is written to one standard, ending with how you know it worked.
 - **Correct use is checked, not just documented.** Every color pair is checked for contrast, every component
   for a description and a documentation link, Figma and code for the same variants and properties, the code for
   raw values where a token belongs, every story and website page for accessibility, and the files for AI tools

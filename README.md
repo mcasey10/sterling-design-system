@@ -11,10 +11,10 @@ follow its links.
 | Who you are | Where to go |
 |---|---|
 | **Evaluator**<br>You want to see what Sterling covers and how it's built, without setting anything up. | [Token reference](https://mcasey10.github.io/sterling-design-system/tokens/) and [Storybook](https://mcasey10.github.io/sterling-design-system/storybook/) · *Browser*<br>Tokens, components, guidance<br><br>[Figma Community preview](https://www.figma.com/community/file/1691833753587232312) · *Browser*<br>The Figma library |
-| **Designer**<br>You design screens in Figma. Start from components, variables and guidance that match the code, so what you hand off is what gets built. | [Figma library on Figma Community](https://www.figma.com/community/file/1691833753587232312) · *Duplicate*<br>Variables, components, guideline and pattern pages |
+| **Product designer**<br>You design screens in Figma. Start from components, variables and guidance that match the code, so what you hand off is what gets built. | [Figma library on Figma Community](https://www.figma.com/community/file/1691833753587232312) · *Duplicate*<br>Variables, components, guideline and pattern pages |
 | **Developer**<br>You build screens in React. Use the same components and tokens as the designs, with props named after the Figma properties. | [sterling-ui from the GitHub Release](https://mcasey10.github.io/sterling-design-system/install/) · *Install*<br>Components and token CSS<br><br>[Storybook Docs](https://mcasey10.github.io/sterling-design-system/storybook/) · *Browser*<br>Guidance for each component |
 | **AI-assisted developer**<br>You build with an AI coding tool. Give it Sterling's components, tokens and rules, so the code it writes follows the system instead of inventing its own. | [Watch the demo](https://mcasey10.github.io/sterling-design-system/demo/) · *Browser*<br>An AI tool building a screen with Sterling<br><br>[sterling-ui from the GitHub Release](https://mcasey10.github.io/sterling-design-system/install/) · *Install*<br>Components and token CSS<br><br>[MCP server from the GitHub Release](https://mcasey10.github.io/sterling-design-system/ai-tools/#set-up) · *Download and register once*<br>Guidance and token lookup for your AI tool<br><br>Or [llms.txt](https://mcasey10.github.io/sterling-design-system/llms.txt) and [the AI files](https://mcasey10.github.io/sterling-design-system/ai/index.json) · *Read by URL*<br>The same information, for tools that read web pages |
-| **Maintainer**<br>You change Sterling itself. Edit the source, and every output is regenerated and checked. | [GitHub repository](https://github.com/mcasey10/sterling-design-system) · *Clone*<br>The source everything above is generated from |
+| **Design system owner**<br>You change Sterling itself. Edit the source, and every output is regenerated and checked. | [GitHub repository](https://github.com/mcasey10/sterling-design-system) · *Clone*<br>The source everything above is generated from |
 
 **Nothing to set up.** *Browser*: Open it in a web browser. *Duplicate*: Open the Community page and choose Open in Figma. You need a Figma account. *Read by URL*: Give your AI tool the address.
 
@@ -134,8 +134,8 @@ All data is fictional: the lenders, loans, and figures are made up.
 
 ## Work on Sterling
 
-For maintainers: changing Sterling itself means cloning this repository. Every output (the Figma library, the
-components, the AI files, the website) is regenerated from it and checked.
+For the design system owner (maintainers): changing Sterling itself means cloning this repository. Every output
+(the Figma library, the components, the AI files, the website) is regenerated from it and checked.
 [CONTRIBUTING.md](CONTRIBUTING.md) has every step, from proposing a change to releasing it.
 
 **Where:** any terminal: PowerShell on Windows, Terminal on macOS, or the terminal in your editor. No
