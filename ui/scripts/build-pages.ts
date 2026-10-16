@@ -488,7 +488,7 @@ ${steps.join("\n")}
 <section class="panel" aria-labelledby="try-title">
   <h2 id="try-title">Try it</h2>
   <p>${link(`${STORYBOOK_URL}?path=/story/examples-pool-loans--pool-loans`, "Examples › Pool loans in Storybook")} is the
-  same screen, working. It's today's version: corrected afterwards in five commits (a to e), made with Claude Code under
+  same screen, working. It's today's version: corrected afterwards in six commits (a to f), made with Claude Code under
   my direction. ${link(historyUrl(DELIVERED_FOLDER), "The screen's history")} has every commit, and
   ${link(repositoryFileUrl("docs/case-study/pool-loans.md"), "the case study")} says what each correction was, and whose.</p>
 </section>
