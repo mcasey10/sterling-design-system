@@ -516,7 +516,7 @@ to `main`.
 
 ## 11. Where Figma and code differ
 
-Figma and code are built from the same definitions, but they are different materials. Each
+Figma and code follow the same definitions, but they are different materials. Each
 difference below is deliberate, and each has a reason. Per-component details (a property with no
 prop, or a prop with no property) are also listed in `ui/src/parity/coded.ts`.
 

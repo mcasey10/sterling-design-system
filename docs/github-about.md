@@ -5,7 +5,7 @@ keeps the text with the rest of the documentation.
 
 **Description**
 
-Sterling, a design system for data-dense applications: design tokens, a Figma library, and the same components in React, all built from one set of definitions, with an MCP server and llms.txt for AI tools.
+Sterling, a design system for data-dense applications: design tokens, a Figma library, and the same components in React, all from one set of definitions, with an MCP server and llms.txt for AI tools.
 
 **Website**
 

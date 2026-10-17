@@ -1,7 +1,7 @@
 {
   "name": "Sterling",
-  "description": "A design system for data-dense applications: design tokens, a Figma library, the same components in React, and files and an MCP server for AI tools, all built from one set of definitions.",
-  "summary": "Sterling is a design system for data-dense applications: design tokens, a Figma library, the same components in React (the sterling-ui package), and files and an MCP server for AI tools, all built from one set of definitions.",
+  "description": "A design system for data-dense applications: design tokens, a Figma library, the same components in React, and files and an MCP server for AI tools, all from one set of definitions.",
+  "summary": "Sterling is a design system for data-dense applications: design tokens, a Figma library, the same components in React (the sterling-ui package), and files and an MCP server for AI tools, all from one set of definitions.",
   "version": "1.2.0",
   "released": "RELEASE-DATE",
   "links": {

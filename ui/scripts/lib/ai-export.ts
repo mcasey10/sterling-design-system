@@ -399,10 +399,10 @@ function buildIndex(version: string, counts: { components: number; icons: number
     name: "Sterling",
     description:
       "A design system for data-dense applications: design tokens, a Figma library, the same components in React, and files " +
-      "and an MCP server for AI tools, all built from one set of definitions.",
+      "and an MCP server for AI tools, all from one set of definitions.",
     summary:
       "Sterling is a design system for data-dense applications: design tokens, a Figma library, the same components in React " +
-      "(the sterling-ui package), and files and an MCP server for AI tools, all built from one set of definitions.",
+      "(the sterling-ui package), and files and an MCP server for AI tools, all from one set of definitions.",
     version,
     // The date this version was released (from CHANGELOG.md), not the time the files were written.
     released: releaseDate(version),
