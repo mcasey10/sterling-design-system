@@ -25,8 +25,8 @@ A design system only helps if teams use it, and use it correctly. Sterling is se
   raw values where a token belongs, every story and website page for accessibility, and the files for AI tools
   against their sources. A team building with Sterling inherits those checks instead of writing them.
 - **One source of truth.** The tokens, the component definitions, and the guidance are written once. The Figma
-  library, the React components, the website, and the files for AI tools are all generated from them, so a
-  decision made once reaches every one of them, and automated checks fail if they drift apart.
+  library, the website, and the files for AI tools are generated from them, and the React components follow them,
+  so a decision made once reaches every one of them, and automated checks fail if they drift apart.
 
 ## What 1.2 adds
 
