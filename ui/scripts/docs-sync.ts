@@ -3,6 +3,7 @@
 //                             the component and icon counts ("24 components and 20 icons"), from definitions/, and
 //                             the contrast pair count ("124 pairs, each in Light and Dark"), from tokens.json
 //   mcp/README.md             the setup block, from definitions/setup.ts (the website's #set-up), and the icon count
+//   docs/reference.md         the icon count ("Sterling's `Icon/*` set has 20 icons")
 //   docs/figma-community.md   the version (package.json); the counts of contrast pairs (tokens.json contrast.rules, per
 //                             color mode), guideline sections, patterns, components, and icons; and the website, demo
 //                             page, and repository addresses (definitions/site.ts)
@@ -135,6 +136,9 @@ update("README.md", (text) =>
 update("mcp/README.md", (text) =>
   counts(between(text, "mcp/README.md", "setup", setupMarkdown(mcpServer(VERSION), 3)), "mcp/README.md", /The \d+ icons share one entry/g, `The ${ICON_COUNT} icons share one entry`, 1)
 );
+update("docs/reference.md", (text) =>
+  counts(text, "docs/reference.md", /`Icon\/\*` set has \d+ icons/g, `\`Icon/*\` set has ${ICON_COUNT} icons`, 1)
+);
 update("docs/figma-community.md", (text) => {
   const file = "docs/figma-community.md";
   let out = oneLine(text, file, /^Sterling Design System \d+\.\d+\.\d+$/, `Sterling Design System ${VERSION}`);
@@ -151,6 +155,6 @@ update("docs/figma-community.md", (text) => {
 });
 
 for (const problem of problems) console.error(`  ✗ ${problem}`);
-if (check) console.log(`README.md, mcp/README.md, docs/figma-community.md checked against their sources — ${problems.length} problem(s).${problems.length ? " Run npm run docs:sync." : ""}`);
+if (check) console.log(`README.md, mcp/README.md, docs/reference.md, docs/figma-community.md checked against their sources — ${problems.length} problem(s).${problems.length ? " Run npm run docs:sync." : ""}`);
 else console.log(written.length ? `Wrote ${written.join(", ")}.` : "Nothing to change.");
 process.exit(problems.length ? 1 : 0);

@@ -140,7 +140,7 @@ architecture, the example page, and any page you add); **Build example** checks 
 closing notification shows "links: N kept, M changed"; any change is listed as a warning in
 the console. Instances in documentation frames that are redrawn each run count as rebuilt.
 
-**More icons:** Sterling's `Icon/*` set is deliberately small. Any icon library enabled in
+**More icons:** Sterling's `Icon/*` set has 20 icons. Any icon library enabled in
 the Figma file (for example Material Symbols) can be used alongside it; size its icons to
 16 (or bind to `icon/size`) and bind their color to a Color variable so they follow
 Light/Dark.

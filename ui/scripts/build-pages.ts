@@ -107,7 +107,7 @@ function startHere(): string {
 <p class="lead">Sterling is a design system: design tokens, components and usage guidance that keep product screens
 consistent. Designers use it in Figma, developers use it in React, and AI tools can look it up while they write code. All
 three come from one set of definitions, so they always describe the same thing, and automated checks fail if they drift
-apart. It's intentionally small: ${Object.keys(COMPONENTS).length} components and ${Object.keys(ICONS).length} icons.</p>
+apart. It has ${Object.keys(COMPONENTS).length} components and ${Object.keys(ICONS).length} icons.</p>
 
 <section class="panel" aria-labelledby="start-title">
   <h2 id="start-title">Start with your role</h2>
