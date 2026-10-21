@@ -88,6 +88,9 @@ and descriptions in Select, and a tooltip; and name the Numeric style's Type det
 copies of the tabular-figures step: the Read me step, the run report reminder, and the Numeric style's
 description (tokens/tokens.json).
 
+Maintenance: newer GitHub Actions (checkout, setup-node, and the Pages actions), CI on Node 22 or 24 instead of 20,
+and no `shell: true` in `scripts/build-site.mjs` (Node's DEP0190 warning).
+
 ## [1.1.1] - 2026-10-11
 
 ### Changed
