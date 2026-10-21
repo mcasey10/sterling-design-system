@@ -401,7 +401,7 @@ Every published component's documentation comes from one table,
 
 | Field | Shown where |
 |---|---|
-| `description`: exactly one sentence | The component's Figma description: the Assets Details panel (click a component in Assets), the Component documentation panel, and Dev Mode |
+| `description`: exactly one sentence | The component's Figma description: select an instance, then click the component's description in the right-hand panel; a "Component documentation" popup opens with it and the link. Also in Dev Mode |
 | `details`: variants, properties, rules | The component's entry under Guidelines › Component usage, and its usage note on the Components page when its section holds more than one component (a single-component section already says it in its description) |
 | `use` / `dont` | The usage note, and the component's entry under Guidelines › Component usage |
 | `related`: Guidelines sections and Patterns that apply | "Related" links in the component's entry |
