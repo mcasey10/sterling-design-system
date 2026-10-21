@@ -48,9 +48,10 @@ If the file only has an empty "Page 1", it becomes the Cover page. Build example
 **Documentation:** every published component's documentation comes from one table,
 [`definitions/docRegistry.ts`](../definitions/docRegistry.ts): a one-sentence description
 (to see it, select an instance, then click the component's description in the right-hand panel; a
-"Component documentation" popup opens with the description and the link; it also shows in Dev Mode), a usage note under the component on the Components page (details, use
-when, don't use when), and a documentation link to the component's own entry under Guidelines ›
-Component usage, which links on to the related Guidelines sections and Patterns. Links need
+"Component documentation" popup opens with the description and the link; it also shows in Dev Mode), a
+usage note under the component on the Components page (details, use when, don't use when), and a
+documentation link to the component's Storybook Docs page (since 1.1.1). Its entry under Guidelines ›
+Component usage links on to the related Guidelines sections and Patterns. Links need
 the file key (`enablePrivatePluginApi` in the manifest); without it the run logs a warning and the
 library checks fail.
 
