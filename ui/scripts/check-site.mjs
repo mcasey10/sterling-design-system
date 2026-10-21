@@ -14,14 +14,13 @@
 // Usage: npm run check:site   (needs site/: run `npm run site` at the repo root first)
 // Chrome: CHROME_PATH, or the usual install location.
 
-import { spawn } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { createRequire } from "node:module";
-import { tmpdir } from "node:os";
 import { extname, join, normalize, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import WebSocket from "ws";
+import { startChrome } from "./lib/chrome.mjs";
 
 const ui = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const site = resolve(ui, "../site");
@@ -102,32 +101,14 @@ for (const page of PAGES) {
 
 // ------------------------------------------------------------ Chrome: axe in every color mode, and phone width
 
-const CHROME = [
-  process.env.CHROME_PATH,
-  "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-  "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-  "/usr/bin/google-chrome",
-  "/usr/bin/google-chrome-stable",
-  "/usr/bin/chromium",
-  "/usr/bin/chromium-browser",
-].find((path) => path && existsSync(path));
-if (!CHROME) {
-  console.error("Chrome not found. Set CHROME_PATH to a Chrome or Chromium executable.");
-  process.exit(1);
-}
-const debugPort = 9300 + ((process.pid + 300) % 600);
-const chrome = spawn(
-  CHROME,
-  ["--headless=new", "--no-sandbox", "--disable-gpu", "--hide-scrollbars", "--window-size=1280,900", `--remote-debugging-port=${debugPort}`, `--user-data-dir=${mkdtempSync(join(tmpdir(), "stl-site-"))}`, "about:blank"],
-  { stdio: "ignore" }
-);
+const chrome = startChrome({ name: "site", width: 1280, height: 900 });
 const sleep = (ms) => new Promise((done) => setTimeout(done, ms));
 
 async function openTab() {
+  const devtools = await chrome.devtools();
   for (let attempt = 0; attempt < 60; attempt++) {
     try {
-      const target = await (await fetch(`http://127.0.0.1:${debugPort}/json/new?about:blank`, { method: "PUT" })).json();
+      const target = await (await fetch(`${devtools}/json/new?about:blank`, { method: "PUT" })).json();
       const socket = new WebSocket(target.webSocketDebuggerUrl);
       await new Promise((done, fail) => (socket.once("open", done), socket.once("error", fail)));
       let id = 0;

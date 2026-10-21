@@ -178,8 +178,8 @@ example be added beside it.
 ### After the first Build library (one time per file)
 
 Turn on **tabular figures** for the **Numeric** text style, so digits line up in columns:
-select the Numeric style, open **Type settings → Details → Numbers**, and set **Style** to
-**Monospace uppercase/lining**. The plugin API can't set OpenType features on a text style,
+edit the Numeric text style, open **Type details (…) → Details → Numbers**, and set **Style**
+to **Monospace uppercase/lining**. The plugin API can't set OpenType features on a text style,
 so this is the only manual step. Builds never undo it, and until it's done **Build library**
 adds a reminder to its run report (it reads the setting from a Numeric text on the
 Components page). The Read me page lists the same step.
@@ -401,7 +401,7 @@ Every published component's documentation comes from one table,
 
 | Field | Shown where |
 |---|---|
-| `description`: exactly one sentence | The component's Figma description: the Assets Details panel (click a component in Assets), the Component documentation panel, and Dev Mode |
+| `description`: exactly one sentence | The component's Figma description: select an instance, then click the component's description in the right-hand panel; a "Component documentation" popup opens with it and the link. Also in Dev Mode |
 | `details`: variants, properties, rules | The component's entry under Guidelines › Component usage, and its usage note on the Components page when its section holds more than one component (a single-component section already says it in its description) |
 | `use` / `dont` | The usage note, and the component's entry under Guidelines › Component usage |
 | `related`: Guidelines sections and Patterns that apply | "Related" links in the component's entry |

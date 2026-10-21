@@ -68,8 +68,8 @@ Rules that keep a rebuild safe:
   (`Label-link`, `Body-link`).
 - **Document as you build.** A new published component needs an entry in `docRegistry.ts`: a
   one-sentence description, its details, when to use it and when not to, and the related guidance.
-  Figma shows the description in the Assets Details panel (click a component in Assets) and in the
-  Component documentation panel, with the link to the component's entry on the Guidelines page.
+  In Figma, select an instance, then click the component's description in the right-hand panel; a
+  "Component documentation" popup opens with the description and the documentation link.
   A new published token needs a description in its group's `"$descriptions"` in `tokens.json`.
 - **A new color pair needs a contrast rule.** Add the text and background combination to
   `contrast.rules` in `tokens.json`.

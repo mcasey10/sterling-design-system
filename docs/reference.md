@@ -47,10 +47,11 @@ If the file only has an empty "Page 1", it becomes the Cover page. Build example
 
 **Documentation:** every published component's documentation comes from one table,
 [`definitions/docRegistry.ts`](../definitions/docRegistry.ts): a one-sentence description
-(shown in the Assets Details panel when you click a component, in the Component documentation
-panel, and in Dev Mode), a usage note under the component on the Components page (details, use
-when, don't use when), and a documentation link to the component's own entry under Guidelines ›
-Component usage, which links on to the related Guidelines sections and Patterns. Links need
+(to see it, select an instance, then click the component's description in the right-hand panel; a
+"Component documentation" popup opens with the description and the link; it also shows in Dev Mode), a
+usage note under the component on the Components page (details, use when, don't use when), and a
+documentation link to the component's Storybook Docs page (since 1.1.1). Its entry under Guidelines ›
+Component usage links on to the related Guidelines sections and Patterns. Links need
 the file key (`enablePrivatePluginApi` in the manifest); without it the run logs a warning and the
 library checks fail.
 
@@ -400,8 +401,9 @@ Once the Site workflow has published `main`:
 3. Fetch `llms.txt` and follow every link in it, including the raw files on `main`.
 4. Install sterling-ui from the Release address into a new React project, and set up the MCP server from the
    download, following only the website.
-5. Open one component's documentation link from Figma (the Assets panel's component details); it opens its
-   Storybook Docs page.
+5. Open one component's documentation link from Figma: select an instance, then click the component's
+   description in the right-hand panel; a "Component documentation" popup opens with the link. It opens the
+   component's Storybook Docs page.
 
 ## Backlog
 
@@ -428,8 +430,8 @@ Not planned for a release yet:
 
 - **Tabular figures:** the plugin API can't turn on OpenType features for a text
   style, so the **Numeric** style doesn't have tabular figures enabled. To fix it
-  once per file: select the Numeric style, click the edit icon, open **Type
-  settings → Details**, and set **Numbers → Style → Monospace uppercase/lining**.
+  once per file: edit the Numeric text style, open **Type details (…) → Details →
+  Numbers**, and set **Style** to **Monospace uppercase/lining**.
   Reruns leave this setting alone: the plugin only writes style properties whose
   values differ from tokens.json.
 - **Missing fonts:** if Inter isn't available, the affected text styles are skipped

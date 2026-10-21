@@ -21,7 +21,13 @@ What sets Sterling apart
 
 What's inside: 24 components and 20 icons for data-dense screens, including a data grid built as a data table (read, sort, select, and act; no inline editing or column resizing).
 
-Use it: duplicate this file (one manual step: turn on tabular figures for the Numeric text style, under Type settings → Details → Numbers → Style → Monospace uppercase/lining). In code, or with AI tools, start at https://mcasey10.github.io/sterling-design-system/
+Ways to use it
+
+- In Figma: duplicate this file and use the components, variables and text styles directly, or publish them as your team's library. One manual step, to turn on tabular figures: edit the Numeric text style, open Type details (…) → Details → Numbers, and set Style to Monospace uppercase/lining.
+- In code: install the sterling-ui package into a React project: https://mcasey10.github.io/sterling-design-system/install/
+- With AI tools: connect Sterling's MCP server to your AI coding tool: https://mcasey10.github.io/sterling-design-system/ai-tools/#set-up
+
+Every way in, for each kind of reader, starts here: https://mcasey10.github.io/sterling-design-system/
 
 Changing Sterling itself is the design system owner's job: this file is generated from the GitHub repository, so edits to Sterling's own values are reset on the next rebuild. See https://github.com/mcasey10/sterling-design-system
 

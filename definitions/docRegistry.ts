@@ -1,7 +1,7 @@
 // Documentation registry: the one table for every published component's documentation. Plain data, shared
 // by the Figma plugin (descriptions, documentation links, usage notes) and the coded layer (Docs pages).
-//   • description — exactly one sentence. It's the component's Figma description, shown in the Assets
-//     Details panel (click a component in Assets), the Component documentation panel, and Dev Mode.
+//   • description — exactly one sentence. It's the component's Figma description: select an instance, then click
+//     the description in the right-hand panel; a "Component documentation" popup opens with it and the link.
 //     People read it; no check or build logic parses it.
 //   • details — variants, properties, and rules, shown in the component's usage note on the Components page.
 //   • use / dont — "Use when" / "Don't use when", shown in the usage note and in the component's own entry

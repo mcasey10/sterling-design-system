@@ -84,7 +84,12 @@ Sterling is for and how each reader starts.
 
 A Claude Code plugin that carries the MCP server, and a Claude Desktop extension (`.mcpb`);
 a toast or inline message, a card or panel, a screen-reader-only text class, layout tokens, grouped options
-and descriptions in Select, and a tooltip.
+and descriptions in Select, and a tooltip; and name the Numeric style's Type details in the plugin's three
+copies of the tabular-figures step: the Read me step, the run report reminder, and the Numeric style's
+description (tokens/tokens.json).
+
+Maintenance: newer GitHub Actions (checkout, setup-node, and the Pages actions), CI on Node 22 or 24 instead of 20,
+and no `shell: true` in `scripts/build-site.mjs` (Node's DEP0190 warning).
 
 ## [1.1.1] - 2026-10-11
 
