@@ -173,7 +173,7 @@ Then, in an empty Figma design file:
 1. Choose **Plugins → Development → Import plugin from manifest…** and select `plugin/manifest.json`.
 2. Run **Plugins → Development → Sterling → Build library**.
 3. Run **Plugins → Development → Sterling → Build example**.
-4. One manual step, once per file: turn on tabular figures: edit the **Numeric** text style, open
+4. One manual step, once per file, to turn on tabular figures: edit the **Numeric** text style, open
    **Type details (…) → Details → Numbers**, and set **Style** to **Monospace uppercase/lining**. The
    plugin can't set it, and reminds you until it's on.
 

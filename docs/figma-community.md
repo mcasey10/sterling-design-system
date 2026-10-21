@@ -23,7 +23,7 @@ What's inside: 24 components and 20 icons for data-dense screens, including a da
 
 Ways to use it
 
-- In Figma: duplicate this file and use the components, variables and text styles directly, or publish them as your team's library. One manual step: turn on tabular figures: edit the Numeric text style, open Type details (…) → Details → Numbers, and set Style to Monospace uppercase/lining.
+- In Figma: duplicate this file and use the components, variables and text styles directly, or publish them as your team's library. One manual step, to turn on tabular figures: edit the Numeric text style, open Type details (…) → Details → Numbers, and set Style to Monospace uppercase/lining.
 - In code: install the sterling-ui package into a React project: https://mcasey10.github.io/sterling-design-system/install/
 - With AI tools: connect Sterling's MCP server to your AI coding tool: https://mcasey10.github.io/sterling-design-system/ai-tools/#set-up
 
