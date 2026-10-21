@@ -319,9 +319,10 @@ ${steps
 ${setupHtml(mcpServer(VERSION), 2, base)}
 <section class="panel" aria-labelledby="first-prompt-title">
   <h2 id="first-prompt-title">A first prompt to try</h2>
-  <p>Once your tool lists <code>sterling</code> as connected, ask it:</p>
-  <blockquote class="prompt"><p>Using Sterling, build a table of five fictional orders, each with a status. Look up the
-  components and the Status chips pattern first.</p></blockquote>
+  <p>Once your tool lists <code>sterling</code> as connected, open it in your React project, the one where you
+  installed <code>sterling-ui</code>, and ask it:</p>
+  <blockquote class="prompt"><p>Using Sterling, build a table of five fictional orders, each with a status, in this
+  project's <code>src/</code>, using sterling-ui. Look up the components and the Status chips pattern first.</p></blockquote>
   <p>The full worked example, a complete screen, is ${link(repositoryFileUrl("demo/prompt.md"), "the Pool loans request")}.</p>
 </section>
 </div>`;
