@@ -5,7 +5,7 @@ All notable changes to Sterling are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) as defined for a design system in
 [CONTRIBUTING.md](CONTRIBUTING.md#versions).
 
-## [1.2.0] - RELEASE-DATE
+## [1.2.0] - 2026-10-21
 
 Sterling for AI tools, and a website with every way in: an MCP server and machine-readable files that describe
 every component, token, and guideline, the React components as an installable package, and pages that say who
