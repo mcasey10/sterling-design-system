@@ -105,7 +105,12 @@ async function openTab() {
 
 /** Opens one story in one theme and returns its violations, or an error if it didn't render. */
 async function check(tab, { story, theme }) {
+  // The system preference matches the theme too, so a story that follows the system (an example screen with its
+  // own color-mode setting) is checked in the mode asked for, not in the browser's default Light.
+  await tab.send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: theme.toLowerCase() }] });
   await tab.send("Page.navigate", { url: `${origin}/iframe.html?id=${story.id}&viewMode=story&globals=theme:${theme}` });
+  // Confirm the mode: the root's data-theme if something set it, otherwise the system preference.
+  const modeCheck = `(document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"))`;
   let state = "";
   for (let waited = 0; waited < 20000 && state !== "ready" && state !== "error"; waited += 100) {
     await sleep(100);
@@ -119,6 +124,8 @@ async function check(tab, { story, theme }) {
   if (state !== "ready") return { error: state === "error" ? "the story threw an error" : "the story didn't render in 20 seconds" };
   // Fonts, and the forced hover / focus / pressed states, settle just after the story renders.
   await tab.evaluate("document.fonts.ready.then(() => new Promise((done) => setTimeout(done, 350)))");
+  const mode = await tab.evaluate(modeCheck);
+  if (mode !== theme.toLowerCase()) return { error: `rendered in ${mode}, not ${theme}: something on the page overrode the color mode` };
   await tab.evaluate(axeSource);
   const run = `axe.run(document.getElementById("storybook-root"), { rules: ${JSON.stringify(Object.fromEntries(PAGE_RULES_OFF.map((rule) => [rule, { enabled: false }])))} })
     .then((results) => results.violations.map((v) => ({ rule: v.id, impact: v.impact, help: v.help, nodes: v.nodes.map((n) => ({ target: n.target.join(" "), summary: (n.failureSummary || "").split("\\n").slice(1).join(" ").trim() })) })))`;

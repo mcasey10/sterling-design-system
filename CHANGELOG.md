@@ -5,11 +5,86 @@ All notable changes to Sterling are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) as defined for a design system in
 [CONTRIBUTING.md](CONTRIBUTING.md#versions).
 
-## [Unreleased]
+## [1.2.0] - 2026-10-21
+
+Sterling for AI tools, and a website with every way in: an MCP server and machine-readable files that describe
+every component, token, and guideline, the React components as an installable package, and pages that say who
+Sterling is for and how each reader starts.
 
 ### Added
 
-- **Storybook:** the Introduction page links to the Figma library ("View in Figma").
+**The website**
+- **Start here**, the new home page: who Sterling is for, why each would use it, and where each should go, with
+  how you get each place (Browser, Duplicate, Read by URL, Install, Download and register once, Clone).
+- **Install sterling-ui** (`/install/`) and **Sterling and AI tools** (`/ai-tools/`): setup written to one
+  standard (where, what you need and how to check it, what to do, scope, how you know it worked, what to do if
+  it didn't). The AI page follows one component, Chip/Status, from its sources to code an AI tool wrote; every
+  excerpt is read from the real files when the site builds, and its MCP exchange comes from the built server.
+- One page shell for every page, with the same navigation and a System / Light / Dark switch, at any width
+  down to a phone's.
+
+**For AI tools**
+- **The AI files** (`ai/`): every component with its guidance, Figma properties, and React props; every token
+  in the Design Tokens (DTCG) format, with its value in each mode and its CSS name; the guidelines and patterns;
+  and an index. Generated from the sources and checked against them.
+- **`llms.txt`** at the website's root: Sterling for tools that read by URL, linking to the AI files.
+- **An MCP server:** eight read-only tools over the same files, in one file, `sterling-mcp.js`, attached to each
+  Release. It works with any MCP client, runs on your machine, and makes no network requests. An MCP client
+  calls it; it doesn't read `llms.txt`.
+
+**In code**
+- **The `sterling-ui` package:** the React components with type declarations, the token CSS, and Inter, as a
+  tarball attached to each Release and installed from its address. It isn't on a package registry.
+- **Examples › Pool loans** in Storybook: the loan example's screen, built by an AI session whose only sources for
+  Sterling were the package and the MCP server, then corrected in six commits (a to f). Its "Filter counts" test
+  checks the loan counts after a filter, Reset, "Any lender", and Clear all; "Loans by status, wrapped" checks that
+  no wrapped line of the summary's status links starts with a separator.
+- **Data grid:** a flagged cell can carry its reason for screen readers (a row's `descriptions`, read after
+  the value and its flag).
+
+**The demo**
+- **The demo replay** (`/demo/`): the session that built the Pool loans screen, step by step: the request, every
+  call to the MCP server with its answer (as the server gave it, from a pre-release build), the session's own
+  notes, and the screen as delivered. Linked from Start here and the AI page.
+- **The case study** (`docs/case-study/pool-loans.md`): what Sterling and 1.2 are for, how the session went, what
+  was corrected afterwards and whose each correction was, what the checks missed, how well it worked, and how
+  teams might apply it.
+
+**For maintainers**
+- Checks for everything above, in CI: the AI files against their sources, the MCP server's tools and its copy
+  of the files, the website (axe in Light and Dark, phone width, every link), the AI page's excerpts, the
+  generated parts of the documentation, the diagrams, Storybook's interaction tests, and the demo replay's
+  record (no local path or unknown address in it).
+- `npm run figma:fingerprint`, to show a rebuild changed nothing it shouldn't have.
+
+### Changed
+
+- **The token reference** moved to `/tokens/`; its old section links still work.
+- **Figma, the Read me page:** links to the website, Storybook, and GitHub; the text styles include Body-link
+  and Label-link; restyling is described as maintainer work, with a link to CONTRIBUTING.
+- **Figma, the Cover:** the website's address.
+- **Patterns, Reset and Clear all:** Reset returns every field to the active saved view's filters (or empty if
+  no view is active); Clear all removes every filter. **Filter panel and chips** also says that a field left
+  empty, or set to its "Any …" option, doesn't filter.
+- **The Icon entry** says an icon is the Icon value of Controls/Button and Controls/Icon button.
+- **The README** starts with the website and the Start here table; setting up Sterling to work on it moved to
+  "Work on Sterling".
+- **Storybook:** the Introduction links to the install page, Start here, the token reference, Figma Community,
+  and the AI page; the browser tab reads "Sterling" and the version.
+- The Guidelines and Patterns text is plain data in `definitions/guidelines.ts`, read by the plugin and the
+  AI files. The pages in Figma are unchanged apart from the text above.
+
+### Fixed
+
+- **Data grid:** in a grid wider than its container, the empty state stays in view instead of centering
+  across every column, where its message was cut off.
+- **Guidelines and Patterns:** the footers name the file their text comes from.
+
+### Ideas for later releases (not scheduled)
+
+A Claude Code plugin that carries the MCP server, and a Claude Desktop extension (`.mcpb`);
+a toast or inline message, a card or panel, a screen-reader-only text class, layout tokens, grouped options
+and descriptions in Select, and a tooltip.
 
 ## [1.1.1] - 2026-10-11
 
@@ -132,6 +207,7 @@ The first release.
   published to GitHub Pages.
 - Continuous integration on every push and pull request.
 
+[1.2.0]: https://github.com/mcasey10/sterling-design-system/releases/tag/v1.2.0
 [1.1.1]: https://github.com/mcasey10/sterling-design-system/releases/tag/v1.1.1
 [1.1.0]: https://github.com/mcasey10/sterling-design-system/releases/tag/v1.1.0
 [1.0.0]: https://github.com/mcasey10/sterling-design-system/releases/tag/v1.0.0

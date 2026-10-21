@@ -140,7 +140,7 @@ architecture, the example page, and any page you add); **Build example** checks 
 closing notification shows "links: N kept, M changed"; any change is listed as a warning in
 the console. Instances in documentation frames that are redrawn each run count as rebuilt.
 
-**More icons:** Sterling's `Icon/*` set is deliberately small. Any icon library enabled in
+**More icons:** Sterling's `Icon/*` set has 20 icons. Any icon library enabled in
 the Figma file (for example Material Symbols) can be used alongside it; size its icons to
 16 (or bind to `icon/size`) and bind their color to a Color variable so they follow
 Light/Dark.
@@ -221,7 +221,7 @@ in Figma, and where to compare each step with the generated file.
 
 ## Build
 
-Requires Node 18+.
+Requires Node.js 20.19 or later (check with `node --version`).
 
 ```bash
 cd plugin
@@ -269,19 +269,24 @@ If your Figma plan limits modes per collection, the plugin creates only the
 first mode (Light, Compact), logs a warning, and leaves the other values in
 `tokens.json`. The Professional plan supports all modes Sterling uses.
 
-## Regenerating example diagrams
+## Diagrams
 
-Example planning diagrams are Mermaid sources (`.mmd`) rendered to SVG next to them,
-for example in `docs/examples/loan-pooling/`. After editing a `.mmd` file, re-render it
-with the Mermaid CLI from the repo root. The first run downloads a headless browser.
+Diagrams are Mermaid sources (`.mmd`) in `docs/`, rendered to SVG beside each. Those in `docs/diagrams/` (the AI
+layer overview, on the website's AI page) are rendered once per color mode in Sterling's own colors, read from the
+Color tokens: `ai-layer.svg` (Light) and `ai-layer.dark.svg` (Dark); the page shows the one for its theme. The
+example's planning diagrams in `docs/examples/loan-pooling/` are rendered once, in Mermaid's default colors.
+After editing a `.mmd` file, re-render from the repo root:
 
 ```bash
-npx -p @mermaid-js/mermaid-cli mmdc -i docs/examples/loan-pooling/pool-workflow.mmd -o docs/examples/loan-pooling/pool-workflow.svg -c docs/mermaid-config.json -C docs/mermaid.css -b white
+npm run diagrams
 ```
 
-Use the same command for each diagram. The shared config renders labels as plain SVG
-text (no embedded HTML) and the CSS makes edge-label backgrounds opaque, so the images
-display correctly in any Markdown viewer.
+It renders every diagram with the Mermaid CLI at a pinned version (`scripts/lib/diagrams.mjs`), through npx: the
+first run downloads it and a headless browser. To render one, add its path: `npm run diagrams -- docs/diagrams/ai-layer.mmd`.
+Each SVG's first line names its source and the hash of what it was rendered from (the source, and for a themed
+diagram its colors too), and `npm run check:diagrams` (in CI) fails if a source, or a color token a diagram uses,
+changed without a re-render. Labels are plain SVG text (no embedded HTML) and edge-label backgrounds are opaque, so
+the images display correctly in any Markdown viewer.
 
 ## Contrast check
 
@@ -315,13 +320,19 @@ description check against the variables in the file.
 npm run tokens:site
 ```
 
-Writes two files to `site/` (gitignored), generated from `tokens/tokens.json`:
+Writes the token reference to `site/` (gitignored), generated from `tokens/tokens.json`. `npm run site`
+builds it as part of the whole website (Start here, Install sterling-ui, the token reference, Sterling and AI
+tools, Storybook, the AI files, and llms.txt), and `npm run check:site` checks every page: axe in Light and Dark
+(as loaded, and as without JavaScript), phone width, every internal link and anchor, and the AI page's steps by
+keyboard. `npm run check:excerpts` checks the AI page's excerpts: each is read from its source when the site
+builds, the code excerpts must be identical to the commit the page says they were delivered in (so it needs the
+repository's history), and the MCP exchange is made with the built server (`mcp/scripts/exchange.mjs`).
 
-- **`site/index.html`**: a self-contained reference page with inline CSS and no network
-  requests. It shows color tokens in Light and Dark with their primitive alias and hex,
-  primitive ramps, spacing / radius / size scales, the Density table, type specimens, and
-  every contrast pair with its ratio and result. A System / Light / Dark toggle switches
-  the page itself, which is styled with the same tokens.
+- **`site/tokens/index.html`**: the token reference, in the website's page shell
+  (`scripts/lib/page-shell.mjs`), with inline CSS and nothing loaded from another site. It shows color
+  tokens in Light and Dark with their primitive alias and hex, primitive ramps, spacing / radius / size
+  scales, the Density table, type specimens, and every contrast pair with its ratio and result. Its
+  section links used to be on the site's home page (`/#color` and the rest); Start here forwards them.
 - **`site/tokens.css`**: CSS custom properties for code. `npm run tokens:css` writes the same file
   to `dist/tokens.css` without building the page; both come from one generator,
   `scripts/lib/token-css.mjs`, so never edit either by hand. Everything carries Sterling's
@@ -346,32 +357,62 @@ Actions**; the next push to `main` publishes the site.
 push and pull request: it type-checks and builds the plugin, runs the contrast and token checks, and
 builds the token site; and for the coded layer it type-checks, runs the parity, raw-value, accessibility, and documentation-link checks, and builds Storybook. The library and example checks need a Figma file, so they run in the plugin.
 
-## Going public
+## Files for AI tools, and the MCP server
 
-The repository went public on 2026-10-11. The steps, in order; all are done:
+- **The export** (`ai/`, committed, generated): `index.json`, `components.json`, `tokens.dtcg.json` (DTCG
+  2025.10), `guidelines.json`, written by `npm run export:ai` from the tokens, `definitions/`, and the coded
+  components (`ui/scripts/lib/ai-export.ts`). `npm run check:ai` fails if they no longer match the sources.
+- **llms.txt**, at the website's root, is rendered from `ai/index.json` (`llmsTxt`) by `scripts/lib/llms.mjs`.
+  To add a section, add it in `ai-export.ts`; `check:ai` validates every link in it.
+- **The MCP server** (`mcp/`): eight read-only tools over a copy of the export, in one file. Users download it
+  from the Release as `sterling-mcp.js` and register it with any MCP client; [mcp/README.md](../mcp/README.md)
+  has the setup and the tools. `npm run check:mcp` rebuilds and tests it.
+- **The AI page** (`/ai-tools/`) follows Chip/Status from the sources to code. Its excerpts are read from the
+  files when the site builds, and step 6 is a real exchange with the built server: `npm run check:excerpts`.
 
-1. ✓ Done. **Check the README** still describes what Sterling includes.
-2. ✓ Done. **Make the repository public:** GitHub → Settings → General → Danger Zone → Change visibility.
-3. ✓ Done. **Turn on Pages:** Settings → Pages → Build and deployment → Source: **GitHub Actions**. Then run
-   the "Site" workflow from the Actions tab, or push to `main`. It publishes the token reference at
-   the root and Storybook under `storybook/`.
-4. ✓ Done. **Open both parts of the site** and follow the link from each to the other: "Components in
-   Storybook" on the token reference, and the title or the Introduction page in Storybook.
-5. ✓ Done. **Check the Storybook address** matches `STORYBOOK_URL` in `definitions/docRegistry.ts`, and open
-   one Docs link in that form, for example
-   `…/storybook/?path=/docs/components-controls-button--docs`. Run `npm run check:docs`.
-6. ✓ Done in 1.1.1. **Point the documentation links at Storybook:** `DOCS_TARGET` is `"storybook"` in
-   `definitions/docRegistry.ts`, so after **Build library** each component's documentation link in
-   Figma opens its Storybook Docs page. Click one from the Component documentation panel to confirm.
-   Set it back to `"figma"` if the site is ever taken down: without the site the links are dead.
-7. ✓ Done. **Set the Figma file to "Anyone with the link can view":** Share → change the link's access.
-8. ✓ Done. **Test the Figma link in a private browser window**, signed out, to confirm it opens without an
-   account.
-9. ✓ Done. **Verify the three links in the README:** the Figma file, Storybook, and the token site.
+## The sterling-ui package
+
+`npm run package` builds `ui/package/` and `sterling-ui-<version>.tgz`: the components, their type
+declarations, `styles.css` (tokens and every component's CSS), and `fonts.css`. It isn't on a package registry;
+each Release attaches the tarball, and users install it from the Release address
+([Install sterling-ui](https://mcasey10.github.io/sterling-design-system/install/), from `definitions/setup.ts`).
+Example screens in `ui/src/examples/` import only from the package (`npm run check:examples`).
+
+## Documentation written once
+
+Some documentation is generated from data, between marker comments (`<!-- generated: … -->`), by
+`npm run docs:sync`; `npm run check:docs-sync` (in CI) fails if it's out of date:
+
+- the Start here table in the README, from `definitions/audiences.ts` (the website's Start here draws the same);
+- the setup block in `mcp/README.md`, from `definitions/setup.ts` (the website's AI page shows the same);
+- the version and the component and icon counts in `docs/figma-community.md`, the text pasted into the Figma
+  Community page at each release.
+
+`docs/github-about.md` holds the text for the repository's About panel, set by hand.
+
+## After a release: check the live site
+
+Once the Site workflow has published `main`:
+
+1. Open Start here, Install, Tokens, Storybook, and AI tools from the navigation, in Light and Dark.
+2. Follow every link on Start here, including the Figma Community page and the Release downloads
+   (`sterling-ui-<version>.tgz`, and `sterling-mcp.js` from `releases/latest/download/`).
+3. Fetch `llms.txt` and follow every link in it, including the raw files on `main`.
+4. Install sterling-ui from the Release address into a new React project, and set up the MCP server from the
+   download, following only the website.
+5. Open one component's documentation link from Figma (the Assets panel's component details); it opens its
+   Storybook Docs page.
 
 ## Backlog
 
 Not planned for a release yet:
+
+- **A Claude Code plugin** that carries the MCP server, so it's set up from inside Claude Code with one command,
+  and a **Claude Desktop extension** (`.mcpb`), opened with a double click. Both after 1.2; until then the
+  server is the Release download, registered with any MCP client.
+
+- **Components a session building a real screen missed:** a toast or inline message, a card or panel, a
+  screen-reader-only text class, layout tokens, and grouped options (and descriptions) in Select.
 
 - **Tooltip component.** A Sterling tooltip, in Figma and in code. Until then the coded Icon button
   shows its label with the browser's own tooltip (`title`), which can't be styled, appears after a
@@ -380,6 +421,10 @@ Not planned for a release yet:
 - **Input/Option with description focus.** Figma has no focus variant for it; the coded option shows one.
 
 ## Known limitations
+
+- **Component descriptions read back with `&quot;`:** Figma returns a description's quote marks as `&quot;` to
+  plugins and tools (for example `The &quot;check&quot; icon…`), though Assets › Details shows them as quote
+  marks. Only how Figma returns the text; nothing to fix.
 
 - **Tabular figures:** the plugin API can't turn on OpenType features for a text
   style, so the **Numeric** style doesn't have tabular figures enabled. To fix it

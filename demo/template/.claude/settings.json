@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "deny": [
+      "WebFetch",
+      "WebSearch",
+      "mcp__figma",
+      "mcp__figma-desktop",
+      "mcp__claude-in-chrome"
+    ]
+  },
+  "enabledMcpjsonServers": ["sterling"]
+}

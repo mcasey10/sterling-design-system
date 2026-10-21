@@ -1,6 +1,6 @@
 {
   "name": "sterling-ui",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "private": true,
   "license": "MIT",
   "description": "Sterling in code: React components and Storybook documentation, built from the same tokens and component definitions as the Figma library.",
@@ -19,7 +19,21 @@
     "check:css": "node scripts/check-css.mjs",
     "precheck:css": "npm run tokens",
     "check:a11y": "node scripts/check-a11y.mjs",
-    "check:docs": "tsx scripts/check-docs.ts"
+    "check:docs": "tsx scripts/check-docs.ts",
+    "export:ai": "tsx scripts/export-ai.ts",
+    "check:ai": "tsx scripts/check-ai.ts",
+    "package": "node scripts/build-package.mjs",
+    "check:examples": "node scripts/check-examples.mjs",
+    "check:urls": "tsx scripts/check-urls.ts",
+    "pages": "tsx scripts/build-pages.ts",
+    "check:site": "node scripts/check-site.mjs",
+    "check:excerpts": "tsx scripts/check-excerpts.ts",
+    "check:interactions": "node scripts/check-interactions.mjs",
+    "docs:sync": "tsx scripts/docs-sync.ts",
+    "demo:extract": "tsx scripts/demo-extract.ts",
+    "check:docs-sync": "tsx scripts/docs-sync.ts --check",
+    "export:demo-data": "tsx scripts/export-demo-data.ts",
+    "check:demo-data": "tsx scripts/export-demo-data.ts --check"
   },
   "dependencies": {
     "inter-ui": "^3.19.3",

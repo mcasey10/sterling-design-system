@@ -93,3 +93,22 @@ export const TruncateTextNeverNumbers: Story = {
     </table>
   ),
 };
+
+/**
+ * A flagged cell with its reason. The flag's icon says "Warning"; `description` adds why, for screen readers,
+ * so they hear "Warning, 21.0%, Above the 20% limit". The reason is on screen too, in the cell beside it.
+ */
+export const FlaggedWithReason: Story = {
+  name: "Flagged, with its reason",
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <table className="stl-story-table">
+      <tbody>
+        <tr>
+          <BodyCell type="numeric" value="21.0%" validation="warning" description="Above the 20% limit" />
+          <BodyCell value="Above the 20% limit" />
+        </tr>
+      </tbody>
+    </table>
+  ),
+};

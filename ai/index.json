@@ -1,0 +1,191 @@
+{
+  "name": "Sterling",
+  "description": "A design system for data-dense applications: design tokens, a Figma library, the same components in React, and files and an MCP server for AI tools, all from one set of definitions.",
+  "summary": "Sterling is a design system for data-dense applications: design tokens, a Figma library, the same components in React (the sterling-ui package), and files and an MCP server for AI tools, all from one set of definitions.",
+  "version": "1.2.0",
+  "released": "2026-10-21",
+  "links": {
+    "website": "https://mcasey10.github.io/sterling-design-system/",
+    "export": "https://mcasey10.github.io/sterling-design-system/ai/",
+    "llmsTxt": "https://mcasey10.github.io/sterling-design-system/llms.txt",
+    "repository": "https://github.com/mcasey10/sterling-design-system",
+    "releases": "https://github.com/mcasey10/sterling-design-system/releases",
+    "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/",
+    "tokenReference": "https://mcasey10.github.io/sterling-design-system/tokens/",
+    "aiTools": "https://mcasey10.github.io/sterling-design-system/ai-tools/",
+    "figmaCommunity": "https://www.figma.com/community/file/1691833753587232312"
+  },
+  "files": [
+    {
+      "file": "components.json",
+      "url": "https://mcasey10.github.io/sterling-design-system/ai/components.json",
+      "contains": "24 components and the 20 icons: what each is for, when to use it, its Figma properties, its React props, and its links."
+    },
+    {
+      "file": "tokens.dtcg.json",
+      "url": "https://mcasey10.github.io/sterling-design-system/ai/tokens.dtcg.json",
+      "contains": "Every token in the Design Tokens (DTCG) format: colors in Light and Dark, spacing, sizes, the three densities, and the text styles, each with its CSS name."
+    },
+    {
+      "file": "guidelines.json",
+      "url": "https://mcasey10.github.io/sterling-design-system/ai/guidelines.json",
+      "contains": "7 guideline sections (the rules) and 9 patterns (complete compositions with numbered steps)."
+    }
+  ],
+  "package": {
+    "name": "sterling-ui",
+    "install": "npm install https://github.com/mcasey10/sterling-design-system/releases/download/v1.2.0/sterling-ui-1.2.0.tgz",
+    "note": "Not on a package registry: npm installs it from the GitHub Release. It needs React 19 or newer.",
+    "setup": "https://mcasey10.github.io/sterling-design-system/install/",
+    "styles": [
+      "import \"sterling-ui/styles.css\";",
+      "import \"sterling-ui/fonts.css\";"
+    ],
+    "stylesNote": "Import styles.css once: it holds the tokens (--stl-… custom properties), the text style classes (.stl-text-…), and every component's CSS. fonts.css loads Inter.",
+    "components": "import { Button, DataGrid, type Column, type GridRow } from \"sterling-ui\";",
+    "types": "Every component has a props type named after it (ButtonProps). The declarations are in the package's dist/types folder.",
+    "colorMode": "Follows the operating system. To set it, put data-theme=\"light\" or data-theme=\"dark\" on the root element.",
+    "density": "Default unless a parent has the class stl-density-compact or stl-density-comfortable."
+  },
+  "mcpServer": {
+    "download": "https://github.com/mcasey10/sterling-design-system/releases/latest/download/sterling-mcp.js",
+    "setup": "https://mcasey10.github.io/sterling-design-system/ai-tools/#set-up",
+    "note": "One file, sterling-mcp.js, on the GitHub Release. It needs Node.js 20 or later, runs on your machine, and makes no network requests. Register it with any MCP client: command node, argument the file's full path.",
+    "tools": [
+      "list_components",
+      "get_component",
+      "get_tokens",
+      "get_token",
+      "list_guidelines",
+      "get_guideline",
+      "get_pattern",
+      "search"
+    ]
+  },
+  "howToUse": [
+    "If the Sterling MCP server is connected, call its tools: they answer from these same files.",
+    "Choose components from components.json: match the task to `description`, `useWhen`, and `dontUseWhen`. Use only components and icons that are listed; Sterling has no others.",
+    "Follow a component's `related` entries into guidelines.json (by `id`) for the rules and patterns that apply to it.",
+    "Build screens from the patterns in guidelines.json. Each pattern says when to use it and explains its parts step by step.",
+    "In code, import the React component from the package (`react.import`) and use the props under `react`. Prop values are the strings listed; there is no `state` prop (see `states`).",
+    "Style only with tokens from tokens.dtcg.json, through the CSS custom property or class named in each token's $extensions. Never write a raw color, size, or font value.",
+    "Use the semantic color tokens (color.*), never the primitives, and never rely on color alone for meaning: pair it with an icon, a sign, or a label.",
+    "All sample data in Sterling is fictional. Keep it that way in anything generated from these files."
+  ],
+  "llmsTxt": {
+    "intro": "When generating designs or code with Sterling:",
+    "guidance": [
+      "Use only the components and icons listed in components.json. Sterling has no others.",
+      "Style only with tokens, through the CSS custom property or class named for each token. Never write a raw color, size, or font value.",
+      "Use the semantic color tokens, never the primitives, and never rely on color alone for meaning: pair it with an icon, a sign, or a label.",
+      "All sample data in Sterling is fictional. Keep it that way in anything generated from these files."
+    ],
+    "sections": [
+      {
+        "title": "Machine-readable export",
+        "links": [
+          {
+            "title": "index.json",
+            "url": "https://mcasey10.github.io/sterling-design-system/ai/index.json",
+            "note": "What the export contains, its version, and how to use the files. Start here."
+          },
+          {
+            "title": "components.json",
+            "url": "https://mcasey10.github.io/sterling-design-system/ai/components.json",
+            "note": "24 components and the 20 icons: what each is for, when to use it, its Figma properties, its React props, and its links."
+          },
+          {
+            "title": "tokens.dtcg.json",
+            "url": "https://mcasey10.github.io/sterling-design-system/ai/tokens.dtcg.json",
+            "note": "Every token in the Design Tokens (DTCG) format: colors in Light and Dark, spacing, sizes, the three densities, and the text styles, each with its CSS name."
+          },
+          {
+            "title": "guidelines.json",
+            "url": "https://mcasey10.github.io/sterling-design-system/ai/guidelines.json",
+            "note": "7 guideline sections (the rules) and 9 patterns (complete compositions with numbered steps)."
+          }
+        ]
+      },
+      {
+        "title": "MCP server",
+        "text": [
+          "Sterling has a small read-only MCP server with the same information as these files. An MCP client calls it as a tool; it doesn't read this file. It is one file, `sterling-mcp.js`, on the GitHub Release, and it needs Node.js 20 or later. It runs on your machine and makes no network requests.",
+          "Download it, then register it with any MCP client: command `node`, argument the file's full path. In Claude Code: `claude mcp add --scope user sterling -- node \"/full/path/to/sterling-mcp.js\"`.",
+          "Tools: list_components, get_component, get_tokens, get_token, list_guidelines, get_guideline, get_pattern, search."
+        ],
+        "links": [
+          {
+            "title": "Download",
+            "url": "https://github.com/mcasey10/sterling-design-system/releases/latest/download/sterling-mcp.js",
+            "note": "The server, latest version."
+          },
+          {
+            "title": "Setup",
+            "url": "https://mcasey10.github.io/sterling-design-system/ai-tools/#set-up",
+            "note": "Every step, with how to check each one."
+          },
+          {
+            "title": "Tools",
+            "url": "https://raw.githubusercontent.com/mcasey10/sterling-design-system/main/mcp/README.md",
+            "note": "What each tool takes and returns."
+          }
+        ]
+      },
+      {
+        "title": "Documentation",
+        "links": [
+          {
+            "title": "README",
+            "url": "https://raw.githubusercontent.com/mcasey10/sterling-design-system/main/README.md",
+            "note": "What Sterling is, what it includes, and where to start."
+          },
+          {
+            "title": "Architecture",
+            "url": "https://raw.githubusercontent.com/mcasey10/sterling-design-system/main/ARCHITECTURE.md",
+            "note": "How the tokens, definitions, Figma plugin, and coded components fit together, and where Figma and code differ."
+          },
+          {
+            "title": "Reference",
+            "url": "https://raw.githubusercontent.com/mcasey10/sterling-design-system/main/docs/reference.md",
+            "note": "Every variable collection, component, property, and tool option."
+          }
+        ]
+      },
+      {
+        "title": "Optional",
+        "links": [
+          {
+            "title": "Storybook",
+            "url": "https://mcasey10.github.io/sterling-design-system/storybook/",
+            "note": "The React components running in the browser, with a Docs page for each. An interactive site, not plain text."
+          },
+          {
+            "title": "Website",
+            "url": "https://mcasey10.github.io/sterling-design-system/",
+            "note": "Start here: every way into Sterling, for each kind of reader."
+          },
+          {
+            "title": "Token reference",
+            "url": "https://mcasey10.github.io/sterling-design-system/tokens/",
+            "note": "Every token with its value in both color modes, and the contrast of every text and background pair."
+          },
+          {
+            "title": "Sterling and AI tools",
+            "url": "https://mcasey10.github.io/sterling-design-system/ai-tools/",
+            "note": "How the MCP server and these files are built and used, followed for one component."
+          },
+          {
+            "title": "Figma Community",
+            "url": "https://www.figma.com/community/file/1691833753587232312",
+            "note": "Open or duplicate the library."
+          },
+          {
+            "title": "Changelog",
+            "url": "https://raw.githubusercontent.com/mcasey10/sterling-design-system/main/CHANGELOG.md",
+            "note": "What changed in each release."
+          }
+        ]
+      }
+    ]
+  }
+}

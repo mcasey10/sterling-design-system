@@ -40,6 +40,11 @@ export interface GridRow {
   disabled?: boolean;
   /** Text color per column key (e.g. muted audit text, warning-colored notes): a Color token name. */
   ink?: Record<string, string>;
+  /**
+   * What a screen reader hears after a cell's value (and its flag), per column key: above all, why a flagged cell is flagged
+   * ("LTV 93.0% — above 90%"). Not shown: say why on screen too, in a neighboring column.
+   */
+  descriptions?: Record<string, string>;
 }
 
 export interface Dataset {

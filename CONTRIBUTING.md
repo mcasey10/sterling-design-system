@@ -38,7 +38,8 @@ Work on a branch, in this order: **tokens → components → guidelines and patt
 | The React component, its CSS, and its stories | `ui/src/components/` |
 | How a coded component maps to its definition | `ui/src/parity/coded.ts` |
 | A component's description, usage text, or documentation link | `definitions/docRegistry.ts` |
-| A guideline or pattern | `plugin/src/library/pages/` |
+| A guideline's or pattern's text | `definitions/guidelines.ts` |
+| A guideline's or pattern's examples | `plugin/src/library/pages/` |
 | The example | `plugin/src/example/loan-pooling/` |
 
 **A component change has three parts, made together:**
@@ -117,8 +118,75 @@ npm run check:a11y
 npm run check:docs
 ```
 
+```bash
+npm run check:ai
+```
+
+```bash
+npm run check:mcp
+```
+
+```bash
+npm run check:examples
+```
+
+```bash
+npm run check:demo-data
+```
+
+```bash
+npm run check:urls
+```
+
+```bash
+npm run package
+```
+
+```bash
+npm run site
+```
+
+```bash
+npm run check:site
+```
+
+```bash
+npm run check:excerpts
+```
+
+```bash
+npm run check:interactions
+```
+
+```bash
+npm run check:demo-session
+```
+
+```bash
+npm run check:diagrams
+```
+
+```bash
+npm run check:docs-sync
+```
+
 `check:a11y` builds Storybook and runs every story in Chrome, in Light and Dark; `check:docs` reads
-that build. Also run `npm run typecheck` in `ui/`.
+that build. `check:ai` fails when the export in `ai/` no longer matches the sources: after changing a
+token, a definition, or guideline text, run `npm run export:ai` and commit the result with the change.
+`check:mcp` (run `npm install` in `mcp/` once) rebuilds the MCP server from `ai/` and tests it, so run it
+after `export:ai`. `check:examples` keeps example screens to the sterling-ui package's public API;
+`check:demo-data` keeps the demo kit's data in step with the plugin's example; `check:urls` fails if a
+Sterling address is written anywhere but `definitions/site.ts`, or if the view-only Figma file is linked
+where the Figma Community page belongs; `package` builds the sterling-ui tarball; `site` builds the
+website and `check:site` checks every page (axe in Light and Dark, phone width, and every link);
+`check:demo-session` fails if the demo replay's record holds a local path, a user folder, or an address
+that isn't Sterling's; `check:interactions` runs every story with a play function (after `npm run build-storybook`) and fails if
+one throws; `check:excerpts` fails if an excerpt on the AI page can no longer be read from its source, or if its code differs
+from the commit it was delivered in; `check:diagrams` fails if a diagram's source changed without
+`npm run diagrams`; `check:docs-sync` fails if a generated part of the documentation (the README's Start
+here table, the MCP server's setup block, the Community text's version) is out of date: run `npm run docs:sync`.
+Also run
+`npm run typecheck` in `ui/`.
 
 GitHub runs the same checks on every push and pull request.
 
@@ -145,19 +213,49 @@ And build in Figma, in a duplicate of the Sterling file (never the published one
 If a check fails, the notification says how many failed and the console
 (**Plugins → Development → Show/Hide console**) names each one.
 
+When a change should leave the Figma output alone (a refactor, or a change for the website or the code only)
+but changes the built plugin (`plugin/dist/code.js`), prove it with a fingerprint of the duplicate: every
+library page layer by layer, every variable, and every text style, each as a hash.
+
+```bash
+npm run figma:fingerprint -- <file key>
+```
+
+It prints a call for an AI tool connected to Figma's MCP server, which runs the read-only code in
+`scripts/lib/figma-fingerprint.js` in that file. Save the result before Build library and again after it,
+then compare them; every row must be the same:
+
+```bash
+npm run figma:fingerprint -- compare before.json after.json
+```
+
 ## 4. Release
 
 1. **Choose the version** using the rules below.
-2. **Set it in four places:** `package.json`, `plugin/package.json`, `ui/package.json`, and
-   `$meta.version` in `tokens/tokens.json`. `npm run check:tokens` fails if they disagree. The Cover
+2. **Set it in five places:** `package.json`, `plugin/package.json`, `ui/package.json`,
+   `mcp/package.json`, and `$meta.version` in `tokens/tokens.json`. `npm run check:tokens` fails if they disagree. The Cover
    and Read me pages and Storybook's title pick it up from `package.json` on the next build.
-3. **Update [CHANGELOG.md](CHANGELOG.md):** what was added, changed, fixed, or removed, written for
-   someone who uses Sterling. For a breaking change, say what to do about it.
-4. **Merge to `main`.** The checks run again, and the site (the token reference and Storybook) is
-   republished.
-5. **Rebuild the Sterling Figma file** with both commands, confirm the checks pass, then publish
-   the library from Figma's Assets panel with the changelog entry as the description.
-6. **Tag the release** `v<version>` on GitHub.
+3. **Regenerate what carries the version:** `npm run export:ai` (the AI files and llms.txt), then
+   `npm run check:mcp` (the MCP server's copy of them), then `npm run docs:sync` (the README, the MCP
+   server's setup block, and the Community text), and commit the result.
+4. **Update [CHANGELOG.md](CHANGELOG.md):** what was added, changed, fixed, or removed, written for
+   someone who uses Sterling. For a breaking change, say what to do about it. Until the release date is
+   chosen, the heading carries `RELEASE-DATE` (`## [1.2.0] - RELEASE-DATE`), which the AI files, llms.txt, and
+   the MCP server copy from it.
+5. **Set the release date, last before pushing:** write it into the heading, run `npm run export:ai`,
+   `npm run docs:sync`, and `npm run check:mcp`, re-run the checks, and commit. `npm run check:release-date`
+   fails while `RELEASE-DATE` is anywhere; it must pass before a push.
+6. **Merge to `main`.** The checks run again, and the website (Start here, the token reference,
+   Storybook, the AI files, and llms.txt) is republished. Open it and follow its links.
+7. **Rebuild the Sterling Figma file** with both commands, confirm the checks pass, then publish
+   the library from Figma's Assets panel with the changelog entry as the description. Fingerprint the
+   file before and after the rebuild (`npm run figma:fingerprint`, see [Check](#3-check)): only the
+   pages this release changes may differ, such as the Cover and Read me, which show the version.
+8. **Tag the release** `v<version>` on GitHub, and attach its two downloads: the package
+   (`npm run package` writes `ui/package/sterling-ui-<version>.tgz`) and the MCP server
+   (`npm run check:mcp` builds it; attach it as `sterling-mcp.js`).
+9. **Update the Figma Community page** with the text in `docs/figma-community.md`, and check
+   the live site (`docs/reference.md`, "After a release: check the live site").
 
 ### Versions
 

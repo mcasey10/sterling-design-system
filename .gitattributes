@@ -1,2 +1,4 @@
 * text=auto eol=lf
 *.svg text eol=lf
+# The export in ai/ must regenerate byte for byte on every platform (npm run check:ai).
+ai/*.json text eol=lf

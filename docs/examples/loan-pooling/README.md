@@ -33,4 +33,4 @@ Source: [`loan-workflow.mmd`](loan-workflow.mmd)
 |---|---|
 | Screens (Pool loans, Add loans), Example states, About frame, example components | Figma → **Example: Loan pooling** page |
 | Plugin code | `plugin/src/example/loanPooling.ts`; sample data, rules, counts and the consistency check in `loanData.ts` |
-| Diagrams | This folder (`.mmd` source, `.svg` rendered; re-render command in [docs/reference.md](../../reference.md#regenerating-example-diagrams)) |
+| Diagrams | This folder (`.mmd` source, `.svg` rendered; re-render command in [docs/reference.md](../../reference.md#diagrams)) |

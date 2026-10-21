@@ -1,8 +1,8 @@
-# Publishes the site (site/) to GitHub Pages on every push to main: the token reference at the root and
-# Storybook under storybook/.
-# It does nothing while the repository is private. Once the repository is public, turn Pages on
-# in Settings → Pages → Build and deployment → Source: "GitHub Actions"; the next push to main
-# (or a manual run from the Actions tab) publishes the site.
+# Publishes the Sterling website (site/) to GitHub Pages on every push to main, or a manual run from the
+# Actions tab: Start here, Install sterling-ui, the token reference, the AI page, Storybook under storybook/, the
+# AI files under ai/, and llms.txt.
+# Pages is set to build from GitHub Actions (Settings → Pages). The build job is skipped if the
+# repository is ever made private.
 name: Site
 
 on:
@@ -24,22 +24,39 @@ jobs:
     if: ${{ !github.event.repository.private }}
     runs-on: ubuntu-latest
     steps:
+      # The full history: the AI page shows code as delivered in an earlier commit, and checks it still is.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: ui/package-lock.json
+          cache-dependency-path: |
+            ui/package-lock.json
+            mcp/package-lock.json
       - name: Install ui dependencies
         run: npm ci
         working-directory: ui
+      # The AI page calls the built MCP server for a real exchange.
+      - name: Install the MCP server's dependencies
+        run: npm ci
+        working-directory: mcp
       # The site is only published from tokens that pass the checks.
       - name: Contrast (WCAG) for every pair in tokens.json
         run: npm run contrast:failures
       - name: Token checks (descriptions, version)
         run: npm run check:tokens
-      - name: Build the site (token reference and Storybook)
+      - name: Every diagram is rendered from its current source
+        run: npm run check:diagrams
+      - name: Build the site (Start here, Install, the token reference, the AI page, Storybook, the AI files, llms.txt)
         run: npm run site
+      # The site is only published when every page passes axe in every color mode, fits a phone's width,
+      # and every internal link and anchor goes somewhere.
+      - name: Check the website
+        run: npm run check:site
+      - name: The AI page's excerpts match their sources, and its code is as delivered
+        run: npm run check:excerpts
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

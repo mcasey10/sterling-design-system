@@ -3,7 +3,7 @@
 // data tables"). It shows the rows, sort, and selection it is given and reports what the person asks for;
 // the application owns the data.
 
-import { type HTMLAttributes, type KeyboardEvent, type MouseEvent, type ReactNode, useRef } from "react";
+import { type CSSProperties, type HTMLAttributes, type KeyboardEvent, type MouseEvent, type ReactNode, useLayoutEffect, useRef, useState } from "react";
 import { type Column, type Dataset, type GridRow, gridWidth, stretches } from "../../../definitions/grid";
 import { BodyCell } from "./BodyCell";
 import { Checkbox } from "./Checkbox";
@@ -74,7 +74,7 @@ export interface DataGridProps extends Omit<HTMLAttributes<HTMLDivElement>, "chi
 
 export function DataGrid({
   label, columns, rows, tones = {}, rowKey, selected = [], onSelectedChange, sort, onSortChange, unsortable = [], fill = false,
-  loading = false, loadingLabel = "Loading rows…", empty, emptyLabel = "", className, ...rest
+  loading = false, loadingLabel = "Loading rows…", empty, emptyLabel = "", className, style, ...rest
 }: DataGridProps) {
   const idKey = rowKey ?? columns.find((column) => column.identifier)?.key ?? columns.find((column) => column.type === "text")?.key ?? "";
   const idOf = (row: GridRow, index: number) => row.values[idKey] ?? String(index);
@@ -111,8 +111,23 @@ export function DataGrid({
   const placeholders = loading === true ? 5 : loading || 0;
   const isEmpty = !loading && rows.length === 0;
 
+  // While it's empty, the grid measures the width it shows, so the empty state keeps to it: in a grid wider than
+  // its container, which scrolls sideways, the message stays in view instead of centering across every column.
+  const frame = useRef<HTMLDivElement>(null);
+  const [visibleWidth, setVisibleWidth] = useState<number | null>(null);
+  useLayoutEffect(() => {
+    const element = frame.current;
+    if (!isEmpty || !empty || !element) return;
+    const measure = () => setVisibleWidth(element.clientWidth);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [isEmpty, empty]);
+  const frameStyle = isEmpty && visibleWidth ? ({ ...style, "--stl-data-grid-visible-width": `${visibleWidth}px` } as CSSProperties) : style;
+
   return (
-    <div className={cx("stl-data-grid", fill && "stl-data-grid--fill", className)} {...rest}>
+    <div ref={frame} className={cx("stl-data-grid", fill && "stl-data-grid--fill", className)} style={frameStyle} {...rest}>
       <table
         aria-label={label}
         aria-busy={loading ? true : undefined}
@@ -173,9 +188,10 @@ export function DataGrid({
                 {columns.map((column) => {
                   const value = row.values[column.key] ?? "";
                   const validation = row.error?.includes(column.key) ? "error" : row.warning?.includes(column.key) ? "warning" : undefined;
+                  const description = row.descriptions?.[column.key];
                   if (column.type === "checkbox") {
                     return (
-                      <BodyCell key={column.key} type="checkbox" validation={validation}>
+                      <BodyCell key={column.key} type="checkbox" validation={validation} description={description}>
                         <Checkbox
                           label={`Select ${id}`}
                           checked={isSelected ? "on" : "off"}
@@ -187,12 +203,12 @@ export function DataGrid({
                   }
                   if (column.type === "chip") {
                     return (
-                      <BodyCell key={column.key} type="chip" validation={validation}>
+                      <BodyCell key={column.key} type="chip" validation={validation} description={description}>
                         <StatusChip tone={(tones[value] ?? "neutral") as StatusChipTone} label={value} />
                       </BodyCell>
                     );
                   }
-                  return <BodyCell key={column.key} type={column.type} value={value} validation={validation} />;
+                  return <BodyCell key={column.key} type={column.type} value={value} validation={validation} description={description} />;
                 })}
               </Row>
             );

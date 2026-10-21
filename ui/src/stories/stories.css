@@ -116,3 +116,8 @@
 .stl-story-menu--wide {
   width: calc(var(--stl-size-40) * 7);
 }
+
+/* A phone-width container (336px), for a grid that has to scroll sideways. */
+.stl-story-narrow {
+  max-width: calc(var(--stl-size-56) * 6);
+}

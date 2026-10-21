@@ -45,12 +45,22 @@ definitions/              Plain data about components, with no Figma code (share
                           core/ensure.ts); a library check fails if a built component differs
   grid.ts                 Data grid datasets: Column / GridRow / Dataset types, the generic placeholder data,
                           which columns stretch, and numericColumnWidth(). Shared by the plugin and ui/
+  site.ts                 THE public addresses (website and its pages, repository, raw files, Release downloads,
+                          Figma Community, the view-only file for maintainers). The plugin doesn't bundle it: the
+                          addresses the plugin uses (website, Storybook, repository, CONTRIBUTING) are in
+                          pluginAddresses.ts, which site.ts re-exports and docRegistry.ts and the plugin import. The audience matrix (AUDIENCES) is in audiences.ts.
+                          Never write a Sterling address anywhere else: `npm run check:urls` fails. Link the
+                          Figma Community page, not the view-only file, except in maintainer docs
   docRegistry.ts          Also holds DOCS_TARGET ("figma" | "storybook": where documentation links point;
-                          "storybook" since 1.1.1), STORYBOOK_URL, and FIGMA_FILE_URL. `npm run check:docs` checks the pages exist
+                          "storybook" since 1.1.1) and re-exports STORYBOOK_URL from pluginAddresses.ts (never import
+                          site.ts here: the plugin bundles this file). `npm run check:docs` checks the pages exist
   docRegistry.ts          THE table of component documentation: one-sentence description, details,
                           use / don't use, related guidance. Every published component needs an entry
                           (shown under Guidelines › Component usage); its documentation link follows DOCS_TARGET
   icons.ts                Icon glyphs (original outline SVG path data)
+  guidelines.ts           THE table of Guidelines and Patterns text: each section's summary, rules, and do /
+                          don't notes; each pattern's summary, use / don't use, and numbered steps. The plugin
+                          draws it and builds the examples (found by position: keep the order in step)
 plugin/
   manifest.json           Figma plugin manifest ("Sterling"; no network access, dynamic-page access)
   src/main.ts             Entry point — runs "Build library" or "Build example", reports results
@@ -119,17 +129,86 @@ ui/                       Sterling in code (React + Storybook, Vite). Own packag
                           pressed are CSS, disabled is a boolean prop) and coded.ts (coded components)
   scripts/check-parity.ts `npm run check:parity`: every defined component is coded (24 of 24) and follows
                           definitions/components.ts; a new Figma component fails it until it is coded
+  src/index.ts            Everything the sterling-ui package exports: every component, its props type, the
+                          grid's data types, numericColumnWidth, textClass, densityClass. A new component is
+                          added here too (check:ai fails otherwise)
+  scripts/build-package.mjs  `npm run package`: ui/package/ (gitignored) and sterling-ui-<version>.tgz, with
+                          dist/index.js, dist/types/, dist/styles.css (tokens + components), dist/fonts.css.
+                          Private: installed from the tarball, never published to a registry
+  src/examples/<name>/    Example screens written against the sterling-ui package (Storybook resolves it to
+                          src/index.ts). Examples › Pool loans is the demo session's screen: committed as
+                          delivered, then corrected one commit at a time. `npm run check:examples`: only
+                          sterling-ui, React, and its own files; never a component's internal stl- classes
+  scripts/export-demo-data.ts  Writes demo/data/pool-2026-07.json from the plugin's loan example (data and
+                          rules only); `npm run check:demo-data` fails if it is out of date
+  scripts/lib/ai-export.ts  Builds the export in ai/ from the sources; scripts/export-ai.ts writes it
+                          (`npm run export:ai`), scripts/check-ai.ts checks it (`npm run check:ai`)
+ai/                       The machine-readable export for AI tools (committed, generated: never hand-edit):
+                          index.json, components.json, tokens.dtcg.json (DTCG 2025.10), guidelines.json.
+                          Regenerate with `npm run export:ai` after changing tokens, definitions/, or coded.ts
+demo/                     The demo kit: a test of building a screen from what Sterling publishes (demo/README.md).
+                          template/ (empty app, the session's CLAUDE.md and settings), data/, prompt.md.
+                          `npm run demo:kit` builds demo/kit/ (gitignored). NEVER commit a local path: the
+                          folders the session must not read come from demo/kit.local.json (gitignored)
+mcp/                      A read-only MCP server over the export, for AI tools. Own package.json (exact dependency
+                          versions: @modelcontextprotocol/sdk, zod); stdio only, NO network access, nothing on npm
+  scripts/build.mjs       Copies ai/ into data/ (gitignored) and bundles everything into dist/server.js (gitignored)
+  src/tools.ts            THE table of the eight tools: name, description (what a client reads), arguments, logic.
+                          src/tool-names.ts lists the names (also used by llms.txt); src/lookup.ts matches names
+                          and finds the closest for an unknown one; src/server.ts wires tools to the protocol
+  test/                   `npm run check:mcp` (root): every tool, the bundled data against ai/, no network code,
+                          and the built file running alone in an empty folder. Rebuild after `npm run export:ai`
 scripts/contrast-check.mjs  Reports WCAG contrast for every pair in tokens.json
                           `contrast.rules`; fails if body text < 4.5:1 or large
                           text/UI < 3:1. Run: `npm run contrast` (repo root)
 scripts/check-tokens.mjs  Token checks: every published token (color, spacing, size, density) has a
                           description in its group's "$descriptions"; versions agree. Run: `npm run check:tokens`
 scripts/build-token-css.mjs   Token CSS for code: `npm run tokens:css` writes dist/tokens.css (gitignored)
-scripts/build-token-site.mjs  Token reference site: `npm run tokens:site` writes site/index.html,
+scripts/build-token-site.mjs  The token reference: `npm run tokens:site` writes site/tokens/index.html,
                           site/tokens.css (gitignored; the same CSS), and site/fonts/ (Inter 3.19 copied
-                          from ui/node_modules/inter-ui, when installed)
-scripts/build-site.mjs    `npm run site`: site/ = token reference + Storybook under storybook/ (what Pages
-                          publishes); scripts/serve-site.mjs (`npm run site:serve`) shows it locally
+                          from ui/node_modules/inter-ui, when installed). Addresses from ai/index.json
+scripts/lib/page-shell.mjs  The website's page shell: head, fonts, token CSS, the site navigation, the Light /
+                          Dark switch, the footer. Every website page uses it; phone width up
+ui/scripts/build-pages.ts `npm run pages` (in ui/): Start here (site/index.html) from AUDIENCES in
+                          definitions/audiences.ts, Install sterling-ui (site/install/) from definitions/setup.ts, and
+                          Sterling and AI tools (site/ai-tools/): Chip/Status followed from source to code in seven
+                          steps, the MCP setup block, a first prompt; and the demo replay (site/demo/). Needs the MCP server built (npm run build in mcp/)
+ui/scripts/lib/excerpts.ts  THE AI page's excerpts, read from the real files by selector (TS entry, JSON path, lines,
+                          code symbol); each must match once. Step 7's code must be identical to 2872cf0, as delivered.
+                          `npm run check:excerpts` runs them (needs git history and the built MCP server)
+mcp/scripts/exchange.mjs  A real exchange with the built server (tools/list, get_component, get_pattern), as JSON,
+                          for the AI page's step 6
+definitions/setup.ts      THE setup instructions (Where / You need / Do / Scope / It worked if / If it didn't),
+                          shown by the website, README, and Storybook
+ui/scripts/demo-extract.ts  `npm run demo:extract -- <transcript.jsonl> --banned <file>`: writes docs/demo/session.json
+                          (the demo replay's record) from the demo session's transcript: the request, each MCP call with
+                          its answer shortened, the session's notes; no paths, no user messages, no reasoning. The banned
+                          terms come from a file outside the repo. Never commit a transcript. `npm run
+                          check:demo-session` (scripts/check-demo-session.mjs) checks the record. docs/demo/ also holds
+                          the screen as delivered (rendered from 2872cf0's own Storybook), for the /demo/ page
+ui/scripts/check-interactions.mjs  `npm run check:interactions` (needs a Storybook build): runs every story with a play
+                          function (tagged play-fn) in headless Chrome; fails if it throws. Examples › Pool loans ›
+                          Filter counts checks the loan counts after a filter, Reset, "Any lender", and Clear all;
+                          Loans by status, wrapped checks no wrapped line starts with a separator, at every width
+ui/scripts/check-site.mjs `npm run check:site`: every website page, axe in Light and Dark (system preference
+                          emulated), as loaded and as without JavaScript (script-added parts marked data-script-added),
+                          no sideways scroll at 375px, every internal link and anchor, the AI page's steps by keyboard
+scripts/build-site.mjs    `npm run site`: site/ = Start here + install/ + tokens/ + ai-tools/ + Storybook under
+                          storybook/ + a copy of ai/ + llms.txt (what Pages publishes); builds the MCP server first;
+                          scripts/serve-site.mjs (`npm run site:serve`)
+ui/scripts/docs-sync.ts   `npm run docs:sync`: writes the generated parts of docs between `<!-- generated: … -->`
+                          markers: README's Start here table (AUDIENCES), mcp/README.md's setup block (setup.ts),
+                          docs/figma-community.md's version and counts, and docs/reference.md's icon count.
+                          `npm run check:docs-sync` fails if stale
+docs/figma-community.md   The Figma Community page text (pasted at release); docs/github-about.md: the About panel
+scripts/check-release-date.mjs  `npm run check:release-date`: fails while the placeholder RELEASE-DATE is in
+                          CHANGELOG.md, ai/, site/llms.txt, or mcp/dist/server.js. The version is set with the
+                          placeholder; the date is written in last. It must pass before any push
+scripts/figma-fingerprint.mjs  `npm run figma:fingerprint -- <file key>`: the call that fingerprints a Figma file
+                          (read-only code in scripts/lib/figma-fingerprint.js: every library page, variable, text
+                          style); `-- compare before.json after.json` compares two. Never commit a file key
+scripts/lib/llms.mjs      Renders llms.txt from ai/index.json (`llmsTxt`: intro, guidance, sections of text and
+                          links). To add a section, add it in ui/scripts/lib/ai-export.ts; check:ai validates it
 scripts/lib/tokens.mjs    Shared token loading, alias resolution, and contrast evaluation
 scripts/lib/token-names.mjs  Token name → CSS name (no imports; shared with ui/)
 scripts/lib/token-css.mjs The one generator of the token CSS. CSS names carry the `stl-` code prefix
@@ -145,9 +224,14 @@ LICENSE, LICENSE-docs.md  MIT for code; CC BY 4.0 for documentation and design c
 .github/workflows/        ci.yml (checks on every push and pull request); pages.yml (publishes the token
                           site from main; skipped while the repo is private)
 ARCHITECTURE.md           How it fits together, for designers
-docs/mermaid-config.json, docs/mermaid.css   Shared settings for rendering example diagrams
-docs/examples/<name>/     Planning docs for an example: .mmd sources (source of truth) and
-                          rendered .svg — re-render after editing a .mmd (command in docs/reference.md)
+docs/mermaid-config.json, docs/mermaid.css   Shared settings for rendering diagrams
+docs/diagrams/            Library diagrams: ai-layer.mmd (how the AI layer is built and used; on the AI page),
+                          rendered per color mode in Sterling's colors from the tokens (ai-layer.svg, ai-layer.dark.svg)
+docs/examples/<name>/     Planning docs for an example: .mmd sources (source of truth) and rendered .svg
+scripts/render-diagrams.mjs  `npm run diagrams`: every .mmd in docs/ → SVG beside it (Mermaid CLI, pinned in
+                          scripts/lib/diagrams.mjs, which also builds the per-mode colors), stamped with the hash of
+                          the source (and colors). `npm run check:diagrams` fails if either changed without a
+                          re-render. Never hand-edit a rendered SVG
 ```
 
 ## Figma output
@@ -218,15 +302,16 @@ docs/examples/<name>/     Planning docs for an example: .mmd sources (source of 
 
 ## Verification
 - Type-check before finishing: `cd plugin && npm run typecheck` (runs `tsc --noEmit`). After changes in
-  `ui/` or `definitions/`: `cd ui && npm run typecheck && npm run check:parity && npm run check:css`, then
+  `ui/` or `definitions/`: `cd ui && npm run typecheck && npm run check:parity && npm run check:css && npm run check:ai`, then
+  `npm run check:mcp` (root; rebuilds the MCP server from ai/ and tests it), and
   `npm run build-storybook && npm run check:a11y` (axe on every story in Light and Dark; needs Chrome).
 - Run `npm run contrast` after any color token change; it must exit 0 (248 pairs today). When
   adding a new text/background combination to a component, add it to `contrast.rules` too.
 - Run `npm run check:tokens` after any token change; it must exit 0. Every new Color, Spacing, Size,
   or Density token needs a description in that group's `"$descriptions"` in tokens.json (Primitives
   need none: they're hidden).
-- When a release changes the version, set it in package.json, plugin/package.json, ui/package.json, and
-  tokens.json `$meta.version`, and add a CHANGELOG.md entry (see CONTRIBUTING.md).
+- When a release changes the version, set it in package.json, plugin/package.json, ui/package.json,
+  mcp/package.json, and tokens.json `$meta.version`, and add a CHANGELOG.md entry (see CONTRIBUTING.md).
 - Before committing, grep for the banned terms (see Hard rules → Naming); there must be none.
 
 ## Loan-pooling example (approved)

@@ -1,0 +1,225 @@
+{
+  "about": "Fictional sample data for the loan pooling example. `loans` is a sample of the pool, not all of it: it holds the first page of each saved view. Use `totals` and each view's `matchingLoans` for counts.",
+  "pool": {
+    "id": "2026-07",
+    "name": "Pool 2026-07",
+    "state": "Draft",
+    "criteria": "30-yr fixed · coupon 5.750–7.250%",
+    "targetUpb": 50000000,
+    "upb": 42600000
+  },
+  "rules": {
+    "ready": {
+      "minFico": 680,
+      "maxLtvPercent": 90
+    },
+    "exception": {
+      "minFico": 660,
+      "maxLtvPercent": 95
+    },
+    "lenderSharePercentCap": 30
+  },
+  "totals": {
+    "loansInPool": 186,
+    "loansByStatus": {
+      "Ready": 181,
+      "Exception": 2,
+      "Signed off": 3
+    },
+    "candidatesToAdd": 62,
+    "lendersOverTheCap": [
+      {
+        "lender": "Harbor Point",
+        "sharePercent": 32,
+        "capPercent": 30
+      }
+    ]
+  },
+  "pageSize": 12,
+  "savedViews": [
+    {
+      "name": "Harbor Point loans",
+      "filters": [
+        {
+          "field": "Lender",
+          "value": "Harbor Point"
+        }
+      ],
+      "matchingLoans": 58
+    },
+    {
+      "name": "Exceptions to sign off",
+      "filters": [
+        {
+          "field": "Status",
+          "value": "Exception"
+        }
+      ],
+      "matchingLoans": 2
+    }
+  ],
+  "loans": [
+    {
+      "id": "LN-204207",
+      "lender": "Harbor Point Lending",
+      "upb": 198400,
+      "fico": 728,
+      "ltvPercent": 76
+    },
+    {
+      "id": "LN-204219",
+      "lender": "Harbor Point Lending",
+      "upb": 264750,
+      "fico": 744,
+      "ltvPercent": 81.5
+    },
+    {
+      "id": "LN-204233",
+      "lender": "Harbor Point Lending",
+      "upb": 175900,
+      "fico": 701,
+      "ltvPercent": 88
+    },
+    {
+      "id": "LN-204248",
+      "lender": "Harbor Point Lending",
+      "upb": 309200,
+      "fico": 762,
+      "ltvPercent": 70.4
+    },
+    {
+      "id": "LN-204261",
+      "lender": "Harbor Point Lending",
+      "upb": 221300,
+      "fico": 671,
+      "ltvPercent": 84,
+      "signOff": {
+        "note": "12 mo reserves",
+        "by": "J. Moore",
+        "date": "Oct 7"
+      }
+    },
+    {
+      "id": "LN-204277",
+      "lender": "Harbor Point Lending",
+      "upb": 156800,
+      "fico": 719,
+      "ltvPercent": 79.9
+    },
+    {
+      "id": "LN-204290",
+      "lender": "Harbor Point Lending",
+      "upb": 287600,
+      "fico": 735,
+      "ltvPercent": 74
+    },
+    {
+      "id": "LN-204305",
+      "lender": "Harbor Point Lending",
+      "upb": 233450,
+      "fico": 692,
+      "ltvPercent": 86
+    },
+    {
+      "id": "LN-204318",
+      "lender": "Harbor Point Lending",
+      "upb": 190250,
+      "fico": 755,
+      "ltvPercent": 68.5
+    },
+    {
+      "id": "LN-204381",
+      "lender": "Harbor Point Lending",
+      "upb": 412500,
+      "fico": 742,
+      "ltvPercent": 78.5
+    },
+    {
+      "id": "LN-204382",
+      "lender": "Cedar Ridge Capital",
+      "upb": 287900,
+      "fico": 718,
+      "ltvPercent": 80
+    },
+    {
+      "id": "LN-204383",
+      "lender": "Northgate Home Loans",
+      "upb": 615000,
+      "fico": 781,
+      "ltvPercent": 65.2
+    },
+    {
+      "id": "LN-204384",
+      "lender": "Quarry Lane Mortgage",
+      "upb": 198250,
+      "fico": 694,
+      "ltvPercent": 91.5,
+      "signOff": {
+        "note": "DTI 28%",
+        "by": "J. Moore",
+        "date": "Oct 6"
+      }
+    },
+    {
+      "id": "LN-204385",
+      "lender": "Tallgrass Lending Co.",
+      "upb": 356400,
+      "fico": 735,
+      "ltvPercent": 75
+    },
+    {
+      "id": "LN-204386",
+      "lender": "Pinecrest Funding",
+      "upb": 522000,
+      "fico": 672,
+      "ltvPercent": 85
+    },
+    {
+      "id": "LN-204387",
+      "lender": "Harbor Point Lending",
+      "upb": 243800,
+      "fico": 755,
+      "ltvPercent": 82
+    },
+    {
+      "id": "LN-204388",
+      "lender": "Cedar Ridge Capital",
+      "upb": 471150,
+      "fico": 664,
+      "ltvPercent": 88,
+      "signOff": {
+        "note": "24 mo reserves",
+        "by": "J. Moore",
+        "date": "Oct 8"
+      }
+    },
+    {
+      "id": "LN-204389",
+      "lender": "Harbor Point Lending",
+      "upb": 305600,
+      "fico": 702,
+      "ltvPercent": 93
+    },
+    {
+      "id": "LN-204390",
+      "lender": "Quarry Lane Mortgage",
+      "upb": 389900,
+      "fico": 749,
+      "ltvPercent": 72.4
+    },
+    {
+      "id": "LN-204391",
+      "lender": "Tallgrass Lending Co.",
+      "upb": 164300,
+      "fico": 701,
+      "ltvPercent": 80
+    },
+    {
+      "id": "LN-204392",
+      "lender": "Pinecrest Funding",
+      "upb": 598700,
+      "fico": 792,
+      "ltvPercent": 60
+    }
+  ]
+}

@@ -5,7 +5,8 @@ by a local Figma plugin from one token file (`tokens/tokens.json`). The same fil
 **an example built with Sterling**: a loan pooling workflow on its own page at the end.
 
 Since 1.1 Sterling also exists in code: React components documented in Storybook (`ui/`), built
-from the same tokens and component definitions as the Figma library.
+from the same tokens and component definitions as the Figma library. Since 1.2 it also publishes what it
+contains for AI tools: files, llms.txt, and an MCP server (see [section 13](#13-sterling-for-ai-tools)).
 
 This document is written for designers first. Code paths are given so you can find things,
 but you don't need to read code to follow it.
@@ -24,7 +25,8 @@ all come from files in this repo:
 | How a component is drawn (layers, layout, which tokens it uses) | `plugin/src/library/components/<name>.ts` | build, then run **Build library** |
 | A component's description or documentation link | `definitions/docRegistry.ts` (one table) | build, then run **Build library** |
 | An icon's glyph | `definitions/icons.ts` | build, then run **Build library** |
-| Guidelines or Patterns content | `plugin/src/library/pages/guidelines.ts` / `patterns.ts` | build, then run **Build library** |
+| Guidelines or Patterns text | `definitions/guidelines.ts` (one table) | build, then run **Build library** |
+| Guidelines or Patterns examples (the instances shown) | `plugin/src/library/pages/guidelines.ts` / `patterns.ts` | build, then run **Build library** |
 | Example data, rules, or counts | `plugin/src/example/loan-pooling/loanData.ts` | build, then run **Build example** |
 
 If you change something in Figma by hand that the plugin owns, the next build puts it
@@ -59,6 +61,10 @@ sterling-design-system/
 │   │                       and component properties with their defaults
 │   ├── docRegistry.ts      ONE TABLE: every published component's description,
 │   │                       usage note, and documentation link
+│   ├── site.ts             Sterling's public addresses (website, repository, Figma Community, the
+│   │                       Release downloads)
+│   ├── audiences.ts        The audience matrix the website's Start here draws
+│   ├── guidelines.ts       The text of the Guidelines sections and the Patterns
 │   └── icons.ts            The 20 icon glyphs (SVG path data)
 │
 ├── plugin/                 The Figma plugin that generates the file
@@ -124,7 +130,19 @@ sterling-design-system/
 │   ├── serve-site.mjs         Serves site/ locally
 │   ├── lib/tokens.mjs         Shared token loading and contrast math
 │   ├── lib/token-names.mjs    How a token name becomes a CSS name (shared with ui/)
-│   └── lib/token-css.mjs      The one generator of the token CSS (stl- prefix)
+│   ├── lib/token-css.mjs      The one generator of the token CSS (stl- prefix)
+│   ├── lib/llms.mjs           Writes llms.txt from ai/index.json
+│   ├── build-demo-kit.mjs     The demo kit → demo/kit/ (see demo/README.md)
+│   └── demo-transcript.mjs    Reads a demo session's transcript: its MCP calls and an isolation audit
+│
+├── ai/                     The machine-readable export for AI tools (generated; committed): index.json,
+│                           components.json, tokens.dtcg.json, guidelines.json. Published at /ai/
+│
+├── mcp/                    A read-only MCP server over the export, built into one file (dist/server.js) and
+│                           attached to each Release as sterling-mcp.js. Own package.json; npm run check:mcp
+│
+├── demo/                   The demo kit: an empty app, the session's rules, the loan example's data, and the
+│                           product request, for testing what Sterling publishes from outside the repository
 │
 ├── docs/
 │   ├── reference.md           Every collection, component, property, and tool option
@@ -134,7 +152,7 @@ sterling-design-system/
 │
 └── .github/workflows/
     ├── ci.yml                 Plugin and token checks, and the coded layer's checks, on every push
-    └── pages.yml              Publishes the site: token reference and Storybook (runs only once the repo is public)
+    └── pages.yml              Publishes the site from main: the website, Storybook, the AI files, and llms.txt
 ```
 
 **The one-way rule:** `example/` may use `library/` and `core/`. `library/` and `core/` never
@@ -205,12 +223,20 @@ From the repo root:
 | `npm run contrast` | Every text/background pair in both color modes meets WCAG (4.5:1 text, 3:1 large text and UI). 248 pairs today, 0 failures. |
 | `npm run check:tokens` | Every published token has a description, no description is left over for a removed token, and the version in tokens.json matches package.json. |
 | `npm run tokens:css` | Writes the token CSS to `dist/tokens.css` |
-| `npm run tokens:site` | Writes the token reference site to `site/` (with the same CSS as `site/tokens.css`) |
-| `npm run site` | Builds the whole site into `site/`: the token reference, with Storybook under `storybook/`. `npm run site:serve` shows it locally |
+| `npm run tokens:site` | Writes the token reference to `site/tokens/` (and the token CSS to `site/tokens.css`) |
+| `npm run site` | Builds the whole website into `site/`: Start here at the root, Install sterling-ui under `install/`, the token reference under `tokens/`, Sterling and AI tools under `ai-tools/`, Storybook under `storybook/`, the export under `ai/`, and `llms.txt` (written from `ai/index.json`). `npm run site:serve` shows it locally |
+| `npm run check:site` | Every website page passes axe in Light and Dark (as loaded, and as without JavaScript), fits a phone's width without scrolling sideways, and every internal link and anchor goes somewhere; the AI page's steps work by keyboard. Needs `npm run site` first |
+| `npm run check:excerpts` | Every excerpt on the AI page can still be read from its source, and its code excerpts are identical to the commit they were delivered in. Needs the repository's history and the built MCP server |
+| `npm run diagrams` / `check:diagrams` | Renders every Mermaid diagram in `docs/` to SVG beside it (website diagrams once per color mode, in Sterling's colors from the tokens) / fails if a source or a color changed without a re-render |
 | `npm run check:docs` | Every published component has the Storybook Docs page its documentation link can open. Needs a Storybook build |
+| `npm run export:ai` | Writes the machine-readable export to `ai/`: components, tokens (DTCG format), guidelines, and an index, all from the sources |
+| `npm run check:ai` | The committed `ai/` files match the sources, every published component has a complete entry, and `llms.txt` links every file |
+| `npm run package` | Builds the `sterling-ui` package into `ui/package/` and packs it into a tarball: components, type declarations, the token CSS, and Inter. Not published |
+| `npm run demo:kit` | Builds the demo kit into `demo/kit/`: the package, the MCP server, the loan example's data, and an empty app (see `demo/README.md`) |
+| `npm run check:mcp` | Type-checks, builds, and tests the MCP server in `mcp/`: every tool, its bundled copy of the export, and that it has no network code. Needs `npm install` in `mcp/` first |
 | `npm run check:parity` | Every published component except the icons has a coded counterpart in `ui/` (24 of 24), and each one follows its definition. Needs `npm install` in `ui/` first. |
 | `npm run check:css` | No raw values in the coded layer's CSS: every color, length, and font value is a token, and every `var(--stl-…)` names a real one. |
-| `npm run check:a11y` | Builds Storybook, then runs axe on every story in Light and Dark with headless Chrome (158 runs today). Fails on any violation or any story that doesn't render. |
+| `npm run check:a11y` | Builds Storybook, then runs axe on every story in Light and Dark with headless Chrome. Fails on any violation or any story that doesn't render. |
 | `npm run storybook` | Starts Storybook for `ui/` at http://localhost:6006 (regenerates the token CSS first) |
 
 GitHub runs the same checks on every push (`ci.yml`).
@@ -447,6 +473,7 @@ sources as the Figma library, not from the Figma file.
 | `tokens/tokens.json` | create variables and text styles | generate `tokens.css` (custom properties and text classes with the `stl-` prefix) |
 | `definitions/components.ts` | create each component's variants and properties | type each component's props, and build its controls and "All variants" story |
 | `definitions/docRegistry.ts` | write descriptions, usage notes, and documentation links | write each Docs page |
+| `definitions/guidelines.ts` | write the Guidelines sections and the Patterns' text (it builds the examples itself) | (not used: Docs pages take their guidance from `docRegistry.ts`) |
 | `definitions/icons.ts` | draw the `Icon/*` components | render icons inline |
 | `definitions/grid.ts` | draw the generic data grid | render the Data grid, with the same placeholder data and column width rule |
 
@@ -469,19 +496,27 @@ does the same.
 | `npm run check:css` | a color, length, or font value in the CSS isn't a token, or a `var(--stl-…)` names no token |
 | `npm run check:a11y` | any story has an axe violation, in Light or Dark, or doesn't render |
 | `npm run check:docs` | a published component has no Storybook Docs page for its documentation link |
+| `npm run check:ai` | the export in `ai/` differs from what the sources give, or a published component has no complete entry in it |
+| `npm run check:examples` | an example screen (`ui/src/examples/`) imports anything but `sterling-ui`, React, and its own files, or uses a component's internal class names |
+| `npm run check:mcp` | an MCP tool returns the wrong result, the server's copy of the export is stale, or the built server contains network code |
 
 **Dependencies.** React, and for the Select only, React Aria (`react-aria`, `react-stately`), which
 supplies its keyboard behavior and screen-reader semantics. Inter 3.19 is bundled (`inter-ui`).
 
-**The site.** `npm run site` builds `site/`: the token reference at the root and Storybook under
-`storybook/`, each linking to the other. `npm run site:serve` shows it at http://localhost:6008.
-The Pages workflow publishes it on every push to `main`, once the repository is public.
+**The website.** `npm run site` builds `site/`: Start here at the root (who Sterling is for, and where
+each reader starts, drawn from `definitions/audiences.ts`), Install sterling-ui under `install/` (from
+`definitions/setup.ts`), the token reference under `tokens/`, Sterling and AI tools under `ai-tools/` (one
+component followed from its sources to code an AI tool wrote, with every excerpt read from the real files when
+the site builds and a real exchange with the built MCP server), and Storybook under `storybook/`, all in one
+page shell with the same navigation. `npm run site:serve` shows it at
+http://localhost:6008, and `npm run check:site` checks it. The Pages workflow publishes it on every push
+to `main`.
 
 ---
 
 ## 11. Where Figma and code differ
 
-Figma and code are built from the same definitions, but they are different materials. Each
+Figma and code follow the same definitions, but they are different materials. Each
 difference below is deliberate, and each has a reason. Per-component details (a property with no
 prop, or a prop with no property) are also listed in `ui/src/parity/coded.ts`.
 
@@ -651,7 +686,38 @@ icon button will use it instead.
 
 The version number lives in the root `package.json`. The plugin reads it at build
 time and prints it on the Cover and Read me pages and in the run notification; Storybook shows it
-in its title. `check:tokens` fails if `tokens.json`, `plugin/package.json`, or `ui/package.json`
-says otherwise. CHANGELOG.md records every release;
+in its title. `check:tokens` fails if `tokens.json`, `plugin/package.json`, `ui/package.json`, or
+`mcp/package.json` says otherwise. CHANGELOG.md records every release;
 CONTRIBUTING.md defines what counts as major, minor, or patch for a design system (renaming
 a layer or property is breaking).
+
+## 13. Sterling for AI tools
+
+Since 1.2, Sterling also publishes what it contains for AI tools, so an AI tool that writes a screen uses
+Sterling's components, tokens, and rules instead of inventing its own. Everything here is generated from the
+same sources as the Figma library and the React components, and checked.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/ai-layer.dark.svg">
+  <img src="docs/diagrams/ai-layer.svg" alt="Sterling's sources generate the AI files and the sterling-ui package. The AI files reach your AI tool two ways: read by URL from the website (llms.txt and /ai/), or through calls to the MCP server. Your AI tool writes your code, which imports sterling-ui.">
+</picture>
+
+- **The AI files** (`ai/`). `npm run export:ai` writes four JSON files from the tokens, `definitions/`, and the
+  coded components: every component with its guidance, Figma properties, and React props; every token in the
+  Design Tokens (DTCG) format; and the guidelines and patterns. They're committed, and `check:ai` fails if they
+  no longer match their sources.
+- **llms.txt**, at the website's root, is the plain-text entry point for tools that read by URL. It's written
+  from `ai/index.json`.
+- **The MCP server** (`mcp/`) answers the same questions as tools: eight read-only tools over a copy of the AI
+  files, in one file with no network access. Each Release attaches it as `sterling-mcp.js`; any MCP client can
+  register it. An MCP client calls the server and doesn't read llms.txt: they are two routes to the same files.
+- **The sterling-ui package** is what the code an AI tool writes imports: the React components and the token
+  CSS, attached to each Release.
+- **The website's AI page** (`/ai-tools/`) follows one component, Chip/Status, through all of this. Its
+  excerpts are read from the real files when the site builds, and its MCP exchange comes from the built server,
+  so the page can't drift from what it describes. Its last step shows code an AI session wrote with the package
+  and the MCP server as its only sources for Sterling: the Pool loans screen in `ui/src/examples/pool-loans/`, as
+  delivered.
+
+The diagram's source is `docs/diagrams/ai-layer.mmd`, rendered in Sterling's Light and Dark colors by
+`npm run diagrams`.

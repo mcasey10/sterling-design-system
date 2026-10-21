@@ -91,6 +91,13 @@
 .stl-data-grid__empty {
   padding: 0;
 }
+/* It keeps to the width the grid shows (measured by DataGrid) and to its left edge, so in a grid wider than its
+   container, which scrolls sideways, the whole message stays in view. */
+.stl-data-grid__empty > * {
+  position: sticky;
+  left: 0;
+  width: var(--stl-data-grid-visible-width, auto);
+}
 /* Says what the grid is doing (loading, or why it is empty) to screen readers only. */
 .stl-data-grid__status {
   position: absolute;

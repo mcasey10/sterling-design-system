@@ -12,6 +12,8 @@
 //     send one component somewhere else.
 // Components whose names start with "_" (demo and example components) aren't published and need no entry.
 
+import { STORYBOOK_URL } from "./pluginAddresses";
+
 /** Sections of the Guidelines page; each is a frame named "Guideline/<section>". */
 export type GuidelineSection =
   | "Principles" | "Accessibility" | "Data display" | "Naming" | "States" | "Color" | "Icons" | "Component usage";
@@ -54,11 +56,9 @@ export type ResolvedDoc = ComponentDoc & { docs: DocTarget };
  */
 export const DOCS_TARGET: "figma" | "storybook" = "storybook";
 
-/** Where the Storybook is published: the storybook/ folder of the GitHub Pages site. */
-export const STORYBOOK_URL = "https://mcasey10.github.io/sterling-design-system/storybook/";
-
-/** The published Sterling Figma file (view only). */
-export const FIGMA_FILE_URL = "https://www.figma.com/design/1Ah1TdgOoCkaCq1dUZFYbd/Sterling-Design-System";
+// Sterling's public addresses live in site.ts. This file imports only pluginAddresses.ts, the part the plugin
+// needs, so the plugin doesn't bundle the rest. STORYBOOK_URL is re-exported here, where it used to be.
+export { STORYBOOK_URL } from "./pluginAddresses";
 
 /** A Storybook title as it appears in a story id: lowercase, with every run of other characters as one hyphen. */
 const storyId = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -334,7 +334,7 @@ export const COMPONENT_DOCS: Record<string, ComponentDoc> = {
 export const ICON_DOC: Omit<ResolvedDoc, "description"> & { description: (name: string) => string } = {
   description: (name) => `The "${name}" icon, a 16px outline glyph that takes its color from the component using it.`,
   details: "16px outline icon. Parent components recolor the Glyph layer; resize with icon/size or size/*.",
-  use: "supporting a label, or as an instance-swap value in Button, Status badge, and similar components.",
+  use: "supporting a label, or as the Icon value of Controls/Button and Controls/Icon button.",
   dont: "it's the only way to convey meaning — pair it with text or an accessible name.",
   related: [guidelines("Accessibility")],
   docs: guidelines("Icons"),

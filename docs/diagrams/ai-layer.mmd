@@ -1,0 +1,19 @@
+%% How Sterling's AI layer is built and used. Rendered to ai-layer.svg by `npm run diagrams`; shown on the
+%% website's AI page and in ARCHITECTURE.md.
+flowchart LR
+  sources["Sterling's sources<br/>tokens.json, definitions/"]
+  files["The AI files, ai/<br/>components, tokens, guidelines"]
+  pkg["sterling-ui<br/>the React components"]
+  site["Website<br/>llms.txt and /ai/"]
+  mcp["MCP server<br/>sterling-mcp.js"]
+  tool["Your AI tool"]
+  code["Your code"]
+
+  sources -- "npm run export:ai" --> files
+  sources -- "npm run package" --> pkg
+  files --> site
+  files --> mcp
+  site -- "read by URL" --> tool
+  mcp -- "tool calls" --> tool
+  tool -- "writes" --> code
+  pkg -- "imported by" --> code

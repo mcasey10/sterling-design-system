@@ -1,0 +1,2979 @@
+{
+  "description": "Every published Sterling component. `figma` lists the properties as the Figma library names them; `react` lists the coded component's props, each with the Figma property it stands for. Figma names are sentence case and map one to one to camelCase props (Show icon ↔ showIcon). Code has no `state` prop: hover, pressed, and focus are CSS, and the rest are props (see each component's `states`). `related` points into guidelines.json.",
+  "components": [
+    {
+      "id": "controls-button",
+      "name": "Controls/Button",
+      "description": "Triggers an action, in primary, secondary, ghost, or danger style.",
+      "details": "Kind × Size × State (default / hover / pressed / focus / disabled). Label, Show icon, and Icon are component properties. Height and padding follow the Density mode. Danger uses status/critical, never finance/sell.",
+      "useWhen": "Triggering an action. One primary per area; secondary for alternatives; ghost in dense toolbars and bulk bars; danger for destructive actions.",
+      "dontUseWhen": "Navigating to another page (use a link), toggling a setting (use a checkbox), or Buy/Sell trade actions styled with danger.",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        },
+        {
+          "type": "guideline",
+          "name": "Color",
+          "file": "guidelines.json",
+          "id": "color"
+        },
+        {
+          "type": "guideline",
+          "name": "Naming",
+          "file": "guidelines.json",
+          "id": "naming"
+        }
+      ],
+      "figma": {
+        "name": "Controls/Button",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 40,
+        "variantProperties": [
+          {
+            "name": "Kind",
+            "values": [
+              "primary",
+              "secondary",
+              "ghost",
+              "danger"
+            ]
+          },
+          {
+            "name": "Size",
+            "values": [
+              "sm",
+              "md"
+            ]
+          },
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "hover",
+              "pressed",
+              "focus",
+              "disabled"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Button"
+          },
+          {
+            "name": "Show icon",
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "Icon",
+            "type": "icon",
+            "default": "plus"
+          }
+        ]
+      },
+      "react": {
+        "component": "Button",
+        "package": "sterling-ui",
+        "import": "import { Button } from \"sterling-ui\";",
+        "source": "ui/src/components/Button.tsx",
+        "props": [
+          {
+            "name": "kind",
+            "figmaProperty": "Kind",
+            "kind": "variant",
+            "values": [
+              "primary",
+              "secondary",
+              "ghost",
+              "danger"
+            ]
+          },
+          {
+            "name": "size",
+            "figmaProperty": "Size",
+            "kind": "variant",
+            "values": [
+              "sm",
+              "md"
+            ]
+          },
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Button"
+          },
+          {
+            "name": "showIcon",
+            "figmaProperty": "Show icon",
+            "kind": "boolean",
+            "default": false
+          },
+          {
+            "name": "icon",
+            "figmaProperty": "Icon",
+            "kind": "icon",
+            "default": "plus"
+          },
+          {
+            "name": "disabled",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "disabled"
+            ]
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "hover",
+            "code": [
+              ":hover"
+            ]
+          },
+          {
+            "figma": "pressed",
+            "code": [
+              ":active"
+            ]
+          },
+          {
+            "figma": "focus",
+            "code": [
+              ":focus-visible"
+            ]
+          },
+          {
+            "figma": "disabled",
+            "code": [
+              "prop disabled"
+            ]
+          }
+        ],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-controls-button--docs"
+    },
+    {
+      "id": "controls-icon-button",
+      "name": "Controls/Icon button",
+      "description": "A square, icon-only button for well-known actions in dense rows and toolbars.",
+      "details": "Kind (secondary / ghost / danger) × Size (sm / md) × State (default / hover / pressed / focus / disabled). Square, sized to the control height (Density). Icon is an instance swap; Label is the accessible name — its layer is hidden, so set it to the action (\"Delete row\") and use it as aria-label and tooltip in code. Danger uses status/critical.",
+      "useWhen": "A well-known action in a dense row or toolbar (more, delete, edit, refresh), with a tooltip.",
+      "dontUseWhen": "The action isn't obvious from the icon (use Controls/Button with a label), or it's the main action of the area.",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        },
+        {
+          "type": "guideline",
+          "name": "Color",
+          "file": "guidelines.json",
+          "id": "color"
+        }
+      ],
+      "figma": {
+        "name": "Controls/Icon button",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 30,
+        "variantProperties": [
+          {
+            "name": "Kind",
+            "values": [
+              "secondary",
+              "ghost",
+              "danger"
+            ]
+          },
+          {
+            "name": "Size",
+            "values": [
+              "sm",
+              "md"
+            ]
+          },
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "hover",
+              "pressed",
+              "focus",
+              "disabled"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Action"
+          },
+          {
+            "name": "Icon",
+            "type": "icon",
+            "default": "more"
+          }
+        ]
+      },
+      "react": {
+        "component": "IconButton",
+        "package": "sterling-ui",
+        "import": "import { IconButton } from \"sterling-ui\";",
+        "source": "ui/src/components/IconButton.tsx",
+        "props": [
+          {
+            "name": "kind",
+            "figmaProperty": "Kind",
+            "kind": "variant",
+            "values": [
+              "secondary",
+              "ghost",
+              "danger"
+            ]
+          },
+          {
+            "name": "size",
+            "figmaProperty": "Size",
+            "kind": "variant",
+            "values": [
+              "sm",
+              "md"
+            ]
+          },
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Action"
+          },
+          {
+            "name": "icon",
+            "figmaProperty": "Icon",
+            "kind": "icon",
+            "default": "more"
+          },
+          {
+            "name": "disabled",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "disabled"
+            ]
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "hover",
+            "code": [
+              ":hover"
+            ]
+          },
+          {
+            "figma": "pressed",
+            "code": [
+              ":active"
+            ]
+          },
+          {
+            "figma": "focus",
+            "code": [
+              ":focus-visible"
+            ]
+          },
+          {
+            "figma": "disabled",
+            "code": [
+              "prop disabled"
+            ]
+          }
+        ],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-controls-icon-button--docs"
+    },
+    {
+      "id": "controls-link",
+      "name": "Controls/Link",
+      "description": "An always-underlined text link for navigation and for shortcuts such as applying a filter.",
+      "details": "Inline text link. Size (sm = Label 12 / md = Body 13) × State (default / hover / focus). Label is a text property. Always underlined in accent/default (accent/hover on hover), so it never relies on color alone; focus adds the outside ring.",
+      "useWhen": "Navigating, or applying a shortcut such as a filter (\"Filter: Status is Exception\"), from within text or a summary panel.",
+      "dontUseWhen": "The action changes data (use Controls/Button), or it's the main action of an area.",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        },
+        {
+          "type": "guideline",
+          "name": "Color",
+          "file": "guidelines.json",
+          "id": "color"
+        }
+      ],
+      "figma": {
+        "name": "Controls/Link",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 6,
+        "variantProperties": [
+          {
+            "name": "Size",
+            "values": [
+              "sm",
+              "md"
+            ]
+          },
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "hover",
+              "focus"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Link"
+          }
+        ]
+      },
+      "react": {
+        "component": "Link",
+        "package": "sterling-ui",
+        "import": "import { Link } from \"sterling-ui\";",
+        "source": "ui/src/components/Link.tsx",
+        "props": [
+          {
+            "name": "size",
+            "figmaProperty": "Size",
+            "kind": "variant",
+            "values": [
+              "sm",
+              "md"
+            ]
+          },
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Link"
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "hover",
+            "code": [
+              ":hover"
+            ]
+          },
+          {
+            "figma": "focus",
+            "code": [
+              ":focus-visible"
+            ]
+          }
+        ],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-controls-link--docs"
+    },
+    {
+      "id": "controls-checkbox",
+      "name": "Controls/Checkbox",
+      "description": "Selects rows or options, with off, on, and indeterminate values.",
+      "details": "Checked (off / on / indeterminate) × State (default / hover / focus / disabled). Checked states use accent/default with a text/inverse glyph; focus adds a focus/ring outline. Label and Show label (off by default) add a visible label for use outside the grid; in a grid row the row itself labels the checkbox.",
+      "useWhen": "Selecting rows or items for a bulk action, or choosing any number of options (turn Show label on outside the grid).",
+      "dontUseWhen": "The choice applies immediately like an on/off setting (use a switch), or only one option can be chosen (use a radio or select).",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        },
+        {
+          "type": "guideline",
+          "name": "States",
+          "file": "guidelines.json",
+          "id": "states"
+        },
+        {
+          "type": "pattern",
+          "name": "Form layout",
+          "file": "guidelines.json",
+          "id": "form-layout"
+        }
+      ],
+      "figma": {
+        "name": "Controls/Checkbox",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 12,
+        "variantProperties": [
+          {
+            "name": "Checked",
+            "values": [
+              "off",
+              "on",
+              "indeterminate"
+            ]
+          },
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "hover",
+              "focus",
+              "disabled"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Label"
+          },
+          {
+            "name": "Show label",
+            "type": "boolean",
+            "default": false
+          }
+        ]
+      },
+      "react": {
+        "component": "Checkbox",
+        "package": "sterling-ui",
+        "import": "import { Checkbox } from \"sterling-ui\";",
+        "source": "ui/src/components/Checkbox.tsx",
+        "props": [
+          {
+            "name": "checked",
+            "figmaProperty": "Checked",
+            "kind": "variant",
+            "values": [
+              "off",
+              "on",
+              "indeterminate"
+            ]
+          },
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Label"
+          },
+          {
+            "name": "showLabel",
+            "figmaProperty": "Show label",
+            "kind": "boolean",
+            "default": false
+          },
+          {
+            "name": "disabled",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "disabled"
+            ]
+          },
+          {
+            "name": "onCheckedChange",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Reports the value the user chose as \"on\" or \"off\"; Figma has no behavior."
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "hover",
+            "code": [
+              ":hover"
+            ]
+          },
+          {
+            "figma": "focus",
+            "code": [
+              ":focus-visible"
+            ]
+          },
+          {
+            "figma": "disabled",
+            "code": [
+              "prop disabled"
+            ]
+          }
+        ],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-controls-checkbox--docs"
+    },
+    {
+      "id": "chip-status",
+      "name": "Chip/Status",
+      "description": "Shows a record's status with a tone color, an icon, and a short label.",
+      "details": "Tone (positive / warning / critical / info / neutral) with a tone-specific icon. Label and Show icon are component properties; labels longer than 160px truncate. Colors: status/<tone>-subtle background, status/<tone>-strong text and icon.",
+      "useWhen": "Showing the status of a record (in a grid cell, card, or header). Keep labels to one or two words.",
+      "dontUseWhen": "The status is an applied filter (use Chip/Filter), or the chip would be the only signal — keep the icon or label visible.",
+      "related": [
+        {
+          "type": "pattern",
+          "name": "Status chips",
+          "file": "guidelines.json",
+          "id": "status-chips"
+        },
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        }
+      ],
+      "figma": {
+        "name": "Chip/Status",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 5,
+        "variantProperties": [
+          {
+            "name": "Tone",
+            "values": [
+              "positive",
+              "warning",
+              "critical",
+              "info",
+              "neutral"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Status"
+          },
+          {
+            "name": "Show icon",
+            "type": "boolean",
+            "default": true
+          }
+        ]
+      },
+      "react": {
+        "component": "StatusChip",
+        "package": "sterling-ui",
+        "import": "import { StatusChip } from \"sterling-ui\";",
+        "source": "ui/src/components/StatusChip.tsx",
+        "props": [
+          {
+            "name": "tone",
+            "figmaProperty": "Tone",
+            "kind": "variant",
+            "values": [
+              "positive",
+              "warning",
+              "critical",
+              "info",
+              "neutral"
+            ]
+          },
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Status"
+          },
+          {
+            "name": "showIcon",
+            "figmaProperty": "Show icon",
+            "kind": "boolean",
+            "default": true
+          }
+        ],
+        "states": [],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-chip-status--docs"
+    },
+    {
+      "id": "chip-side",
+      "name": "Chip/Side",
+      "description": "Shows the buy or sell side of an order or trade.",
+      "details": "Side (buy / sell) of an order or trade. The label carries the meaning; override it with B / S in tight columns. Colors: finance/<side>-subtle background, finance/<side>-strong text.",
+      "useWhen": "Showing the side of an order, trade, or position in a grid cell or ticket header (swap a Type = chip cell's Chip to this).",
+      "dontUseWhen": "Showing gain or loss (use a gain / loss cell), or as a Buy / Sell action (use Controls/Button).",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "Color",
+          "file": "guidelines.json",
+          "id": "color"
+        },
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        }
+      ],
+      "figma": {
+        "name": "Chip/Side",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 2,
+        "variantProperties": [
+          {
+            "name": "Side",
+            "values": [
+              "buy",
+              "sell"
+            ]
+          }
+        ],
+        "componentProperties": []
+      },
+      "react": {
+        "component": "SideChip",
+        "package": "sterling-ui",
+        "import": "import { SideChip } from \"sterling-ui\";",
+        "source": "ui/src/components/Chips.tsx",
+        "props": [
+          {
+            "name": "side",
+            "figmaProperty": "Side",
+            "kind": "variant",
+            "values": [
+              "buy",
+              "sell"
+            ]
+          },
+          {
+            "name": "label",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "\"Buy\" or \"Sell\" by default. In Figma, a text layer to override (for example with B / S)."
+          }
+        ],
+        "states": [],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-chip-side--docs"
+    },
+    {
+      "id": "chip-filter",
+      "name": "Chip/Filter",
+      "description": "Shows one applied filter, with a control to remove it.",
+      "details": "Applied filter, State (default / hover / pressed / focus). Label and Show remove are component properties; labels longer than 240px truncate. Height follows Density → control/height-sm.",
+      "useWhen": "Summarizing filters already applied to a view, with a way to remove each one.",
+      "dontUseWhen": "Showing a record's status (use Chip/Status), or offering filters to apply (use inputs and selects in a filters panel).",
+      "related": [
+        {
+          "type": "pattern",
+          "name": "Filter panel and chips",
+          "file": "guidelines.json",
+          "id": "filter-panel-and-chips"
+        },
+        {
+          "type": "pattern",
+          "name": "Filters, grid, and bulk actions",
+          "file": "guidelines.json",
+          "id": "filters-grid-and-bulk-actions"
+        },
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        }
+      ],
+      "figma": {
+        "name": "Chip/Filter",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 4,
+        "variantProperties": [
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "hover",
+              "pressed",
+              "focus"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Filter: Value"
+          },
+          {
+            "name": "Show remove",
+            "type": "boolean",
+            "default": true
+          }
+        ]
+      },
+      "react": {
+        "component": "FilterChip",
+        "package": "sterling-ui",
+        "import": "import { FilterChip } from \"sterling-ui\";",
+        "source": "ui/src/components/Chips.tsx",
+        "props": [
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Filter: Value"
+          },
+          {
+            "name": "showRemove",
+            "figmaProperty": "Show remove",
+            "kind": "boolean",
+            "default": true
+          },
+          {
+            "name": "onRemove",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Called when the chip is used to remove its filter; Figma has no behavior."
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "hover",
+            "code": [
+              ":hover"
+            ]
+          },
+          {
+            "figma": "pressed",
+            "code": [
+              ":active"
+            ]
+          },
+          {
+            "figma": "focus",
+            "code": [
+              ":focus-visible"
+            ]
+          }
+        ],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-chip-filter--docs"
+    },
+    {
+      "id": "grid-headercell",
+      "name": "Grid/HeaderCell",
+      "description": "Labels a grid column, with optional sorting and left or right alignment.",
+      "details": "Sort (none / asc / desc) × Align (left / right) × State (default / hover / focus). Label and Show sort are component properties. Only a sorted header (asc / desc) shows its icon at rest; an unsorted one reveals ⇕ on hover and focus, so a grid shows at most one sort icon. Show sort off means the column can't be sorted. The sort icon belongs next to its label, and a right-aligned label stays flush with the numbers. In this component the label fills the cell and truncates at its width, so the icon sits at the cell edge: size numeric columns to their values and it lands beside the label. Height follows Density → row/height.",
+      "useWhen": "Labeling a grid column; use Align = right for numeric columns so headers line up with the numbers.",
+      "dontUseWhen": "The column can't be sorted — turn Show sort off rather than using a different header.",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "Data display",
+          "file": "guidelines.json",
+          "id": "data-display"
+        },
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        },
+        {
+          "type": "pattern",
+          "name": "Filters, grid, and bulk actions",
+          "file": "guidelines.json",
+          "id": "filters-grid-and-bulk-actions"
+        }
+      ],
+      "figma": {
+        "name": "Grid/HeaderCell",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 18,
+        "variantProperties": [
+          {
+            "name": "Sort",
+            "values": [
+              "none",
+              "asc",
+              "desc"
+            ]
+          },
+          {
+            "name": "Align",
+            "values": [
+              "left",
+              "right"
+            ]
+          },
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "hover",
+              "focus"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Column"
+          },
+          {
+            "name": "Show sort",
+            "type": "boolean",
+            "default": true
+          }
+        ]
+      },
+      "react": {
+        "component": "HeaderCell",
+        "package": "sterling-ui",
+        "import": "import { HeaderCell } from \"sterling-ui\";",
+        "source": "ui/src/components/HeaderCell.tsx",
+        "props": [
+          {
+            "name": "sort",
+            "figmaProperty": "Sort",
+            "kind": "variant",
+            "values": [
+              "none",
+              "asc",
+              "desc"
+            ]
+          },
+          {
+            "name": "align",
+            "figmaProperty": "Align",
+            "kind": "variant",
+            "values": [
+              "left",
+              "right"
+            ]
+          },
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Column"
+          },
+          {
+            "name": "showSort",
+            "figmaProperty": "Show sort",
+            "kind": "boolean",
+            "default": true
+          },
+          {
+            "name": "onSort",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Called when the person asks to sort by the column; Figma has no behavior."
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "hover",
+            "code": [
+              ":hover"
+            ]
+          },
+          {
+            "figma": "focus",
+            "code": [
+              ":focus-visible"
+            ]
+          }
+        ],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-grid-headercell--docs"
+    },
+    {
+      "id": "grid-bodycell",
+      "name": "Grid/BodyCell",
+      "description": "One grid cell for text, numbers, gain or loss, a chip, or a checkbox, in every row and validation state.",
+      "details": "Type (text / numeric / gain / loss / chip / checkbox) × State (default / hover / selected / selected-hover / focus / warning / warning-focus / error / error-focus). Numeric, gain and loss cells are right-aligned in the Numeric style and never truncate (size the column instead); text values truncate. Gain and loss add ▲ / ▼ and finance/gain / loss — type the sign in Value (+1.25%, −0.80%). Warning and error add a border and an icon, so they never rely on color alone, and a flagged cell keeps its look while its row is hovered or selected. Focus variants are for future editable cells; read-only grids show focus on header buttons and row checkboxes only. Chip and Checkbox are exposed nested instances; swap the Chip to Chip/Side for buy / sell.",
+      "useWhen": "Building custom rows or tables from individual cells, or overriding one cell's state (e.g. a value that breaks a rule).",
+      "dontUseWhen": "You need a whole row — use Grid/Row, which keeps cell widths and states consistent.",
+      "related": [
+        {
+          "type": "pattern",
+          "name": "Warning and exception cells",
+          "file": "guidelines.json",
+          "id": "warning-and-exception-cells"
+        },
+        {
+          "type": "guideline",
+          "name": "Data display",
+          "file": "guidelines.json",
+          "id": "data-display"
+        },
+        {
+          "type": "guideline",
+          "name": "States",
+          "file": "guidelines.json",
+          "id": "states"
+        },
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        },
+        {
+          "type": "guideline",
+          "name": "Color",
+          "file": "guidelines.json",
+          "id": "color"
+        }
+      ],
+      "figma": {
+        "name": "Grid/BodyCell",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 54,
+        "variantProperties": [
+          {
+            "name": "Type",
+            "values": [
+              "text",
+              "numeric",
+              "gain",
+              "loss",
+              "chip",
+              "checkbox"
+            ]
+          },
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "hover",
+              "selected",
+              "selected-hover",
+              "focus",
+              "warning",
+              "warning-focus",
+              "error",
+              "error-focus"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Value",
+            "type": "text",
+            "default": "Value"
+          }
+        ]
+      },
+      "react": {
+        "component": "BodyCell",
+        "package": "sterling-ui",
+        "import": "import { BodyCell } from \"sterling-ui\";",
+        "source": "ui/src/components/BodyCell.tsx",
+        "props": [
+          {
+            "name": "type",
+            "figmaProperty": "Type",
+            "kind": "variant",
+            "values": [
+              "text",
+              "numeric",
+              "gain",
+              "loss",
+              "chip",
+              "checkbox"
+            ]
+          },
+          {
+            "name": "value",
+            "figmaProperty": "Value",
+            "kind": "text",
+            "default": "Value"
+          },
+          {
+            "name": "selected",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "selected"
+            ]
+          },
+          {
+            "name": "validation",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "warning",
+              "error"
+            ]
+          },
+          {
+            "name": "description",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "What a screen reader hears after the value, such as why a flagged cell is flagged. Figma draws what people see, so it has no property for text that is only read aloud."
+          },
+          {
+            "name": "children",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "The StatusChip or Checkbox of a chip or checkbox cell. In Figma it is an exposed nested instance."
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "hover",
+            "code": [
+              ":hover"
+            ]
+          },
+          {
+            "figma": "selected",
+            "code": [
+              "prop selected"
+            ]
+          },
+          {
+            "figma": "selected-hover",
+            "code": [
+              "prop selected",
+              ":hover"
+            ]
+          },
+          {
+            "figma": "focus",
+            "code": [
+              ":focus-visible"
+            ]
+          },
+          {
+            "figma": "warning",
+            "code": [
+              "prop validation"
+            ]
+          },
+          {
+            "figma": "warning-focus",
+            "code": [
+              "prop validation",
+              ":focus-visible"
+            ]
+          },
+          {
+            "figma": "error",
+            "code": [
+              "prop validation"
+            ]
+          },
+          {
+            "figma": "error-focus",
+            "code": [
+              "prop validation",
+              ":focus-visible"
+            ]
+          }
+        ],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-grid-bodycell--docs"
+    },
+    {
+      "id": "grid-row",
+      "name": "Grid/Row",
+      "description": "One grid row of body cells, in default, hover, selected, and selected-hover states.",
+      "details": "State (default / hover / selected / selected-hover). A checkbox cell plus generic columns, built from Grid/BodyCell instances.",
+      "useWhen": "Assembling a grid: one Row instance per record, overriding cell values.",
+      "dontUseWhen": "A single value needs a different state — override that cell instead of adding row variants.",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "States",
+          "file": "guidelines.json",
+          "id": "states"
+        },
+        {
+          "type": "pattern",
+          "name": "Filters, grid, and bulk actions",
+          "file": "guidelines.json",
+          "id": "filters-grid-and-bulk-actions"
+        }
+      ],
+      "figma": {
+        "name": "Grid/Row",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 4,
+        "variantProperties": [
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "hover",
+              "selected",
+              "selected-hover"
+            ]
+          }
+        ],
+        "componentProperties": []
+      },
+      "react": {
+        "component": "Row",
+        "package": "sterling-ui",
+        "import": "import { Row } from \"sterling-ui\";",
+        "source": "ui/src/components/DataGrid.tsx",
+        "props": [
+          {
+            "name": "selected",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "selected"
+            ]
+          },
+          {
+            "name": "children",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "The row's BodyCells. In Figma a row is built from body cell instances."
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "hover",
+            "code": [
+              ":hover"
+            ]
+          },
+          {
+            "figma": "selected",
+            "code": [
+              "prop selected"
+            ]
+          },
+          {
+            "figma": "selected-hover",
+            "code": [
+              "prop selected",
+              ":hover"
+            ]
+          }
+        ],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-grid-row--docs"
+    },
+    {
+      "id": "grid-data-grid",
+      "name": "Grid/Data grid",
+      "description": "A generic data grid with placeholder rows, to override or rebuild for a real dataset.",
+      "details": "Generic grid with placeholder data: two selected rows and one cell in the error state. Override values per screen.",
+      "useWhen": "Starting a data view quickly; override headers and cell values, or rebuild rows from Grid/Row.",
+      "dontUseWhen": "The layout isn't tabular (use cards or a list).",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "Data display",
+          "file": "guidelines.json",
+          "id": "data-display"
+        },
+        {
+          "type": "pattern",
+          "name": "Filters, grid, and bulk actions",
+          "file": "guidelines.json",
+          "id": "filters-grid-and-bulk-actions"
+        },
+        {
+          "type": "pattern",
+          "name": "Loading, empty, and error states",
+          "file": "guidelines.json",
+          "id": "loading-empty-and-error-states"
+        }
+      ],
+      "figma": {
+        "name": "Grid/Data grid",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 1,
+        "variantProperties": [],
+        "componentProperties": []
+      },
+      "react": {
+        "component": "DataGrid",
+        "package": "sterling-ui",
+        "import": "import { DataGrid } from \"sterling-ui\";",
+        "source": "ui/src/components/DataGrid.tsx",
+        "props": [
+          {
+            "name": "label",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "The grid's accessible name."
+          },
+          {
+            "name": "columns",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "The application owns the data: the grid shows what it is given and reports what the person asks for. In Figma, columns are edited on the instance."
+          },
+          {
+            "name": "rows",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "The application owns the data: the grid shows what it is given and reports what the person asks for. In Figma, rows are instances with overridden values. A row's `warning` and `error` flag cells by column key, and its `descriptions` give each cell text a screen reader hears after the value: say why a flagged cell is flagged there, as the Warning and exception cells pattern asks."
+          },
+          {
+            "name": "tones",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "The tone of each chip label. In Figma, set on each chip."
+          },
+          {
+            "name": "rowKey",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Which column identifies a row, for selection."
+          },
+          {
+            "name": "selected",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "The selected rows. In Figma, each row's State."
+          },
+          {
+            "name": "onSelectedChange",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Reports selection, including select-all and Shift ranges; Figma has no behavior."
+          },
+          {
+            "name": "sort",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "The sorted column. In Figma, each header cell's Sort."
+          },
+          {
+            "name": "onSortChange",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Reports a request to sort; Figma has no behavior."
+          },
+          {
+            "name": "unsortable",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Columns that can't be sorted. In Figma, each header cell's Show sort."
+          },
+          {
+            "name": "fill",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Stretches descriptive text columns to fill the container, as the plugin does when it fits a grid to a screen."
+          },
+          {
+            "name": "loading",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Shows skeleton rows and marks the grid busy. In Figma, place Grid/Skeleton row instances under the header."
+          },
+          {
+            "name": "loadingLabel",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "What the first skeleton row and screen readers say while loading."
+          },
+          {
+            "name": "empty",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "The EmptyState shown when there are no rows. In Figma, place Grid/Empty state under the header."
+          },
+          {
+            "name": "emptyLabel",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "What screen readers hear when the empty state appears."
+          }
+        ],
+        "states": [],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-grid-data-grid--docs"
+    },
+    {
+      "id": "grid-pagination",
+      "name": "Grid/Pagination",
+      "description": "Shows the visible range under a grid, with Previous and Next buttons.",
+      "details": "Footer under the grid. Range and Page are text properties; Previous and Next are exposed Button instances, so their State (e.g. disabled on the first or last page) is set from this component's panel.",
+      "useWhen": "A grid shows one page of a larger result set.",
+      "dontUseWhen": "All rows fit on screen, or the list scrolls continuously — omit pagination.",
+      "related": [
+        {
+          "type": "pattern",
+          "name": "Filters, grid, and bulk actions",
+          "file": "guidelines.json",
+          "id": "filters-grid-and-bulk-actions"
+        }
+      ],
+      "figma": {
+        "name": "Grid/Pagination",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 1,
+        "variantProperties": [],
+        "componentProperties": [
+          {
+            "name": "Range",
+            "type": "text",
+            "default": "Showing 1–5 of 120"
+          },
+          {
+            "name": "Page",
+            "type": "text",
+            "default": "Page 1 of 24"
+          }
+        ]
+      },
+      "react": {
+        "component": "Pagination",
+        "package": "sterling-ui",
+        "import": "import { Pagination } from \"sterling-ui\";",
+        "source": "ui/src/components/GridStates.tsx",
+        "props": [
+          {
+            "name": "range",
+            "figmaProperty": "Range",
+            "kind": "text",
+            "default": "Showing 1–5 of 120"
+          },
+          {
+            "name": "page",
+            "figmaProperty": "Page",
+            "kind": "text",
+            "default": "Page 1 of 24"
+          },
+          {
+            "name": "onPrevious",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Called for Previous; Figma has no behavior."
+          },
+          {
+            "name": "onNext",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Called for Next; Figma has no behavior."
+          },
+          {
+            "name": "previousDisabled",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "On the first page. In Figma, set on the exposed Previous button instance (State)."
+          },
+          {
+            "name": "nextDisabled",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "On the last page. In Figma, set on the exposed Next button instance (State)."
+          }
+        ],
+        "states": [],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-grid-pagination--docs"
+    },
+    {
+      "id": "grid-skeleton-row",
+      "name": "Grid/Skeleton row",
+      "description": "A placeholder row shown while grid rows load.",
+      "details": "Loading placeholder with the grid's column widths: surface/skeleton bars, numeric bars right-aligned. Show label adds a \"Loading rows…\" label (Label text property) — turn it on for the first row. Mark the grid aria-busy in code.",
+      "useWhen": "Rows are loading: stack 3–5 under the header, matching the expected row count.",
+      "dontUseWhen": "A load takes under ~300 ms (show nothing), or the load failed or returned nothing (use Grid/Empty state).",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        },
+        {
+          "type": "pattern",
+          "name": "Loading, empty, and error states",
+          "file": "guidelines.json",
+          "id": "loading-empty-and-error-states"
+        }
+      ],
+      "figma": {
+        "name": "Grid/Skeleton row",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 1,
+        "variantProperties": [],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Loading rows…"
+          },
+          {
+            "name": "Show label",
+            "type": "boolean",
+            "default": false
+          }
+        ]
+      },
+      "react": {
+        "component": "SkeletonRow",
+        "package": "sterling-ui",
+        "import": "import { SkeletonRow } from \"sterling-ui\";",
+        "source": "ui/src/components/GridStates.tsx",
+        "props": [
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Loading rows…"
+          },
+          {
+            "name": "showLabel",
+            "figmaProperty": "Show label",
+            "kind": "boolean",
+            "default": false
+          },
+          {
+            "name": "columns",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "The grid's columns, one bar each. In Figma the row is drawn for the generic grid's columns."
+          }
+        ],
+        "states": [],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-grid-skeleton-row--docs"
+    },
+    {
+      "id": "grid-empty-state",
+      "name": "Grid/Empty state",
+      "description": "Takes the place of grid rows when there are no results or loading failed.",
+      "details": "Shown in place of grid rows. Tone (neutral / critical): neutral for no results or nothing yet, critical for a load error (icon and title say so, not just color). Title and Message are text layers — override the copy; swap the icon from the instance. Show action toggles the exposed Action button (Clear filters / Retry).",
+      "useWhen": "A grid has no rows to show — filters match nothing, nothing exists yet, or loading failed.",
+      "dontUseWhen": "Rows are still loading (use Grid/Skeleton row), or only some rows have problems (flag those cells).",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        },
+        {
+          "type": "pattern",
+          "name": "Loading, empty, and error states",
+          "file": "guidelines.json",
+          "id": "loading-empty-and-error-states"
+        }
+      ],
+      "figma": {
+        "name": "Grid/Empty state",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 2,
+        "variantProperties": [
+          {
+            "name": "Tone",
+            "values": [
+              "neutral",
+              "critical"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Show action",
+            "type": "boolean",
+            "default": true
+          }
+        ]
+      },
+      "react": {
+        "component": "EmptyState",
+        "package": "sterling-ui",
+        "import": "import { EmptyState } from \"sterling-ui\";",
+        "source": "ui/src/components/GridStates.tsx",
+        "props": [
+          {
+            "name": "tone",
+            "figmaProperty": "Tone",
+            "kind": "variant",
+            "values": [
+              "neutral",
+              "critical"
+            ]
+          },
+          {
+            "name": "showAction",
+            "figmaProperty": "Show action",
+            "kind": "boolean",
+            "default": true
+          },
+          {
+            "name": "title",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "In Figma, a text layer to override."
+          },
+          {
+            "name": "message",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "In Figma, a text layer to override."
+          },
+          {
+            "name": "actionLabel",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "In Figma, set on the exposed Action button instance."
+          },
+          {
+            "name": "onAction",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Called for the action; Figma has no behavior."
+          }
+        ],
+        "states": [],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-grid-empty-state--docs"
+    },
+    {
+      "id": "grid-bulkactionbar",
+      "name": "Grid/BulkActionBar",
+      "description": "Shows the selection count and the actions for the selected grid rows.",
+      "details": "Shown above a grid while rows are selected. The count is text: select-all is the checkbox in the grid's header, so the bar has no checkbox of its own. Count and Select all are text properties; Show select all hides the Select all link (e.g. once all matching rows are selected); Show destructive toggles the danger action. Hint and Show hint (off by default) explain why an action is disabled. Action buttons are exposed instances — rename them and set their state from the bar instance.",
+      "useWhen": "One or more grid rows are selected and the actions apply to all of them.",
+      "dontUseWhen": "Nothing is selected (hide the bar), or an action applies to a single row (put it in the row).",
+      "related": [
+        {
+          "type": "pattern",
+          "name": "Bulk action bar",
+          "file": "guidelines.json",
+          "id": "bulk-action-bar"
+        },
+        {
+          "type": "pattern",
+          "name": "Filters, grid, and bulk actions",
+          "file": "guidelines.json",
+          "id": "filters-grid-and-bulk-actions"
+        },
+        {
+          "type": "guideline",
+          "name": "States",
+          "file": "guidelines.json",
+          "id": "states"
+        }
+      ],
+      "figma": {
+        "name": "Grid/BulkActionBar",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 1,
+        "variantProperties": [],
+        "componentProperties": [
+          {
+            "name": "Count",
+            "type": "text",
+            "default": "2 selected"
+          },
+          {
+            "name": "Select all",
+            "type": "text",
+            "default": "Select all 120 matching"
+          },
+          {
+            "name": "Show select all",
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "Hint",
+            "type": "text",
+            "default": "No eligible items selected"
+          },
+          {
+            "name": "Show hint",
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "Show destructive",
+            "type": "boolean",
+            "default": true
+          }
+        ]
+      },
+      "react": {
+        "component": "BulkActionBar",
+        "package": "sterling-ui",
+        "import": "import { BulkActionBar } from \"sterling-ui\";",
+        "source": "ui/src/components/BulkActionBar.tsx",
+        "props": [
+          {
+            "name": "count",
+            "figmaProperty": "Count",
+            "kind": "text",
+            "default": "2 selected"
+          },
+          {
+            "name": "selectAll",
+            "figmaProperty": "Select all",
+            "kind": "text",
+            "default": "Select all 120 matching"
+          },
+          {
+            "name": "showSelectAll",
+            "figmaProperty": "Show select all",
+            "kind": "boolean",
+            "default": true
+          },
+          {
+            "name": "hint",
+            "figmaProperty": "Hint",
+            "kind": "text",
+            "default": "No eligible items selected"
+          },
+          {
+            "name": "showHint",
+            "figmaProperty": "Show hint",
+            "kind": "boolean",
+            "default": false
+          },
+          {
+            "name": "onSelectAll",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Called for \"Select all N matching\"; Figma has no behavior."
+          },
+          {
+            "name": "hintId",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Lets a disabled action point to the hint that explains it (aria-describedby)."
+          },
+          {
+            "name": "children",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "The action Buttons. In Figma they are exposed button instances."
+          }
+        ],
+        "states": [],
+        "figmaOnly": [
+          {
+            "property": "Show destructive",
+            "reason": "In code the actions are children: leave the destructive button out instead of hiding it."
+          }
+        ]
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-grid-bulkactionbar--docs"
+    },
+    {
+      "id": "summary-summary-metric",
+      "name": "Summary/Summary metric",
+      "description": "Shows one headline number, with an optional progress bar against a target.",
+      "details": "Label, value, and optional progress vs. target. Status (normal / over-target): over-target adds a warning icon and text in addition to the bar color. State (default / loading): loading shows a skeleton bar and \"Loading…\" in place of the value. Long labels truncate; the value never does — use compact notation (e.g. $12.35B) for large numbers and put the full value in Detail. Resize the Bar layer to reflect progress. Padding and the gap between its parts follow Density → card/padding and card/gap.",
+      "useWhen": "A single headline number someone checks at a glance, optionally against a target or limit.",
+      "dontUseWhen": "Comparing many values over time (use a chart or grid), or the number needs row-level detail.",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "Data display",
+          "file": "guidelines.json",
+          "id": "data-display"
+        },
+        {
+          "type": "guideline",
+          "name": "States",
+          "file": "guidelines.json",
+          "id": "states"
+        },
+        {
+          "type": "pattern",
+          "name": "Loading, empty, and error states",
+          "file": "guidelines.json",
+          "id": "loading-empty-and-error-states"
+        }
+      ],
+      "figma": {
+        "name": "Summary/Summary metric",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 4,
+        "variantProperties": [
+          {
+            "name": "Status",
+            "values": [
+              "normal",
+              "over-target"
+            ]
+          },
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "loading"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Metric"
+          },
+          {
+            "name": "Show progress",
+            "type": "boolean",
+            "default": true
+          }
+        ]
+      },
+      "react": {
+        "component": "SummaryMetric",
+        "package": "sterling-ui",
+        "import": "import { SummaryMetric } from \"sterling-ui\";",
+        "source": "ui/src/components/SummaryMetric.tsx",
+        "props": [
+          {
+            "name": "status",
+            "figmaProperty": "Status",
+            "kind": "variant",
+            "values": [
+              "normal",
+              "over-target"
+            ]
+          },
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Metric"
+          },
+          {
+            "name": "showProgress",
+            "figmaProperty": "Show progress",
+            "kind": "boolean",
+            "default": true
+          },
+          {
+            "name": "loading",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "loading"
+            ]
+          },
+          {
+            "name": "value",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "In Figma, a text layer to override: it differs per variant, so it isn't a property."
+          },
+          {
+            "name": "detail",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "In Figma, a text layer to override: it differs per variant, so it isn't a property."
+          },
+          {
+            "name": "progress",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Progress toward the target, 0 to 1. In Figma, resize the Bar layer."
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "loading",
+            "code": [
+              "prop loading"
+            ]
+          }
+        ],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-summary-summary-metric--docs"
+    },
+    {
+      "id": "input-text",
+      "name": "Input/Text",
+      "description": "A labeled text field with helper text and validation states.",
+      "details": "Text input with label and helper text. State: default / hover / focus / error / error-focus / warning / warning-focus / disabled; error and warning add an icon and colored helper text, and a flagged field keeps its border when focused, with the focus ring outside it. Content: value / placeholder (Placeholder text in text/secondary). Label, Value, Placeholder, Helper, Show label, and Show helper are component properties; long values truncate. Field height follows Density → control/height.",
+      "useWhen": "Entering free text or a number (amounts, rates, IDs).",
+      "dontUseWhen": "The value comes from a fixed list (use a select). Hide the label (Show label off) only when a visible label sits right next to the field, and give the field an accessible name in code.",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        },
+        {
+          "type": "guideline",
+          "name": "States",
+          "file": "guidelines.json",
+          "id": "states"
+        },
+        {
+          "type": "pattern",
+          "name": "Form layout",
+          "file": "guidelines.json",
+          "id": "form-layout"
+        }
+      ],
+      "figma": {
+        "name": "Input/Text",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 16,
+        "variantProperties": [
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "hover",
+              "focus",
+              "error",
+              "error-focus",
+              "warning",
+              "warning-focus",
+              "disabled"
+            ]
+          },
+          {
+            "name": "Content",
+            "values": [
+              "value",
+              "placeholder"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Label"
+          },
+          {
+            "name": "Value",
+            "type": "text",
+            "default": "Value"
+          },
+          {
+            "name": "Placeholder",
+            "type": "text",
+            "default": "Enter a value"
+          },
+          {
+            "name": "Helper",
+            "type": "text",
+            "default": "Helper text"
+          },
+          {
+            "name": "Show label",
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "Show helper",
+            "type": "boolean",
+            "default": true
+          }
+        ]
+      },
+      "react": {
+        "component": "TextInput",
+        "package": "sterling-ui",
+        "import": "import { TextInput } from \"sterling-ui\";",
+        "source": "ui/src/components/TextInput.tsx",
+        "props": [
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Label"
+          },
+          {
+            "name": "value",
+            "figmaProperty": "Value",
+            "kind": "text",
+            "default": "Value"
+          },
+          {
+            "name": "placeholder",
+            "figmaProperty": "Placeholder",
+            "kind": "text",
+            "default": "Enter a value"
+          },
+          {
+            "name": "helper",
+            "figmaProperty": "Helper",
+            "kind": "text",
+            "default": "Helper text"
+          },
+          {
+            "name": "showLabel",
+            "figmaProperty": "Show label",
+            "kind": "boolean",
+            "default": true
+          },
+          {
+            "name": "showHelper",
+            "figmaProperty": "Show helper",
+            "kind": "boolean",
+            "default": true
+          },
+          {
+            "name": "validation",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "error",
+              "warning"
+            ]
+          },
+          {
+            "name": "disabled",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "disabled"
+            ]
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "hover",
+            "code": [
+              ":hover"
+            ]
+          },
+          {
+            "figma": "focus",
+            "code": [
+              ":focus-visible"
+            ]
+          },
+          {
+            "figma": "error",
+            "code": [
+              "prop validation"
+            ]
+          },
+          {
+            "figma": "error-focus",
+            "code": [
+              "prop validation",
+              ":focus-visible"
+            ]
+          },
+          {
+            "figma": "warning",
+            "code": [
+              "prop validation"
+            ]
+          },
+          {
+            "figma": "warning-focus",
+            "code": [
+              "prop validation",
+              ":focus-visible"
+            ]
+          },
+          {
+            "figma": "disabled",
+            "code": [
+              "prop disabled"
+            ]
+          }
+        ],
+        "figmaOnly": [
+          {
+            "property": "Content",
+            "reason": "In code the field shows its placeholder whenever the value is empty, so there is nothing to choose."
+          }
+        ]
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-input-text--docs"
+    },
+    {
+      "id": "input-select",
+      "name": "Input/Select",
+      "description": "A labeled dropdown for choosing one option from a short list.",
+      "details": "Select with label and helper text. State: default / hover / focus / open (menu below the field, covering the helper) / error / error-focus / warning / warning-focus / disabled; error and warning add an icon and colored helper text, and a flagged field keeps its border when focused, with the focus ring outside it. Content: value / placeholder (Placeholder text in text/secondary). Label, Value, Placeholder, Helper, Show label, and Show helper are component properties; long values truncate. Field height follows Density → control/height.",
+      "useWhen": "Choosing one option from a list of about 5–15 known values.",
+      "dontUseWhen": "There are only 2–3 options (show them all) or the list is long and searchable (use a combobox). Hide the label (Show label off) only when a visible label sits right next to the field, and give the field an accessible name in code.",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        },
+        {
+          "type": "guideline",
+          "name": "States",
+          "file": "guidelines.json",
+          "id": "states"
+        },
+        {
+          "type": "pattern",
+          "name": "Form layout",
+          "file": "guidelines.json",
+          "id": "form-layout"
+        }
+      ],
+      "figma": {
+        "name": "Input/Select",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 18,
+        "variantProperties": [
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "hover",
+              "focus",
+              "open",
+              "error",
+              "error-focus",
+              "warning",
+              "warning-focus",
+              "disabled"
+            ]
+          },
+          {
+            "name": "Content",
+            "values": [
+              "value",
+              "placeholder"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Label"
+          },
+          {
+            "name": "Value",
+            "type": "text",
+            "default": "Option"
+          },
+          {
+            "name": "Placeholder",
+            "type": "text",
+            "default": "Select an option"
+          },
+          {
+            "name": "Helper",
+            "type": "text",
+            "default": "Helper text"
+          },
+          {
+            "name": "Show label",
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "Show helper",
+            "type": "boolean",
+            "default": true
+          }
+        ]
+      },
+      "react": {
+        "component": "Select",
+        "package": "sterling-ui",
+        "import": "import { Select } from \"sterling-ui\";",
+        "source": "ui/src/components/Select.tsx",
+        "props": [
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Label"
+          },
+          {
+            "name": "value",
+            "figmaProperty": "Value",
+            "kind": "text",
+            "default": "Option"
+          },
+          {
+            "name": "placeholder",
+            "figmaProperty": "Placeholder",
+            "kind": "text",
+            "default": "Select an option"
+          },
+          {
+            "name": "helper",
+            "figmaProperty": "Helper",
+            "kind": "text",
+            "default": "Helper text"
+          },
+          {
+            "name": "showLabel",
+            "figmaProperty": "Show label",
+            "kind": "boolean",
+            "default": true
+          },
+          {
+            "name": "showHelper",
+            "figmaProperty": "Show helper",
+            "kind": "boolean",
+            "default": true
+          },
+          {
+            "name": "validation",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "error",
+              "warning"
+            ]
+          },
+          {
+            "name": "disabled",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "disabled"
+            ]
+          },
+          {
+            "name": "open",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "open"
+            ]
+          },
+          {
+            "name": "options",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "The choices. In Figma they are the Option instances inside Input/Menu."
+          },
+          {
+            "name": "onValueChange",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Reports the option the user chose; Figma has no behavior."
+          },
+          {
+            "name": "onOpenChange",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Reports the menu opening and closing; Figma has no behavior."
+          },
+          {
+            "name": "name",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "The field's name when it is submitted with a form."
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "hover",
+            "code": [
+              ":hover"
+            ]
+          },
+          {
+            "figma": "focus",
+            "code": [
+              ":focus-visible"
+            ]
+          },
+          {
+            "figma": "open",
+            "code": [
+              "prop open"
+            ]
+          },
+          {
+            "figma": "error",
+            "code": [
+              "prop validation"
+            ]
+          },
+          {
+            "figma": "error-focus",
+            "code": [
+              "prop validation",
+              ":focus-visible"
+            ]
+          },
+          {
+            "figma": "warning",
+            "code": [
+              "prop validation"
+            ]
+          },
+          {
+            "figma": "warning-focus",
+            "code": [
+              "prop validation",
+              ":focus-visible"
+            ]
+          },
+          {
+            "figma": "disabled",
+            "code": [
+              "prop disabled"
+            ]
+          }
+        ],
+        "figmaOnly": [
+          {
+            "property": "Content",
+            "reason": "In code the field shows its placeholder whenever nothing is selected, so there is nothing to choose."
+          }
+        ]
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-input-select--docs"
+    },
+    {
+      "id": "input-option",
+      "name": "Input/Option",
+      "description": "One row in a select's open menu.",
+      "details": "One menu row. State (default / hover / focus / selected / disabled); selected adds a check icon and bold label, and focus (the option the arrow keys are on) adds a focus ring inside the row to the hover fill. Label is a text property; long labels truncate. Height follows Density → control/height.",
+      "useWhen": "Listing choices in Input/Menu (a select's open list).",
+      "dontUseWhen": "The choices act immediately (use a menu of actions) or need multi-select (use checkboxes).",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "States",
+          "file": "guidelines.json",
+          "id": "states"
+        },
+        {
+          "type": "pattern",
+          "name": "Form layout",
+          "file": "guidelines.json",
+          "id": "form-layout"
+        }
+      ],
+      "figma": {
+        "name": "Input/Option",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 5,
+        "variantProperties": [
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "hover",
+              "focus",
+              "selected",
+              "disabled"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Option"
+          }
+        ]
+      },
+      "react": {
+        "component": "Option",
+        "package": "sterling-ui",
+        "import": "import { Option } from \"sterling-ui\";",
+        "source": "ui/src/components/Menu.tsx",
+        "props": [
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Option"
+          },
+          {
+            "name": "selected",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "selected"
+            ]
+          },
+          {
+            "name": "disabled",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "disabled"
+            ]
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "hover",
+            "code": [
+              ":hover"
+            ]
+          },
+          {
+            "figma": "focus",
+            "code": [
+              ":focus-visible"
+            ]
+          },
+          {
+            "figma": "selected",
+            "code": [
+              "prop selected"
+            ]
+          },
+          {
+            "figma": "disabled",
+            "code": [
+              "prop disabled"
+            ]
+          }
+        ],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-input-option--docs"
+    },
+    {
+      "id": "input-menu",
+      "name": "Input/Menu",
+      "description": "The open list of options shown under a select.",
+      "details": "Open list for Input/Select: a raised panel of Input/Option instances. Options are exposed instances — set each one's Label and State from this component's panel; hide extra rows to shorten the list.",
+      "useWhen": "Showing a select's options (it's placed under the field in Input/Select State = open).",
+      "dontUseWhen": "The list needs search or grouping beyond ~15 options (use a combobox).",
+      "related": [
+        {
+          "type": "pattern",
+          "name": "Form layout",
+          "file": "guidelines.json",
+          "id": "form-layout"
+        }
+      ],
+      "figma": {
+        "name": "Input/Menu",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 1,
+        "variantProperties": [],
+        "componentProperties": []
+      },
+      "react": {
+        "component": "Menu",
+        "package": "sterling-ui",
+        "import": "import { Menu } from \"sterling-ui\";",
+        "source": "ui/src/components/Menu.tsx",
+        "props": [],
+        "states": [],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-input-menu--docs"
+    },
+    {
+      "id": "input-option-with-description",
+      "name": "Input/Option with description",
+      "description": "A two-line menu row with a label and a muted description.",
+      "details": "Two-line menu row: Label plus a muted Description. State (default / hover / selected / disabled); selected adds a check icon and bold label. Label and Description are text properties; both truncate.",
+      "useWhen": "Each choice needs a short explanation — a saved view and its filters, an account and its number.",
+      "dontUseWhen": "One line is enough (use Input/Option).",
+      "related": [
+        {
+          "type": "pattern",
+          "name": "Saved views",
+          "file": "guidelines.json",
+          "id": "saved-views"
+        }
+      ],
+      "figma": {
+        "name": "Input/Option with description",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 4,
+        "variantProperties": [
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "hover",
+              "selected",
+              "disabled"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Option"
+          },
+          {
+            "name": "Description",
+            "type": "text",
+            "default": "Description"
+          }
+        ]
+      },
+      "react": {
+        "component": "OptionWithDescription",
+        "package": "sterling-ui",
+        "import": "import { OptionWithDescription } from \"sterling-ui\";",
+        "source": "ui/src/components/Menu.tsx",
+        "props": [
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Option"
+          },
+          {
+            "name": "description",
+            "figmaProperty": "Description",
+            "kind": "text",
+            "default": "Description"
+          },
+          {
+            "name": "selected",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "selected"
+            ]
+          },
+          {
+            "name": "disabled",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "disabled"
+            ]
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "hover",
+            "code": [
+              ":hover"
+            ]
+          },
+          {
+            "figma": "selected",
+            "code": [
+              "prop selected"
+            ]
+          },
+          {
+            "figma": "disabled",
+            "code": [
+              "prop disabled"
+            ]
+          }
+        ],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-input-option-with-description--docs"
+    },
+    {
+      "id": "input-menu-heading",
+      "name": "Input/Menu heading",
+      "description": "A group heading inside a menu.",
+      "details": "Group heading inside a menu. Label is a text property. Not interactive.",
+      "useWhen": "A menu has two or more groups of options (e.g. predefined and saved views).",
+      "dontUseWhen": "The menu has a single group — omit the heading.",
+      "related": [
+        {
+          "type": "pattern",
+          "name": "Saved views",
+          "file": "guidelines.json",
+          "id": "saved-views"
+        }
+      ],
+      "figma": {
+        "name": "Input/Menu heading",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 1,
+        "variantProperties": [],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Group"
+          }
+        ]
+      },
+      "react": {
+        "component": "MenuHeading",
+        "package": "sterling-ui",
+        "import": "import { MenuHeading } from \"sterling-ui\";",
+        "source": "ui/src/components/Menu.tsx",
+        "props": [
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Group"
+          }
+        ],
+        "states": [],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-input-menu-heading--docs"
+    },
+    {
+      "id": "tabs-tab",
+      "name": "Tabs/Tab",
+      "description": "Switches between views of the same data, with an optional count.",
+      "details": "View switcher above the grid. State: default / hover / focus / disabled / selected / selected-focus. Label, Count, and Show count are component properties; long labels truncate. Selected adds an underline and bold label; focus adds a focus/ring outline. A selected tab has no hover state: it is already the current view, so pointing at it changes nothing.",
+      "useWhen": "Switching between views of the same data (e.g. All / Open / Closed).",
+      "dontUseWhen": "Navigating between pages or steps (use navigation), or filtering by many values (use filters).",
+      "related": [
+        {
+          "type": "guideline",
+          "name": "States",
+          "file": "guidelines.json",
+          "id": "states"
+        },
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        },
+        {
+          "type": "pattern",
+          "name": "Filters, grid, and bulk actions",
+          "file": "guidelines.json",
+          "id": "filters-grid-and-bulk-actions"
+        }
+      ],
+      "figma": {
+        "name": "Tabs/Tab",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 6,
+        "variantProperties": [
+          {
+            "name": "State",
+            "values": [
+              "default",
+              "hover",
+              "focus",
+              "disabled",
+              "selected",
+              "selected-focus"
+            ]
+          }
+        ],
+        "componentProperties": [
+          {
+            "name": "Label",
+            "type": "text",
+            "default": "Tab"
+          },
+          {
+            "name": "Count",
+            "type": "text",
+            "default": "0"
+          },
+          {
+            "name": "Show count",
+            "type": "boolean",
+            "default": true
+          }
+        ]
+      },
+      "react": {
+        "component": "Tab",
+        "package": "sterling-ui",
+        "import": "import { Tab } from \"sterling-ui\";",
+        "source": "ui/src/components/Tab.tsx",
+        "props": [
+          {
+            "name": "label",
+            "figmaProperty": "Label",
+            "kind": "text",
+            "default": "Tab"
+          },
+          {
+            "name": "count",
+            "figmaProperty": "Count",
+            "kind": "text",
+            "default": "0"
+          },
+          {
+            "name": "showCount",
+            "figmaProperty": "Show count",
+            "kind": "boolean",
+            "default": true
+          },
+          {
+            "name": "selected",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "selected"
+            ]
+          },
+          {
+            "name": "disabled",
+            "figmaProperty": "State",
+            "kind": "state",
+            "stateValues": [
+              "disabled"
+            ]
+          }
+        ],
+        "states": [
+          {
+            "figma": "default",
+            "code": [
+              "no prop: the resting state"
+            ]
+          },
+          {
+            "figma": "hover",
+            "code": [
+              ":hover"
+            ]
+          },
+          {
+            "figma": "focus",
+            "code": [
+              ":focus-visible"
+            ]
+          },
+          {
+            "figma": "disabled",
+            "code": [
+              "prop disabled"
+            ]
+          },
+          {
+            "figma": "selected",
+            "code": [
+              "prop selected"
+            ]
+          },
+          {
+            "figma": "selected-focus",
+            "code": [
+              "prop selected",
+              ":focus-visible"
+            ]
+          }
+        ],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-tabs-tab--docs"
+    },
+    {
+      "id": "overlay-dialog",
+      "name": "Overlay/Dialog",
+      "description": "A modal dialog for one focused task, with a title, a body, and Cancel and primary actions.",
+      "details": "Modal dialog: Title, Show close, a Body slot for the instance's own content, and exposed Cancel and Primary buttons (set the primary's label and disabled state from this component's panel). Raised surface with a border.",
+      "useWhen": "Confirming or completing one focused task without leaving the screen (sign off, rename, confirm a destructive action).",
+      "dontUseWhen": "The task needs the rest of the screen for reference (use a side panel), or it's only a message (use inline status).",
+      "related": [
+        {
+          "type": "pattern",
+          "name": "Confirmation dialog",
+          "file": "guidelines.json",
+          "id": "confirmation-dialog"
+        },
+        {
+          "type": "guideline",
+          "name": "Accessibility",
+          "file": "guidelines.json",
+          "id": "accessibility"
+        },
+        {
+          "type": "guideline",
+          "name": "States",
+          "file": "guidelines.json",
+          "id": "states"
+        }
+      ],
+      "figma": {
+        "name": "Overlay/Dialog",
+        "file": "https://www.figma.com/community/file/1691833753587232312",
+        "variants": 1,
+        "variantProperties": [],
+        "componentProperties": [
+          {
+            "name": "Title",
+            "type": "text",
+            "default": "Dialog title"
+          },
+          {
+            "name": "Show close",
+            "type": "boolean",
+            "default": true
+          },
+          {
+            "name": "Body",
+            "type": "slot"
+          }
+        ]
+      },
+      "react": {
+        "component": "Dialog",
+        "package": "sterling-ui",
+        "import": "import { Dialog } from \"sterling-ui\";",
+        "source": "ui/src/components/Dialog.tsx",
+        "props": [
+          {
+            "name": "title",
+            "figmaProperty": "Title",
+            "kind": "text",
+            "default": "Dialog title"
+          },
+          {
+            "name": "showClose",
+            "figmaProperty": "Show close",
+            "kind": "boolean",
+            "default": true
+          },
+          {
+            "name": "children",
+            "figmaProperty": "Body",
+            "kind": "slot"
+          },
+          {
+            "name": "open",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Whether the dialog is showing. In Figma a dialog is placed on the canvas or not."
+          },
+          {
+            "name": "onClose",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Called for Cancel, the close button, and Escape; Figma has no behavior."
+          },
+          {
+            "name": "cancelLabel",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "In Figma, set on the exposed Cancel button instance."
+          },
+          {
+            "name": "primaryLabel",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "In Figma, set on the exposed Primary button instance."
+          },
+          {
+            "name": "primaryKind",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "In Figma, set on the exposed Primary button instance (Kind)."
+          },
+          {
+            "name": "primaryDisabled",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "In Figma, set on the exposed Primary button instance (State)."
+          },
+          {
+            "name": "onPrimary",
+            "figmaProperty": null,
+            "kind": "code-only",
+            "note": "Called for the primary action; Figma has no behavior."
+          }
+        ],
+        "states": [],
+        "figmaOnly": []
+      },
+      "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-overlay-dialog--docs"
+    }
+  ],
+  "icons": {
+    "id": "icon",
+    "name": "Icon/*",
+    "names": [
+      "Icon/check",
+      "Icon/minus",
+      "Icon/plus",
+      "Icon/x",
+      "Icon/chevron-down",
+      "Icon/arrow-up",
+      "Icon/arrow-down",
+      "Icon/sort",
+      "Icon/caret-up",
+      "Icon/caret-down",
+      "Icon/circle-check",
+      "Icon/alert-triangle",
+      "Icon/circle-x",
+      "Icon/info",
+      "Icon/circle-dot",
+      "Icon/search",
+      "Icon/filter",
+      "Icon/chevron-up",
+      "Icon/more",
+      "Icon/refresh"
+    ],
+    "description": "The \"<name>\" icon, a 16px outline glyph that takes its color from the component using it.",
+    "details": "16px outline icon. Parent components recolor the Glyph layer; resize with icon/size or size/*.",
+    "useWhen": "Supporting a label, or as the Icon value of Controls/Button and Controls/Icon button.",
+    "dontUseWhen": "It's the only way to convey meaning — pair it with text or an accessible name.",
+    "related": [
+      {
+        "type": "guideline",
+        "name": "Icons",
+        "file": "guidelines.json",
+        "id": "icons"
+      },
+      {
+        "type": "guideline",
+        "name": "Accessibility",
+        "file": "guidelines.json",
+        "id": "accessibility"
+      }
+    ],
+    "figma": {
+      "name": "Icon/<name>",
+      "file": "https://www.figma.com/community/file/1691833753587232312",
+      "variants": 1,
+      "variantProperties": [],
+      "componentProperties": []
+    },
+    "react": {
+      "component": "Icon",
+      "package": "sterling-ui",
+      "import": "import { Icon } from \"sterling-ui\";",
+      "source": "ui/src/components/Icon.tsx",
+      "props": [
+        {
+          "name": "name",
+          "figmaProperty": null,
+          "kind": "icon-name",
+          "values": [
+            "check",
+            "minus",
+            "plus",
+            "x",
+            "chevron-down",
+            "arrow-up",
+            "arrow-down",
+            "sort",
+            "caret-up",
+            "caret-down",
+            "circle-check",
+            "alert-triangle",
+            "circle-x",
+            "info",
+            "circle-dot",
+            "search",
+            "filter",
+            "chevron-up",
+            "more",
+            "refresh"
+          ],
+          "note": "Which icon: the part of the Figma name after Icon/."
+        }
+      ],
+      "states": [],
+      "figmaOnly": []
+    },
+    "storybook": "https://mcasey10.github.io/sterling-design-system/storybook/?path=/docs/components-icon--docs"
+  }
+}

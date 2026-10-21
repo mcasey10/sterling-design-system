@@ -3,43 +3,52 @@
 // definitions/components.ts and fails if any defined component isn't coded.
 // Icons (Icon/<name>) have no properties, so they have no definition and no entry: <Icon name> takes any
 // name in definitions/icons.ts.
+// `component` is the name the source file exports: one file can export several components (Menu.tsx).
 
 import type { CodedComponent } from "./parity";
 
 export const CODED: Record<string, CodedComponent> = {
   "Controls/Button": {
+    component: "Button",
     source: "src/components/Button.tsx",
     props: ["kind", "size", "label", "showIcon", "icon", "disabled"],
   },
   "Controls/Icon button": {
+    component: "IconButton",
     source: "src/components/IconButton.tsx",
     props: ["kind", "size", "label", "icon", "disabled"],
   },
   "Controls/Link": {
+    component: "Link",
     source: "src/components/Link.tsx",
     props: ["size", "label"],
   },
   "Controls/Checkbox": {
+    component: "Checkbox",
     source: "src/components/Checkbox.tsx",
     props: ["checked", "label", "showLabel", "disabled", "onCheckedChange"],
     codeOnly: { onCheckedChange: "Reports the value the user chose as \"on\" or \"off\"; Figma has no behavior." },
   },
   "Chip/Status": {
+    component: "StatusChip",
     source: "src/components/StatusChip.tsx",
     props: ["tone", "label", "showIcon"],
   },
   "Tabs/Tab": {
+    component: "Tab",
     source: "src/components/Tab.tsx",
     props: ["label", "count", "showCount", "selected", "disabled"],
     stateProps: { selected: "selected" },
   },
   "Input/Text": {
+    component: "TextInput",
     source: "src/components/TextInput.tsx",
     props: ["label", "value", "placeholder", "helper", "showLabel", "showHelper", "validation", "disabled"],
     stateProps: { error: "validation", warning: "validation" },
     figmaOnly: { Content: "In code the field shows its placeholder whenever the value is empty, so there is nothing to choose." },
   },
   "Input/Select": {
+    component: "Select",
     source: "src/components/Select.tsx",
     props: [
       "label", "value", "placeholder", "helper", "showLabel", "showHelper", "validation", "disabled", "open",
@@ -55,25 +64,30 @@ export const CODED: Record<string, CodedComponent> = {
     },
   },
   "Input/Menu": {
+    component: "Menu",
     source: "src/components/Menu.tsx",
     props: [],
   },
   "Input/Option": {
+    component: "Option",
     source: "src/components/Menu.tsx",
     props: ["label", "selected", "disabled"],
     stateProps: { selected: "selected" },
   },
   "Chip/Side": {
+    component: "SideChip",
     source: "src/components/Chips.tsx",
     props: ["side", "label"],
     codeOnly: { label: "\"Buy\" or \"Sell\" by default. In Figma, a text layer to override (for example with B / S)." },
   },
   "Chip/Filter": {
+    component: "FilterChip",
     source: "src/components/Chips.tsx",
     props: ["label", "showRemove", "onRemove"],
     codeOnly: { onRemove: "Called when the chip is used to remove its filter; Figma has no behavior." },
   },
   "Summary/Summary metric": {
+    component: "SummaryMetric",
     source: "src/components/SummaryMetric.tsx",
     props: ["status", "label", "showProgress", "loading", "value", "detail", "progress"],
     stateProps: { loading: "loading" },
@@ -84,32 +98,42 @@ export const CODED: Record<string, CodedComponent> = {
     },
   },
   "Input/Option with description": {
+    component: "OptionWithDescription",
     source: "src/components/Menu.tsx",
     props: ["label", "description", "selected", "disabled"],
     stateProps: { selected: "selected" },
   },
   "Input/Menu heading": {
+    component: "MenuHeading",
     source: "src/components/Menu.tsx",
     props: ["label"],
   },
   "Grid/HeaderCell": {
+    component: "HeaderCell",
     source: "src/components/HeaderCell.tsx",
     props: ["sort", "align", "label", "showSort", "onSort"],
     codeOnly: { onSort: "Called when the person asks to sort by the column; Figma has no behavior." },
   },
   "Grid/BodyCell": {
+    component: "BodyCell",
     source: "src/components/BodyCell.tsx",
-    props: ["type", "value", "selected", "validation", "children"],
+    props: ["type", "value", "selected", "validation", "description", "children"],
     stateProps: { selected: "selected", warning: "validation", error: "validation" },
-    codeOnly: { children: "The StatusChip or Checkbox of a chip or checkbox cell. In Figma it is an exposed nested instance." },
+    codeOnly: {
+      description:
+        "What a screen reader hears after the value, such as why a flagged cell is flagged. Figma draws what people see, so it has no property for text that is only read aloud.",
+      children: "The StatusChip or Checkbox of a chip or checkbox cell. In Figma it is an exposed nested instance.",
+    },
   },
   "Grid/Row": {
+    component: "Row",
     source: "src/components/DataGrid.tsx",
     props: ["selected", "children"],
     stateProps: { selected: "selected" },
     codeOnly: { children: "The row's BodyCells. In Figma a row is built from body cell instances." },
   },
   "Grid/Data grid": {
+    component: "DataGrid",
     source: "src/components/DataGrid.tsx",
     props: [
       "label", "columns", "rows", "tones", "rowKey", "selected", "onSelectedChange", "sort", "onSortChange", "unsortable", "fill",
@@ -118,7 +142,8 @@ export const CODED: Record<string, CodedComponent> = {
     codeOnly: {
       label: "The grid's accessible name.",
       columns: "The application owns the data: the grid shows what it is given and reports what the person asks for. In Figma, columns are edited on the instance.",
-      rows: "The application owns the data: the grid shows what it is given and reports what the person asks for. In Figma, rows are instances with overridden values.",
+      rows:
+        "The application owns the data: the grid shows what it is given and reports what the person asks for. In Figma, rows are instances with overridden values. A row's `warning` and `error` flag cells by column key, and its `descriptions` give each cell text a screen reader hears after the value: say why a flagged cell is flagged there, as the Warning and exception cells pattern asks.",
       tones: "The tone of each chip label. In Figma, set on each chip.",
       rowKey: "Which column identifies a row, for selection.",
       selected: "The selected rows. In Figma, each row's State.",
@@ -134,6 +159,7 @@ export const CODED: Record<string, CodedComponent> = {
     },
   },
   "Grid/Pagination": {
+    component: "Pagination",
     source: "src/components/GridStates.tsx",
     props: ["range", "page", "onPrevious", "onNext", "previousDisabled", "nextDisabled"],
     codeOnly: {
@@ -144,11 +170,13 @@ export const CODED: Record<string, CodedComponent> = {
     },
   },
   "Grid/Skeleton row": {
+    component: "SkeletonRow",
     source: "src/components/GridStates.tsx",
     props: ["label", "showLabel", "columns"],
     codeOnly: { columns: "The grid's columns, one bar each. In Figma the row is drawn for the generic grid's columns." },
   },
   "Grid/Empty state": {
+    component: "EmptyState",
     source: "src/components/GridStates.tsx",
     props: ["tone", "showAction", "title", "message", "actionLabel", "onAction"],
     codeOnly: {
@@ -159,6 +187,7 @@ export const CODED: Record<string, CodedComponent> = {
     },
   },
   "Grid/BulkActionBar": {
+    component: "BulkActionBar",
     source: "src/components/BulkActionBar.tsx",
     props: ["count", "selectAll", "showSelectAll", "hint", "showHint", "onSelectAll", "hintId", "children"],
     figmaOnly: { "Show destructive": "In code the actions are children: leave the destructive button out instead of hiding it." },
@@ -169,6 +198,7 @@ export const CODED: Record<string, CodedComponent> = {
     },
   },
   "Overlay/Dialog": {
+    component: "Dialog",
     source: "src/components/Dialog.tsx",
     props: [
       "title", "showClose", "children", "open", "onClose", "cancelLabel", "primaryLabel", "primaryKind", "primaryDisabled",

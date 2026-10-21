@@ -1,8 +1,9 @@
 # Checks that need no Figma file, on every push and pull request:
 # the plugin type-checks and builds, every color pair meets WCAG contrast, every published
-# token has a description, and the token CSS and token site build. The coded layer (ui/) type-checks,
-# has a coded counterpart for every component definition, uses no raw values in its CSS, builds its
-# Storybook, and passes an accessibility run over every story in every color mode.
+# token has a description, the token CSS and token site build, and every diagram is rendered from its
+# current source. The coded layer (ui/) type-checks, has a coded counterpart for every component definition,
+# uses no raw values in its CSS, builds its Storybook, and passes an accessibility run over every story in
+# every color mode. The website builds and passes its checks, including the AI page's excerpts.
 name: CI
 
 on:
@@ -41,20 +42,31 @@ jobs:
         run: npm run tokens:css
       - name: Build the token site
         run: npm run tokens:site
+      - name: Every diagram is rendered from its current source
+        run: npm run check:diagrams
 
   ui:
     runs-on: ubuntu-latest
     steps:
+      # The full history: the AI page shows code as delivered in an earlier commit, and checks it still is.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: ui/package-lock.json
+          cache-dependency-path: |
+            ui/package-lock.json
+            mcp/package-lock.json
 
       - name: Install ui dependencies
         run: npm ci
         working-directory: ui
+      # The website's AI page calls the built MCP server for a real exchange.
+      - name: Install the MCP server's dependencies
+        run: npm ci
+        working-directory: mcp
       - name: Generate the token CSS
         run: npm run tokens
         working-directory: ui
@@ -67,12 +79,60 @@ jobs:
       - name: No raw values in the coded layer's CSS
         run: npm run check:css
         working-directory: ui
+      - name: Example screens use only the sterling-ui package, never its internal markup
+        run: npm run check:examples
+        working-directory: ui
+      - name: Sterling's addresses are written once, in definitions/site.ts
+        run: npm run check:urls
+        working-directory: ui
+      - name: Build the website
+        run: npm run site
+      - name: The website passes axe in every color mode, fits a phone's width, and has no broken links
+        run: npm run check:site
+      - name: The AI page's excerpts match their sources, and its code is as delivered
+        run: npm run check:excerpts
+      - name: The generated parts of the documentation are up to date
+        run: npm run check:docs-sync
+      - name: The demo replay's record has no local path or unknown address
+        run: npm run check:demo-session
       - name: Build Storybook
         run: npm run build-storybook
         working-directory: ui
       - name: Accessibility (axe) on every story, in every color mode
         run: npm run check:a11y
         working-directory: ui
+      - name: Interaction tests (every story with a play function)
+        run: npm run check:interactions
+        working-directory: ui
       - name: Every component has the Storybook Docs page its documentation link can open
         run: npm run check:docs
         working-directory: ui
+      - name: The export in ai/ matches the sources and covers every published component
+        run: npm run check:ai
+        working-directory: ui
+      - name: The demo kit's data matches the plugin's example
+        run: npm run check:demo-data
+        working-directory: ui
+      - name: Build the sterling-ui package (components, type declarations, styles)
+        run: npm run package
+        working-directory: ui
+
+  mcp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: mcp/package-lock.json
+
+      - name: Install the MCP server's dependencies
+        run: npm ci
+        working-directory: mcp
+      - name: Type-check the MCP server
+        run: npm run typecheck
+        working-directory: mcp
+      - name: Build the server and test every tool, the bundled data, and that it has no network code
+        run: npm test
+        working-directory: mcp
