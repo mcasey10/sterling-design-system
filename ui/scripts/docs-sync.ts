@@ -5,8 +5,8 @@
 //   mcp/README.md             the setup block, from definitions/setup.ts (the website's #set-up), and the icon count
 //   docs/reference.md         the icon count ("Sterling's `Icon/*` set has 20 icons")
 //   docs/figma-community.md   the version (package.json); the counts of contrast pairs (tokens.json contrast.rules, per
-//                             color mode), guideline sections, patterns, components, and icons; and the website, demo
-//                             page, and repository addresses (definitions/site.ts)
+//                             color mode), guideline sections, patterns, components, and icons; and the website, install,
+//                             MCP setup, demo page, and repository addresses (definitions/site.ts)
 // Each generated block sits between marker comments (`<!-- generated: name … -->` and `<!-- /generated: name -->`);
 // everything outside them is written by hand. Counts and the Community text's version line, inside sentences, are
 // found by their wording instead.
@@ -147,7 +147,9 @@ update("docs/figma-community.md", (text) => {
     [/\d+ guideline sections and \d+ patterns/g, `${GUIDELINES.length} guideline sections and ${PATTERNS.length} patterns`],
     [/What's inside: \d+ components and \d+ icons\b/g, `What's inside: ${COMPONENT_COUNT} components and ${ICON_COUNT} icons`],
     [/build a screen with it: \S+/g, `build a screen with it: ${DEMO_PAGE_URL}`],
-    [/start at \S+/g, `start at ${WEBSITE_URL}`],
+    [/into a React project: \S+/g, `into a React project: ${INSTALL_PACKAGE_URL}`],
+    [/to your AI coding tool: \S+/g, `to your AI coding tool: ${MCP_SETUP_URL}`],
+    [/for each kind of reader, starts here: \S+/g, `for each kind of reader, starts here: ${WEBSITE_URL}`],
     [/Sterling's own values are reset on the next rebuild\. See \S+/g, `Sterling's own values are reset on the next rebuild. See ${REPOSITORY_URL}`],
   ];
   for (const [pattern, wording] of each) out = counts(out, file, pattern, wording, 1);
