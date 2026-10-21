@@ -429,8 +429,8 @@ Not planned for a release yet:
 
 - **Tabular figures:** the plugin API can't turn on OpenType features for a text
   style, so the **Numeric** style doesn't have tabular figures enabled. To fix it
-  once per file: select the Numeric style, click the edit icon, open **Type
-  settings → Details**, and set **Numbers → Style → Monospace uppercase/lining**.
+  once per file: edit the Numeric text style, open **Type details (…) → Details →
+  Numbers**, and set **Style** to **Monospace uppercase/lining**.
   Reruns leave this setting alone: the plugin only writes style properties whose
   values differ from tokens.json.
 - **Missing fonts:** if Inter isn't available, the affected text styles are skipped

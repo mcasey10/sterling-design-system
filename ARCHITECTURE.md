@@ -178,8 +178,8 @@ example be added beside it.
 ### After the first Build library (one time per file)
 
 Turn on **tabular figures** for the **Numeric** text style, so digits line up in columns:
-select the Numeric style, open **Type settings → Details → Numbers**, and set **Style** to
-**Monospace uppercase/lining**. The plugin API can't set OpenType features on a text style,
+edit the Numeric text style, open **Type details (…) → Details → Numbers**, and set **Style**
+to **Monospace uppercase/lining**. The plugin API can't set OpenType features on a text style,
 so this is the only manual step. Builds never undo it, and until it's done **Build library**
 adds a reminder to its run report (it reads the setting from a Numeric text on the
 Components page). The Read me page lists the same step.
