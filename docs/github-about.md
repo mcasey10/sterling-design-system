@@ -13,4 +13,4 @@ https://mcasey10.github.io/sterling-design-system/
 
 **Topics**
 
-design-system, design-tokens, figma, react, storybook, accessibility, data-grid, mcp, llms-txt
+accessibility, component-library, design-system, design-tokens, figma, figma-plugin, figma-variables, react, storybook, typescript, data-grid, llms-txt, mcp
