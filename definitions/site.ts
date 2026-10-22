@@ -14,6 +14,8 @@ export const TOKENS_URL = `${WEBSITE_URL}tokens/`;
 export const AI_PAGE_URL = `${WEBSITE_URL}ai-tools/`;
 /** The replay of the Pool loans demo session: an AI tool building a screen with Sterling. */
 export const DEMO_PAGE_URL = `${WEBSITE_URL}demo/`;
+/** The live example: the Pool loans screen, working, filling the window (Storybook's story without its wrapper). */
+export const EXAMPLE_PAGE_URL = `${WEBSITE_URL}example/`;
 /** The machine-readable files for AI tools (ai/ in the repository, published as is). */
 export const AI_FILES_URL = `${WEBSITE_URL}ai/`;
 /** llms.txt: the plain-text entry point for AI tools that read by URL. */

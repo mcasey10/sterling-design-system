@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Builds the published website into site/: Start here at the root, Install sterling-ui under install/, the
-// token reference under tokens/, Sterling and AI tools under ai-tools/, Storybook under storybook/, the
+// token reference under tokens/, Sterling and AI tools under ai-tools/, the demo replay under demo/, the live
+// example under example/ (a story from Storybook, in a frame), Storybook under storybook/, the
 // machine-readable export under ai/ (a copy of the committed ai/ folder, which `npm run check:ai` keeps in step
 // with the sources), and llms.txt at the root, written from ai/index.json (scripts/lib/llms.mjs). This is what the Pages workflow publishes; `npm run check:site` checks
 // it (accessibility in every color mode, and every internal link).
@@ -33,4 +34,4 @@ run("npm", ["run", "build-storybook", "--", "--output-dir", "../site/storybook"]
 cpSync(resolve(root, "ai"), resolve(root, "site/ai"), { recursive: true });
 // llms.txt: the entry point for AI tools, from the export's index.
 writeFileSync(resolve(root, "site/llms.txt"), renderLlmsTxt(JSON.parse(readFileSync(resolve(root, "ai/index.json"), "utf8"))));
-console.log("Wrote site/: Start here, install/, tokens/, ai-tools/, storybook/, ai/ (the export), and llms.txt.");
+console.log("Wrote site/: Start here, install/, tokens/, ai-tools/, demo/, example/, storybook/, ai/ (the export), and llms.txt.");

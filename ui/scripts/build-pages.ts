@@ -4,6 +4,8 @@
 //   site/install/index.html    Install sterling-ui, from the setup block in definitions/setup.ts
 //   site/demo/index.html       The demo replay: the Pool loans session, from docs/demo/session.json (the request,
 //                              each MCP call and its answer, the session's notes) and the screen as delivered
+//   site/example/index.html    The live example: Examples › Pool loans from the built Storybook, without Storybook's
+//                              wrapper, under a slim bar (check:site fails if the story is gone from storybook/index.json)
 //   site/ai-tools/index.html   Sterling and AI tools: one component followed from the sources to code an AI tool
 //                              wrote, with excerpts read from the real files (lib/excerpts.ts), a real exchange
 //                              with the built MCP server (mcp/scripts/exchange.mjs), the overview diagram
@@ -22,14 +24,14 @@ import { AUDIENCES, HOW, NO_SETUP, type Audience, type How, type Place } from ".
 import { COMPONENTS } from "../../definitions/components";
 import { ICONS } from "../../definitions/icons";
 import {
-  AI_FILES_URL, AI_PAGE_URL, DEMO_PAGE_URL, INSTALL_PACKAGE_URL, STORYBOOK_URL, LLMS_TXT_URL, MCP_SETUP_URL, RELEASES_URL, REPOSITORY_URL, WEBSITE_URL, commitUrl, historyUrl,
+  AI_FILES_URL, AI_PAGE_URL, DEMO_PAGE_URL, EXAMPLE_PAGE_URL, INSTALL_PACKAGE_URL, STORYBOOK_URL, LLMS_TXT_URL, MCP_SETUP_URL, RELEASES_URL, REPOSITORY_URL, WEBSITE_URL, commitUrl, historyUrl,
   repositoryFileUrl,
 } from "../../definitions/site";
 import {
   DELIVERED, DELIVERED_FOLDER, codeExcerpts, componentsJsonExcerpt, exchangeExcerpts, llmsExcerpt, patternExcerpt, sourceExcerpts,
   tokenExcerpt, type Exchange, type Excerpt,
 } from "./lib/excerpts";
-import { esc, renderPage } from "../../scripts/lib/page-shell.mjs";
+import { esc, renderFramePage, renderPage } from "../../scripts/lib/page-shell.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const site = resolve(root, "site");
@@ -108,6 +110,10 @@ function startHere(): string {
 consistent. Designers use it in Figma, developers use it in React, and AI tools can look it up while they write code. All
 three come from one set of definitions, so they always describe the same thing, and automated checks fail if they drift
 apart. It has ${Object.keys(COMPONENTS).length} components and ${Object.keys(ICONS).length} icons.</p>
+<ul class="see-it">
+  <li><a class="see-it__link" href="${esc(local(EXAMPLE_PAGE_URL, base))}">Try the live example</a> <span class="note">A working screen built from Sterling's components</span></li>
+  <li><a class="see-it__link" href="${esc(local(DEMO_PAGE_URL, base))}">Watch the demo</a> <span class="note">An AI tool building that screen with Sterling</span></li>
+</ul>
 
 <section class="panel" aria-labelledby="start-title">
   <h2 id="start-title">Start with your role</h2>
@@ -139,7 +145,7 @@ ${AUDIENCES.map((a) => row(a, base)).join("\n")}
     base,
     current: "start",
     main,
-    css: START_CSS,
+    css: START_CSS + SEE_IT_CSS,
     script: FORWARD_JS,
     version: VERSION,
     repositoryUrl: REPOSITORY_URL,
@@ -449,6 +455,7 @@ building. This replays the session: the request, what it looked up, and what it 
   <li>${mcpCount} calls to Sterling's MCP server in ${mcpSpan} seconds</li>
   <li>${Math.round(s.durationSeconds / 60)} minutes from the request to a working screen</li>
 </ul>
+<p class="try-it"><a class="see-it__link" href="${esc(local(EXAMPLE_PAGE_URL, base))}">Try the finished screen</a></p>
 
 <section class="panel" aria-labelledby="request-title">
   <h2 id="request-title">The request</h2>
@@ -500,13 +507,73 @@ ${steps.join("\n")}
     base,
     current: "ai-tools",
     main,
-    css: AI_CSS + DEMO_CSS,
+    css: AI_CSS + DEMO_CSS + SEE_IT_CSS,
     script: STEPS_JS,
     version: VERSION,
     repositoryUrl: REPOSITORY_URL,
     releasesUrl: RELEASES_URL,
   });
 }
+
+// ---------------------------------------------------------------- The live example
+
+/** Examples › Pool loans in Storybook. check:site fails if the built Storybook has no story with this id. */
+export const EXAMPLE_STORY_ID = "examples-pool-loans--pool-loans";
+/** The picture link previews show: the designed screen (1440 × 900). */
+const EXAMPLE_IMAGE = "preview.png";
+
+function examplePage(): string {
+  const base = "../";
+  const src = `${base}storybook/iframe.html?id=${EXAMPLE_STORY_ID}&viewMode=story`;
+  return renderFramePage({
+    title: "Pool loans example · Sterling",
+    description: "Pool loans: a working screen built from Sterling's components. All data is fictional.",
+    base,
+    bar: "<strong>Pool loans:</strong> a working screen built from Sterling's components. All data is fictional.",
+    links: `<a href="${esc(local(DEMO_PAGE_URL, base))}">How it was built</a><a href="${esc(base)}">Back to Sterling</a>`,
+    frame: { src, title: "Pool loans example" },
+    script: EXAMPLE_JS(src),
+    version: VERSION,
+    og: {
+      url: EXAMPLE_PAGE_URL,
+      image: `${EXAMPLE_PAGE_URL}${EXAMPLE_IMAGE}`,
+      imageWidth: 1440,
+      imageHeight: 900,
+      imageAlt: "The Pool loans screen: a filter panel, a grid of loans with one exception flagged, and a pool summary listing the issues that block submission.",
+    },
+  });
+}
+
+// The story follows the page's color mode: Storybook takes it as a global in the address (globals=theme:Dark).
+// Light is the story's own default, so the address as written works without JavaScript.
+const EXAMPLE_JS = (src: string) => `
+(() => {
+  const frame = document.querySelector(".frame-main iframe");
+  const modes = ${JSON.stringify(JSON.parse(readFileSync(resolve(root, "tokens/tokens.json"), "utf8")).color.$modes)};
+  const dark = matchMedia("(prefers-color-scheme: dark)");
+  const mode = () => {
+    const set = document.documentElement.dataset.theme;
+    return (set ? set === "dark" : dark.matches) ? modes[1] : modes[0];
+  };
+  let shown = modes[0];
+  const follow = () => {
+    if (mode() === shown) return;
+    shown = mode();
+    frame.src = ${JSON.stringify(src)} + "&globals=theme:" + shown;
+  };
+  document.addEventListener("themechange", follow);
+  dark.addEventListener("change", follow);
+  follow();
+})();
+`;
+
+const SEE_IT_CSS = `
+.see-it { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-wrap: wrap; gap: 12px 24px; }
+.see-it li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.see-it__link { display: inline-block; font-weight: 600; padding: 6px 14px; border: 1px solid var(--color-accent-default); border-radius: var(--radius-sm); text-decoration: none; }
+.see-it__link:hover { background: var(--color-surface-hover); }
+.try-it { margin: 0 0 8px; }
+`;
 
 const DEMO_CSS = `
 .crumb { margin: 0 0 4px; font-size: 13px; }
@@ -709,12 +776,14 @@ const FORWARD_JS = `
 })();
 `;
 
-for (const folder of ["install", "ai-tools", "demo"]) mkdirSync(resolve(site, folder), { recursive: true });
+for (const folder of ["install", "ai-tools", "demo", "example"]) mkdirSync(resolve(site, folder), { recursive: true });
 writeFileSync(resolve(site, "index.html"), startHere());
 writeFileSync(resolve(site, "install/index.html"), installPage());
 writeFileSync(resolve(site, "ai-tools/index.html"), aiToolsPage());
 for (const { file } of DIAGRAM_MODES) copyFileSync(resolve(root, "docs/diagrams", file), resolve(site, "ai-tools", file));
 writeFileSync(resolve(site, "demo/index.html"), demoPage());
 copyFileSync(resolve(root, "docs/images/example-pool-loans.png"), resolve(site, "demo/design.png"));
+writeFileSync(resolve(site, "example/index.html"), examplePage());
+copyFileSync(resolve(root, "docs/images/example-pool-loans.png"), resolve(site, "example", EXAMPLE_IMAGE));
 for (const theme of ["light", "dark"]) copyFileSync(resolve(root, `docs/demo/delivered-${theme}.png`), resolve(site, `demo/delivered-${theme}.png`));
-console.log("Wrote site/index.html (Start here), site/install/ (Install sterling-ui), site/ai-tools/ (Sterling and AI tools), and site/demo/ (the demo replay).");
+console.log("Wrote site/index.html (Start here), site/install/ (Install sterling-ui), site/ai-tools/ (Sterling and AI tools), site/demo/ (the demo replay), and site/example/ (the live example).");

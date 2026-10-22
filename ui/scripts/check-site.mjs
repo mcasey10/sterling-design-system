@@ -8,8 +8,12 @@
 //     Space work it, and a step's button opens that step;
 //   • a page scrolls sideways at phone width (375px);
 //   • an internal link or anchor goes nowhere: every link on every page is followed to its file, and an
-//     anchor (#…) to an element with that id.
-// Storybook (site/storybook/) is checked story by story by check:a11y; here only links into it are followed.
+//     anchor (#…) to an element with that id;
+//   • a link or frame into Storybook names a story or docs page that the built Storybook doesn't have
+//     (storybook/index.json): renaming Examples › Pool loans would otherwise leave /example/ blank;
+//   • a page's link-preview picture (og:image) on this website isn't in site/.
+// Storybook (site/storybook/) is checked story by story by check:a11y; here only links into it are followed (and
+// axe doesn't reach into the frame on /example/, which shows a story).
 //
 // Usage: npm run check:site   (needs site/: run `npm run site` at the repo root first)
 // Chrome: CHROME_PATH, or the usual install location.
@@ -67,9 +71,16 @@ const origin = `http://127.0.0.1:${server.address().port}`;
 // ------------------------------------------------------------ the pages, and every internal link on them
 
 /** The website's own pages: every index.html outside storybook/ and ai/. */
-const PAGES = ["", "tokens/", "install/", "ai-tools/", "demo/", ...PENDING.filter((p) => existsSync(join(site, p, "index.html")))].filter((p) => existsSync(join(site, p, "index.html")));
+const PAGES = ["", "tokens/", "install/", "ai-tools/", "demo/", "example/", ...PENDING.filter((p) => existsSync(join(site, p, "index.html")))].filter((p) => existsSync(join(site, p, "index.html")));
 const problems = [];
 const pending = new Set();
+/** Storybook's stories and docs pages, by id, as the built Storybook lists them. */
+const storybookIndex = join(site, "storybook", "index.json");
+const storyIds = existsSync(storybookIndex) ? new Set(Object.keys(JSON.parse(readFileSync(storybookIndex, "utf8")).entries)) : null;
+if (!storyIds) problems.push("storybook/index.json is missing: the links into Storybook can't be checked");
+/** The address the site is published at, from the export (ai/index.json), to find og:image pictures in site/. */
+const websiteUrl = JSON.parse(readFileSync(join(site, "ai", "index.json"), "utf8")).links.website;
+let stories = 0;
 const idsOf = (html) => new Set([...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
 let links = 0;
 for (const page of PAGES) {
@@ -92,10 +103,27 @@ for (const page of PAGES) {
       problems.push(`/${page}: "${href}" goes nowhere (${target.pathname})`);
       continue;
     }
+    // Into Storybook: iframe.html?id=<id>, or the manager's ?path=/story/<id> or /docs/<id>.
+    if (path.startsWith("storybook/") && storyIds) {
+      const id = target.searchParams.get("id") ?? /^\/(?:story|docs)\/([^&]+)/.exec(target.searchParams.get("path") ?? "")?.[1];
+      if (id) {
+        stories++;
+        if (!storyIds.has(id)) problems.push(`/${page}: "${href}" names "${id}", which the built Storybook doesn't have (storybook/index.json)`);
+      }
+    }
     if (target.hash && file.endsWith(".html") && !file.includes(`${join("site", "storybook")}`)) {
       const id = decodeURIComponent(target.hash.slice(1));
       if (!idsOf(readFileSync(file, "utf8")).has(id)) problems.push(`/${page}: "${href}" has no element with id "${id}"`);
     }
+  }
+}
+
+for (const page of PAGES) {
+  const html = readFileSync(join(site, page, "index.html"), "utf8");
+  for (const [, image] of html.matchAll(/<meta property="og:image" content="([^"]+)"/g)) {
+    const local = image.startsWith(websiteUrl) ? image.slice(websiteUrl.length) : null;
+    if (!local) problems.push(`/${page}: og:image "${image}" isn't on this website`);
+    else if (!existsSync(join(site, local))) problems.push(`/${page}: og:image "${image}" isn't in site/ (${local})`);
   }
 }
 
@@ -195,7 +223,7 @@ try {
             document.querySelectorAll("[data-stepping]").forEach((list) => { list.removeAttribute("data-stepping"); [...list.children].forEach((c) => (c.hidden = false)); });`);
         await tab.evaluate(axeSource);
         const violations = await tab.evaluate(
-          `axe.run(document).then((r) => r.violations.map((v) => ({ rule: v.id, impact: v.impact, help: v.help, nodes: v.nodes.slice(0, 3).map((n) => n.target.join(" ")) })))`
+          `axe.run(document, { iframes: false }).then((r) => r.violations.map((v) => ({ rule: v.id, impact: v.impact, help: v.help, nodes: v.nodes.slice(0, 3).map((n) => n.target.join(" ")) })))`
         );
         for (const v of violations) problems.push(`${where}: ${v.rule} [${v.impact}] — ${v.help}: ${v.nodes.join(", ")}`);
       }
@@ -221,6 +249,6 @@ for (const problem of problems) console.error(`  ✗ ${problem}`);
 const notYet = pending.size ? ` Not built yet, and allowed for now: ${[...pending].map((p) => `/${p}`).join(", ")}.` : "";
 console.log(
   `${PAGES.length} pages × ${THEMES.length} color modes (${THEMES.join(", ")}), as loaded and as without JavaScript, and phone width: ${runs} axe runs; ` +
-    `the step-throughs by keyboard; ${links} internal links followed — ${problems.length} problem(s).${notYet}`
+    `the step-throughs by keyboard; ${links} internal links followed (${stories} of them name a Storybook story or docs page) — ${problems.length} problem(s).${notYet}`
 );
 process.exit(problems.length ? 1 : 0);

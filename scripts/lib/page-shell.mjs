@@ -59,6 +59,7 @@ thead th { border-top: 0; color: var(--color-text-secondary); font-weight: 600; 
 }
 `);
 
+// Sets the color mode, and tells the page (a "themechange" event on document) so a page can follow it.
 const THEME_JS = `
 (() => {
   const root = document.documentElement;
@@ -66,6 +67,7 @@ const THEME_JS = `
   function setTheme(t) {
     if (t === "system") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", t);
     buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.theme === t)));
+    document.dispatchEvent(new CustomEvent("themechange", { detail: t }));
   }
   buttons.forEach((b) => b.addEventListener("click", () => setTheme(b.dataset.theme)));
   setTheme("system");
@@ -79,45 +81,69 @@ export const NAV = [
   { id: "tokens", label: "Tokens", path: "tokens/" },
   { id: "storybook", label: "Storybook", path: "storybook/" },
   { id: "ai-tools", label: "AI tools", path: "ai-tools/" },
+  { id: "example", label: "Example", path: "example/" },
 ];
 
 /**
- * A whole page. `base` is the way back to the site root from the page ("" at the root, "../" one folder
- * down), so every link and the fonts work wherever the site is published. `current` is the NAV id.
+ * The document head: title, description, Open Graph tags when `og` is given ({ url, image, imageWidth, imageHeight,
+ * imageAlt }: absolute addresses, as link previews need), the fonts, the token CSS, and the shell's styles.
  */
-export function renderPage({ title, description, base, current, main, css = "", script = "", version, repositoryUrl, releasesUrl }) {
+function head({ title, description, base, css, og = /** @type {any} */ (undefined) }) {
   const fontCss = Object.entries(FONT_FILES)
     .map(([weight, file]) => `@font-face { font-family: "${tokens.typography.fontFamily}"; font-style: normal; font-weight: ${weight}; font-display: swap; src: url("${base}fonts/${file}") format("woff2"); }`)
     .join("\n");
-  const nav = NAV.map((item) => {
-    const here = item.id === current ? ' aria-current="page"' : "";
-    return `<li><a href="${esc(base + item.path) || "./"}"${here}>${esc(item.label)}</a></li>`;
-  }).join("");
+  const ogTags = og
+    ? `
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sterling">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(description)}">
+<meta property="og:url" content="${esc(og.url)}">
+<meta property="og:image" content="${esc(og.image)}">
+<meta property="og:image:width" content="${esc(og.imageWidth)}">
+<meta property="og:image:height" content="${esc(og.imageHeight)}">
+<meta property="og:image:alt" content="${esc(og.imageAlt)}">
+<meta name="twitter:card" content="summary_large_image">`
+    : "";
   return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
-<meta name="description" content="${esc(description)}">
+<meta name="description" content="${esc(description)}">${ogTags}
 <style>
 ${fontCss}
 ${buildTokenCss(tokens)}
 ${SHELL_CSS}
 ${tokenStyles(css)}
 </style>
-</head>
+</head>`;
+}
+
+const themeSwitch = () => `<div class="theme" role="group" aria-label="Color mode">
+      <button type="button" data-theme="system">System</button>
+      <button type="button" data-theme="light">${esc(LIGHT)}</button>
+      <button type="button" data-theme="dark">${esc(DARK)}</button>
+    </div>`;
+
+/**
+ * A whole page. `base` is the way back to the site root from the page ("" at the root, "../" one folder
+ * down), so every link and the fonts work wherever the site is published. `current` is the NAV id.
+ */
+export function renderPage({ title, description, base, current, main, css = "", script = "", version, repositoryUrl, releasesUrl, og = /** @type {any} */ (undefined) }) {
+  const nav = NAV.map((item) => {
+    const here = item.id === current ? ' aria-current="page"' : "";
+    return `<li><a href="${esc(base + item.path) || "./"}"${here}>${esc(item.label)}</a></li>`;
+  }).join("");
+  return `${head({ title, description, base, css, og })}
 <body class="${PREFIX}-text-body">
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="site-header__inner">
     <a class="brand" href="${esc(base) || "./"}">Sterling<span>${esc(version)}</span></a>
     <nav class="site-nav" aria-label="Site"><ul>${nav}<li><a href="${esc(repositoryUrl)}">GitHub</a></li></ul></nav>
-    <div class="theme" role="group" aria-label="Color mode">
-      <button type="button" data-theme="system">System</button>
-      <button type="button" data-theme="light">${esc(LIGHT)}</button>
-      <button type="button" data-theme="dark">${esc(DARK)}</button>
-    </div>
+    ${themeSwitch()}
   </div>
 </header>
 <main id="main">
@@ -132,6 +158,42 @@ ${main}
     <span>All example data is fictional.</span>
   </div>
 </footer>
+<script>${THEME_JS}${script}</script>
+</body>
+</html>
+`;
+}
+
+const FRAME_CSS = `
+html, body { height: 100%; }
+body { display: flex; flex-direction: column; }
+.frame-bar { flex: none; border-bottom: 1px solid var(--color-border-default); background: var(--color-surface-panel); }
+.frame-bar__inner { padding: 8px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; }
+.frame-bar h1 { margin: 0; font-size: 13px; line-height: 20px; font-weight: 400; }
+.frame-bar .links { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; }
+.frame-main { flex: 1 1 auto; min-height: 0; display: flex; max-width: none; margin: 0; padding: 0; }
+.frame-main iframe { flex: 1 1 auto; width: 100%; min-height: 480px; border: 0; display: block; }
+`;
+
+/**
+ * A page that is one framed screen: a slim bar (the brand, a line of text, links, and the color-mode switch) above
+ * an iframe that fills the rest of the window. `bar` (the page's h1, set small) and `links` are HTML; `frame` is { src, title }.
+ */
+export function renderFramePage({ title, description, base, bar, links, frame, css = "", script = "", version, og = /** @type {any} */ (undefined) }) {
+  return `${head({ title, description, base, css: FRAME_CSS + css, og })}
+<body class="${PREFIX}-text-body">
+<a class="skip" href="#main">Skip to the example</a>
+<header class="frame-bar">
+  <div class="frame-bar__inner">
+    <a class="brand" href="${esc(base) || "./"}">Sterling<span>${esc(version)}</span></a>
+    <h1>${bar}</h1>
+    <div class="links">${links}</div>
+    ${themeSwitch()}
+  </div>
+</header>
+<main id="main" class="frame-main">
+<iframe src="${esc(frame.src)}" title="${esc(frame.title)}"></iframe>
+</main>
 <script>${THEME_JS}${script}</script>
 </body>
 </html>

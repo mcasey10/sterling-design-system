@@ -172,7 +172,9 @@ scripts/lib/page-shell.mjs  The website's page shell: head, fonts, token CSS, th
 ui/scripts/build-pages.ts `npm run pages` (in ui/): Start here (site/index.html) from AUDIENCES in
                           definitions/audiences.ts, Install sterling-ui (site/install/) from definitions/setup.ts, and
                           Sterling and AI tools (site/ai-tools/): Chip/Status followed from source to code in seven
-                          steps, the MCP setup block, a first prompt; and the demo replay (site/demo/). Needs the MCP server built (npm run build in mcp/)
+                          steps, the MCP setup block, a first prompt; the demo replay (site/demo/); and the live example
+                          (site/example/: Examples › Pool loans from the built Storybook in a frame, under a slim bar,
+                          with Open Graph tags for link previews). Needs the MCP server built (npm run build in mcp/)
 ui/scripts/lib/excerpts.ts  THE AI page's excerpts, read from the real files by selector (TS entry, JSON path, lines,
                           code symbol); each must match once. Step 7's code must be identical to 2872cf0, as delivered.
                           `npm run check:excerpts` runs them (needs git history and the built MCP server)
@@ -192,8 +194,9 @@ ui/scripts/check-interactions.mjs  `npm run check:interactions` (needs a Storybo
                           Loans by status, wrapped checks no wrapped line starts with a separator, at every width
 ui/scripts/check-site.mjs `npm run check:site`: every website page, axe in Light and Dark (system preference
                           emulated), as loaded and as without JavaScript (script-added parts marked data-script-added),
-                          no sideways scroll at 375px, every internal link and anchor, the AI page's steps by keyboard
-scripts/build-site.mjs    `npm run site`: site/ = Start here + install/ + tokens/ + ai-tools/ + Storybook under
+                          no sideways scroll at 375px, every internal link and anchor, the AI page's steps by keyboard,
+                          every Storybook story id a page links or frames (against storybook/index.json), og:image files
+scripts/build-site.mjs    `npm run site`: site/ = Start here + install/ + tokens/ + ai-tools/ + demo/ + example/ + Storybook under
                           storybook/ + a copy of ai/ + llms.txt (what Pages publishes); builds the MCP server first;
                           scripts/serve-site.mjs (`npm run site:serve`)
 ui/scripts/docs-sync.ts   `npm run docs:sync`: writes the generated parts of docs between `<!-- generated: … -->`
