@@ -18,6 +18,7 @@ Any terminal: PowerShell on Windows, Terminal on macOS, or the terminal in your 
 
 - **Node.js 20 or later.** Check: `node --version` shows `v20` or higher. If not, install the LTS version from nodejs.org, then open a new terminal.
 - **An AI tool that supports MCP servers.** Any MCP client works. Its documentation says where to add an MCP server.
+- **For the first prompt: a React project with sterling-ui installed.** See Install sterling-ui (https://mcasey10.github.io/sterling-design-system/install/). Setting up the server doesn't need it, so you can create the project afterwards.
 
 ### Do
 
@@ -37,7 +38,7 @@ It prints `Sterling MCP server 1.2.0 · …`. Then register it with your AI tool
 claude mcp add --scope user sterling -- node "/full/path/to/sterling-mcp.js"
 ```
 
-**Any other MCP client.** Add a server to the client's MCP settings: command `node`, argument the file's full path.
+**Any other MCP client.** Open the client's MCP settings file in your editor (its documentation says where), add a server with command `node` and argument the file's full path, save, and restart the client:
 
 ```json
 {
@@ -53,7 +54,13 @@ claude mcp add --scope user sterling -- node "/full/path/to/sterling-mcp.js"
 
 ### It worked if
 
-Your tool lists `sterling` as connected (in Claude Code, run `/mcp`). Then ask: "Which Sterling component shows a record's status?" It should answer Chip/Status, from the server.
+Your tool lists `sterling` as connected: in Claude Code, start it with `claude` in a terminal, then run `/mcp`. Then ask: "Which Sterling component shows a record's status?" It should answer Chip/Status, from the server. The first time it calls one of Sterling's tools, Claude Code asks for permission: allow it.
+
+Next, the first prompt. Open your AI tool in your React project's folder (the one where you installed sterling-ui; in Claude Code, run `claude` there, and if it asks whether you trust the folder, choose Yes), check it lists `sterling` as connected, then ask:
+
+> Using Sterling, build a table of five fictional orders, each with a status, using sterling-ui, and show it in `src/App.tsx`. Look up the components and the Status chips pattern first.
+
+When it's done, run `npm run dev` in the project folder (in a second terminal if your AI tool is running in the first) and open the address it prints. The full worked example, a complete screen, is the Pool loans request (https://github.com/mcasey10/sterling-design-system/blob/main/demo/prompt.md).
 
 ### If it didn't
 

@@ -63,6 +63,7 @@ export function setupHtml(block: SetupBlock, level = 2, base = ""): string {
       return `<div class="choices">${s.choices
         .map((c) => `<div class="choice"><${sub === "h3" ? "h4" : "h3"}>${esc(c.title)}</${sub === "h3" ? "h4" : "h3"}><p>${inline(c.text)}</p><pre><code>${esc(c.command)}</code></pre></div>`)
         .join("")}</div>`;
+    if (s.prompt) return `<blockquote class="prompt"><p>${inline(s.prompt)}</p></blockquote>`;
     return s.command ? `<pre><code>${esc(s.command)}</code></pre>` : `<p>${inline(s.text ?? "")}</p>`;
   };
   return `
@@ -76,7 +77,7 @@ export function setupHtml(block: SetupBlock, level = 2, base = ""): string {
   ${block.steps.map(step).join("\n  ")}
   ${block.scope ? `<${sub}>Scope</${sub}>\n  <p>${inline(block.scope)}</p>` : ""}
   <${sub}>It worked if</${sub}>
-  <p>${inline(block.worked)}</p>
+  ${block.worked.map(step).join("\n  ")}
   <${sub}>If it didn't</${sub}>
   <ul>${block.failed.map((f) => `<li>${inline(f)}</li>`).join("")}</ul>
 </section>`;
@@ -323,14 +324,6 @@ ${steps
   </ol>
 </section>
 ${setupHtml(mcpServer(VERSION), 2, base)}
-<section class="panel" aria-labelledby="first-prompt-title">
-  <h2 id="first-prompt-title">A first prompt to try</h2>
-  <p>Once your tool lists <code>sterling</code> as connected, open it in your React project, the one where you
-  installed <code>sterling-ui</code>, and ask it:</p>
-  <blockquote class="prompt"><p>Using Sterling, build a table of five fictional orders, each with a status, in this
-  project's <code>src/</code>, using sterling-ui. Look up the components and the Status chips pattern first.</p></blockquote>
-  <p>The full worked example, a complete screen, is ${link(repositoryFileUrl("demo/prompt.md"), "the Pool loans request")}.</p>
-</section>
 </div>`;
   return renderPage({
     title: "Sterling and AI tools",

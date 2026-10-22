@@ -172,7 +172,7 @@ scripts/lib/page-shell.mjs  The website's page shell: head, fonts, token CSS, th
 ui/scripts/build-pages.ts `npm run pages` (in ui/): Start here (site/index.html) from AUDIENCES in
                           definitions/audiences.ts, Install sterling-ui (site/install/) from definitions/setup.ts, and
                           Sterling and AI tools (site/ai-tools/): Chip/Status followed from source to code in seven
-                          steps, the MCP setup block, a first prompt; the demo replay (site/demo/); and the live example
+                          steps, the MCP setup block (ending with a first prompt); the demo replay (site/demo/); and the live example
                           (site/example/: Examples › Pool loans from the built Storybook in a frame, under a slim bar,
                           with Open Graph tags for link previews). Needs the MCP server built (npm run build in mcp/)
 ui/scripts/lib/excerpts.ts  THE AI page's excerpts, read from the real files by selector (TS entry, JSON path, lines,

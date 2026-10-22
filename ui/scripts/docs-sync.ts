@@ -57,20 +57,26 @@ function startHere(): string {
 /** A setup block, with the same headings in the same order as on the website. */
 function setupMarkdown(block: SetupBlock, level: number): string {
   const h = "#".repeat(level);
-  const fence = (command: string) => `\`\`\`${command.trimStart().startsWith("{") ? "json" : "bash"}\n${command}\n\`\`\``;
+  const fence = (command: string) => `\`\`\`${command.trimStart().startsWith("{") ? "json" : command.startsWith("import ") ? "tsx" : "bash"}\n${command}\n\`\`\``;
   const out: string[] = [];
   if (block.intro) out.push(block.intro, "");
   out.push(`${h} Where`, "", block.where, "", `${h} You need`, "");
   for (const n of block.need)
     out.push(n.check ? `- **${n.what}.** Check: \`${n.check}\` shows ${n.expect}. If not, ${n.get}` : `- **${n.what}.** ${n.get}`);
   out.push("", `${h} Do`, "");
-  for (const step of block.steps) {
-    if (step.choices) for (const c of step.choices) out.push(`**${c.title}.** ${c.text}`, "", fence(c.command), "");
-    else if (step.command) out.push(fence(step.command), "");
-    else out.push(step.text ?? "", "");
-  }
+  const steps = (list: SetupBlock["steps"]) => {
+    for (const step of list) {
+      if (step.choices) for (const c of step.choices) out.push(`**${c.title}.** ${c.text}`, "", fence(c.command), "");
+      else if (step.prompt) out.push(`> ${step.prompt}`, "");
+      else if (step.command) out.push(fence(step.command), "");
+      else out.push(step.text ?? "", "");
+    }
+  };
+  steps(block.steps);
   if (block.scope) out.push(`${h} Scope`, "", block.scope, "");
-  out.push(`${h} It worked if`, "", block.worked, "", `${h} If it didn't`, "", ...block.failed.map((f) => `- ${f}`));
+  out.push(`${h} It worked if`, "");
+  steps(block.worked);
+  out.push(`${h} If it didn't`, "", ...block.failed.map((f) => `- ${f}`));
   return out.join("\n");
 }
 
