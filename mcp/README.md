@@ -16,36 +16,47 @@ Any terminal: PowerShell on Windows, Terminal on macOS, or the terminal in your 
 
 ### You need
 
-- **Node.js 20 or later.** Check: `node --version` shows `v20` or higher. If not, install the LTS version from nodejs.org, then open a new terminal.
-- **An AI tool that supports MCP servers.** Any MCP client works. Its documentation says where to add an MCP server.
+- **Node.js 20 or later.** Check with `node --version`: it shows `v20` or higher. If not, get the LTS version from nodejs.org.
+- **An AI tool that supports MCP servers.** Any MCP client works.
+- **For step 5 only: a React project with sterling-ui installed.** See Install sterling-ui (https://mcasey10.github.io/sterling-design-system/install/).
 
 ### Do
 
-Download `sterling-mcp.js` from the latest GitHub Release (https://github.com/mcasey10/sterling-design-system/releases/latest/download/sterling-mcp.js). Put it in a folder where it can stay, for example a `tools` folder in your home folder, and note its full path.
+1. Download `sterling-mcp.js` from the latest GitHub Release (https://github.com/mcasey10/sterling-design-system/releases/latest/download/sterling-mcp.js). Put it in a folder where it can stay, for example a `tools` folder in your home folder, and note its full path.
 
-Check that it runs. In any terminal, from any folder:
+2. Check that it runs. In any terminal, from any folder:
 
-```bash
-node "/full/path/to/sterling-mcp.js" --version
-```
+   ```bash
+   node "/full/path/to/sterling-mcp.js" --version
+   ```
 
-It prints `Sterling MCP server 1.2.0 · …`. Then register it with your AI tool, once:
+   It prints `Sterling MCP server 1.2.0 · …`.
 
-**Claude Code.** In any terminal, from any folder:
+3. Register it with your AI tool, once:
 
-```bash
-claude mcp add --scope user sterling -- node "/full/path/to/sterling-mcp.js"
-```
+   **Claude Code.** In any terminal, from any folder:
 
-**Any other MCP client.** Add a server to the client's MCP settings: command `node`, argument the file's full path.
+   ```bash
+   claude mcp add --scope user sterling -- node "/full/path/to/sterling-mcp.js"
+   ```
 
-```json
-{
-  "mcpServers": {
-    "sterling": { "command": "node", "args": ["/full/path/to/sterling-mcp.js"] }
-  }
-}
-```
+   **Any other MCP client.** Open the client's MCP settings file in your editor (its documentation says where), add a server with command `node` and argument the file's full path, save, and restart the client:
+
+   ```json
+   {
+     "mcpServers": {
+       "sterling": { "command": "node", "args": ["/full/path/to/sterling-mcp.js"] }
+     }
+   }
+   ```
+
+4. Check the connection: start your AI tool (in Claude Code, run `claude` in a terminal, then `/mcp`) and ask: "Which Sterling component shows a record's status?" The first time it calls one of Sterling's tools, Claude Code asks for permission: allow it.
+
+5. Try the first prompt (skip it until you have a React project with sterling-ui installed): open your AI tool in that project's folder (in Claude Code, run `claude` there, and if it asks whether you trust the folder, choose Yes), check it lists `sterling` as connected, and ask:
+
+   > Using Sterling, build a table of five fictional orders, each with a status, using sterling-ui, and show it in `src/App.tsx`. Look up the components and the Status chips pattern first.
+
+   When it's done, run `npm run dev` in the project folder (in a second terminal if your AI tool is in the first) and open the address it prints.
 
 ### Scope
 
@@ -53,7 +64,11 @@ claude mcp add --scope user sterling -- node "/full/path/to/sterling-mcp.js"
 
 ### It worked if
 
-Your tool lists `sterling` as connected (in Claude Code, run `/mcp`). Then ask: "Which Sterling component shows a record's status?" It should answer Chip/Status, from the server.
+Your tool lists `sterling` as connected, and answers Chip/Status, from the server.
+
+With the first prompt, the tool looks up the components and the Status chips pattern before it writes code, and the page shows a table of orders with Sterling's status chips, each with an icon and a label.
+
+Next: the full worked example, a complete screen, is the Pool loans request (https://github.com/mcasey10/sterling-design-system/blob/main/demo/prompt.md).
 
 ### If it didn't
 

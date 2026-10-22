@@ -57,20 +57,33 @@ function startHere(): string {
 /** A setup block, with the same headings in the same order as on the website. */
 function setupMarkdown(block: SetupBlock, level: number): string {
   const h = "#".repeat(level);
-  const fence = (command: string) => `\`\`\`${command.trimStart().startsWith("{") ? "json" : "bash"}\n${command}\n\`\`\``;
+  const fence = (command: string) => `\`\`\`${command.trimStart().startsWith("{") ? "json" : command.startsWith("import ") ? "tsx" : "bash"}\n${command}\n\`\`\``;
   const out: string[] = [];
   if (block.intro) out.push(block.intro, "");
   out.push(`${h} Where`, "", block.where, "", `${h} You need`, "");
   for (const n of block.need)
-    out.push(n.check ? `- **${n.what}.** Check: \`${n.check}\` shows ${n.expect}. If not, ${n.get}` : `- **${n.what}.** ${n.get}`);
+    out.push(
+      n.check
+        ? `- **${n.what}.** Check${n.checkWhat ? ` ${n.checkWhat}` : ""} with \`${n.check}\`: it shows ${n.expect}.${n.get ? ` If not, ${n.get}` : ""}`
+        : `- **${n.what}.**${n.get ? ` ${n.get}` : ""}`
+    );
   out.push("", `${h} Do`, "");
-  for (const step of block.steps) {
-    if (step.choices) for (const c of step.choices) out.push(`**${c.title}.** ${c.text}`, "", fence(c.command), "");
-    else if (step.command) out.push(fence(step.command), "");
-    else out.push(step.text ?? "", "");
-  }
+  // Each step is a numbered item; its later parts are indented under the number, so they stay inside it.
+  const indent = (text: string) => text.split("\n").map((line) => (line ? `   ${line}` : line)).join("\n");
+  block.steps.forEach((step, i) => {
+    const parts: string[] = [];
+    for (const part of step) {
+      if (part.choices) for (const c of part.choices) parts.push(`**${c.title}.** ${c.text}`, fence(c.command));
+      else if (part.prompt) parts.push(`> ${part.prompt}`);
+      else if (part.command) parts.push(fence(part.command));
+      else parts.push(part.text ?? "");
+    }
+    const [first, ...rest] = parts;
+    out.push(`${i + 1}. ${first}`, "", ...rest.flatMap((p) => [indent(p), ""]));
+  });
   if (block.scope) out.push(`${h} Scope`, "", block.scope, "");
-  out.push(`${h} It worked if`, "", block.worked, "", `${h} If it didn't`, "", ...block.failed.map((f) => `- ${f}`));
+  out.push(`${h} It worked if`, "", ...block.worked.flatMap((w) => [w, ""]), ...block.next.flatMap((n) => [n, ""]));
+  out.push(`${h} If it didn't`, "", ...block.failed.map((f) => `- ${f}`));
   return out.join("\n");
 }
 
