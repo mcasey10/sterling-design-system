@@ -4,11 +4,18 @@
 // to use, which folder to be in, or what has to be set up first:
 //   where   which console, and which folder (or "any folder")
 //   need    each prerequisite, with a command that checks it, what it should show, and where to get it
-//   steps   what to do: text, and commands (one per block); `choices` sets alternatives side by side; `prompt` is
-//           something to ask an AI tool
+//   steps   Do: every action, as numbered steps in the order they're taken. A step is a list of parts: text, a
+//           command (one per part), `choices` (alternatives side by side), or a `prompt` to ask an AI tool
 //   scope   only where it matters, with the choice to make
-//   worked  how to check it worked, and what to do next (steps, like `steps`)
+//   worked  It worked if: only what the reader should see
+//   next    what to do next, shown after It worked if
 //   failed  the one or two most likely causes when it didn't
+//
+// The rule: Do holds every action, as numbered steps in the order they're taken. A condition for skipping a step
+// comes first, in the step's opening words ("Check the install (optional; skip it if …)"). It worked if only
+// describes what the reader should see; it never introduces a step. Next follows It worked if. (A prerequisite's
+// "If not, …" under You need says how to get it, and If it didn't says how to fix a cause; neither is a step.)
+//
 // Text may use `backticks` for code.
 
 import { INSTALL_PACKAGE_URL, MCP_SERVER_DOWNLOAD_URL, MCP_SETUP_URL, STORYBOOK_URL, packageUrl, repositoryFileUrl } from "./site";
@@ -29,13 +36,16 @@ export interface Choice {
   command: string;
 }
 
-export interface Step {
+/** One part of a step: text, a command, alternatives side by side, or something to ask an AI tool (a quotation). */
+export interface Part {
   text?: string;
   command?: string;
   choices?: Choice[];
-  /** Something to ask an AI tool, shown as a quotation. */
   prompt?: string;
 }
+
+/** One numbered step under Do: its parts, in order. */
+export type Step = Part[];
 
 export interface SetupBlock {
   id: string;
@@ -46,7 +56,10 @@ export interface SetupBlock {
   need: Prerequisite[];
   steps: Step[];
   scope?: string;
-  worked: Step[];
+  /** What the reader should see, in sentences. Never an action: actions are steps. */
+  worked: string[];
+  /** What to do next, each a sentence with "Next:". */
+  next: string[];
   failed: string[];
 }
 
@@ -59,63 +72,71 @@ const NODE: Prerequisite = {
 };
 
 /** Installing the React components into an application. */
-export const installPackage = (version: string): SetupBlock => ({
-  id: "install-sterling-ui",
-  title: "Install sterling-ui",
-  where:
-    `${ANY_TERMINAL} Open it in your React project's folder, the one with \`package.json\`: go there with \`cd\`, ` +
-    "or open the folder in your editor and open its terminal. No React project yet? Open the terminal in the folder where " +
-    "you want to create one, and start with the Vite step under You need.",
-  need: [
-    NODE,
-    {
-      what: "A React 19 project",
-      check: "npm ls react",
-      expect: "`react@19…`",
-      get:
-        "start a new one with Vite: run `npm create vite@latest my-app -- --template react-ts`. If it asks setup " +
-        "questions, the defaults are fine, except \"Install with npm and start now?\": choose No, then run `cd my-app` and " +
-        "`npm install` yourself, and continue with the steps below.",
-    },
-  ],
-  steps: [
-    { text: "Install the package from the GitHub Release:" },
-    { command: `npm install ${packageUrl(version)}` },
-    {
-      text:
-        `No network access during installs? Download \`sterling-ui-${version}.tgz\` from the Release into the project, ` +
-        `for example into a \`vendor\` folder, and install that file instead. Commit the file, so others can install it too:`,
-    },
-    { command: `npm install ./vendor/sterling-ui-${version}.tgz` },
-    {
-      text:
-        "Then, once: open your app's entry file (in a new Vite project, `src/main.tsx`) in your editor, add these two lines " +
-        "at the top, remove `import './index.css'` (the starter's styles change Sterling's layout), and save:",
-    },
-    { command: 'import "sterling-ui/styles.css";\nimport "sterling-ui/fonts.css";' },
-  ],
-  worked: [
-    { text: "`package.json` lists `sterling-ui`." },
-    {
-      text:
-        "To check the install, show one Sterling button: open `src/App.tsx` in your editor, add the import at the top and " +
-        "the button inside what the component returns, and save:",
-    },
-    { command: 'import { Button } from "sterling-ui";\n\n<Button label="Save" kind="primary" />' },
-    {
-      text:
-        "Then run `npm run dev` and open the address it prints. If a blue Save button appears in Sterling's font, the " +
-        "package, its styles and its fonts are working. You can remove the button afterwards. Going straight on to an AI " +
-        "tool? You can skip this check: the first prompt there shows the same.",
-    },
-    { text: `Next: each component's Docs page in Storybook (${STORYBOOK_URL}).` },
-    { text: `Using an AI coding tool? Next: connect it to Sterling's MCP server (${MCP_SETUP_URL}), then try the first prompt there.` },
-  ],
-  failed: [
-    "`ERESOLVE` mentioning React: the project isn't on React 19. Check with `npm ls react`.",
-    "`404` or \"not found\": check the version number in the address.",
-  ],
-});
+export const installPackage = (version: string): SetupBlock => {
+  const steps: Step[] = [
+    [
+      { text: "Install the package from the GitHub Release:" },
+      { command: `npm install ${packageUrl(version)}` },
+      {
+        text:
+          `Or, with no network access during installs: download \`sterling-ui-${version}.tgz\` from the Release into the ` +
+          "project, for example into a `vendor` folder, and install that file instead. Commit the file, so others can install it too:",
+      },
+      { command: `npm install ./vendor/sterling-ui-${version}.tgz` },
+    ],
+    [
+      {
+        text:
+          "Open your app's entry file (in a new Vite project, `src/main.tsx`) in your editor, add these two lines at the " +
+          "top, remove `import './index.css'` (the starter's styles change Sterling's layout), and save:",
+      },
+      { command: 'import "sterling-ui/styles.css";\nimport "sterling-ui/fonts.css";' },
+    ],
+    [
+      {
+        text:
+          "Check the install (optional; skip it if you're going straight on to an AI tool): open `src/App.tsx` in your " +
+          "editor, add the import at the top and the button inside what the component returns, and save:",
+      },
+      { command: 'import { Button } from "sterling-ui";\n\n<Button label="Save" kind="primary" />' },
+      { text: "Then run `npm run dev` and open the address it prints." },
+    ],
+  ];
+  const check = steps.length;
+  return {
+    id: "install-sterling-ui",
+    title: "Install sterling-ui",
+    where:
+      `${ANY_TERMINAL} Open it in your React project's folder, the one with \`package.json\`: go there with \`cd\`, ` +
+      "or open the folder in your editor and open its terminal. No React project yet? Open the terminal in the folder where " +
+      "you want to create one, and start with the Vite step under You need.",
+    need: [
+      NODE,
+      {
+        what: "A React 19 project",
+        check: "npm ls react",
+        expect: "`react@19…`",
+        get:
+          "start a new one with Vite: run `npm create vite@latest my-app -- --template react-ts`. If it asks setup " +
+          "questions, the defaults are fine, except \"Install with npm and start now?\": choose No, then run `cd my-app` and " +
+          "`npm install` yourself, and continue with the steps below.",
+      },
+    ],
+    steps,
+    worked: [
+      `\`package.json\` lists \`sterling-ui\`, and, if you did step ${check}, a blue Save button appears in Sterling's font. ` +
+        "You can remove the button afterwards.",
+    ],
+    next: [
+      `Next: each component's Docs page in Storybook (${STORYBOOK_URL}).`,
+      `Using an AI coding tool? Next: connect it to Sterling's MCP server (${MCP_SETUP_URL}), then try the first prompt there.`,
+    ],
+    failed: [
+      "`ERESOLVE` mentioning React: the project isn't on React 19. Check with `npm ls react`.",
+      "`404` or \"not found\": check the version number in the address.",
+    ],
+  };
+};
 
 /** Setting up the MCP server, for any MCP client. Its id is the AI page's #set-up. */
 export const mcpServer = (version: string): SetupBlock => ({
@@ -139,62 +160,79 @@ export const mcpServer = (version: string): SetupBlock => ({
     },
   ],
   steps: [
-    {
-      text:
-        `Download \`sterling-mcp.js\` from the latest GitHub Release (${MCP_SERVER_DOWNLOAD_URL}). Put it in a folder where it ` +
-        "can stay, for example a `tools` folder in your home folder, and note its full path.",
-    },
-    { text: "Check that it runs. In any terminal, from any folder:" },
-    { command: 'node "/full/path/to/sterling-mcp.js" --version' },
-    { text: `It prints \`Sterling MCP server ${version} · …\`. Then register it with your AI tool, once:` },
-    {
-      choices: [
-        {
-          title: "Claude Code",
-          text: "In any terminal, from any folder:",
-          command: 'claude mcp add --scope user sterling -- node "/full/path/to/sterling-mcp.js"',
-        },
-        {
-          title: "Any other MCP client",
-          text:
-            "Open the client's MCP settings file in your editor (its documentation says where), add a server with command " +
-            "`node` and argument the file's full path, save, and restart the client:",
-          command: `{
+    [
+      {
+        text:
+          `Download \`sterling-mcp.js\` from the latest GitHub Release (${MCP_SERVER_DOWNLOAD_URL}). Put it in a folder where it ` +
+          "can stay, for example a `tools` folder in your home folder, and note its full path.",
+      },
+    ],
+    [
+      { text: "Check that it runs. In any terminal, from any folder:" },
+      { command: 'node "/full/path/to/sterling-mcp.js" --version' },
+      { text: `It prints \`Sterling MCP server ${version} · …\`.` },
+    ],
+    [
+      { text: "Register it with your AI tool, once:" },
+      {
+        choices: [
+          {
+            title: "Claude Code",
+            text: "In any terminal, from any folder:",
+            command: 'claude mcp add --scope user sterling -- node "/full/path/to/sterling-mcp.js"',
+          },
+          {
+            title: "Any other MCP client",
+            text:
+              "Open the client's MCP settings file in your editor (its documentation says where), add a server with command " +
+              "`node` and argument the file's full path, save, and restart the client:",
+            command: `{
   "mcpServers": {
     "sterling": { "command": "node", "args": ["/full/path/to/sterling-mcp.js"] }
   }
 }`,
-        },
-      ],
-    },
+          },
+        ],
+      },
+    ],
+    [
+      {
+        text:
+          "Check the connection: start your AI tool (in Claude Code, run `claude` in a terminal, then `/mcp`) and ask: " +
+          '"Which Sterling component shows a record\'s status?" The first time it calls one of Sterling\'s tools, Claude ' +
+          "Code asks for permission: allow it.",
+      },
+    ],
+    [
+      {
+        text:
+          "Try the first prompt (skip it until you have a React project with sterling-ui installed): open your AI tool in " +
+          "that project's folder (in Claude Code, run `claude` there, and if it asks whether you trust the folder, choose " +
+          "Yes), check it lists `sterling` as connected, and ask:",
+      },
+      {
+        prompt:
+          "Using Sterling, build a table of five fictional orders, each with a status, using sterling-ui, and show it in " +
+          "`src/App.tsx`. Look up the components and the Status chips pattern first.",
+      },
+      {
+        text:
+          "When it's done, run `npm run dev` in the project folder (in a second terminal if your AI tool is in the first) " +
+          "and open the address it prints.",
+      },
+    ],
   ],
   scope:
     "`--scope user` makes Sterling available in every project, which is right for most people. To share it with a team " +
     "through one repository instead, put the JSON above in that project's `.mcp.json`, with a path that works for everyone. " +
     "Claude Code asks each person to approve a project's servers the first time.",
   worked: [
-    {
-      text:
-        "Your tool lists `sterling` as connected: in Claude Code, start it with `claude` in a terminal, then run `/mcp`. " +
-        'Then ask: "Which Sterling component shows a record\'s status?" It should answer Chip/Status, from the server. ' +
-        "The first time it calls one of Sterling's tools, Claude Code asks for permission: allow it.",
-    },
-    {
-      text:
-        "Next, the first prompt. Open your AI tool in your React project's folder (the one where you installed " +
-        "sterling-ui; in Claude Code, run `claude` there, and if it asks whether you trust the folder, choose Yes), check " +
-        "it lists `sterling` as connected, then ask:",
-    },
-    {
-      prompt:
-        "Using Sterling, build a table of five fictional orders, each with a status, using sterling-ui, and show it in " +
-        "`src/App.tsx`. Look up the components and the Status chips pattern first.",
-    },
-    {
-      text:
-        "When it's done, run `npm run dev` in the project folder (in a second terminal if your AI tool is running in the " +
-        `first) and open the address it prints. The full worked example, a complete screen, is the Pool loans request (${repositoryFileUrl("demo/prompt.md")}).`,
-    },
+    "Your tool lists `sterling` as connected, and answers Chip/Status, from the server.",
+    "With the first prompt, the tool looks up the components and the Status chips pattern before it writes code, and the " +
+      "page shows a table of orders with Sterling's status chips, each with an icon and a label.",
+  ],
+  next: [
+    `Next: the full worked example, a complete screen, is the Pool loans request (${repositoryFileUrl("demo/prompt.md")}).`,
   ],
   failed: [
     '"node" not found: Node.js isn\'t installed, or the terminal was opened before it was. Install it, then open a new terminal.',

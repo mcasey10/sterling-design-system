@@ -64,18 +64,21 @@ function setupMarkdown(block: SetupBlock, level: number): string {
   for (const n of block.need)
     out.push(n.check ? `- **${n.what}.** Check: \`${n.check}\` shows ${n.expect}. If not, ${n.get}` : `- **${n.what}.** ${n.get}`);
   out.push("", `${h} Do`, "");
-  const steps = (list: SetupBlock["steps"]) => {
-    for (const step of list) {
-      if (step.choices) for (const c of step.choices) out.push(`**${c.title}.** ${c.text}`, "", fence(c.command), "");
-      else if (step.prompt) out.push(`> ${step.prompt}`, "");
-      else if (step.command) out.push(fence(step.command), "");
-      else out.push(step.text ?? "", "");
+  // Each step is a numbered item; its later parts are indented under the number, so they stay inside it.
+  const indent = (text: string) => text.split("\n").map((line) => (line ? `   ${line}` : line)).join("\n");
+  block.steps.forEach((step, i) => {
+    const parts: string[] = [];
+    for (const part of step) {
+      if (part.choices) for (const c of part.choices) parts.push(`**${c.title}.** ${c.text}`, fence(c.command));
+      else if (part.prompt) parts.push(`> ${part.prompt}`);
+      else if (part.command) parts.push(fence(part.command));
+      else parts.push(part.text ?? "");
     }
-  };
-  steps(block.steps);
+    const [first, ...rest] = parts;
+    out.push(`${i + 1}. ${first}`, "", ...rest.flatMap((p) => [indent(p), ""]));
+  });
   if (block.scope) out.push(`${h} Scope`, "", block.scope, "");
-  out.push(`${h} It worked if`, "");
-  steps(block.worked);
+  out.push(`${h} It worked if`, "", ...block.worked.flatMap((w) => [w, ""]), ...block.next.flatMap((n) => [n, ""]));
   out.push(`${h} If it didn't`, "", ...block.failed.map((f) => `- ${f}`));
   return out.join("\n");
 }

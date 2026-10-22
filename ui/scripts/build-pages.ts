@@ -19,7 +19,7 @@ import { execFileSync } from "node:child_process";
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { installPackage, mcpServer, type SetupBlock } from "../../definitions/setup";
+import { installPackage, mcpServer, type Part, type SetupBlock } from "../../definitions/setup";
 import { AUDIENCES, HOW, NO_SETUP, type Audience, type How, type Place } from "../../definitions/audiences";
 import { COMPONENTS } from "../../definitions/components";
 import { ICONS } from "../../definitions/icons";
@@ -58,7 +58,7 @@ export function setupHtml(block: SetupBlock, level = 2, base = ""): string {
     n.check
       ? `<li><strong>${esc(n.what)}.</strong> Check: <code>${esc(n.check)}</code> shows ${inline(n.expect ?? "")}. If not, ${inline(n.get)}</li>`
       : `<li><strong>${esc(n.what)}.</strong> ${inline(n.get)}</li>`;
-  const step = (s: SetupBlock["steps"][number]) => {
+  const part = (s: Part) => {
     if (s.choices)
       return `<div class="choices">${s.choices
         .map((c) => `<div class="choice"><${sub === "h3" ? "h4" : "h3"}>${esc(c.title)}</${sub === "h3" ? "h4" : "h3"}><p>${inline(c.text)}</p><pre><code>${esc(c.command)}</code></pre></div>`)
@@ -74,10 +74,11 @@ export function setupHtml(block: SetupBlock, level = 2, base = ""): string {
   <${sub}>You need</${sub}>
   <ul class="needs">${block.need.map(need).join("")}</ul>
   <${sub}>Do</${sub}>
-  ${block.steps.map(step).join("\n  ")}
+  <ol class="do">${block.steps.map((st) => `<li>${st.map(part).join("")}</li>`).join("\n  ")}</ol>
   ${block.scope ? `<${sub}>Scope</${sub}>\n  <p>${inline(block.scope)}</p>` : ""}
   <${sub}>It worked if</${sub}>
-  ${block.worked.map(step).join("\n  ")}
+  ${block.worked.map((w) => `<p>${inline(w)}</p>`).join("\n  ")}
+  ${block.next.map((n) => `<p>${inline(n)}</p>`).join("\n  ")}
   <${sub}>If it didn't</${sub}>
   <ul>${block.failed.map((f) => `<li>${inline(f)}</li>`).join("")}</ul>
 </section>`;
@@ -606,6 +607,11 @@ const SETUP_CSS = `
 .setup h3, .setup--page h2 { font-size: 14px; margin-top: 16px; }
 .setup--page h2:first-child { margin-top: 0; }
 .setup ul { margin: 0 0 12px; padding-left: 20px; }
+/* Do: numbered steps, in order. A step's parts (text, commands, choices, a prompt) sit inside its number. */
+.setup ol.do { margin: 0 0 12px; padding-left: 24px; }
+.setup ol.do > li { margin: 0 0 16px; }
+.setup ol.do > li::marker { font-weight: 600; }
+.setup ol.do > li > :last-child { margin-bottom: 0; }
 /* Commands wrap rather than scroll, so nothing needs scrolling sideways, at any width. Copying keeps them whole. */
 .setup pre, .setup pre code { white-space: pre-wrap; overflow-wrap: anywhere; }
 .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 0 0 12px; }

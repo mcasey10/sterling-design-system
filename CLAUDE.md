@@ -180,8 +180,10 @@ ui/scripts/lib/excerpts.ts  THE AI page's excerpts, read from the real files by 
                           `npm run check:excerpts` runs them (needs git history and the built MCP server)
 mcp/scripts/exchange.mjs  A real exchange with the built server (tools/list, get_component, get_pattern), as JSON,
                           for the AI page's step 6
-definitions/setup.ts      THE setup instructions (Where / You need / Do / Scope / It worked if / If it didn't),
-                          shown by the website, README, and Storybook
+definitions/setup.ts      THE setup instructions (Where / You need / Do / Scope / It worked if + Next / If it didn't),
+                          shown by the website and mcp/README.md. Do = every action, numbered, in order (a skip
+                          condition opens its step); It worked if only describes what you see, never a new step
+                          (the rule is in setup.ts's header and CONTRIBUTING, Writing for Sterling)
 ui/scripts/demo-extract.ts  `npm run demo:extract -- <transcript.jsonl> --banned <file>`: writes docs/demo/session.json
                           (the demo replay's record) from the demo session's transcript: the request, each MCP call with
                           its answer shortened, the session's notes; no paths, no user messages, no reasoning. The banned
