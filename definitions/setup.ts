@@ -107,11 +107,12 @@ export const installPackage = (version: string): SetupBlock => {
     [
       {
         text:
-          "Check the install (optional; skip it if you're going straight on to an AI tool): open `src/App.tsx` in your " +
-          "editor, add the import at the top and the button inside what the component returns, and save:",
+          "Check the install (optional; skip it if you're going straight on to an AI tool). This replaces the starter " +
+          "page of the new project from step 1: it's only a check, so don't do it in a project with your own work in " +
+          "`src/App.tsx`. Open `src/App.tsx` in your editor and replace everything in it with:",
       },
-      { command: 'import { Button } from "sterling-ui";\n\n<Button label="Save" kind="primary" />' },
-      { text: "Then run `npm run dev` and open the address it prints." },
+      { command: 'import { Button } from "sterling-ui";\n\nexport default function App() {\n  return <Button label="Save" kind="primary" />;\n}' },
+      { text: "Then save, run `npm run dev`, and open the address it prints." },
     ],
   ];
   const check = steps.length;
