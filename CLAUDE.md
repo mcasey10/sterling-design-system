@@ -182,7 +182,8 @@ mcp/scripts/exchange.mjs  A real exchange with the built server (tools/list, get
                           for the AI page's step 6
 definitions/setup.ts      THE setup instructions (Where / You need / Do / Scope / It worked if + Next / If it didn't),
                           shown by the website and mcp/README.md. Do = every action, numbered, in order (a skip
-                          condition opens its step); It worked if only describes what you see, never a new step
+                          condition opens its step); You need = requirement, check, one-line pointer, never instructions;
+                          It worked if only describes what you see, never a new step
                           (the rule is in setup.ts's header and CONTRIBUTING, Writing for Sterling)
 ui/scripts/demo-extract.ts  `npm run demo:extract -- <transcript.jsonl> --banned <file>`: writes docs/demo/session.json
                           (the demo replay's record) from the demo session's transcript: the request, each MCP call with

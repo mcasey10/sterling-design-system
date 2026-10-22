@@ -16,9 +16,9 @@ Any terminal: PowerShell on Windows, Terminal on macOS, or the terminal in your 
 
 ### You need
 
-- **Node.js 20 or later.** Check: `node --version` shows `v20` or higher. If not, install the LTS version from nodejs.org, then open a new terminal.
-- **An AI tool that supports MCP servers.** Any MCP client works. Its documentation says where to add an MCP server.
-- **For the first prompt: a React project with sterling-ui installed.** See Install sterling-ui (https://mcasey10.github.io/sterling-design-system/install/). Setting up the server doesn't need it, so you can create the project afterwards.
+- **Node.js 20 or later.** Check with `node --version`: it shows `v20` or higher. If not, get the LTS version from nodejs.org.
+- **An AI tool that supports MCP servers.** Any MCP client works.
+- **For step 5 only: a React project with sterling-ui installed.** See Install sterling-ui (https://mcasey10.github.io/sterling-design-system/install/).
 
 ### Do
 

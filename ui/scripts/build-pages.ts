@@ -56,8 +56,8 @@ export function setupHtml(block: SetupBlock, level = 2, base = ""): string {
   const title = level === 1 ? "" : `\n  <${h} id="${block.id}-title">${esc(block.title)}</${h}>`;
   const need = (n: SetupBlock["need"][number]) =>
     n.check
-      ? `<li><strong>${esc(n.what)}.</strong> Check: <code>${esc(n.check)}</code> shows ${inline(n.expect ?? "")}. If not, ${inline(n.get)}</li>`
-      : `<li><strong>${esc(n.what)}.</strong> ${inline(n.get)}</li>`;
+      ? `<li><strong>${esc(n.what)}.</strong> Check${n.checkWhat ? ` ${esc(n.checkWhat)}` : ""} with <code>${esc(n.check)}</code>: it shows ${inline(n.expect ?? "")}.${n.get ? ` If not, ${inline(n.get)}` : ""}</li>`
+      : `<li><strong>${esc(n.what)}.</strong>${n.get ? ` ${inline(n.get)}` : ""}</li>`;
   const part = (s: Part) => {
     if (s.choices)
       return `<div class="choices">${s.choices

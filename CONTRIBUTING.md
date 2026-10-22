@@ -283,5 +283,7 @@ Guidelines, descriptions, and notes are part of the product.
   in this order: Where, You need, Do, Scope (only where it matters), It worked if, If it didn't. **Do** holds
   every action, as numbered steps in the order they're taken; a condition for skipping a step comes first, in the
   step's opening words ("Check the install (optional; skip it if …)"). **It worked if** only describes what the
-  reader should see; it never introduces a step. **Next** follows It worked if. Say which terminal and folder,
+  reader should see; it never introduces a step. **Next** follows It worked if. **You need** only states a
+  requirement, how to check it, and at most a one-line pointer to what provides it ("or create one in step 1");
+  any instructions are steps. Only **If it didn't** may say how to fix a cause. Say which terminal and folder,
   say to open a file in an editor before changing it, and mention every question a tool asks on the way.

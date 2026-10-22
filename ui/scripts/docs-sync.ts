@@ -62,7 +62,11 @@ function setupMarkdown(block: SetupBlock, level: number): string {
   if (block.intro) out.push(block.intro, "");
   out.push(`${h} Where`, "", block.where, "", `${h} You need`, "");
   for (const n of block.need)
-    out.push(n.check ? `- **${n.what}.** Check: \`${n.check}\` shows ${n.expect}. If not, ${n.get}` : `- **${n.what}.** ${n.get}`);
+    out.push(
+      n.check
+        ? `- **${n.what}.** Check${n.checkWhat ? ` ${n.checkWhat}` : ""} with \`${n.check}\`: it shows ${n.expect}.${n.get ? ` If not, ${n.get}` : ""}`
+        : `- **${n.what}.**${n.get ? ` ${n.get}` : ""}`
+    );
   out.push("", `${h} Do`, "");
   // Each step is a numbered item; its later parts are indented under the number, so they stay inside it.
   const indent = (text: string) => text.split("\n").map((line) => (line ? `   ${line}` : line)).join("\n");
