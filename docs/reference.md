@@ -422,6 +422,19 @@ Not planned for a release yet:
 
 - **Input/Option with description focus.** Figma has no focus variant for it; the coded option shows one.
 
+- **From the repeat runs** (after the series; Sterling isn't changed during it):
+  - **A z-index token.** Sterling has no z-index or layer token, so a screen's own popup needs a raw value.
+  - **Say that component class names are private.** Nothing Sterling publishes says that `stl-` component classes
+    (as opposed to token classes and custom properties) aren't for screens to use, and screens use them: the
+    October 14 screen and run 1 both did. Related: Select gives no ref to its button, so a screen can't focus
+    it without a class.
+  - **Say who sets color mode and density.** The instructions say how to set them, not that the host page sets
+    them and a screen mustn't change them. Run 1's screen removed them on load, like the October 14 screen.
+  - **DataGrid's loading label truncates.** In run 1, at 1440px, the first skeleton row showed "Loading pool
+    loa" in the last column, with no ellipsis. Check in Storybook.
+  - **The example's filter panel.** Examples › Pool loans has no "+ Add filter", which the designer's screen
+    shows (run 1's screen has it). A question about the example, not the runs.
+
 ## Known limitations
 
 - **Component descriptions read back with `&quot;`:** Figma returns a description's quote marks as `&quot;` to
