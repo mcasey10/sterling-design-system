@@ -14,6 +14,8 @@
 //   A line may give a substitute, "term => substitute": where the session's own words use the term, the extract
 //   shows the substitute in square brackets, the usual mark for an edited quotation. Any other banned term in the
 //   extract stops it being written. `npm run check:demo-session` checks the extract.
+// For a repeat run (docs/demo/runs/), add --out <file> to write somewhere other than docs/demo/session.json, and
+// --answers "<label>" to say which server answered (the default label describes the October 14 session).
 
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -22,8 +24,12 @@ import { shortJson, type Shape } from "./lib/excerpts";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const args = process.argv.slice(2);
-const transcript = args.find((a) => !a.startsWith("--") && args[args.indexOf(a) - 1] !== "--banned");
+const OPTIONS = ["--banned", "--out", "--answers"];
+const optionValues = new Set(OPTIONS.filter((o) => args.includes(o)).map((o) => args[args.indexOf(o) + 1]));
+const transcript = args.find((a) => !a.startsWith("--") && !optionValues.has(a));
 const bannedFile = args[args.indexOf("--banned") + 1];
+const outFile = args.includes("--out") ? resolve(args[args.indexOf("--out") + 1]) : resolve(root, "docs/demo/session.json");
+const answersLabel = args.includes("--answers") ? args[args.indexOf("--answers") + 1] : "As the MCP server answered on 2026-10-14, a pre-release build of Sterling 1.2";
 if (!transcript || !args.includes("--banned") || !bannedFile) {
   console.error("Usage: npm run demo:extract -- <transcript.jsonl> --banned <file>");
   process.exit(1);
@@ -150,7 +156,7 @@ const session = {
     "The Pool loans demo session, as the website's replay page (/demo/) shows it: the request, each call to Sterling's " +
     "MCP server with its answer shortened, and the session's own notes. Extracted from the session's transcript by " +
     "ui/scripts/demo-extract.ts; checked by npm run check:demo-session. All data in it is fictional.",
-  answersLabel: "As the MCP server answered on 2026-10-14, a pre-release build of Sterling 1.2",
+  answersLabel,
   session: {
     date: new Date(start).toISOString().slice(0, 10),
     tool: `Claude Code ${version}`,
@@ -172,7 +178,7 @@ if (problems.length) {
   console.error(`Not written: the extract contains ${[...new Set(problems)].join(" and ")}.`);
   process.exit(1);
 }
-mkdirSync(resolve(root, "docs/demo"), { recursive: true });
-writeFileSync(resolve(root, "docs/demo/session.json"), text);
+mkdirSync(dirname(outFile), { recursive: true });
+writeFileSync(outFile, text);
 const mcp = events.filter((e) => e.kind === "mcp").length;
-console.log(`Wrote docs/demo/session.json: ${mcp} MCP calls, ${events.length - mcp} other events, ${session.session.durationSeconds} s.`);
+console.log(`Wrote ${outFile}: ${mcp} MCP calls, ${events.length - mcp} other events, ${session.session.durationSeconds} s.`);
