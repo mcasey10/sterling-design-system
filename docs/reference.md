@@ -433,6 +433,15 @@ Not planned for a release yet:
     sentence to Sterling's guidance (the server's instructions and the package README): the host app owns color mode
     and density, and a screen must never change them. Until then, a run that changes them is a Sterling fail
     (repeat-runs deviation 16).
+  - **The summary metric's numbers.** Sterling's rule (full value in Detail, Oct 7) and its own Pool loans summary
+    (Sep 30) were never compared, and disagree (repeat-runs deviation 17). Decide and write down:
+    - the Detail line gives context (such as "85% of $50.0M target"), not a repeat of the value;
+    - the exact value goes in the metric's accessible name, and in a Tooltip once Sterling has one;
+    - compact notation depends on the number's size, not the card's width;
+    - detail lines with numbers wrap, never truncate;
+    - never spell out a rounded figure as if it were exact ($42.6M isn't $42,600,000);
+    - a minimum width for the summary panel (runs 1 and 2 rendered it at 229 and 224 px at 1440 px, and run 2's
+      narrower panel changed its wrapping).
   - **DataGrid's loading label truncates.** In run 1, at 1440px, the first skeleton row showed "Loading pool
     loa" in the last column, with no ellipsis. Check in Storybook.
   - **The example's filter panel.** Examples › Pool loans has no "+ Add filter", which the designer's screen
