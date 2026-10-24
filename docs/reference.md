@@ -429,7 +429,10 @@ Not planned for a release yet:
     October 14 screen and run 1 both did. Related: Select gives no ref to its button, so a screen can't focus
     it without a class.
   - **Say who sets color mode and density.** The instructions say how to set them, not that the host page sets
-    them and a screen mustn't change them. Run 1's screen removed them on load, like the October 14 screen.
+    them and a screen mustn't change them. Run 1's screen removed them on load, like the October 14 screen. Add one
+    sentence to Sterling's guidance (the server's instructions and the package README): the host app owns color mode
+    and density, and a screen must never change them. Until then, a run that changes them is a Sterling fail
+    (repeat-runs deviation 16).
   - **DataGrid's loading label truncates.** In run 1, at 1440px, the first skeleton row showed "Loading pool
     loa" in the last column, with no ellipsis. Check in Storybook.
   - **The example's filter panel.** Examples › Pool loans has no "+ Add filter", which the designer's screen
