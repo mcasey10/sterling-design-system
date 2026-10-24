@@ -415,6 +415,11 @@ Not planned for a release yet:
 
 - **Components a session building a real screen missed:** a toast or inline message, a card or panel, a
   screen-reader-only text class, layout tokens, and grouped options (and descriptions) in Select.
+  - **With the toast: where focus goes after a short-lived action.** Say where keyboard focus goes when the control
+    that had it disappears or is disabled by the action: after Undo (the notice and its Undo button go away), and
+    after a dialog closes whose trigger the action disabled (Sign off, once no exception is selected). In the repeat
+    runs, focus after Undo went to the notice in runs 1–3 and was lost to the page body in run 4 (repeat-runs
+    deviations 23 and 24).
 
 - **Tooltip component.** A Sterling tooltip, in Figma and in code. Until then the coded Icon button
   shows its label with the browser's own tooltip (`title`), which can't be styled, appears after a

@@ -1,0 +1,186 @@
+/* Layout for the Pool loans screen. Every value is a Sterling token, or a multiple of one (as Sterling's own
+   CSS does for fixed widths). */
+
+.app {
+  min-height: 100vh;
+  background: var(--stl-color-surface-background);
+  color: var(--stl-color-text-primary);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+.heading {
+  color: var(--stl-color-text-primary);
+}
+
+.muted {
+  color: var(--stl-color-text-secondary);
+}
+
+.ink-warning {
+  color: var(--stl-color-status-warning-strong);
+}
+
+.ink-positive {
+  color: var(--stl-color-status-positive-strong);
+}
+
+.ink-info {
+  color: var(--stl-color-status-info-strong);
+}
+
+/* ------------------------------------------------------------ Building blocks */
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stl-space-8);
+}
+
+.row--end {
+  justify-content: flex-end;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+  min-width: 0;
+}
+
+.stack--tight {
+  gap: var(--stl-space-4);
+}
+
+.icon-text {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--stl-control-gap);
+}
+
+.plain-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.inline-list {
+  line-height: var(--stl-size-24);
+}
+
+.spacer {
+  flex: 1 1 0;
+}
+
+/* Sterling's fields and metrics have fixed widths; in the side panels they fill the column. */
+.full {
+  width: 100%;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-card-gap);
+  box-sizing: border-box;
+  padding: var(--stl-card-padding);
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  border-radius: var(--stl-radius-md);
+  background: var(--stl-color-surface-panel);
+}
+
+.panel:focus-visible {
+  outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);
+  outline-offset: var(--stl-space-2);
+}
+
+/* Read by screen readers, not shown. Sterling has no utility for this, so it is built like its own
+   hidden status regions. */
+.visually-hidden {
+  position: absolute;
+  width: var(--stl-stroke-1);
+  height: var(--stl-stroke-1);
+  margin: calc(-1 * var(--stl-stroke-1));
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------ Page */
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--stl-space-16);
+  padding: var(--stl-space-12) var(--stl-space-16);
+  border-bottom: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  background: var(--stl-color-surface-panel);
+}
+
+/* Filters (about 2 of 12 columns), the list, and the summary. They wrap on narrow screens. */
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--stl-space-16);
+  padding: var(--stl-space-16);
+}
+
+.side {
+  flex: 1 1 calc(var(--stl-size-56) * 4);
+  max-width: calc(var(--stl-size-56) * 5);
+  min-width: 0;
+}
+
+.main {
+  flex: 100 1 calc(var(--stl-size-56) * 12);
+  min-width: 0;
+}
+
+.toolbar {
+  min-height: var(--stl-control-height);
+}
+
+.view-select {
+  width: calc(var(--stl-size-56) * 4.5);
+}
+
+/* ------------------------------------------------------------ Message after an action */
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+  padding: var(--stl-space-4) var(--stl-space-12);
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  border-radius: var(--stl-radius-sm);
+  background: var(--stl-color-surface-panel);
+}
+
+.notice__text {
+  flex: 1 1 auto;
+}
+
+/* ------------------------------------------------------------ Summary */
+
+.summary {
+  gap: var(--stl-space-12);
+}
+
+.inline-list .stl-link {
+  white-space: nowrap;
+}
+
+.notice:focus-visible {
+  outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);
+  outline-offset: var(--stl-space-2);
+}
