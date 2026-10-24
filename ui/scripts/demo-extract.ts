@@ -28,7 +28,8 @@ const OPTIONS = ["--banned", "--out", "--answers"];
 const optionValues = new Set(OPTIONS.filter((o) => args.includes(o)).map((o) => args[args.indexOf(o) + 1]));
 const transcript = args.find((a) => !a.startsWith("--") && !optionValues.has(a));
 const bannedFile = args[args.indexOf("--banned") + 1];
-const outFile = args.includes("--out") ? resolve(args[args.indexOf("--out") + 1]) : resolve(root, "docs/demo/session.json");
+// A relative --out is relative to where the command was run (npm --prefix ui runs this script from ui/).
+const outFile = args.includes("--out") ? resolve(process.env.INIT_CWD ?? process.cwd(), args[args.indexOf("--out") + 1]) : resolve(root, "docs/demo/session.json");
 const answersLabel = args.includes("--answers") ? args[args.indexOf("--answers") + 1] : "As the MCP server answered on 2026-10-14, a pre-release build of Sterling 1.2";
 if (!transcript || !args.includes("--banned") || !bannedFile) {
   console.error("Usage: npm run demo:extract -- <transcript.jsonl> --banned <file>");
@@ -72,8 +73,13 @@ function shapeFor(tool: string, answer: Record<string, unknown>): Shape {
       return "collection" in answer
         ? { collection: true, count: true, tokens: { $first: 3 } }
         : { collections: { $first: 4, $each: { name: true, tokens: true, description: true } } };
-    default:
-      return { name: true };
+    case "search":
+      return { query: true, found: true, shown: true, results: { $first: 3, $each: { type: true, name: true, excerpt: true } } };
+    default: {
+      // Any other tool: its name, or else its first three keys (lists shortened to three items).
+      if ("name" in answer) return { name: true };
+      return Object.fromEntries(Object.keys(answer).slice(0, 3).map((k) => [k, Array.isArray(answer[k]) ? { $first: 3 } : true]));
+    }
   }
 }
 
@@ -129,13 +135,19 @@ for (const entry of entries) {
       if (!use?.name.startsWith("mcp__sterling__")) continue;
       const tool = use.name.slice("mcp__sterling__".length);
       const raw = textOf(c.content);
-      const answer = JSON.parse(raw) as Record<string, unknown>;
+      // An answer is JSON, except an error, which is a sentence (e.g. "No token named …"): shown as it is, shortened.
+      let answer: Record<string, unknown> | undefined;
+      try {
+        answer = JSON.parse(raw) as Record<string, unknown>;
+      } catch {
+        answer = undefined;
+      }
       events.push({
         at: use.at,
         kind: "mcp",
         tool,
         arguments: use.input,
-        answer: shortJson(answer, shapeFor(tool, answer), tool),
+        answer: answer ? shortJson(answer, shapeFor(tool, answer), tool) : JSON.stringify(raw.length > 300 ? raw.slice(0, 300) + "…" : raw),
         answerChars: raw.length,
         ok: !c.is_error,
       });
