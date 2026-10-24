@@ -442,6 +442,11 @@ Not planned for a release yet:
     - never spell out a rounded figure as if it were exact ($42.6M isn't $42,600,000);
     - a minimum width for the summary panel (runs 1 and 2 rendered it at 229 and 224 px at 1440 px, and run 2's
       narrower panel changed its wrapping).
+  - **Correct three passages about October 14's browser.** The case study ([pool-loans.md](case-study/pool-loans.md),
+    the "What the session could and couldn't see" paragraph, and "for want of a browser" under "How well it worked")
+    and the demo page (`ui/scripts/build-pages.ts`, "The session had no browser it could use") say no browser was
+    available. Chrome was installed and could be started headless from the shell, as repeat runs 1 and 2 did; the
+    session didn't try. Say that instead. The session's own words (its report) stay as written.
   - **DataGrid's loading label truncates.** In run 1, at 1440px, the first skeleton row showed "Loading pool
     loa" in the last column, with no ellipsis. Check in Storybook.
   - **The example's filter panel.** Examples › Pool loans has no "+ Add filter", which the designer's screen
