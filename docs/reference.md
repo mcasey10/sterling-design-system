@@ -452,6 +452,14 @@ Not planned for a release yet:
     and the demo page (`ui/scripts/build-pages.ts`, "The session had no browser it could use") say no browser was
     available. Chrome was installed and could be started headless from the shell, as repeat runs 1 and 2 did; the
     session didn't try. Say that instead. The session's own words (its report) stay as written.
+  - **A narrow-width layout rule.** Sterling says nothing about how a screen's columns behave at narrow widths. Run
+    5's filters | grid | summary layout kept all three columns at 390 px and left the grid 1 px wide, so nothing in
+    it could be seen; runs 1–4 stacked or scrolled and kept the grid 216–357 px (repeat-runs deviation 27). Say how
+    the standard data-screen layout (filters 2 | grid 8 | summary 2 of 12 columns) collapses at narrow widths, with
+    layout tokens.
+  - **`numericColumnWidth` ignores the header label.** A short numeric column can be narrower than its header: in
+    Comfortable, FICO's header needs 68.3 px and `numericColumnWidth` gives 64 (repeat runs 1 and 4). Size a column to
+    the wider of its values and its label.
   - **DataGrid's loading label truncates.** In run 1, at 1440px, the first skeleton row showed "Loading pool
     loa" in the last column, with no ellipsis. Check in Storybook.
   - **The example's filter panel.** Examples › Pool loans has no "+ Add filter", which the designer's screen
