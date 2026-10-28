@@ -444,9 +444,19 @@ Not planned for a release yet:
     - the exact value goes in the metric's accessible name, and in a Tooltip once Sterling has one;
     - compact notation depends on the number's size, not the card's width;
     - detail lines with numbers wrap, never truncate;
-    - never spell out a rounded figure as if it were exact ($42.6M isn't $42,600,000);
+    - when the exact value isn't in the data, don't spell out a rounded figure as if it were exact;
     - a minimum width for the summary panel (runs 1 and 2 rendered it at 229 and 224 px at 1440 px, and run 2's
       narrower panel changed its wrapping).
+  - **Align the request with the example.** `demo/prompt.md` was drafted from a summary of the loan-pooling example,
+    not its full spec, and never checked against it: it leaves out Export, "+ Add filter", Edit criteria, Save view and
+    the View menu, and the summary's shortcuts, which the example's About frame and the design picture show; it asks
+    for an Undo the example doesn't have; and its Remove confirmation rule ("beyond the loans on screen") differs from
+    the example's ("all matching loans selected"). Bring the two into line, in one direction or the other, and check
+    them against each other.
+  - **A second consumer test, outside Sterling's library.** The repeat runs were a best case: the screen Sterling's
+    components were scoped for, with a design picture from Sterling's own example. Try a screen Sterling wasn't built
+    around (for example an MBS or dealers screen), with a mockup and a request written together and checked against
+    each other before any run.
   - **Correct three passages about October 14's browser.** The case study ([pool-loans.md](case-study/pool-loans.md),
     the "What the session could and couldn't see" paragraph, and "for want of a browser" under "How well it worked")
     and the demo page (`ui/scripts/build-pages.ts`, "The session had no browser it could use") say no browser was
