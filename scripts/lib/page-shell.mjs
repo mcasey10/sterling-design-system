@@ -69,18 +69,32 @@ thead th { border-top: 0; color: var(--color-text-secondary); font-weight: 600; 
 }
 `);
 
-// Sets the color mode, and tells the page (a "themechange" event on document) so a page can follow it.
-const THEME_JS = `
+// The color mode a visitor chose (light or dark), kept in localStorage under this key; nothing saved means System.
+// Storage can be unavailable (private windows, blocked site data), so every access is wrapped and System is the fallback.
+const THEME_KEY = "sterling-color-mode";
+
+// In the head, before first paint: applies a saved choice, so a page never flashes in the other mode.
+const THEME_HEAD_JS = `try{var t=localStorage.getItem(${JSON.stringify(THEME_KEY)});if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}`;
+
+// Sets the color mode, and tells the page (a "themechange" event on document) so a page can follow it. With
+// `remember`, the switch starts from the saved choice and saves each new one; without it, it starts at System.
+const themeJs = (remember) => `
 (() => {
   const root = document.documentElement;
   const buttons = document.querySelectorAll(".theme button");
-  function setTheme(t) {
+  const key = ${JSON.stringify(THEME_KEY)};
+  function setTheme(t, save) {
     if (t === "system") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", t);
     buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.theme === t)));
+    if (save) {
+      try {
+        if (t === "system") localStorage.removeItem(key); else localStorage.setItem(key, t);
+      } catch (e) {}
+    }
     document.dispatchEvent(new CustomEvent("themechange", { detail: t }));
   }
-  buttons.forEach((b) => b.addEventListener("click", () => setTheme(b.dataset.theme)));
-  setTheme("system");
+  buttons.forEach((b) => b.addEventListener("click", () => setTheme(b.dataset.theme, ${remember})));
+  setTheme(${remember} ? root.getAttribute("data-theme") || "system" : "system", false);
 })();
 `;
 
@@ -119,7 +133,7 @@ export const navGroupOf = (current) => NAV.find((group) => group.items.some((ite
  * The document head: title, description, Open Graph tags when `og` is given ({ url, image, imageWidth, imageHeight,
  * imageAlt }: absolute addresses, as link previews need), the fonts, the token CSS, and the shell's styles.
  */
-function head({ title, description, base, css, og = /** @type {any} */ (undefined) }) {
+function head({ title, description, base, css, og = /** @type {any} */ (undefined), remember = true }) {
   const fontCss = Object.entries(FONT_FILES)
     .map(([weight, file]) => `@font-face { font-family: "${tokens.typography.fontFamily}"; font-style: normal; font-weight: ${weight}; font-display: swap; src: url("${base}fonts/${file}") format("woff2"); }`)
     .join("\n");
@@ -142,7 +156,8 @@ function head({ title, description, base, css, og = /** @type {any} */ (undefine
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
-<meta name="description" content="${esc(description)}">${ogTags}
+<meta name="description" content="${esc(description)}">${ogTags}${remember ? `
+<script>${THEME_HEAD_JS}</script>` : ""}
 <style>
 ${fontCss}
 ${buildTokenCss(tokens)}
@@ -200,7 +215,7 @@ ${main}
     <span>All example data is fictional.</span>
   </div>
 </footer>
-<script>${THEME_JS}${script}</script>
+<script>${themeJs(true)}${script}</script>
 </body>
 </html>
 `;
@@ -224,7 +239,8 @@ body { display: flex; flex-direction: column; }
  * `links` are HTML; `frame` is { src, title }.
  */
 export function renderFramePage({ title, description, base, bar, note = "", links, frame, css = "", script = "", version, og = /** @type {any} */ (undefined) }) {
-  return `${head({ title, description, base, css: FRAME_CSS + css, og })}
+  // The live example doesn't use the saved color mode yet: it starts at System, like Storybook.
+  return `${head({ title, description, base, css: FRAME_CSS + css, og, remember: false })}
 <body class="${PREFIX}-text-body">
 <a class="skip" href="#main">Skip to the example</a>
 <header class="frame-bar">
@@ -239,7 +255,7 @@ export function renderFramePage({ title, description, base, bar, note = "", link
 <main id="main" class="frame-main">
 <iframe src="${esc(frame.src)}" title="${esc(frame.title)}"></iframe>
 </main>
-<script>${THEME_JS}${script}</script>
+<script>${themeJs(false)}${script}</script>
 </body>
 </html>
 `;
