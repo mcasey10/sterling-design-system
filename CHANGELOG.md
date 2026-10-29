@@ -14,7 +14,7 @@ All notable changes to Sterling are recorded here. The format follows
   second row lists the current group's pages. No address changed. Links to these pages use the menu's names
   (Watch it build, Try the live example), and the demo page no longer shows a breadcrumb.
 - **The color mode is remembered.** Choosing Light or Dark keeps it on every page (saved in the browser, applied before
-  the page is drawn); System clears it. The live example still starts at System.
+  the page is drawn), including the live example and its screen; System clears it. Storybook keeps its own Theme.
 - **Five follow-up runs** (`/runs/`): the demo's build repeated five times from scratch after the three fixes, with
   what held, what varied, and the full record.
 - **Two builds** (`/#two-builds`), a new section of Start here: building Sterling, and building a screen with it.
