@@ -38,6 +38,10 @@ export const VISUALS = {
     file: "V2-consistent-runs.png", width: 1600, height: 736,
     alt: "Thumbnails of the opening screen from follow-up runs 01 to 05, all showing the same Harbor Point loans view, with build times between 10 minutes 6 seconds and 13 minutes 32 seconds. A shared line says every run had all figures correct, all requested states built, and no automated accessibility violations, checked with axe in Light and Dark in every density.",
   },
+  states: {
+    file: "V5-states-edge-cases.png", width: 1600, height: 1274,
+    alt: "A table of twelve items across follow-up runs 01 to 05, titled \"Every requested state, and the edge cases, in all five runs.\" Seven requested states (loading, empty, error, disabled actions, selection, the bulk action bar, and sign-off) and five edge cases (long lender names, a filter with no results, \"Any lender\", Clear all, and loans not in the sample) are marked handled in every run. Loading and error were checked by hand; the others were scored automatically, and the loans-not-in-the-sample check was recorded as a note. Run 05's cell for that item adds \"wording noted\": its empty state counted all 186 pool loans, though only the sample was filtered.",
+  },
   mockup: {
     file: "V3-mockup-vs-request.png", width: 1600, height: 1163,
     alt: "The design mockup's header and bulk action bar, with Edit criteria and Export outlined, next to the request's list of what the trader can do, which mentions neither control. A table of the five follow-up runs shows that four left Export out and said so while run 02 added a CSV download and said so, and that runs 01, 02, and 04 added an Edit criteria placeholder while runs 03 and 05 left it out.",
@@ -123,6 +127,12 @@ the handoff or to gaps in Sterling's guidance. (What “building with Sterling�
   <p>Each run took about 10 to 13½ minutes. In every run, all the figures the request specified were correct, every
   requested state was built (loading, empty, error, disabled actions, selection, sign-off), and automated accessibility
   checks found no violations.</p>
+</section>
+
+<section class="panel" aria-labelledby="states-title">
+  <h2 id="states-title">Every state and edge case, in every run</h2>
+  ${visual(VISUALS.states, VISUALS.states.file)}
+  <p>All five runs built every requested state and handled each edge case; the only note is run 05's empty-state wording.</p>
 </section>
 
 <section class="panel" aria-labelledby="mockup-title">

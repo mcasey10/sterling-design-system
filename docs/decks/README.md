@@ -1,7 +1,8 @@
 # Slide decks
 
-Public slide decks about Sterling, one folder per deck, each with its PowerPoint file and the PDF made from it. No page
-on the website links to a deck; each is linked from the LinkedIn post it went with.
+Public slide decks about Sterling, one folder per deck, each with its PowerPoint file and the PDF made from it, named
+after the folder (`<deck>/<deck>.pptx` and `<deck>.pdf`). The site build publishes each PDF at `decks/<deck>.pdf`. No
+page on the website links to a deck; each is linked from the LinkedIn post it went with.
 
 Before committing a deck, run the deck check with the banned-terms list (kept outside the repository):
 
@@ -17,4 +18,4 @@ the list, so there it checks paths and metadata only.
 
 | Deck | LinkedIn post | Address | Files |
 |---|---|---|---|
-| *None yet* | | | |
+| Five follow-up runs | Linked from the pinned comment on the Sterling 1.2 LinkedIn post | https://mcasey10.github.io/sterling-design-system/decks/sterling-follow-up-runs.pdf | [.pptx](sterling-follow-up-runs/sterling-follow-up-runs.pptx), [.pdf](sterling-follow-up-runs/sterling-follow-up-runs.pdf) |

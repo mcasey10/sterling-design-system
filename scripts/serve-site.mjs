@@ -14,7 +14,7 @@ if (!existsSync(join(site, "index.html"))) {
   process.exit(1);
 }
 const port = Number(process.argv[2] ?? 6008);
-const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".woff2": "font/woff2", ".woff": "font/woff", ".ico": "image/x-icon" };
+const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".pdf": "application/pdf", ".woff2": "font/woff2", ".woff": "font/woff", ".ico": "image/x-icon" };
 
 createServer((request, response) => {
   const url = new URL(request.url, "http://localhost");

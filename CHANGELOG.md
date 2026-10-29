@@ -17,6 +17,9 @@ All notable changes to Sterling are recorded here. The format follows
   the page is drawn), including the live example and its screen; System clears it. Storybook keeps its own Theme.
 - **Five follow-up runs** (`/runs/`): the demo's build repeated five times from scratch after the three fixes, with
   what held, what varied, and the full record.
+- **States and edge cases** on `/runs/`: every requested state and edge case, in all five runs.
+- **Slide decks at `/decks/`**: the site publishes each deck's PDF; no page links to them. The first is "Five
+  follow-up runs" (`docs/decks/sterling-follow-up-runs/`).
 - **Two builds** (`/#two-builds`), a new section of Start here: building Sterling, and building a screen with it.
 - The demo, the live example, and Set up link to both. Set up advises letting your AI tool see the app it builds.
 - The demo page and the case study no longer say the first session had no browser available: Chrome was installed

@@ -18,6 +18,8 @@ export const DEMO_PAGE_URL = `${WEBSITE_URL}demo/`;
 export const EXAMPLE_PAGE_URL = `${WEBSITE_URL}example/`;
 /** The five follow-up runs: the same build repeated from scratch, after the fixes the demo session led to. */
 export const RUNS_PAGE_URL = `${WEBSITE_URL}runs/`;
+/** Slide decks, as PDFs (docs/decks/<deck>/<deck>.pdf, published flat as decks/<deck>.pdf). No page links here. */
+export const DECKS_URL = `${WEBSITE_URL}decks/`;
 /** Start here's "Two builds" section: building Sterling, and building a screen with it. */
 export const TWO_BUILDS_URL = `${WEBSITE_URL}#two-builds`;
 /** The machine-readable files for AI tools (ai/ in the repository, published as is). */

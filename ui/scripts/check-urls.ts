@@ -14,7 +14,7 @@ import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  AI_FILES_URL, AI_PAGE_URL, DEMO_PAGE_URL, EXAMPLE_PAGE_URL, FIGMA_COMMUNITY_URL, FIGMA_FILE_URL, INSTALL_PACKAGE_URL, LLMS_TXT_URL, RAW_URL, REPOSITORY_URL, RUNS_PAGE_URL, STORYBOOK_URL,
+  AI_FILES_URL, AI_PAGE_URL, DEMO_PAGE_URL, EXAMPLE_PAGE_URL, FIGMA_COMMUNITY_URL, FIGMA_FILE_URL, INSTALL_PACKAGE_URL, LLMS_TXT_URL, RAW_URL, REPOSITORY_URL, RUNS_PAGE_URL, STORYBOOK_URL, DECKS_URL,
   TOKENS_URL, WEBSITE_URL,
 } from "../../definitions/site";
 
@@ -32,7 +32,7 @@ const FIGMA_FILE_ID = FIGMA_FILE_URL.split("/design/")[1].split("/")[0];
 /** Every address of Sterling's own: the website, the repository and its raw files, and the Figma file and page. */
 const STERLING = /https:\/\/(?:mcasey10\.github\.io\/sterling-design-system|github\.com\/mcasey10\/sterling-design-system|raw\.githubusercontent\.com\/mcasey10\/sterling-design-system|www\.figma\.com\/(?:design|file|community\/file)\/[A-Za-z0-9]+)[^\s"'`)<>\]]*/g;
 /** The addresses a document may link: each named in site.ts, as a whole address or the start of one. */
-const PAGES = [TOKENS_URL, INSTALL_PACKAGE_URL, AI_PAGE_URL, DEMO_PAGE_URL, EXAMPLE_PAGE_URL, RUNS_PAGE_URL, STORYBOOK_URL, AI_FILES_URL, LLMS_TXT_URL];
+const PAGES = [TOKENS_URL, INSTALL_PACKAGE_URL, AI_PAGE_URL, DEMO_PAGE_URL, EXAMPLE_PAGE_URL, RUNS_PAGE_URL, DECKS_URL, STORYBOOK_URL, AI_FILES_URL, LLMS_TXT_URL];
 const allowed = (url: string, file: string) => {
   const clean = url.replace(/[.,;:]+$/, "");
   if (clean.startsWith(FIGMA_FILE_URL) || clean.includes(FIGMA_FILE_ID)) return MAINTAINER_DOCS.has(file);
