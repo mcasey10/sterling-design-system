@@ -5,6 +5,25 @@ All notable changes to Sterling are recorded here. The format follows
 [Semantic Versioning](https://semver.org/) as defined for a design system in
 [CONTRIBUTING.md](CONTRIBUTING.md#versions).
 
+## [Unreleased]
+
+### Website
+
+- **Two-level navigation.** The menu has two groups, Sterling (Start here, Install, Tokens, Storybook, GitHub) and
+  Build with AI (Set up, Watch it build, Live example, Follow-up runs). A group's link opens its first page; the
+  second row lists the current group's pages. No address changed.
+- **Five follow-up runs** (`/runs/`): the demo's build repeated five times from scratch after the three fixes, with
+  what held, what varied, and the full record.
+- **Two builds** (`/#two-builds`), a new section of Start here: building Sterling, and building a screen with it.
+- The demo, the live example, and Set up link to both. Set up advises letting your AI tool see the app it builds.
+- The demo page and the case study no longer say the first session had no browser available: Chrome was installed
+  and could have been started from the shell, and the session didn't try.
+
+### Tooling
+
+- `docs/decks/` for public slide decks, and `check:decks`: every .pptx and .pdf is read in full and fails on a banned
+  term, a local path, or an author or company in its metadata. CI runs it without the banned-terms list.
+
 ## [1.2.0] - 2026-10-21
 
 Sterling for AI tools, and a website with every way in: an MCP server and machine-readable files that describe

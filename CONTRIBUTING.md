@@ -180,7 +180,9 @@ Sterling address is written anywhere but `definitions/site.ts`, or if the view-o
 where the Figma Community page belongs; `package` builds the sterling-ui tarball; `site` builds the
 website and `check:site` checks every page (axe in Light and Dark, phone width, and every link);
 `check:demo-session` fails if the demo replay's record holds a local path, a user folder, or an address
-that isn't Sterling's; `check:interactions` runs every story with a play function (after `npm run build-storybook`) and fails if
+that isn't Sterling's; `check:decks` reads every slide deck in `docs/decks/` (.pptx and .pdf, all text including
+speaker notes, hidden slides and comments) and fails on a banned term (with `--banned <file>`, the list kept outside
+the repository), a local path, or an author, editor, company or manager in its metadata; `check:interactions` runs every story with a play function (after `npm run build-storybook`) and fails if
 one throws; `check:excerpts` fails if an excerpt on the AI page can no longer be read from its source, or if its code differs
 from the commit it was delivered in; `check:diagrams` fails if a diagram's source changed without
 `npm run diagrams`; `check:docs-sync` fails if a generated part of the documentation (the README's Start

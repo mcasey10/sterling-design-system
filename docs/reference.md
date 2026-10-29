@@ -395,7 +395,8 @@ Some documentation is generated from data, between marker comments (`<!-- genera
 
 Once the Site workflow has published `main`:
 
-1. Open Start here, Install, Tokens, Storybook, and AI tools from the navigation, in Light and Dark.
+1. Open every page from the navigation, in Light and Dark: under Sterling, Start here, Install, Tokens and Storybook;
+   under Build with AI, Set up, Watch it build, Live example and Follow-up runs.
 2. Follow every link on Start here, including the Figma Community page and the Release downloads
    (`sterling-ui-<version>.tgz`, and `sterling-mcp.js` from `releases/latest/download/`).
 3. Fetch `llms.txt` and follow every link in it, including the raw files on `main`.
@@ -457,11 +458,6 @@ Not planned for a release yet:
     components were scoped for, with a design picture from Sterling's own example. Try a screen Sterling wasn't built
     around (for example an MBS or dealers screen), with a mockup and a request written together and checked against
     each other before any run.
-  - **Correct three passages about October 14's browser.** The case study ([pool-loans.md](case-study/pool-loans.md),
-    the "What the session could and couldn't see" paragraph, and "for want of a browser" under "How well it worked")
-    and the demo page (`ui/scripts/build-pages.ts`, "The session had no browser it could use") say no browser was
-    available. Chrome was installed and could be started headless from the shell, as repeat runs 1 and 2 did; the
-    session didn't try. Say that instead. The session's own words (its report) stay as written.
   - **A narrow-width layout rule.** Sterling says nothing about how a screen's columns behave at narrow widths. Run
     5's filters | grid | summary layout kept all three columns at 390 px and left the grid 1 px wide, so nothing in
     it could be seen; runs 1–4 stacked or scrolled and kept the grid 216–357 px (repeat-runs deviation 27). Say how

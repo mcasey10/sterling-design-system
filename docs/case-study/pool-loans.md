@@ -90,10 +90,11 @@ transcript, read afterwards with `scripts/demo-transcript.mjs`, shows no other M
 and no file outside the kit read or written.
 
 **What the session could and couldn't see.** It could see the design picture, which it read as an image. It
-couldn't see the app it built: looking at a running app takes a browser, and the only browser tool available,
-Claude in Chrome, drives the user's own Chrome, with their sign-ins and the open web. That would have broken the
-isolation, so it was turned off for the session. This was deliberate, and it had a cost: the session couldn't
-look at its own work, use it by keyboard, or check it with a screen reader. Near the end it tried Claude in
+never looked at the app it built. Its browser tool, Claude in Chrome, drives the user's own Chrome, with their
+sign-ins and the open web. That would have broken the isolation, so it was turned off for the session. Chrome itself
+was installed and could have been started headless from the shell, as every one of the
+[follow-up runs](https://mcasey10.github.io/sterling-design-system/runs/) later did; the session didn't try. So it
+didn't look at its own work, use it by keyboard, or check it with a screen reader. Near the end it tried Claude in
 Chrome, found it off, and checked its numbers through the code instead. The kit's settings now deny Claude in
 Chrome outright.
 
@@ -119,7 +120,7 @@ Examples › Pool loans, in its corrected form.
 
 As the request asked, it ended with a report, and the report was candid:
 
-- **What it couldn't check.** Without a browser, it said plainly that nothing in the app it built had been
+- **What it couldn't check.** Having never opened the app, it said plainly that nothing in it had been
   checked visually, with a keyboard, or with a screen reader. What it had checked was the numbers, by running its data
   code: 186 loans, 181 Ready, 2 Exception, 3 Signed off, Harbor Point at 32%, 3 issues.
 - **The components it used:** 20 of Sterling's, among them the status chip, filter chip, bulk action bar,
@@ -193,9 +194,9 @@ an extra settings panel, a wrapping separator); the other three traced back to S
 lacked, a pattern that said the wrong thing, an empty state that hid its message. An AI tool reads the guidance
 literally, so building with it tests the design system itself: it finds where the guidance is wrong or missing.
 
-**It still needed a person, for two different things.** Looking at the app and trying it: the session couldn't,
-for want of a browser, and said so; a browser that reaches only the local app would let the next session do it
-itself, and would probably have caught the cut-off column (correction b). Judging whether the behavior is right:
+**It still needed a person, for two different things.** Looking at the app and trying it: the session didn't,
+since it never started a browser, and said so; a browser that reaches only the local app lets a session do it
+itself (every follow-up run did), and would probably have caught the cut-off column (correction b). Judging whether the behavior is right:
 the Reset problem was found by my own hands-on use of the app, not by any check, and a browser wouldn't have
 changed it, because the session had followed Sterling's guidance as written. Each problem found that way now has a check, so the next session, or the
 next team, is caught sooner.

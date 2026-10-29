@@ -16,6 +16,10 @@ export const AI_PAGE_URL = `${WEBSITE_URL}ai-tools/`;
 export const DEMO_PAGE_URL = `${WEBSITE_URL}demo/`;
 /** The live example: the Pool loans screen, working, filling the window (Storybook's story without its wrapper). */
 export const EXAMPLE_PAGE_URL = `${WEBSITE_URL}example/`;
+/** The five follow-up runs: the same build repeated from scratch, after the fixes the demo session led to. */
+export const RUNS_PAGE_URL = `${WEBSITE_URL}runs/`;
+/** Start here's "Two builds" section: building Sterling, and building a screen with it. */
+export const TWO_BUILDS_URL = `${WEBSITE_URL}#two-builds`;
 /** The machine-readable files for AI tools (ai/ in the repository, published as is). */
 export const AI_FILES_URL = `${WEBSITE_URL}ai/`;
 /** llms.txt: the plain-text entry point for AI tools that read by URL. */
@@ -25,6 +29,8 @@ export const LLMS_TXT_URL = `${WEBSITE_URL}llms.txt`;
 export const RELEASES_URL = `${REPOSITORY_URL}/releases`;
 /** A file on the repository's main branch, as GitHub shows it. */
 export const repositoryFileUrl = (path: string) => `${REPOSITORY_URL}/blob/main/${path}`;
+/** A folder on the repository's main branch, as GitHub shows it. */
+export const repositoryFolderUrl = (path: string) => `${REPOSITORY_URL}/tree/main/${path}`;
 /** One commit, as GitHub shows it. */
 export const commitUrl = (sha: string) => `${REPOSITORY_URL}/commit/${sha}`;
 /** The commits that changed a folder or file on main. */

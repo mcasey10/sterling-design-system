@@ -224,7 +224,7 @@ From the repo root:
 | `npm run check:tokens` | Every published token has a description, no description is left over for a removed token, and the version in tokens.json matches package.json. |
 | `npm run tokens:css` | Writes the token CSS to `dist/tokens.css` |
 | `npm run tokens:site` | Writes the token reference to `site/tokens/` (and the token CSS to `site/tokens.css`) |
-| `npm run site` | Builds the whole website into `site/`: Start here at the root, Install sterling-ui under `install/`, the token reference under `tokens/`, Sterling and AI tools under `ai-tools/`, Storybook under `storybook/`, the export under `ai/`, and `llms.txt` (written from `ai/index.json`). `npm run site:serve` shows it locally |
+| `npm run site` | Builds the whole website into `site/`: Start here at the root, Install sterling-ui under `install/`, the token reference under `tokens/`, Sterling and AI tools under `ai-tools/`, the demo replay under `demo/`, the live example under `example/`, the follow-up runs under `runs/`, Storybook under `storybook/`, the export under `ai/`, and `llms.txt` (written from `ai/index.json`). `npm run site:serve` shows it locally |
 | `npm run check:site` | Every website page passes axe in Light and Dark (as loaded, and as without JavaScript), fits a phone's width without scrolling sideways, and every internal link and anchor goes somewhere; the AI page's steps work by keyboard. Needs `npm run site` first |
 | `npm run check:excerpts` | Every excerpt on the AI page can still be read from its source, and its code excerpts are identical to the commit they were delivered in. Needs the repository's history and the built MCP server |
 | `npm run diagrams` / `check:diagrams` | Renders every Mermaid diagram in `docs/` to SVG beside it (website diagrams once per color mode, in Sterling's colors from the tokens) / fails if a source or a color changed without a re-render |
@@ -507,8 +507,9 @@ supplies its keyboard behavior and screen-reader semantics. Inter 3.19 is bundle
 each reader starts, drawn from `definitions/audiences.ts`), Install sterling-ui under `install/` (from
 `definitions/setup.ts`), the token reference under `tokens/`, Sterling and AI tools under `ai-tools/` (one
 component followed from its sources to code an AI tool wrote, with every excerpt read from the real files when
-the site builds and a real exchange with the built MCP server), and Storybook under `storybook/`, all in one
-page shell with the same navigation. `npm run site:serve` shows it at
+the site builds and a real exchange with the built MCP server), the demo replay under `demo/`, the live example
+under `example/`, the five follow-up runs under `runs/`, and Storybook under `storybook/`, all in one page shell with
+the same navigation: two groups, Sterling and Build with AI, then the pages of the current group. `npm run site:serve` shows it at
 http://localhost:6008, and `npm run check:site` checks it. The Pages workflow publishes it on every push
 to `main`.
 
