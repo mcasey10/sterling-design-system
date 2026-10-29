@@ -118,7 +118,7 @@ three come from one set of definitions, so they always describe the same thing, 
 apart. It has ${Object.keys(COMPONENTS).length} components and ${Object.keys(ICONS).length} icons.</p>
 <ul class="see-it">
   <li><a class="see-it__link" href="${esc(local(EXAMPLE_PAGE_URL, base))}">Try the live example</a> <span class="note">A working screen built from Sterling's components</span></li>
-  <li><a class="see-it__link" href="${esc(local(DEMO_PAGE_URL, base))}">Watch the demo</a> <span class="note">An AI tool building that screen with Sterling</span></li>
+  <li><a class="see-it__link" href="${esc(local(DEMO_PAGE_URL, base))}">Watch it build</a> <span class="note">An AI tool building that screen with Sterling</span></li>
 </ul>
 
 <section class="panel" aria-labelledby="start-title">
@@ -452,7 +452,6 @@ function demoPage(): string {
   });
   const mode = (file: string, theme: string) => `<img class="for-${theme}" src="${file}" width="1440" height="915" alt="The Pool loans screen as delivered: the filter panel, the Harbor Point loans view with twelve loans and one exception flagged, the pool summary with its three issues, and the session's own demo settings panel at the bottom.">`;
   const main = `<div class="column">
-<p class="crumb">${link(AI_PAGE_URL, "Sterling and AI tools")} ›</p>
 <h1>The demo: an AI tool builds a screen with Sterling</h1>
 <p class="first-build">This is the first build: the session that found the three problems. Five follow-up runs checked
 the fixes: ${link(RUNS_PAGE_URL, "Follow-up runs")}. What the two builds are: ${link(TWO_BUILDS_URL, "Two builds")}.</p>
@@ -464,7 +463,7 @@ building. This replays the session: the request, what it looked up, and what it 
   <li>${mcpCount} calls to Sterling's MCP server in ${mcpSpan} seconds</li>
   <li>${Math.round(s.durationSeconds / 60)} minutes from the request to a working screen</li>
 </ul>
-<p class="try-it"><a class="see-it__link" href="${esc(local(EXAMPLE_PAGE_URL, base))}">Try the finished screen</a></p>
+<p class="try-it"><a class="see-it__link" href="${esc(local(EXAMPLE_PAGE_URL, base))}">Try the live example</a></p>
 
 <section class="panel" aria-labelledby="request-title">
   <h2 id="request-title">The request</h2>
@@ -562,7 +561,7 @@ function examplePage(): string {
     base,
     bar: "<strong>Pool loans:</strong> a working screen built from Sterling's components. All data is fictional.",
     note: `The Pool loans screen after review. Its mockup came from Sterling's own Figma example: <a href="${esc(local(TWO_BUILDS_URL, base))}">Two builds</a>.`,
-    links: `<a href="${esc(local(DEMO_PAGE_URL, base))}">How it was built</a><a href="${esc(local(RUNS_PAGE_URL, base))}">Follow-up runs</a><a href="${esc(base)}">Back to Sterling</a>`,
+    links: `<a href="${esc(local(DEMO_PAGE_URL, base))}">Watch it build</a><a href="${esc(local(RUNS_PAGE_URL, base))}">Follow-up runs</a><a href="${esc(base)}">Back to Sterling</a>`,
     frame: { src, title: "Pool loans example" },
     script: EXAMPLE_JS(src),
     version: VERSION,
@@ -608,7 +607,6 @@ const SEE_IT_CSS = `
 `;
 
 const DEMO_CSS = `
-.crumb { margin: 0 0 4px; font-size: 13px; }
 .facts { display: flex; flex-wrap: wrap; gap: 4px 24px; padding: 0; margin: 0 0 8px; list-style: none; color: var(--color-text-secondary); font-size: 13px; }
 .request { margin: 0 0 16px; padding: 12px 16px; border-left: 3px solid var(--color-accent-default); background: var(--color-surface-hover); }
 .request p { margin: 0 0 8px; }

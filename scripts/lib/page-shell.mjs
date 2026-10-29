@@ -33,6 +33,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .site-nav { flex: 1 1 auto; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 8px 24px; }
 .site-nav ul { display: flex; flex-wrap: wrap; gap: 4px 16px; list-style: none; margin: 0; padding: 0; }
 .site-nav__pages { grid-column: 1 / -1; }
+/* A thin rule between the brand and the groups, so "Sterling 1.2.0" doesn't read as the first group. */
+.site-nav ul.site-nav__groups { border-left: 1px solid var(--color-border-default); padding-left: 24px; }
 .site-nav ul a { color: var(--color-text-primary); text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; }
 .site-nav ul a:hover { border-bottom-color: var(--color-border-strong); }
 .site-nav__groups a { font-weight: 600; color: var(--color-text-secondary); }
@@ -62,6 +64,7 @@ thead th { border-top: 0; color: var(--color-text-secondary); font-weight: 600; 
   .panel { padding: 16px; }
   .site-nav { gap: 8px 16px; }
   .site-nav ul { gap: 4px 12px; }
+  .site-nav ul.site-nav__groups { padding-left: 16px; }
   h1 { font-size: 24px; line-height: 32px; }
 }
 `);

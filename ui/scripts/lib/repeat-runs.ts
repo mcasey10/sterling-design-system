@@ -87,14 +87,14 @@ export function twoBuildsSection(link: Link): string {
 
 /** The Follow-up runs page's main content. Pictures are served next to the page. */
 export function runsMain(link: Link): string {
-  const fix = (v: Visual, title: string, text: string) => `${visual(v, v.file)}
-  <p><strong>${esc(title)}</strong> ${esc(text)}</p>`;
+  const fix = (v: Visual, result: string) => `${visual(v, v.file)}
+  <p>${esc(result)}</p>`;
   return `<div class="column">
 <h1>Five follow-up runs</h1>
 <p class="lead">During version 1.2, an AI coding tool built the Pool loans screen from Sterling, and review found three
 problems in Sterling itself, which I fixed. One run proves less than it seems, so I ran the same build five more times from
-scratch. The fixes held in every run, and where the runs varied, the cause traced back to the handoff or to gaps in
-Sterling's guidance. (What “building with Sterling” means: ${link(TWO_BUILDS_URL, "Two builds")}.)</p>
+scratch. The fixes held in every run where they could be measured, and where the runs varied, the cause traced back to
+the handoff or to gaps in Sterling's guidance. (What “building with Sterling” means: ${link(TWO_BUILDS_URL, "Two builds")}.)</p>
 
 <section class="panel" aria-labelledby="how-title">
   <h2 id="how-title">How the runs were done</h2>
@@ -110,15 +110,15 @@ Sterling's guidance. (What “building with Sterling” means: ${link(TWO_BUILDS
 </section>
 
 <section class="panel" aria-labelledby="fixes-title">
-  <h2 id="fixes-title">1. The three fixes held</h2>
+  <h2 id="fixes-title">The three fixes held</h2>
   <p>The first build exposed three problems in Sterling. Each was fixed, then checked in all five follow-up runs.</p>
-  ${fix(VISUALS.fix1, "The data grid couldn't tell screen readers why a cell was flagged.", "Sterling's data grid had no way to attach the reason for a warning to a cell. To get it right, the first build bypassed the data grid and wrote its own table. It worked, but the screen no longer used the component, so future improvements to the data grid would never reach it. Now the data grid can carry a reason for each cell, and all five follow-up runs used it.")}
-  ${fix(VISUALS.fix2, "Reset discarded the saved view's filters.", "The screen opens on a saved view (one lender's loans). Sterling's guidance said Reset clears every filter, and the first build did exactly that. The guidance now says Reset returns to the view's filters, and Clear all removes everything. All five follow-up runs return to the view's 58 loans.")}
-  ${fix(VISUALS.fix3, "The empty data grid's message didn't fit narrow screens.", "The message for an empty grid was centered on the grid's full width, not the space you can see, so it was cut off. It's now centered and wrapped within the visible space of the grid frame, and it was fully visible in every run where it could be measured.")}
+  ${fix(VISUALS.fix1, "All five follow-up runs used the data grid, and the reason is read out.")}
+  ${fix(VISUALS.fix2, "All five follow-up runs return to the view's 58 loans.")}
+  ${fix(VISUALS.fix3, "Fully visible in every follow-up run where it could be measured.")}
 </section>
 
 <section class="panel" aria-labelledby="consistent-title">
-  <h2 id="consistent-title">2. Consistent where the request was clear</h2>
+  <h2 id="consistent-title">Consistent where the request was clear</h2>
   ${visual(VISUALS.consistent, VISUALS.consistent.file)}
   <p>Each run took about 10 to 13½ minutes. In every run, all the figures the request specified were correct, every
   requested state was built (loading, empty, error, disabled actions, selection, sign-off), and automated accessibility
@@ -126,7 +126,7 @@ Sterling's guidance. (What “building with Sterling” means: ${link(TWO_BUILDS
 </section>
 
 <section class="panel" aria-labelledby="mockup-title">
-  <h2 id="mockup-title">3. The mockup and the request didn't agree, and the AI followed the request</h2>
+  <h2 id="mockup-title">The mockup and the request didn't agree, and the AI followed the request</h2>
   ${visual(VISUALS.mockup, VISUALS.mockup.file)}
   <p>The request was drafted by Claude Code from a summary of the example, and I approved it without comparing it to the
   mockup. So the mockup showed controls the request never described. Export is in the mockup's bulk action bar; four runs
@@ -136,7 +136,7 @@ Sterling's guidance. (What “building with Sterling” means: ${link(TWO_BUILDS
 </section>
 
 <section class="panel" aria-labelledby="patterns-title">
-  <h2 id="patterns-title">4. Patterns filled the gaps</h2>
+  <h2 id="patterns-title">Patterns filled the gaps</h2>
   ${visual(VISUALS.patterns, VISUALS.patterns.file)}
   <p>The request didn't describe the View menu, saving a view, or the clickable counts in the summary. All five runs built
   them the same way, matching what Sterling's Saved views pattern and its link guidance describe. Written-down patterns let
@@ -171,6 +171,7 @@ Sterling's guidance. (What “building with Sterling” means: ${link(TWO_BUILDS
     <li>Layout tokens, and a z-index token for a screen's own menus and popups.</li>
     <li>Grouped options in Select, which the Saved views pattern asks for.</li>
     <li>Where keyboard focus goes after a short-lived action, such as Undo.</li>
+    <li>Say that component class names are private: all five runs used them.</li>
   </ul>
 </section>
 

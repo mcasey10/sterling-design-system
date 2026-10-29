@@ -82,7 +82,7 @@ export const AUDIENCES: Audience[] = [
     role: "AI-assisted developer",
     why: "You build with an AI coding tool. Give it Sterling's components, tokens and rules, so the code it writes follows the system instead of inventing its own.",
     places: [
-      { links: [{ label: "Watch the demo", url: DEMO_PAGE_URL }], note: "An AI tool building a screen with Sterling", how: "Browser" },
+      { links: [{ label: "Watch it build", url: DEMO_PAGE_URL }], note: "An AI tool building a screen with Sterling", how: "Browser" },
       sterlingUi,
       {
         links: [{ label: "MCP server from the GitHub Release", url: MCP_SETUP_URL }],

@@ -11,7 +11,8 @@ All notable changes to Sterling are recorded here. The format follows
 
 - **Two-level navigation.** The menu has two groups, Sterling (Start here, Install, Tokens, Storybook, GitHub) and
   Build with AI (Set up, Watch it build, Live example, Follow-up runs). A group's link opens its first page; the
-  second row lists the current group's pages. No address changed.
+  second row lists the current group's pages. No address changed. Links to these pages use the menu's names
+  (Watch it build, Try the live example), and the demo page no longer shows a breadcrumb.
 - **Five follow-up runs** (`/runs/`): the demo's build repeated five times from scratch after the three fixes, with
   what held, what varied, and the full record.
 - **Two builds** (`/#two-builds`), a new section of Start here: building Sterling, and building a screen with it.
