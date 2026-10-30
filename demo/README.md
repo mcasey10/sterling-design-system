@@ -9,7 +9,7 @@ Figma file, or the web.
 
 | | |
 |---|---|
-| `template/` | What the kit is built from: an empty React + TypeScript app (Vite), the session's `CLAUDE.md`, `.mcp.json`, and `.claude/settings.json` |
+| `template/` | What the kit is built from: an empty React + TypeScript app (Vite) with its `package-lock.json`, the session's `CLAUDE.md`, `.mcp.json`, and `.claude/settings.json` |
 | `data/pool-2026-07.json` | The example's data, written from the plugin's example by `npm run export:demo-data`. Fictional |
 | `prompt.md` | The product request to paste into the session |
 | `kit.local.example.json` | A model for `kit.local.json`, the local setting that lists the folders the session must not read |
@@ -17,9 +17,10 @@ Figma file, or the web.
 
 ## Build the kit
 
-1. Copy `kit.local.example.json` to `kit.local.json` and list the folders the session must not read: this
-   repository, and anything else on the machine it could learn Sterling from. `kit.local.json` is never
-   committed, so the paths exist only on this machine and in the built kit.
+1. Copy `kit.local.example.json` to `kit.local.json` and list the folders (`denyPaths`) and single files
+   (`denyFiles`) the session must not read: this repository, and anything else on the machine it could learn
+   Sterling from. `kit.local.json` is never committed, so the paths exist only on this machine and in the built
+   kit.
 2. From the repository root:
 
 ```bash
@@ -34,19 +35,25 @@ sterling-ui-<version>.tgz     the React package
 mcp/server.js                 the MCP server, one file
 data/pool-2026-07.json        the data
 design/pool-loans.png         the designer's screen
-package.json, index.html, vite.config.ts, tsconfig.json, src/   an empty app
+package.json, package-lock.json, index.html, vite.config.ts, tsconfig.json, src/   an empty app
 CLAUDE.md                     the rules of the session
 .mcp.json                     the sterling server, and no other
 .claude/settings.json         denies the web, the Figma servers, Claude in Chrome, and the folders in kit.local.json
 ```
 
+The lockfile in `template/` records the package's hash, so the build stops if the package has changed. To
+regenerate it, after `npm run demo:kit` has failed on it: delete `template/package-lock.json`, build again, run
+`npm install` in a copy of `demo/kit/`, and copy its `package-lock.json` back to `template/`, with the tarball's
+file name replaced by `STERLING_UI_TARBALL`.
+
 ## Run the demo
 
 1. Copy `demo/kit/` to a new folder outside this repository.
-2. In that folder, install the app's dependencies (this is the one step that uses the network):
+2. In that folder, install the app's dependencies, exactly as the lockfile lists them (this is the one step that
+   uses the network):
 
 ```bash
-npm install
+npm ci
 ```
 
 3. Start a session there with only the kit's MCP server:

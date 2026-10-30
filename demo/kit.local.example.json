@@ -1,7 +1,10 @@
 {
-  "about": "Copy this file to kit.local.json (which is never committed) and list the folders the demo session must not read: this repository, and anything else on this machine it could learn Sterling from. Write each as an absolute path in POSIX form with a leading double slash: on Windows, C:\\Users\\name\\project becomes //c/Users/name/project. The kit build turns each into Read and Edit deny rules in the kit's .claude/settings.json.",
+  "about": "Copy this file to kit.local.json (which is never committed) and list what the demo session must not read: this repository, and anything else on this machine it could learn Sterling from. Write each as an absolute path in POSIX form with a leading double slash: on Windows, C:\\Users\\name\\project becomes //c/Users/name/project. The kit build turns each folder in denyPaths into Read and Edit deny rules for everything inside it, and each file in denyFiles into Read and Edit deny rules for that file, in the kit's .claude/settings.json. A file may not exist yet when the kit is built.",
   "denyPaths": [
     "//c/path/to/this/repository",
     "//c/path/to/another/folder"
+  ],
+  "denyFiles": [
+    "//c/path/to/a/file.json"
   ]
 }

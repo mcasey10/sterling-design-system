@@ -13,6 +13,7 @@
 // Usage: npm run demo:kit
 
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { cpSync, copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -41,6 +42,17 @@ const pkgText = readFileSync(pkgPath, "utf8");
 if (!pkgText.includes("STERLING_UI_TARBALL")) throw new Error("demo/template/package.json has no STERLING_UI_TARBALL placeholder");
 writeFileSync(pkgPath, pkgText.replace("STERLING_UI_TARBALL", tarball));
 
+// The lockfile (demo/template/package-lock.json), so every copy of the kit installs the same versions with
+// `npm ci`. It records the tarball's hash: if the package has changed, regenerate the lockfile (demo/README.md).
+const lockPath = resolve(kit, "package-lock.json");
+if (existsSync(lockPath)) {
+  const lockText = readFileSync(lockPath, "utf8").replaceAll("STERLING_UI_TARBALL", tarball);
+  writeFileSync(lockPath, lockText);
+  const locked = JSON.parse(lockText).packages?.["node_modules/sterling-ui"]?.integrity;
+  const actual = "sha512-" + createHash("sha512").update(readFileSync(resolve(kit, tarball))).digest("base64");
+  if (locked !== actual) throw new Error(`demo/template/package-lock.json doesn't match ${tarball} (it records ${locked}). Regenerate it: see demo/README.md.`);
+}
+
 mkdirSync(resolve(kit, "mcp"), { recursive: true });
 copyFileSync(at("mcp/dist/server.js"), resolve(kit, "mcp/server.js"));
 mkdirSync(resolve(kit, "data"), { recursive: true });
@@ -55,19 +67,22 @@ const settingsPath = resolve(kit, ".claude/settings.json");
 const settings = JSON.parse(readFileSync(settingsPath, "utf8"));
 let denied = [];
 if (existsSync(localPath)) {
-  denied = JSON.parse(readFileSync(localPath, "utf8")).denyPaths ?? [];
-  for (const path of denied) {
+  const local = JSON.parse(readFileSync(localPath, "utf8"));
+  const absolute = (path) => {
     if (!/^\/\/[^/]/.test(path)) throw new Error(`demo/kit.local.json: "${path}" must be an absolute path with a leading double slash, e.g. //c/Users/name/project`);
-    const base = path.replace(/\/+$/, "");
-    settings.permissions.deny.push(`Read(${base}/**)`, `Edit(${base}/**)`);
-  }
+    return path.replace(/\/+$/, "");
+  };
+  // A folder: everything inside it. A file: that file (a folder rule, path/**, never matches a file).
+  for (const path of local.denyPaths ?? []) settings.permissions.deny.push(`Read(${absolute(path)}/**)`, `Edit(${absolute(path)}/**)`);
+  for (const path of local.denyFiles ?? []) settings.permissions.deny.push(`Read(${absolute(path)})`, `Edit(${absolute(path)})`);
+  denied = [...(local.denyPaths ?? []), ...(local.denyFiles ?? [])];
   writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + "\n");
 }
 
 console.log(`\nBuilt demo/kit/ with ${tarball}, mcp/server.js, the data, and the design.`);
 console.log(
   denied.length
-    ? `Its settings deny reading ${denied.length} local folder(s) from demo/kit.local.json, the web, the Figma servers, and Claude in Chrome.`
+    ? `Its settings deny reading ${denied.length} local folder(s) and file(s) from demo/kit.local.json, the web, the Figma servers, and Claude in Chrome.`
     : "WARNING: demo/kit.local.json is missing, so the kit denies the web and the Figma servers but NO local folders.\n" +
         "Copy demo/kit.local.example.json to demo/kit.local.json, list this repository's path, and build again."
 );

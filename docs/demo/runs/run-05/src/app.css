@@ -1,0 +1,281 @@
+/* Layout for the Pool loans screen. Every value is a Sterling token; Sterling's components bring their own CSS. */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--stl-color-surface-background);
+  color: var(--stl-color-text-primary);
+}
+
+.app h1,
+.app h2,
+.app h3,
+.app p,
+.app ul {
+  margin: 0;
+}
+
+.muted {
+  color: var(--stl-color-text-secondary);
+}
+
+.tone-warning {
+  color: var(--stl-color-status-warning-strong);
+}
+
+.tone-positive {
+  color: var(--stl-color-status-positive-strong);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: var(--stl-stroke-1);
+  height: var(--stl-stroke-1);
+  margin: calc(-1 * var(--stl-stroke-1));
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------ Page header */
+
+.page-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "title actions"
+    "criteria actions";
+  align-items: center;
+  column-gap: var(--stl-space-24);
+  row-gap: var(--stl-space-4);
+  padding: var(--stl-space-12) var(--stl-space-16);
+  border-bottom: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  background: var(--stl-color-surface-panel);
+}
+
+.page-header__title {
+  grid-area: title;
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+  min-width: 0;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+}
+
+.page-header__criteria {
+  grid-area: criteria;
+}
+
+.page-header__actions {
+  grid-area: actions;
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-12);
+}
+
+.issues-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--stl-space-4);
+}
+
+/* ------------------------------------------------------------ Three columns: filters, loans, summary */
+
+.layout {
+  display: grid;
+  /* Filters and summary keep a fixed width (as in the design); the loans take the rest. */
+  grid-template-columns: calc(var(--stl-size-40) * 5.5) minmax(0, 1fr) calc(var(--stl-size-40) * 5.5);
+  align-items: start;
+  gap: var(--stl-space-16);
+  padding: var(--stl-space-16);
+  flex: 1;
+}
+
+.panel,
+.card {
+  box-sizing: border-box;
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  border-radius: var(--stl-radius-md);
+  background: var(--stl-color-surface-panel);
+  padding: var(--stl-card-padding);
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-16);
+}
+
+.filters__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+
+.filters__form .stl-field {
+  width: 100%;
+}
+
+.filters__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--stl-space-8);
+  padding-top: var(--stl-space-4);
+}
+
+.loans {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.loans__tabs {
+  border-bottom: var(--stl-stroke-1) solid var(--stl-color-border-default);
+}
+
+.loans__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+  padding-top: var(--stl-space-12);
+  min-width: 0;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+  flex-wrap: wrap;
+}
+
+.toolbar__view {
+  width: calc(var(--stl-size-40) * 6);
+}
+
+.toolbar__chips {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+  flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;
+}
+
+/* A message after an action, with Undo. Sterling has no toast or inline banner, so this is built from tokens. */
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+  padding: var(--stl-space-4) var(--stl-space-12);
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  border-left: var(--stl-stroke-2) solid var(--stl-color-status-info);
+  border-radius: var(--stl-radius-sm);
+  background: var(--stl-color-surface-panel);
+  color: var(--stl-color-text-primary);
+}
+
+.notice__text {
+  flex: 1;
+}
+
+.notice:focus-visible {
+  outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);
+  outline-offset: var(--stl-stroke-1);
+}
+
+.notice > .stl-icon {
+  color: var(--stl-color-status-info);
+}
+
+/* ------------------------------------------------------------ Summary */
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+
+.summary h2 {
+  padding: var(--stl-space-4) 0;
+}
+
+.summary__metric {
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-card-gap);
+}
+
+.card--warning {
+  border-color: var(--stl-color-status-warning);
+}
+
+.card__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-6);
+}
+
+.issue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-2);
+}
+
+.status-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--stl-space-4);
+}
+
+/* ------------------------------------------------------------ Dialogs */
+
+.dialog-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-4);
+  padding-left: var(--stl-space-16);
+}
+
+.stl-dialog__body .stl-field {
+  width: 100%;
+}
+
+.stl-dialog__body form {
+  padding-top: var(--stl-space-4);
+}
+
+/* ------------------------------------------------------------ Demo controls */
+
+.demo {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--stl-space-16);
+  padding: var(--stl-space-12) var(--stl-space-16);
+  border-top: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  background: var(--stl-color-surface-panel);
+}
+
+.demo h2 {
+  align-self: center;
+}
+
+.demo .stl-select {
+  width: calc(var(--stl-size-40) * 4);
+}
+
+.demo .stl-checkbox {
+  min-height: var(--stl-control-height);
+}

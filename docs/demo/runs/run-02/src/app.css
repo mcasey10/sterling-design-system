@@ -1,0 +1,310 @@
+/* Layout for the Pool loans screen. Every value is a Sterling token, or a calc() of tokens. */
+
+body {
+  margin: var(--stl-space-0);
+  background: var(--stl-color-surface-background);
+  color: var(--stl-color-text-primary);
+}
+
+.app {
+  color: var(--stl-color-text-primary);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: var(--stl-space-0);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: var(--stl-stroke-1);
+  height: var(--stl-stroke-1);
+  margin: calc(-1 * var(--stl-stroke-1));
+  padding: var(--stl-space-0);
+  border: var(--stl-space-0);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.muted,
+.summary-card__muted {
+  color: var(--stl-color-text-secondary);
+}
+
+.tone-warning {
+  color: var(--stl-color-status-warning-strong);
+}
+.tone-positive {
+  color: var(--stl-color-status-positive-strong);
+}
+
+.icon-text,
+.summary-card__title,
+.notice__text {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--stl-space-4);
+}
+
+/* ---------- Header ---------- */
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--stl-space-16);
+  padding: var(--stl-space-12) var(--stl-space-16);
+  background: var(--stl-color-surface-panel);
+  border-bottom: var(--stl-stroke-1) solid var(--stl-color-border-default);
+}
+
+.page-header__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--stl-space-8);
+  row-gap: var(--stl-space-4);
+}
+
+.breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+  color: var(--stl-color-text-secondary);
+}
+
+.page-header__criteria {
+  flex-basis: 100%;
+  color: var(--stl-color-text-secondary);
+}
+
+.page-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stl-space-12);
+}
+
+/* ---------- Three columns: filters, list, summary ---------- */
+
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--stl-space-16);
+  padding: var(--stl-space-16);
+}
+
+.filter-panel,
+.pool-summary {
+  flex: 1 1 calc(var(--stl-size-56) * 4);
+  max-width: calc(var(--stl-size-56) * 4);
+}
+
+.layout__main {
+  flex: 100 1 calc(var(--stl-size-56) * 10);
+  min-width: 0;
+}
+
+.panel {
+  box-sizing: border-box;
+  background: var(--stl-color-surface-panel);
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  border-radius: var(--stl-radius-md);
+}
+
+/* ---------- Filter panel ---------- */
+
+.filter-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-16);
+  padding: var(--stl-card-padding);
+}
+
+.filter-panel__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+
+.add-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--stl-space-4);
+}
+
+.add-filter .stl-menu {
+  align-self: stretch;
+}
+
+.filter-panel__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--stl-space-8);
+}
+
+/* ---------- Tabs and toolbar ---------- */
+
+.tabs {
+  margin-bottom: var(--stl-space-12);
+}
+
+.tab-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stl-space-8);
+}
+
+.toolbar__label {
+  color: var(--stl-color-text-secondary);
+}
+
+.toolbar .toolbar__view {
+  width: calc(var(--stl-size-40) * 5);
+}
+
+.applied-filters {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stl-space-8);
+}
+
+.applied-filters:focus-visible,
+#pool-loans-grid:focus-visible,
+.notice:focus-visible,
+.pool-summary .panel:focus-visible {
+  outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);
+  outline-offset: var(--stl-stroke-2);
+}
+
+/* ---------- Notice (with Undo) ---------- */
+
+.notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stl-space-8);
+  padding: var(--stl-space-8) var(--stl-space-12);
+  background: var(--stl-color-surface-panel);
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  border-left: var(--stl-size-4) solid var(--stl-color-status-info);
+  border-radius: var(--stl-radius-sm);
+}
+
+.notice__text {
+  flex: 1 1 auto;
+}
+
+.notice__text .stl-icon {
+  color: var(--stl-color-status-info-strong);
+  flex: none;
+}
+
+/* Nothing to say: the live region stays in the page, but takes no space. */
+.notice--empty {
+  padding: var(--stl-space-0);
+  border: var(--stl-space-0);
+  margin-top: calc(-1 * var(--stl-space-12));
+}
+
+/* ---------- Grid ---------- */
+
+.grid-frame {
+  min-width: 0;
+}
+
+/* ---------- Summary ---------- */
+
+.pool-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+
+.summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-card-gap);
+  padding: var(--stl-card-padding);
+}
+
+.summary-card__label {
+  color: var(--stl-color-text-secondary);
+}
+
+.summary-card__title {
+  align-items: flex-start;
+}
+
+.summary-card__title .stl-icon {
+  flex: none;
+  margin-top: var(--stl-space-2);
+}
+
+.summary-card__issue {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--stl-space-2);
+}
+
+/* ---------- Dialogs ---------- */
+
+.dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+
+.dialog-list {
+  margin: var(--stl-space-0);
+  padding-left: var(--stl-space-16);
+}
+
+/* ---------- Demo settings ---------- */
+
+.demo-settings {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--stl-space-16);
+  margin: var(--stl-space-0) var(--stl-space-16) var(--stl-space-16);
+  padding: var(--stl-space-12) var(--stl-space-16);
+  border-top: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  color: var(--stl-color-text-secondary);
+}
+
+.demo-settings h2 {
+  flex-basis: 100%;
+}
+
+/* Fields are full width in the panel and in dialogs (Form layout pattern). */
+.filter-panel .stl-field,
+.dialog-body .stl-field {
+  width: 100%;
+}
+
+.summary-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--stl-space-4);
+}
+
+.summary-card__links > span {
+  white-space: nowrap;
+}

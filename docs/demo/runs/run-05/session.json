@@ -1,0 +1,730 @@
+{
+  "about": "The Pool loans demo session, as the website's replay page (/demo/) shows it: the request, each call to Sterling's MCP server with its answer shortened, and the session's own notes. Extracted from the session's transcript by ui/scripts/demo-extract.ts; checked by npm run check:demo-session. All data in it is fictional.",
+  "answersLabel": "As the kit's MCP server (Sterling 1.2.0) answered",
+  "session": {
+    "date": "2026-10-24",
+    "tool": "Claude Code 2.1.308",
+    "model": "Opus 5.5",
+    "mode": "auto",
+    "durationSeconds": 630
+  },
+  "request": {
+    "opening": "Build the Pool loans screen for our loan pooling tool, in this app, with the Sterling design system.\n\nWhat the screen is for\nA trader is assembling Pool 2026-07, a pool of 30-year fixed-rate loans, toward a $50.0M target. The pool is a\ndraft. Before it can be submitted, every loan that breaks an eligibility rule must be signed off or removed,\nand no lender may hold more than 30% of the pool. This screen is where the trader reviews the loans in the\npool, deals with the exceptions, and submits.",
+    "full": "demo/prompt.md"
+  },
+  "report": "I've built the Pool loans screen and `npm run build` passes. I tested it in headless Chrome, scripting the clicks and taking screenshots, against the rules and states in your brief. **What works:**\n- **Starting view:** \"Harbor Point loans\" shows 58 loans, 12 to a page.",
+  "events": [
+    {
+      "at": 3,
+      "kind": "note",
+      "text": "I'll start by looking at the project, the data, the design, and the Sterling MCP server."
+    },
+    {
+      "at": 4,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "List project files and package info"
+    },
+    {
+      "at": 5,
+      "kind": "tool",
+      "tool": "ToolSearch",
+      "what": "Loaded the Sterling tools"
+    },
+    {
+      "at": 9,
+      "kind": "mcp",
+      "tool": "list_components",
+      "arguments": {},
+      "answer": "{\n  \"count\": 24,\n  \"categories\": [\"Controls\", \"Chip\", \"Grid\", \"Input\", \"Overlay\", \"Summary\", \"Tabs\", \"Icon\"],\n  \"components\": [\n    {\n      \"name\": \"Controls/Button\",\n      \"react\": \"Button\",\n      \"description\": \"Triggers an action, in primary, secondary, ghost, or danger style.\",\n      …\n    },\n    {\n      \"name\": \"Controls/Icon button\",\n      \"react\": \"IconButton\",\n      \"description\": \"A square, icon-only button for well-known actions in dense rows and toolbars.\",\n      …\n    },\n    {\n      \"name\": \"Controls/Link\",\n      \"react\": \"Link\",\n      \"description\": \"An always-underlined text link for navigation and for shortcuts such as applying a filter.\",\n      …\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 6554,
+      "ok": true
+    },
+    {
+      "at": 9,
+      "kind": "mcp",
+      "tool": "list_guidelines",
+      "arguments": {},
+      "answer": "{\n  \"sections\": [\n    {\n      \"name\": \"Principles\",\n      \"summary\": \"A good component is easy to use correctly and hard to use incorrectly. This table lays out both positive and negative design principles.\"\n    },\n    {\n      \"name\": \"Accessibility\",\n      \"summary\": \"Visible focus, contrast in every mode, and signals beyond color.\"\n    },\n    {\n      \"name\": \"Data display\",\n      \"summary\": \"Numbers are the content: never hide digits, and line them up.\"\n    },\n    …\n  ],\n  \"patterns\": [\n    {\n      \"name\": \"Filters, grid, and bulk actions\",\n      \"summary\": \"The core data screen: narrow a large set of records, compare them in a grid, and act on a selection.\"\n    },\n    {\n      \"name\": \"Bulk action bar\",\n      \"summary\": \"What the bar above a grid says and offers as the selection changes. It appears only while rows are selected, directly above the grid, and pushes the grid down.\"\n    },\n    {\n      \"name\": \"Filter panel and chips\",\n      \"summary\": \"A panel sets the filters; chips above the grid show what's applied. The two always agree.\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 2713,
+      "ok": true
+    },
+    {
+      "at": 10,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Read source files and data"
+    },
+    {
+      "at": 10,
+      "kind": "tool",
+      "tool": "Read",
+      "what": "Read pool-loans.png"
+    },
+    {
+      "at": 13,
+      "kind": "note",
+      "text": "Now the patterns that cover this screen."
+    },
+    {
+      "at": 13,
+      "kind": "mcp",
+      "tool": "get_pattern",
+      "arguments": {
+        "name": "Filters, grid, and bulk actions"
+      },
+      "answer": "{\n  \"name\": \"Filters, grid, and bulk actions\",\n  \"summary\": \"The core data screen: narrow a large set of records, compare them in a grid, and act on a selection.\",\n  \"useWhen\": \"People find, compare, and act on many records of the same kind (orders, positions, inventory).\",\n  \"steps\": [\n    {\n      \"number\": 1,\n      \"label\": \"Filters panel\",\n      \"note\": \"Filters sit on the left (2 of 12 columns). Inputs and selects narrow the rows. Apply runs the query. Reset returns every field to the active saved view's filters, or empty if no view is active. Placeholders give examples, never labels.\"\n    },\n    {\n      \"number\": 2,\n      \"label\": \"View and applied filters\",\n      \"note\": \"The View dropdown picks a named filter set (plus columns and sort); Save view saves the current one. Every applied filter is a chip, in sync with the panel: removing a chip clears its field, Clear all removes them all. No tabs here — tabs are for separate datasets (scopes), not for status views.\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 1821,
+      "ok": true
+    },
+    {
+      "at": 14,
+      "kind": "mcp",
+      "tool": "get_pattern",
+      "arguments": {
+        "name": "Bulk action bar"
+      },
+      "answer": "{\n  \"name\": \"Bulk action bar\",\n  \"summary\": \"What the bar above a grid says and offers as the selection changes. It appears only while rows are selected, directly above the grid, and pushes the grid down.\",\n  \"useWhen\": \"People act on several rows at once (approve, export, delete).\",\n  \"steps\": [\n    {\n      \"number\": 1,\n      \"label\": \"Some rows selected\",\n      \"note\": \"The count says how many rows are selected, in words. The bar has no checkbox: selecting every row on the page is the checkbox in the grid's header, and Clear selection is a button. Select all N matching extends the selection to every row that matches the filters, not only the page shown.\"\n    },\n    {\n      \"number\": 2,\n      \"label\": \"All matching rows selected\",\n      \"note\": \"Once everything matching is selected, the count says so and the Select all link is hidden. Before a destructive action on this selection, ask for confirmation: it reaches rows the person can't see (see Confirmation dialog).\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 1643,
+      "ok": true
+    },
+    {
+      "at": 14,
+      "kind": "mcp",
+      "tool": "get_pattern",
+      "arguments": {
+        "name": "Filter panel and chips"
+      },
+      "answer": "{\n  \"name\": \"Filter panel and chips\",\n  \"summary\": \"A panel sets the filters; chips above the grid show what's applied. The two always agree.\",\n  \"useWhen\": \"A grid has several filterable columns and people combine filters.\",\n  \"steps\": [\n    {\n      \"number\": 1,\n      \"label\": \"Filter panel\",\n      \"note\": \"The panel has one field per commonly filtered column; Add filter offers the rest. Apply runs the query. Reset returns every field to the active saved view's filters, or empty if no view is active. Clear all removes every filter. A field left empty, or set to its \\\"Any …\\\" option, doesn't filter: it adds no condition and shows no chip. Placeholders give an example of the expected value, never the label.\"\n    },\n    {\n      \"number\": 2,\n      \"label\": \"Applied filters as chips\",\n      \"note\": \"Every applied filter shows as a chip in plain words (Status is Open). Removing a chip clears its field in the panel, and choosing a view fills both. Changing the filters marks the view as edited (see Saved views).\"\n    }\n  ],\n  …\n}",
+      "answerChars": 1242,
+      "ok": true
+    },
+    {
+      "at": 14,
+      "kind": "mcp",
+      "tool": "get_pattern",
+      "arguments": {
+        "name": "Saved views"
+      },
+      "answer": "{\n  \"name\": \"Saved views\",\n  \"summary\": \"A view is a named filter set, plus its columns and sort. People pick one from the View menu and can save their own.\",\n  \"useWhen\": \"People come back to the same few filter sets (my items, flagged, large amounts).\",\n  \"steps\": [\n    {\n      \"number\": 1,\n      \"label\": \"View menu, open\",\n      \"note\": \"The menu groups predefined views and the person's own. Each option shows its filter set in muted text, so people know what they'll get before choosing. A view can also add columns.\"\n    },\n    {\n      \"number\": 2,\n      \"label\": \"An edited view: Save view is enabled\",\n      \"note\": \"Changing a view's filters keeps its name and adds \\\"· edited\\\". Save view becomes available and saves the current filter set under Saved by me. Reset returns to the view's own filters; Clear all removes every filter.\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 1201,
+      "ok": true
+    },
+    {
+      "at": 15,
+      "kind": "mcp",
+      "tool": "get_pattern",
+      "arguments": {
+        "name": "Warning and exception cells"
+      },
+      "answer": "{\n  \"name\": \"Warning and exception cells\",\n  \"summary\": \"How a grid flags one value that needs attention or breaks a rule, without relying on color.\",\n  \"useWhen\": \"One value in a row is outside a rule or limit, and people need to find it and see why.\",\n  \"steps\": [\n    {\n      \"number\": 1,\n      \"label\": \"Normal, warning, error\",\n      \"note\": \"Warning marks a value that's allowed but needs attention; error marks one that blocks the action. Both add a border and an icon, and use darker ink on the tinted background.\"\n    },\n    {\n      \"number\": 2,\n      \"label\": \"With keyboard focus\",\n      \"note\": \"The focus ring sits inside the flag's border, so a focused cell still shows that it's flagged.\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 1204,
+      "ok": true
+    },
+    {
+      "at": 15,
+      "kind": "mcp",
+      "tool": "get_pattern",
+      "arguments": {
+        "name": "Confirmation dialog"
+      },
+      "answer": "{\n  \"name\": \"Confirmation dialog\",\n  \"summary\": \"A dialog that asks before an action that can't be undone, or that reaches further than the person can see.\",\n  \"useWhen\": \"The action is irreversible (delete), or it applies to rows beyond the visible page (all 120 matching).\",\n  \"steps\": [\n    {\n      \"number\": 1,\n      \"label\": \"An action that can't be undone\",\n      \"note\": \"The title asks the question, with the count. The primary button repeats the verb and the count, never \\\"OK\\\". Destructive actions use the danger button. Cancel is always there, and Escape closes the dialog.\"\n    },\n    {\n      \"number\": 2,\n      \"label\": \"A selection that goes beyond the page\",\n      \"note\": \"A reversible action needs confirmation only when the selection goes beyond what's visible. The body says what's included and how to undo it.\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 1273,
+      "ok": true
+    },
+    {
+      "at": 15,
+      "kind": "mcp",
+      "tool": "get_pattern",
+      "arguments": {
+        "name": "Loading, empty, and error states"
+      },
+      "answer": "{\n  \"name\": \"Loading, empty, and error states\",\n  \"summary\": \"What a data view shows before, instead of, or when it fails to show rows. Keep the header and filters so context isn't lost.\",\n  \"useWhen\": \"Any data view that loads asynchronously or can come back empty.\",\n  \"steps\": [\n    {\n      \"number\": 1,\n      \"label\": \"Loading\",\n      \"note\": \"Loading: after ~300 ms, show skeleton rows under the real header, so the layout doesn't jump when rows arrive. Turn on the first row's label (\\\"Loading rows…\\\") and mark the grid aria-busy in code. Summary metrics use State = loading.\"\n    },\n    {\n      \"number\": 2,\n      \"label\": \"Empty (no results)\",\n      \"note\": \"Empty: say why there are no rows and offer the way out — Clear filters for no results; for nothing yet, say what will appear and how to add it.\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 1231,
+      "ok": true
+    },
+    {
+      "at": 16,
+      "kind": "mcp",
+      "tool": "get_pattern",
+      "arguments": {
+        "name": "Status chips"
+      },
+      "answer": "{\n  \"name\": \"Status chips\",\n  \"summary\": \"A status chip says what state a record is in, with a tone, an icon, and one or two words.\",\n  \"useWhen\": \"A record has a small set of states that people scan for (active, pending, flagged, blocked, draft).\",\n  \"steps\": [\n    {\n      \"number\": 1,\n      \"label\": \"One tone per meaning\",\n      \"note\": \"Positive: done or healthy. Info: in progress. Warning: needs attention. Critical: blocked or failed. Neutral: inactive or draft. Each tone has its own icon, so the status never depends on color alone.\"\n    },\n    {\n      \"number\": 2,\n      \"label\": \"In a grid\",\n      \"note\": \"In a grid, status gets its own column, sized to the longest label. Use the same word for the same state everywhere.\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 1098,
+      "ok": true
+    },
+    {
+      "at": 18,
+      "kind": "note",
+      "text": "Now the component details."
+    },
+    {
+      "at": 19,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "DataGrid"
+      },
+      "answer": "{\n  \"name\": \"Grid/Data grid\",\n  \"description\": \"A generic data grid with placeholder rows, to override or rebuild for a real dataset.\",\n  \"useWhen\": \"Starting a data view quickly; override headers and cell values, or rebuild rows from Grid/Row.\",\n  \"react\": {\n    \"component\": \"DataGrid\",\n    \"import\": \"import { DataGrid } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 4750,
+      "ok": true
+    },
+    {
+      "at": 19,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "BodyCell"
+      },
+      "answer": "{\n  \"name\": \"Grid/BodyCell\",\n  \"description\": \"One grid cell for text, numbers, gain or loss, a chip, or a checkbox, in every row and validation state.\",\n  \"useWhen\": \"Building custom rows or tables from individual cells, or overriding one cell's state (e.g. a value that breaks a rule).\",\n  \"react\": {\n    \"component\": \"BodyCell\",\n    \"import\": \"import { BodyCell } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 5203,
+      "ok": true
+    },
+    {
+      "at": 19,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "HeaderCell"
+      },
+      "answer": "{\n  \"name\": \"Grid/HeaderCell\",\n  \"description\": \"Labels a grid column, with optional sorting and left or right alignment.\",\n  \"useWhen\": \"Labeling a grid column; use Align = right for numeric columns so headers line up with the numbers.\",\n  \"react\": {\n    \"component\": \"HeaderCell\",\n    \"import\": \"import { HeaderCell } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 3706,
+      "ok": true
+    },
+    {
+      "at": 20,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "BulkActionBar"
+      },
+      "answer": "{\n  \"name\": \"Grid/BulkActionBar\",\n  \"description\": \"Shows the selection count and the actions for the selected grid rows.\",\n  \"useWhen\": \"One or more grid rows are selected and the actions apply to all of them.\",\n  \"react\": {\n    \"component\": \"BulkActionBar\",\n    \"import\": \"import { BulkActionBar } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 3973,
+      "ok": true
+    },
+    {
+      "at": 20,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "Pagination"
+      },
+      "answer": "{\n  \"name\": \"Grid/Pagination\",\n  \"description\": \"Shows the visible range under a grid, with Previous and Next buttons.\",\n  \"useWhen\": \"A grid shows one page of a larger result set.\",\n  \"react\": {\n    \"component\": \"Pagination\",\n    \"import\": \"import { Pagination } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 2504,
+      "ok": true
+    },
+    {
+      "at": 20,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "Row"
+      },
+      "answer": "{\n  \"name\": \"Grid/Row\",\n  \"description\": \"One grid row of body cells, in default, hover, selected, and selected-hover states.\",\n  \"useWhen\": \"Assembling a grid: one Row instance per record, overriding cell values.\",\n  \"react\": {\n    \"component\": \"Row\",\n    \"import\": \"import { Row } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 2284,
+      "ok": true
+    },
+    {
+      "at": 23,
+      "kind": "note",
+      "text": "Let me read the actual type declarations alongside."
+    },
+    {
+      "at": 24,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "List Sterling type declaration files"
+    },
+    {
+      "at": 27,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Print all Sterling component type declarations"
+    },
+    {
+      "at": 31,
+      "kind": "note",
+      "text": "Now the remaining components, guidelines, and tokens."
+    },
+    {
+      "at": 32,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "StatusChip"
+      },
+      "answer": "{\n  \"name\": \"Chip/Status\",\n  \"description\": \"Shows a record's status with a tone color, an icon, and a short label.\",\n  \"useWhen\": \"Showing the status of a record (in a grid cell, card, or header). Keep labels to one or two words.\",\n  \"react\": {\n    \"component\": \"StatusChip\",\n    \"import\": \"import { StatusChip } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 2364,
+      "ok": true
+    },
+    {
+      "at": 32,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "Tab"
+      },
+      "answer": "{\n  \"name\": \"Tabs/Tab\",\n  \"description\": \"Switches between views of the same data, with an optional count.\",\n  \"useWhen\": \"Switching between views of the same data (e.g. All / Open / Closed).\",\n  \"react\": {\n    \"component\": \"Tab\",\n    \"import\": \"import { Tab } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 3500,
+      "ok": true
+    },
+    {
+      "at": 32,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "SummaryMetric"
+      },
+      "answer": "{\n  \"name\": \"Summary/Summary metric\",\n  \"description\": \"Shows one headline number, with an optional progress bar against a target.\",\n  \"useWhen\": \"A single headline number someone checks at a glance, optionally against a target or limit.\",\n  \"react\": {\n    \"component\": \"SummaryMetric\",\n    \"import\": \"import { SummaryMetric } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 3787,
+      "ok": true
+    },
+    {
+      "at": 32,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "Button"
+      },
+      "answer": "{\n  \"name\": \"Controls/Button\",\n  \"description\": \"Triggers an action, in primary, secondary, ghost, or danger style.\",\n  \"useWhen\": \"Triggering an action. One primary per area; secondary for alternatives; ghost in dense toolbars and bulk bars; danger for destructive actions.\",\n  \"react\": {\n    \"component\": \"Button\",\n    \"import\": \"import { Button } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 3761,
+      "ok": true
+    },
+    {
+      "at": 33,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "Select"
+      },
+      "answer": "{\n  \"name\": \"Input/Select\",\n  \"description\": \"A labeled dropdown for choosing one option from a short list.\",\n  \"useWhen\": \"Choosing one option from a list of about 5–15 known values.\",\n  \"react\": {\n    \"component\": \"Select\",\n    \"import\": \"import { Select } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 6127,
+      "ok": true
+    },
+    {
+      "at": 33,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "Link"
+      },
+      "answer": "{\n  \"name\": \"Controls/Link\",\n  \"description\": \"An always-underlined text link for navigation and for shortcuts such as applying a filter.\",\n  \"useWhen\": \"Navigating, or applying a shortcut such as a filter (\\\"Filter: Status is Exception\\\"), from within text or a summary panel.\",\n  \"react\": {\n    \"component\": \"Link\",\n    \"import\": \"import { Link } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 2404,
+      "ok": true
+    },
+    {
+      "at": 33,
+      "kind": "mcp",
+      "tool": "get_guideline",
+      "arguments": {
+        "section": "Data display"
+      },
+      "answer": "{\n  \"name\": \"Data display\",\n  \"summary\": \"Numbers are the content: never hide digits, and line them up.\",\n  \"rules\": [\n    {\n      \"term\": \"Truncate text, never numbers\",\n      \"text\": \"Text (labels, names, text cell values) truncates with an ellipsis at a max width. Numbers never truncate — hidden digits are a risk in financial data.\"\n    },\n    {\n      \"term\": \"Size numeric columns\",\n      \"text\": \"Width = characters × 7.5 + 24, rounded up to 8 (numericColumnWidth() in the plugin); add 16 for the gain / loss glyph, or for the warning / error icon in a column whose cells can be flagged. Size for the longest value the column can hold.\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 3914,
+      "ok": true
+    },
+    {
+      "at": 34,
+      "kind": "mcp",
+      "tool": "get_guideline",
+      "arguments": {
+        "section": "Accessibility"
+      },
+      "answer": "{\n  \"name\": \"Accessibility\",\n  \"summary\": \"Visible focus, contrast in every mode, and signals beyond color.\",\n  \"rules\": [\n    {\n      \"term\": \"Focus\",\n      \"text\": \"Every interactive control has a focus variant (State = focus, or a combined -focus value) with a 2px focus/ring outline. It sits outside the control (3px) by default; inside for grid cells, header cells, and tabs, which touch their neighbours; and 1px inside the warning or error border on flagged cells, so both stay visible. The outline is its own layer, so focus never shifts the layout.\"\n    },\n    {\n      \"term\": \"Contrast in every mode\",\n      \"text\": \"Text needs 4.5:1, and large text and UI graphics (icons, borders, focus rings) need 3:1 — in Light and Dark. Every pair a component uses is listed in tokens.json contrast.rules, and npm run contrast must pass. Disabled content is exempt (WCAG 1.4.3).\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 2284,
+      "ok": true
+    },
+    {
+      "at": 38,
+      "kind": "mcp",
+      "tool": "get_tokens",
+      "arguments": {},
+      "answer": "{\n  \"collections\": [\n    {\n      \"name\": \"primitives\",\n      \"tokens\": 66,\n      \"description\": \"The raw color ramps. Hidden in Figma: components use the semantic Color tokens, never these.\"\n    },\n    {\n      \"name\": \"color\",\n      \"tokens\": 50,\n      \"description\": \"Semantic colors. $value is the Light mode; every mode is in $extensions.\",\n      …\n    },\n    {\n      \"name\": \"spacing\",\n      \"tokens\": 15,\n      \"description\": \"Spacing scale for gap and padding (scope: Gap), plus corner radii (scope: Corner radius). Published: applied directly in layouts.\"\n    },\n    {\n      \"name\": \"size\",\n      \"tokens\": 10,\n      \"description\": \"Dimension scale for fixed widths and heights (scope: Width & height). For heights that should follow Density, use Density/* instead.\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 1465,
+      "ok": true
+    },
+    {
+      "at": 38,
+      "kind": "mcp",
+      "tool": "get_tokens",
+      "arguments": {
+        "collection": "color",
+        "mode": "Light"
+      },
+      "answer": "{\n  \"collection\": \"color\",\n  \"count\": 50,\n  \"tokens\": [\n    {\n      \"name\": \"surface/background\",\n      \"css\": \"--stl-color-surface-background\",\n      \"aliasOf\": \"neutral/50\",\n      \"value\": \"#F7F8FA\",\n      \"description\": \"Page and app background, behind panels.\"\n    },\n    {\n      \"name\": \"surface/panel\",\n      \"css\": \"--stl-color-surface-panel\",\n      \"aliasOf\": \"neutral/0\",\n      \"value\": \"#FFFFFF\",\n      \"description\": \"Background of panels, cards, grid rows, and input fields.\"\n    },\n    {\n      \"name\": \"surface/raised\",\n      \"css\": \"--stl-color-surface-raised\",\n      \"aliasOf\": \"neutral/0\",\n      \"value\": \"#FFFFFF\",\n      \"description\": \"Background of surfaces that sit above the page: menus and dialogs.\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 11849,
+      "ok": true
+    },
+    {
+      "at": 39,
+      "kind": "mcp",
+      "tool": "get_tokens",
+      "arguments": {
+        "collection": "size"
+      },
+      "answer": "{\n  \"collection\": \"size\",\n  \"count\": 10,\n  \"tokens\": [\n    {\n      \"name\": \"size/4\",\n      \"css\": \"--stl-size-4\",\n      \"value\": \"4px\",\n      \"description\": \"4px fixed width or height, for thin bars such as a progress track.\"\n    },\n    {\n      \"name\": \"size/12\",\n      \"css\": \"--stl-size-12\",\n      \"value\": \"12px\",\n      \"description\": \"12px fixed width or height, for small icons.\"\n    },\n    {\n      \"name\": \"size/16\",\n      \"css\": \"--stl-size-16\",\n      \"value\": \"16px\",\n      \"description\": \"16px fixed width or height, for icons and checkboxes.\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 2099,
+      "ok": true
+    },
+    {
+      "at": 39,
+      "kind": "mcp",
+      "tool": "get_tokens",
+      "arguments": {
+        "collection": "spacing"
+      },
+      "answer": "{\n  \"collection\": \"spacing\",\n  \"count\": 15,\n  \"tokens\": [\n    {\n      \"name\": \"space/0\",\n      \"css\": \"--stl-space-0\",\n      \"value\": \"0px\",\n      \"description\": \"No gap or padding (0px).\"\n    },\n    {\n      \"name\": \"space/2\",\n      \"css\": \"--stl-space-2\",\n      \"value\": \"2px\",\n      \"description\": \"2px gap or padding, the smallest step.\"\n    },\n    {\n      \"name\": \"space/4\",\n      \"css\": \"--stl-space-4\",\n      \"value\": \"4px\",\n      \"description\": \"4px gap or padding, for tightly related items such as an icon and its label.\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 2683,
+      "ok": true
+    },
+    {
+      "at": 39,
+      "kind": "mcp",
+      "tool": "get_tokens",
+      "arguments": {
+        "collection": "typography"
+      },
+      "answer": "{\n  \"collection\": \"typography\",\n  \"count\": 11,\n  \"tokens\": [\n    {\n      \"name\": \"Display\",\n      \"css\": \".stl-text-display\",\n      \"value\": {\n        \"fontFamily\": \"Inter\",\n        \"fontSize\": \"24px\",\n        \"fontWeight\": 600,\n        \"lineHeight\": 1.3333,\n        \"letterSpacing\": \"-0.5px\"\n      }\n    },\n    {\n      \"name\": \"Title\",\n      \"css\": \".stl-text-title\",\n      \"value\": {\n        \"fontFamily\": \"Inter\",\n        \"fontSize\": \"20px\",\n        \"fontWeight\": 600,\n        \"lineHeight\": 1.4,\n        \"letterSpacing\": \"-0.25px\"\n      }\n    },\n    {\n      \"name\": \"Heading\",\n      \"css\": \".stl-text-heading\",\n      \"value\": {\n        \"fontFamily\": \"Inter\",\n        \"fontSize\": \"16px\",\n        \"fontWeight\": 600,\n        \"lineHeight\": 1.375,\n        \"letterSpacing\": \"0px\"\n      }\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 3196,
+      "ok": true
+    },
+    {
+      "at": 40,
+      "kind": "mcp",
+      "tool": "get_tokens",
+      "arguments": {
+        "collection": "density",
+        "mode": "Default"
+      },
+      "answer": "{\n  \"collection\": \"density\",\n  \"count\": 11,\n  \"tokens\": [\n    {\n      \"name\": \"row/height\",\n      \"css\": \"--stl-row-height\",\n      \"aliasOf\": \"size/32\",\n      \"value\": \"32px\",\n      \"description\": \"Height of grid rows and header cells. Follows the Density mode.\"\n    },\n    {\n      \"name\": \"cell/padding-x\",\n      \"css\": \"--stl-cell-padding-x\",\n      \"aliasOf\": \"space/8\",\n      \"value\": \"8px\",\n      \"description\": \"Left and right padding inside grid cells. Follows the Density mode.\"\n    },\n    {\n      \"name\": \"cell/padding-y\",\n      \"css\": \"--stl-cell-padding-y\",\n      \"aliasOf\": \"space/6\",\n      \"value\": \"6px\",\n      \"description\": \"Top and bottom padding inside grid cells. Follows the Density mode.\"\n    },\n    …\n  ],\n  …\n}",
+      "answerChars": 2876,
+      "ok": true
+    },
+    {
+      "at": 43,
+      "kind": "note",
+      "text": "A few gap checks: tooltip, textarea, undo/toast, breadcrumb."
+    },
+    {
+      "at": 43,
+      "kind": "mcp",
+      "tool": "search",
+      "arguments": {
+        "query": "undo"
+      },
+      "answer": "{\n  \"query\": \"undo\",\n  \"found\": 1,\n  \"shown\": 1,\n  \"results\": [\n    {\n      \"type\": \"pattern\",\n      \"name\": \"Confirmation dialog\",\n      \"excerpt\": \"A dialog that asks before an action that can't be undone, or that reaches further than the person can see.\",\n      …\n    }\n  ]\n}",
+      "answerChars": 366,
+      "ok": true
+    },
+    {
+      "at": 44,
+      "kind": "mcp",
+      "tool": "search",
+      "arguments": {
+        "query": "tooltip"
+      },
+      "answer": "{\n  \"query\": \"tooltip\",\n  \"found\": 4,\n  \"shown\": 4,\n  \"results\": [\n    {\n      \"type\": \"component\",\n      \"name\": \"Controls/Icon button\",\n      \"excerpt\": \"… to the action (\\\"Delete row\\\") and use it as aria-label and tooltip in code. Danger uses …\",\n      …\n    },\n    {\n      \"type\": \"pattern\",\n      \"name\": \"Warning and exception cells\",\n      \"excerpt\": \"… a reason in a neighboring column, with the full rule in a tooltip. In code, include the reason in the cell's accessible name. Size the column with the icon allowance (numericColumnWidth with icon), so flagged values …\",\n      …\n    },\n    {\n      \"type\": \"guideline\",\n      \"name\": \"Accessibility\",\n      \"excerpt\": \"… buttons always set Label: it's the accessible name and the …\",\n      …\n    },\n    …\n  ]\n}",
+      "answerChars": 1291,
+      "ok": true
+    },
+    {
+      "at": 44,
+      "kind": "mcp",
+      "tool": "search",
+      "arguments": {
+        "query": "textarea note"
+      },
+      "answer": "{\n  \"query\": \"textarea note\",\n  \"found\": 2,\n  \"shown\": 2,\n  \"results\": [\n    {\n      \"type\": \"pattern\",\n      \"name\": \"Form layout\",\n      \"excerpt\": \"Use when: Creating or editing a single record with a few fields (a ticket, a setting, an order note).\",\n      …\n    },\n    {\n      \"type\": \"guideline\",\n      \"name\": \"Data display\",\n      \"excerpt\": \"Column widths: Size numeric and identifier columns (IDs, codes, reference numbers) to their values. When a grid has room to spare, only descriptive text columns (names, notes, reasons) stretch to take it up.\",\n      …\n    }\n  ]\n}",
+      "answerChars": 746,
+      "ok": true
+    },
+    {
+      "at": 44,
+      "kind": "mcp",
+      "tool": "search",
+      "arguments": {
+        "query": "breadcrumb page header"
+      },
+      "answer": "{\n  \"query\": \"breadcrumb page header\",\n  \"found\": 23,\n  \"shown\": 10,\n  \"results\": [\n    {\n      \"type\": \"component\",\n      \"name\": \"Grid/HeaderCell\",\n      \"excerpt\": \"… and Show sort are component properties. Only a sorted header (asc / desc) shows its icon at rest; an unsorted one reveals ⇕ on hover and focus, so a grid shows at most one sort icon. Show sort off means the column can't …\",\n      …\n    },\n    {\n      \"type\": \"component\",\n      \"name\": \"Grid/Data grid\",\n      \"excerpt\": \"Use when: Starting a data view quickly; override headers and cell values, or rebuild rows from Grid/Row.\",\n      …\n    },\n    {\n      \"type\": \"component\",\n      \"name\": \"Grid/Pagination\",\n      \"excerpt\": \"Footer under the grid. Range and Page are text properties; Previous and Next are exposed Button instances, so their State (e.g. disabled on the first or last page) is set from this component's panel.\",\n      …\n    },\n    …\n  ]\n}",
+      "answerChars": 3409,
+      "ok": true
+    },
+    {
+      "at": 45,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "Dialog"
+      },
+      "answer": "{\n  \"name\": \"Overlay/Dialog\",\n  \"description\": \"A modal dialog for one focused task, with a title, a body, and Cancel and primary actions.\",\n  \"useWhen\": \"Confirming or completing one focused task without leaving the screen (sign off, rename, confirm a destructive action).\",\n  \"react\": {\n    \"component\": \"Dialog\",\n    \"import\": \"import { Dialog } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 3590,
+      "ok": true
+    },
+    {
+      "at": 45,
+      "kind": "mcp",
+      "tool": "get_component",
+      "arguments": {
+        "name": "EmptyState"
+      },
+      "answer": "{\n  \"name\": \"Grid/Empty state\",\n  \"description\": \"Takes the place of grid rows when there are no results or loading failed.\",\n  \"useWhen\": \"A grid has no rows to show — filters match nothing, nothing exists yet, or loading failed.\",\n  \"react\": {\n    \"component\": \"EmptyState\",\n    \"import\": \"import { EmptyState } from \\\"sterling-ui\\\";\",\n    …\n  },\n  …\n}",
+      "answerChars": 2801,
+      "ok": true
+    },
+    {
+      "at": 51,
+      "kind": "note",
+      "text": "Sterling has no tooltip, toast/undo, textarea, breadcrumb, or card component — I'll note those. Now let me check how DataGrid actually renders (chip cells, selection, sorting) in the bundle."
+    },
+    {
+      "at": 52,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Locate DataGrid source in bundle"
+    },
+    {
+      "at": 54,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Read DataGrid, BulkActionBar, Dialog source"
+    },
+    {
+      "at": 61,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "List function definitions in bundle"
+    },
+    {
+      "at": 64,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Read FilterChip, Select, SummaryMetric, Tab, TextInput source"
+    },
+    {
+      "at": 73,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Survey CSS selectors in Sterling styles"
+    },
+    {
+      "at": 76,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Read base body and bulk-bar CSS"
+    },
+    {
+      "at": 188,
+      "kind": "note",
+      "text": "I've read the Sterling patterns, components, tokens, and the component source. Now planning the screen and writing the code. Quick check of the package exports first."
+    },
+    {
+      "at": 189,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Check sterling-ui package exports"
+    },
+    {
+      "at": 193,
+      "kind": "note",
+      "text": "Writing the data model first: it derives each loan's status from the rules and keeps counts honest by combining the sample loans with the file's totals."
+    },
+    {
+      "at": 227,
+      "kind": "tool",
+      "tool": "Write",
+      "what": "Wrote pool.ts"
+    },
+    {
+      "at": 281,
+      "kind": "note",
+      "text": "Now let me check how SummaryMetric and Link look in CSS before laying out the summary panel."
+    },
+    {
+      "at": 282,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Read summary metric, link, tab, dialog CSS"
+    },
+    {
+      "at": 286,
+      "kind": "note",
+      "text": "Writing the screen component now."
+    },
+    {
+      "at": 370,
+      "kind": "tool",
+      "tool": "Write",
+      "what": "Wrote App.tsx"
+    },
+    {
+      "at": 404,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Apply review fixes to App.tsx"
+    },
+    {
+      "at": 408,
+      "kind": "note",
+      "text": "Now the styles (tokens only) and the entry files."
+    },
+    {
+      "at": 425,
+      "kind": "tool",
+      "tool": "Write",
+      "what": "Wrote app.css"
+    },
+    {
+      "at": 426,
+      "kind": "tool",
+      "tool": "Write",
+      "what": "Wrote main.tsx"
+    },
+    {
+      "at": 427,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Add body text class and run build"
+    },
+    {
+      "at": 432,
+      "kind": "note",
+      "text": "Build passes. Let me run the app and take a headless screenshot to check the layout against the design."
+    },
+    {
+      "at": 434,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Start dev server and look for a headless browser"
+    },
+    {
+      "at": 441,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Screenshot the app with headless Chrome"
+    },
+    {
+      "at": 445,
+      "kind": "tool",
+      "tool": "Read",
+      "what": "Read shot1.png"
+    },
+    {
+      "at": 453,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Check field width CSS"
+    },
+    {
+      "at": 460,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Fix column layout and re-screenshot"
+    },
+    {
+      "at": 463,
+      "kind": "tool",
+      "tool": "Read",
+      "what": "Read shot2.png"
+    },
+    {
+      "at": 468,
+      "kind": "note",
+      "text": "Layout now matches the design. Next I'll drive the real page with a small Chrome DevTools script to test the interactions (selection, sign-off, remove/undo, empty, error, dark, compact)."
+    },
+    {
+      "at": 468,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Check Node version"
+    },
+    {
+      "at": 497,
+      "kind": "tool",
+      "tool": "Write",
+      "what": "Wrote drive.mjs"
+    },
+    {
+      "at": 501,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Run the interaction test script"
+    },
+    {
+      "at": 531,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Fix test script and rerun"
+    },
+    {
+      "at": 535,
+      "kind": "tool",
+      "tool": "Edit",
+      "what": "Edit"
+    },
+    {
+      "at": 539,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Fix Enter key text and rerun tests"
+    },
+    {
+      "at": 572,
+      "kind": "tool",
+      "tool": "Edit",
+      "what": "Edit"
+    },
+    {
+      "at": 573,
+      "kind": "tool",
+      "tool": "Edit",
+      "what": "Edit"
+    },
+    {
+      "at": 574,
+      "kind": "tool",
+      "tool": "Read",
+      "what": "Read s-all-selected.png"
+    },
+    {
+      "at": 574,
+      "kind": "tool",
+      "tool": "Read",
+      "what": "Read s-dark-compact.png"
+    },
+    {
+      "at": 578,
+      "kind": "note",
+      "text": "Dark mode and compact density both render correctly. Checking the dialogs."
+    },
+    {
+      "at": 579,
+      "kind": "tool",
+      "tool": "Read",
+      "what": "Read s-signoff-error.png"
+    },
+    {
+      "at": 580,
+      "kind": "tool",
+      "tool": "Read",
+      "what": "Read s-empty.png"
+    },
+    {
+      "at": 589,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Apply fixes, check CSS for raw values, build"
+    },
+    {
+      "at": 593,
+      "kind": "note",
+      "text": "The build passes, and the CSS has no raw colors, sizes, or fonts. Rerunning the interaction script once more, then stopping the dev server."
+    },
+    {
+      "at": 596,
+      "kind": "tool",
+      "tool": "Bash",
+      "what": "Rerun tests and stop dev server"
+    }
+  ]
+}

@@ -1,0 +1,275 @@
+/* Layout for the Pool loans screen. Every value is a Sterling token. */
+
+body {
+  margin: var(--stl-space-0);
+  background: var(--stl-color-surface-background);
+  color: var(--stl-color-text-primary);
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--stl-color-surface-background);
+  color: var(--stl-color-text-primary);
+}
+
+.app h1,
+.app h2,
+.app h3,
+.app p,
+.app ul {
+  margin: var(--stl-space-0);
+}
+
+.muted {
+  color: var(--stl-color-text-secondary);
+}
+
+/* ---------- Header ---------- */
+
+.pool-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--stl-space-4) var(--stl-space-16);
+  padding: var(--stl-space-12) var(--stl-space-16);
+  border-bottom: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  background: var(--stl-color-surface-panel);
+}
+
+.pool-header__title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--stl-space-8);
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+}
+
+.breadcrumb__sep {
+  color: var(--stl-color-text-secondary);
+}
+
+.pool-header__criteria {
+  grid-column: 1;
+  color: var(--stl-color-text-secondary);
+}
+
+.pool-header__actions {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--stl-space-12);
+}
+
+.issues-badge,
+.issues-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--stl-space-4);
+  color: var(--stl-color-status-warning-strong);
+}
+
+.issues-badge[data-clear],
+.issues-heading[data-clear] {
+  color: var(--stl-color-status-positive-strong);
+}
+
+/* ---------- Three columns: filters, list, summary. They wrap on narrow screens, with no breakpoints. ---------- */
+
+.workspace {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--stl-space-16);
+  padding: var(--stl-space-16);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-card-gap);
+  box-sizing: border-box;
+  padding: var(--stl-card-padding);
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  border-radius: var(--stl-radius-md);
+  background: var(--stl-color-surface-panel);
+}
+
+/* The same width as a summary metric. */
+.filter-panel,
+.summary {
+  flex: 1 1 calc(var(--stl-size-40) * 5.5);
+  max-width: calc(var(--stl-size-40) * 5.5);
+}
+
+.filter-panel__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+
+.filter-panel__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--stl-space-8);
+}
+
+.list-area {
+  flex: 1000 1 calc(var(--stl-size-40) * 16);
+  min-width: var(--stl-space-0);
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+
+.list-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-8);
+}
+
+.list-panel .stl-data-grid {
+  background: var(--stl-color-surface-panel);
+}
+
+/* ---------- View and applied filters ---------- */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--stl-space-8);
+}
+
+.toolbar__view {
+  width: calc(var(--stl-size-40) * 6);
+}
+
+.toolbar__chips {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--stl-space-8);
+}
+
+.toolbar__save {
+  margin-left: auto;
+}
+
+/* ---------- Inline notice (Sterling has none): the result of an action, with Undo. ---------- */
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+  padding: var(--stl-space-4) var(--stl-space-12);
+  border: var(--stl-stroke-1) solid var(--stl-color-status-positive);
+  border-radius: var(--stl-radius-sm);
+  background: var(--stl-color-status-positive-subtle);
+  color: var(--stl-color-status-positive-strong);
+}
+
+.notice:focus-visible {
+  outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);
+  outline-offset: var(--stl-space-2);
+}
+
+.notice__text {
+  flex: 1;
+}
+
+/* Hidden but still in the page, so screen readers hear the next message. */
+.notice--empty {
+  position: absolute;
+  width: var(--stl-stroke-1);
+  height: var(--stl-stroke-1);
+  margin: calc(-1 * var(--stl-stroke-1));
+  padding: var(--stl-space-0);
+  border: var(--stl-space-0);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- Summary ---------- */
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+
+.link-row__item {
+  white-space: nowrap;
+}
+
+.issue {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--stl-space-4);
+  padding-top: var(--stl-space-8);
+}
+
+/* ---------- Dialog bodies ---------- */
+
+.dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+
+.dialog-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-4);
+  padding-left: var(--stl-space-16);
+}
+
+/* ---------- Preview settings ---------- */
+
+.preview {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--stl-space-16);
+  padding: var(--stl-space-12) var(--stl-space-16);
+  border-top: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  background: var(--stl-color-surface-panel);
+}
+
+.preview h2 {
+  align-self: center;
+}
+
+.preview .stl-field {
+  width: calc(var(--stl-size-40) * 4);
+}
+
+.preview__check {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-16);
+  min-height: var(--stl-control-height);
+}
+
+/* Form layout: fields fill the panel's width. */
+.filter-panel .stl-field,
+.dialog-body .stl-field {
+  width: 100%;
+}
+
+.summary__metric {
+  width: 100%;
+}

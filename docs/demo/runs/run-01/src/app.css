@@ -1,0 +1,264 @@
+/* Layout for the Pool loans screen. Every value is a Sterling token (or a calc of tokens, as Sterling's own
+   CSS does); components bring their own styles from sterling-ui/styles.css. */
+
+h1,
+h2,
+h3,
+p {
+  margin: var(--stl-space-0);
+}
+
+/* ---- Header ---- */
+
+.page-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--stl-space-4) var(--stl-space-16);
+  padding: var(--stl-space-12) var(--stl-space-16);
+  background: var(--stl-color-surface-panel);
+  border-bottom: var(--stl-stroke-1) solid var(--stl-color-border-default);
+}
+.page-header__title {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+  min-width: 0;
+}
+.page-header__actions {
+  grid-row: span 2;
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-12);
+}
+.page-header__criteria {
+  color: var(--stl-color-text-secondary);
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+  color: var(--stl-color-text-secondary);
+}
+
+.issues-count {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--stl-space-4);
+}
+.issues-count--open {
+  color: var(--stl-color-status-warning-strong);
+}
+.issues-count--clear {
+  color: var(--stl-color-status-positive-strong);
+}
+
+/* ---- Three columns: filters (2 of 12), list, summary ---- */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 8fr) minmax(0, 2fr);
+  align-items: start;
+  gap: var(--stl-space-16);
+  padding: var(--stl-space-16);
+}
+
+.panel {
+  background: var(--stl-color-surface-panel);
+  border: var(--stl-stroke-1) solid var(--stl-color-border-default);
+  border-radius: var(--stl-radius-md);
+}
+.panel__heading {
+  color: var(--stl-color-text-primary);
+}
+
+/* ---- Filters panel ---- */
+
+.filters__form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--stl-space-12);
+  padding: var(--stl-card-padding);
+}
+/* Form layout: one column, fields full width. */
+.filters__form .stl-field,
+.dialog-body .stl-field,
+.demo .stl-field {
+  width: 100%;
+}
+.filters__form > .popup-anchor {
+  align-self: flex-start;
+}
+.filters__extra {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--stl-space-4);
+}
+.filters__extra-field {
+  flex: 1;
+  min-width: 0;
+}
+/* Line the remove button up with the field, below its label. */
+.filters__extra-remove {
+  margin-top: calc(var(--stl-space-16) + var(--stl-space-4) + (var(--stl-control-height) - var(--stl-control-height-sm)) / 2);
+}
+.filters__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--stl-space-8);
+}
+
+/* ---- List column ---- */
+
+.main,
+.tab-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+  min-width: 0;
+}
+.tabs {
+  border-bottom: var(--stl-stroke-1) solid var(--stl-color-border-default);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stl-space-12);
+}
+.toolbar__save {
+  margin-left: auto;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--stl-space-8);
+}
+
+.view-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+}
+.view-menu__label {
+  color: var(--stl-color-text-secondary);
+}
+.view-menu .view-menu__field {
+  width: calc(var(--stl-size-40) * 5);
+}
+
+/* Menus opened from a button or the View field sit just under it, above the page. */
+.popup-anchor {
+  position: relative;
+}
+.popup-list {
+  position: absolute;
+  top: calc(100% + var(--stl-space-4));
+  left: var(--stl-space-0);
+  z-index: 10;
+  min-width: 100%;
+  width: max-content;
+  max-width: calc(var(--stl-size-40) * 8);
+}
+.popup-list:focus {
+  outline: none;
+}
+
+/* An inline message with an optional Undo: Sterling has no toast or banner. */
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-8);
+  padding: var(--stl-space-2) var(--stl-space-4) var(--stl-space-2) var(--stl-space-12);
+  border: var(--stl-stroke-1) solid;
+  border-radius: var(--stl-radius-sm);
+}
+.notice:focus-visible {
+  outline: var(--stl-stroke-2) solid var(--stl-color-focus-ring);
+  outline-offset: var(--stl-stroke-2);
+}
+.notice--positive {
+  background: var(--stl-color-status-positive-subtle);
+  border-color: var(--stl-color-status-positive);
+  color: var(--stl-color-status-positive-strong);
+}
+.notice--info {
+  background: var(--stl-color-status-info-subtle);
+  border-color: var(--stl-color-status-info);
+  color: var(--stl-color-status-info-strong);
+}
+.notice__text {
+  flex: 1;
+}
+
+/* ---- Summary ---- */
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+.summary .stl-summary-metric {
+  width: 100%;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-card-gap);
+  padding: var(--stl-card-padding);
+}
+.card__label,
+.card__muted {
+  color: var(--stl-color-text-secondary);
+}
+.issues__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--stl-space-4);
+}
+.issues--open .issues__heading {
+  color: var(--stl-color-status-warning-strong);
+}
+.issues--clear .issues__heading {
+  color: var(--stl-color-status-positive-strong);
+}
+.issues__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--stl-space-2);
+}
+
+/* ---- Dialogs ---- */
+
+.dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stl-space-12);
+}
+.dialog-list {
+  margin: var(--stl-space-0);
+  padding-left: var(--stl-space-16);
+}
+
+/* ---- Demo settings ---- */
+
+.demo {
+  display: grid;
+  grid-template-columns: auto repeat(3, calc(var(--stl-size-40) * 5));
+  align-items: end;
+  gap: var(--stl-space-16);
+  margin: var(--stl-space-0) var(--stl-space-16) var(--stl-space-16);
+  padding: var(--stl-card-padding);
+}
+.demo__heading {
+  align-self: center;
+  color: var(--stl-color-text-secondary);
+}
+
+.status-links .stl-link {
+  white-space: nowrap;
+}

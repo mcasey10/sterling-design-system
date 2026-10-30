@@ -415,12 +415,65 @@ Not planned for a release yet:
 
 - **Components a session building a real screen missed:** a toast or inline message, a card or panel, a
   screen-reader-only text class, layout tokens, and grouped options (and descriptions) in Select.
+  - **With the toast: where focus goes after a short-lived action.** Say where keyboard focus goes when the control
+    that had it disappears or is disabled by the action: after Undo (the notice and its Undo button go away), and
+    after a dialog closes whose trigger the action disabled (Sign off, once no exception is selected). In the repeat
+    runs, focus after Undo went to the notice in runs 1–3 and was lost to the page body in run 4 (repeat-runs
+    deviations 23 and 24).
 
 - **Tooltip component.** A Sterling tooltip, in Figma and in code. Until then the coded Icon button
   shows its label with the browser's own tooltip (`title`), which can't be styled, appears after a
   delay, and doesn't appear on keyboard focus.
 
 - **Input/Option with description focus.** Figma has no focus variant for it; the coded option shows one.
+
+- **From the repeat runs** (after the series; Sterling isn't changed during it):
+  - **A z-index token.** Sterling has no z-index or layer token, so a screen's own popup needs a raw value.
+  - **Say that component class names are private.** Nothing Sterling publishes says that `stl-` component classes
+    (as opposed to token classes and custom properties) aren't for screens to use, and screens use them: the
+    October 14 screen and run 1 both did. Related: Select gives no ref to its button, so a screen can't focus
+    it without a class.
+  - **Say who sets color mode and density.** The instructions say how to set them, not that the host page sets
+    them and a screen mustn't change them. Run 1's screen removed them on load, like the October 14 screen. Add one
+    sentence to Sterling's guidance (the server's instructions and the package README): the host app owns color mode
+    and density, and a screen must never change them. Until then, a run that changes them is a Sterling fail
+    (repeat-runs deviation 16).
+  - **The summary metric's numbers.** Sterling's rule (full value in Detail, Oct 7) and its own Pool loans summary
+    (Sep 30) were never compared, and disagree (repeat-runs deviation 17). Decide and write down:
+    - the Detail line gives context (such as "85% of $50.0M target"), not a repeat of the value;
+    - the exact value goes in the metric's accessible name, and in a Tooltip once Sterling has one;
+    - compact notation depends on the number's size, not the card's width;
+    - detail lines with numbers wrap, never truncate;
+    - when the exact value isn't in the data, don't spell out a rounded figure as if it were exact;
+    - a minimum width for the summary panel (runs 1 and 2 rendered it at 229 and 224 px at 1440 px, and run 2's
+      narrower panel changed its wrapping).
+  - **Align the request with the example.** `demo/prompt.md` was drafted from a summary of the loan-pooling example,
+    not its full spec, and never checked against it: it leaves out Export, "+ Add filter", Edit criteria, Save view and
+    the View menu, and the summary's shortcuts, which the example's About frame and the design picture show; it asks
+    for an Undo the example doesn't have; and its Remove confirmation rule ("beyond the loans on screen") differs from
+    the example's ("all matching loans selected"). Bring the two into line, in one direction or the other, and check
+    them against each other.
+  - **A second consumer test, outside Sterling's library.** The repeat runs were a best case: the screen Sterling's
+    components were scoped for, with a design picture from Sterling's own example. Try a screen Sterling wasn't built
+    around (for example an MBS or dealers screen), with a mockup and a request written together and checked against
+    each other before any run.
+  - **Correct three passages about October 14's browser.** The case study ([pool-loans.md](case-study/pool-loans.md),
+    the "What the session could and couldn't see" paragraph, and "for want of a browser" under "How well it worked")
+    and the demo page (`ui/scripts/build-pages.ts`, "The session had no browser it could use") say no browser was
+    available. Chrome was installed and could be started headless from the shell, as repeat runs 1 and 2 did; the
+    session didn't try. Say that instead. The session's own words (its report) stay as written.
+  - **A narrow-width layout rule.** Sterling says nothing about how a screen's columns behave at narrow widths. Run
+    5's filters | grid | summary layout kept all three columns at 390 px and left the grid 1 px wide, so nothing in
+    it could be seen; runs 1–4 stacked or scrolled and kept the grid 216–357 px (repeat-runs deviation 27). Say how
+    the standard data-screen layout (filters 2 | grid 8 | summary 2 of 12 columns) collapses at narrow widths, with
+    layout tokens.
+  - **`numericColumnWidth` ignores the header label.** A short numeric column can be narrower than its header: in
+    Comfortable, FICO's header needs 68.3 px and `numericColumnWidth` gives 64 (repeat runs 1 and 4). Size a column to
+    the wider of its values and its label.
+  - **DataGrid's loading label truncates.** In run 1, at 1440px, the first skeleton row showed "Loading pool
+    loa" in the last column, with no ellipsis. Check in Storybook.
+  - **The example's filter panel.** Examples › Pool loans has no "+ Add filter", which the designer's screen
+    shows (run 1's screen has it). A question about the example, not the runs.
 
 ## Known limitations
 
