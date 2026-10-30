@@ -173,7 +173,7 @@ no Undo. It's still a Sterling gap: Sterling has no guidance on where focus goes
 
 ## Rulings and deviations that affected scoring
 
-- **Deviation 6**: a reviewer may override a scorer result only when the scorer read the wrong region (NUM-upb in
+- **Deviation 6**: the review session may override a scorer result only when the scorer read the wrong region (NUM-upb in
   runs 1 and 5: the scorer read the filter panel's `<aside>`).
 - **Deviation 7**: theme and density are set before the app loads (the scorer sets them after, so it can't see a
   screen that overrides them).

@@ -167,14 +167,17 @@ scripts/build-token-css.mjs   Token CSS for code: `npm run tokens:css` writes di
 scripts/build-token-site.mjs  The token reference: `npm run tokens:site` writes site/tokens/index.html,
                           site/tokens.css (gitignored; the same CSS), and site/fonts/ (Inter 3.19 copied
                           from ui/node_modules/inter-ui, when installed). Addresses from ai/index.json
-scripts/lib/page-shell.mjs  The website's page shell: head, fonts, token CSS, the site navigation, the Light /
+scripts/lib/page-shell.mjs  The website's page shell: head, fonts, token CSS, the site navigation (NAV: two groups,
+                          Sterling and Build with AI; the header shows both, then the current group's pages), the Light /
                           Dark switch, the footer. Every website page uses it; phone width up
 ui/scripts/build-pages.ts `npm run pages` (in ui/): Start here (site/index.html) from AUDIENCES in
                           definitions/audiences.ts, Install sterling-ui (site/install/) from definitions/setup.ts, and
                           Sterling and AI tools (site/ai-tools/): Chip/Status followed from source to code in seven
                           steps, the MCP setup block (ending with a first prompt); the demo replay (site/demo/); and the live example
                           (site/example/: Examples › Pool loans from the built Storybook in a frame, under a slim bar,
-                          with Open Graph tags for link previews). Needs the MCP server built (npm run build in mcp/)
+                          with Open Graph tags for link previews); and Five follow-up runs (site/runs/; its text and Start
+                          here's "Two builds" section are in ui/scripts/lib/repeat-runs.ts, the pictures in
+                          docs/demo/runs/images/). Needs the MCP server built (npm run build in mcp/)
 ui/scripts/lib/excerpts.ts  THE AI page's excerpts, read from the real files by selector (TS entry, JSON path, lines,
                           code symbol); each must match once. Step 7's code must be identical to 2872cf0, as delivered.
                           `npm run check:excerpts` runs them (needs git history and the built MCP server)
@@ -207,6 +210,9 @@ ui/scripts/docs-sync.ts   `npm run docs:sync`: writes the generated parts of doc
                           docs/figma-community.md's version and counts, and docs/reference.md's icon count.
                           `npm run check:docs-sync` fails if stale
 docs/figma-community.md   The Figma Community page text (pasted at release); docs/github-about.md: the About panel
+docs/decks/               Public slide decks (<deck>/<deck>.pptx and the PDF made from it), indexed in its README.md;
+                          linked from LinkedIn, not from any page. `npm run site` publishes each PDF at decks/<deck>.pdf
+                          (DECKS_URL). `npm run check:decks` (ui/scripts/check-decks.mjs) reads them
 scripts/check-release-date.mjs  `npm run check:release-date`: fails while the placeholder RELEASE-DATE is in
                           CHANGELOG.md, ai/, site/llms.txt, or mcp/dist/server.js. The version is set with the
                           placeholder; the date is written in last. It must pass before any push
@@ -318,7 +324,9 @@ scripts/render-diagrams.mjs  `npm run diagrams`: every .mmd in docs/ → SVG bes
   need none: they're hidden).
 - When a release changes the version, set it in package.json, plugin/package.json, ui/package.json,
   mcp/package.json, and tokens.json `$meta.version`, and add a CHANGELOG.md entry (see CONTRIBUTING.md).
-- Before committing, grep for the banned terms (see Hard rules → Naming); there must be none.
+- Before committing, grep for the banned terms (see Hard rules → Naming); there must be none. When a .pptx or .pdf
+  changed, run `npm run check:decks -- --banned <file>` too (all text, notes, hidden slides, comments; no local path,
+  no author, editor, company or manager in the metadata).
 
 ## Loan-pooling example (approved)
 Build Pool 2026-07 toward a $50.0M target; resolve issues; submit. Data, rules, counts and

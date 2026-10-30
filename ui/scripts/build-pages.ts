@@ -6,6 +6,9 @@
 //                              each MCP call and its answer, the session's notes) and the screen as delivered
 //   site/example/index.html    The live example: Examples › Pool loans from the built Storybook, without Storybook's
 //                              wrapper, under a slim bar (check:site fails if the story is gone from storybook/index.json)
+//   site/runs/index.html       Five follow-up runs: the demo's build repeated five times after the fixes, with the
+//                              pictures in docs/demo/runs/images/ (text in lib/repeat-runs.ts, which also holds
+//                              Start here's "Two builds" section)
 //   site/ai-tools/index.html   Sterling and AI tools: one component followed from the sources to code an AI tool
 //                              wrote, with excerpts read from the real files (lib/excerpts.ts), a real exchange
 //                              with the built MCP server (mcp/scripts/exchange.mjs), the overview diagram
@@ -25,8 +28,9 @@ import { COMPONENTS } from "../../definitions/components";
 import { ICONS } from "../../definitions/icons";
 import {
   AI_FILES_URL, AI_PAGE_URL, DEMO_PAGE_URL, EXAMPLE_PAGE_URL, INSTALL_PACKAGE_URL, STORYBOOK_URL, LLMS_TXT_URL, MCP_SETUP_URL, RELEASES_URL, REPOSITORY_URL, WEBSITE_URL, commitUrl, historyUrl,
-  repositoryFileUrl,
+  RUNS_PAGE_URL, TWO_BUILDS_URL, repositoryFileUrl,
 } from "../../definitions/site";
+import { RUNS_IMAGES, VISUALS, VISUAL_CSS, runsMain, twoBuildsSection } from "./lib/repeat-runs";
 import {
   DELIVERED, DELIVERED_FOLDER, codeExcerpts, componentsJsonExcerpt, exchangeExcerpts, llmsExcerpt, patternExcerpt, sourceExcerpts,
   tokenExcerpt, type Exchange, type Excerpt,
@@ -114,7 +118,7 @@ three come from one set of definitions, so they always describe the same thing, 
 apart. It has ${Object.keys(COMPONENTS).length} components and ${Object.keys(ICONS).length} icons.</p>
 <ul class="see-it">
   <li><a class="see-it__link" href="${esc(local(EXAMPLE_PAGE_URL, base))}">Try the live example</a> <span class="note">A working screen built from Sterling's components</span></li>
-  <li><a class="see-it__link" href="${esc(local(DEMO_PAGE_URL, base))}">Watch the demo</a> <span class="note">An AI tool building that screen with Sterling</span></li>
+  <li><a class="see-it__link" href="${esc(local(DEMO_PAGE_URL, base))}">Watch it build</a> <span class="note">An AI tool building that screen with Sterling</span></li>
 </ul>
 
 <section class="panel" aria-labelledby="start-title">
@@ -140,6 +144,8 @@ ${AUDIENCES.map((a) => row(a, base)).join("\n")}
     <li><a href="${esc(local(MCP_SETUP_URL, base))}">Set up the MCP server</a>: connect Sterling to your AI tool</li>
   </ul>
 </section>
+
+${twoBuildsSection((url, label) => `<a href="${esc(local(url, base))}">${esc(label)}</a>`)}
 </div>`;
   return renderPage({
     title: "Sterling Design System",
@@ -147,7 +153,7 @@ ${AUDIENCES.map((a) => row(a, base)).join("\n")}
     base,
     current: "start",
     main,
-    css: START_CSS + SEE_IT_CSS,
+    css: START_CSS + SEE_IT_CSS + VISUAL_CSS,
     script: FORWARD_JS,
     version: VERSION,
     repositoryUrl: REPOSITORY_URL,
@@ -325,6 +331,13 @@ ${steps
   </ol>
 </section>
 ${setupHtml(mcpServer(VERSION), 2, base)}
+
+<section class="panel" id="see-what-it-builds" aria-labelledby="see-what-it-builds-title">
+  <h2 id="see-what-it-builds-title">Let your AI tool see what it builds</h2>
+  <p>Once the MCP server is set up, let your AI tool look at the app it builds. In the
+  ${link(RUNS_PAGE_URL, "five follow-up runs")}, every session opened a browser to check its own screen. If your tool can run a
+  browser or take screenshots, allow it.</p>
+</section>
 </div>`;
   return renderPage({
     title: "Sterling and AI tools",
@@ -439,8 +452,9 @@ function demoPage(): string {
   });
   const mode = (file: string, theme: string) => `<img class="for-${theme}" src="${file}" width="1440" height="915" alt="The Pool loans screen as delivered: the filter panel, the Harbor Point loans view with twelve loans and one exception flagged, the pool summary with its three issues, and the session's own demo settings panel at the bottom.">`;
   const main = `<div class="column">
-<p class="crumb">${link(AI_PAGE_URL, "Sterling and AI tools")} ›</p>
 <h1>The demo: an AI tool builds a screen with Sterling</h1>
+<p class="first-build">This is the first build: the session that found the three problems. Five follow-up runs checked
+the fixes: ${link(RUNS_PAGE_URL, "Follow-up runs")}. What the two builds are: ${link(TWO_BUILDS_URL, "Two builds")}.</p>
 <p class="lead">Claude Code was asked to build the Pool loans screen of a loan pooling tool. Sterling supplied the
 components and the guidance. The request, the design and the sample data came from the user, and Claude Code did the
 building. This replays the session: the request, what it looked up, and what it built.</p>
@@ -449,7 +463,7 @@ building. This replays the session: the request, what it looked up, and what it 
   <li>${mcpCount} calls to Sterling's MCP server in ${mcpSpan} seconds</li>
   <li>${Math.round(s.durationSeconds / 60)} minutes from the request to a working screen</li>
 </ul>
-<p class="try-it"><a class="see-it__link" href="${esc(local(EXAMPLE_PAGE_URL, base))}">Try the finished screen</a></p>
+<p class="try-it"><a class="see-it__link" href="${esc(local(EXAMPLE_PAGE_URL, base))}">Try the live example</a></p>
 
 <section class="panel" aria-labelledby="request-title">
   <h2 id="request-title">The request</h2>
@@ -475,9 +489,9 @@ ${steps.join("\n")}
 
 <section class="panel" aria-labelledby="result-title">
   <h2 id="result-title">What it built</h2>
-  <p>The session had no browser it could use, so it couldn't look at the app it built: the only one available, Claude in
-  Chrome, drives the user's own browser on the open web, and was turned off to keep the session to Sterling's package and
-  MCP server. Its report began:</p>
+  <p>The session never looked at the app it built. Claude in Chrome, which drives the user's own browser on the open web,
+  was turned off to keep the session to Sterling's package and MCP server; Chrome itself was installed and could have been
+  started headless from the shell, as every follow-up run did, but the session didn't try. Its report began:</p>
   <blockquote class="request"><p>${withCode(data.report)}</p></blockquote>
   <figure class="shot">
     <div class="shot-frame">${mode("delivered-light.png", "light")}${mode("delivered-dark.png", "dark")}</div>
@@ -499,7 +513,7 @@ ${steps.join("\n")}
     title: "The Sterling demo",
     description: "An AI tool builds a screen with Sterling: the request, every call to Sterling's MCP server, and the screen it built.",
     base,
-    current: "ai-tools",
+    current: "demo",
     main,
     css: AI_CSS + DEMO_CSS + SEE_IT_CSS,
     script: STEPS_JS,
@@ -508,6 +522,28 @@ ${steps.join("\n")}
     releasesUrl: RELEASES_URL,
   });
 }
+
+// ---------------------------------------------------------------- The follow-up runs
+
+function runsPage(): string {
+  const base = "../";
+  return renderPage({
+    title: "Five follow-up runs · Sterling",
+    description: "The demo's build repeated five times from scratch, after the fixes: what held, what varied, and why.",
+    base,
+    current: "runs",
+    main: runsMain((url, label) => `<a href="${esc(local(url, base))}">${esc(label)}</a>`),
+    css: VISUAL_CSS + RUNS_CSS,
+    version: VERSION,
+    repositoryUrl: REPOSITORY_URL,
+    releasesUrl: RELEASES_URL,
+  });
+}
+
+const RUNS_CSS = `
+.panel ul { margin: 0 0 16px; padding-left: 20px; max-width: 72ch; }
+.panel li { margin: 4px 0; }
+`;
 
 // ---------------------------------------------------------------- The live example
 
@@ -524,7 +560,8 @@ function examplePage(): string {
     description: "Pool loans: a working screen built from Sterling's components. All data is fictional.",
     base,
     bar: "<strong>Pool loans:</strong> a working screen built from Sterling's components. All data is fictional.",
-    links: `<a href="${esc(local(DEMO_PAGE_URL, base))}">How it was built</a><a href="${esc(base)}">Back to Sterling</a>`,
+    note: `The Pool loans screen after review. Its mockup came from Sterling's own Figma example: <a href="${esc(local(TWO_BUILDS_URL, base))}">Two builds</a>.`,
+    links: `<a href="${esc(local(DEMO_PAGE_URL, base))}">Watch it build</a><a href="${esc(local(RUNS_PAGE_URL, base))}">Follow-up runs</a><a href="${esc(base)}">Back to Sterling</a>`,
     frame: { src, title: "Pool loans example" },
     script: EXAMPLE_JS(src),
     version: VERSION,
@@ -570,7 +607,6 @@ const SEE_IT_CSS = `
 `;
 
 const DEMO_CSS = `
-.crumb { margin: 0 0 4px; font-size: 13px; }
 .facts { display: flex; flex-wrap: wrap; gap: 4px 24px; padding: 0; margin: 0 0 8px; list-style: none; color: var(--color-text-secondary); font-size: 13px; }
 .request { margin: 0 0 16px; padding: 12px 16px; border-left: 3px solid var(--color-accent-default); background: var(--color-surface-hover); }
 .request p { margin: 0 0 8px; }
@@ -775,7 +811,7 @@ const FORWARD_JS = `
 })();
 `;
 
-for (const folder of ["install", "ai-tools", "demo", "example"]) mkdirSync(resolve(site, folder), { recursive: true });
+for (const folder of ["install", "ai-tools", "demo", "example", "runs"]) mkdirSync(resolve(site, folder), { recursive: true });
 writeFileSync(resolve(site, "index.html"), startHere());
 writeFileSync(resolve(site, "install/index.html"), installPage());
 writeFileSync(resolve(site, "ai-tools/index.html"), aiToolsPage());
@@ -785,4 +821,9 @@ copyFileSync(resolve(root, "docs/images/example-pool-loans.png"), resolve(site, 
 writeFileSync(resolve(site, "example/index.html"), examplePage());
 copyFileSync(resolve(root, "docs/images/example-pool-loans.png"), resolve(site, "example", EXAMPLE_IMAGE));
 for (const theme of ["light", "dark"]) copyFileSync(resolve(root, `docs/demo/delivered-${theme}.png`), resolve(site, `demo/delivered-${theme}.png`));
-console.log("Wrote site/index.html (Start here), site/install/ (Install sterling-ui), site/ai-tools/ (Sterling and AI tools), site/demo/ (the demo replay), and site/example/ (the live example).");
+writeFileSync(resolve(site, "runs/index.html"), runsPage());
+for (const v of Object.values(VISUALS)) {
+  const folder = v === VISUALS.twoBuilds ? site : resolve(site, "runs");
+  copyFileSync(resolve(root, RUNS_IMAGES, v.file), resolve(folder, v.file));
+}
+console.log("Wrote site/index.html (Start here), site/install/ (Install sterling-ui), site/ai-tools/ (Sterling and AI tools), site/demo/ (the demo replay), site/example/ (the live example), and site/runs/ (the follow-up runs).");

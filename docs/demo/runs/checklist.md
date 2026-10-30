@@ -1,7 +1,7 @@
 # Repeat runs: the checklist
 
 Fixed before run 1 and not changed during the series. Every run is scored against it, by the scorer
-(`demo/scoring/`) where it can and by the manual steps in [procedure.md](procedure.md) where it can't.
+(`demo/scoring/`) where it can and by the steps in [procedure.md](procedure.md) where it can't.
 [methods.md](methods.md) explains how the runs are set up.
 
 ## How each check is scored
@@ -27,11 +27,11 @@ Fixed before run 1 and not changed during the series. Every run is scored agains
 - **Results columns:** `run, check, part, result, headline, source, owner, actual owner, owner reason, how,
   evidence`. The scorer leaves `actual owner` and `owner reason` empty; the review fills them for every fail
   (`results-reviewed.csv`).
-- **Who does the manual checks:** Michael does SCREEN-keyboard, SCREEN-design, and SCREEN-reader (optional; `not
-  done` if skipped). A separate Claude Code review session does every other manual and audit check, after the run's
-  folder and transcript are out of the run's reach. See [procedure.md](procedure.md).
-- **How:** `auto` (the scorer, in a browser), `static` (the scorer, reading the run's files), `manual`, or
-  `audit` (reading the transcript).
+- **Who does the checks marked `manual`:** Michael does SCREEN-keyboard, SCREEN-design, and SCREEN-reader by hand
+  (optional; `not done` if skipped). A separate Claude Code review session, following written steps, does every other
+  `manual` check and the audit checks, after the run's folder and transcript are out of the run's reach. See [procedure.md](procedure.md).
+- **How:** `auto` (the scorer, in a browser), `static` (the scorer, reading the run's files), `manual` (not the
+  scorer: Michael by hand, or the review session, as above), or `audit` (reading the transcript).
 - **★** marks the headline set, reported first in the summary.
 
 ### Matching rules for the scorer

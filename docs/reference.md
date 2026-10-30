@@ -395,7 +395,8 @@ Some documentation is generated from data, between marker comments (`<!-- genera
 
 Once the Site workflow has published `main`:
 
-1. Open Start here, Install, Tokens, Storybook, and AI tools from the navigation, in Light and Dark.
+1. Open every page from the navigation, in Light and Dark: under Sterling, Start here, Install, Tokens and Storybook;
+   under Build with AI, Set up, Watch it build, Live example and Follow-up runs.
 2. Follow every link on Start here, including the Figma Community page and the Release downloads
    (`sterling-ui-<version>.tgz`, and `sterling-mcp.js` from `releases/latest/download/`).
 3. Fetch `llms.txt` and follow every link in it, including the raw files on `main`.
@@ -427,6 +428,19 @@ Not planned for a release yet:
 
 - **Input/Option with description focus.** Figma has no focus variant for it; the coded option shows one.
 
+- **Storybook security advisories (critical).** `npm audit` in `ui/` reports two advisories for Storybook 10.0.0–10.6.1
+  (installed: 10.6.1), both fixed in 10.6.2: GHSA-f2ph-cmg5-wxc8 (the preview doesn't check the origin of messages,
+  so a malicious website can inject code) and GHSA-px85-f4q5-jh77 (the dev server accepts code injection from the
+  local network). The second only matters while `npm run storybook` runs; check whether the first also applies to the
+  static build the website publishes under `storybook/`. The upgrade is a patch release within 10.6:
+  - raise `storybook`, `@storybook/addon-a11y`, `@storybook/addon-docs`, `@storybook/react-vite` and
+    `storybook-addon-pseudo-states` together in `ui/package.json` (all have 10.6.5), then `npm install` and confirm
+    `npm audit` is clean;
+  - rebuild Storybook and run `check:a11y`, `check:interactions`, `check:parity` and `check:css`, then `npm run site`
+    and `check:site` (it checks every story id the website links or frames);
+  - look at the Theme / Density toolbar, the pseudo-states "All variants" grids and the Docs pages by hand;
+  - add a CHANGELOG entry, and republish the website so the published Storybook is the fixed build.
+
 - **From the repeat runs** (after the series; Sterling isn't changed during it):
   - **A z-index token.** Sterling has no z-index or layer token, so a screen's own popup needs a raw value.
   - **Say that component class names are private.** Nothing Sterling publishes says that `stl-` component classes
@@ -457,16 +471,13 @@ Not planned for a release yet:
     components were scoped for, with a design picture from Sterling's own example. Try a screen Sterling wasn't built
     around (for example an MBS or dealers screen), with a mockup and a request written together and checked against
     each other before any run.
-  - **Correct three passages about October 14's browser.** The case study ([pool-loans.md](case-study/pool-loans.md),
-    the "What the session could and couldn't see" paragraph, and "for want of a browser" under "How well it worked")
-    and the demo page (`ui/scripts/build-pages.ts`, "The session had no browser it could use") say no browser was
-    available. Chrome was installed and could be started headless from the shell, as repeat runs 1 and 2 did; the
-    session didn't try. Say that instead. The session's own words (its report) stay as written.
   - **A narrow-width layout rule.** Sterling says nothing about how a screen's columns behave at narrow widths. Run
     5's filters | grid | summary layout kept all three columns at 390 px and left the grid 1 px wide, so nothing in
     it could be seen; runs 1–4 stacked or scrolled and kept the grid 216–357 px (repeat-runs deviation 27). Say how
     the standard data-screen layout (filters 2 | grid 8 | summary 2 of 12 columns) collapses at narrow widths, with
-    layout tokens.
+    layout tokens. The live example shows the same gap at desktop widths: its grid's columns need 808 px, and below
+    about 1,370 px wide the middle column is narrower, so the grid scrolls sideways inside its frame and the Exception
+    column looks cut off.
   - **`numericColumnWidth` ignores the header label.** A short numeric column can be narrower than its header: in
     Comfortable, FICO's header needs 68.3 px and `numericColumnWidth` gives 64 (repeat runs 1 and 4). Size a column to
     the wider of its values and its label.

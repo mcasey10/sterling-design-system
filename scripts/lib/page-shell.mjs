@@ -26,13 +26,20 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .skip { position: absolute; left: 16px; top: -64px; padding: 8px 12px; background: var(--color-surface-raised); border: 1px solid var(--color-border-strong); border-radius: var(--radius-sm); z-index: 1; }
 .skip:focus { top: 8px; }
 .site-header { border-bottom: 1px solid var(--color-border-default); background: var(--color-surface-panel); }
-.site-header__inner { max-width: 1120px; margin: 0 auto; padding: 12px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; }
+.site-header__inner { max-width: 1120px; margin: 0 auto; padding: 12px 16px 8px; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px 24px; }
 .brand { font-weight: 600; font-size: 16px; color: var(--color-text-primary); text-decoration: none; }
 .brand span { color: var(--color-text-secondary); font-weight: 400; font-size: 12px; margin-left: 4px; }
+/* Two rows: the brand and the two groups, then the pages of the current page's group. */
+.site-nav { flex: 1 1 auto; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 8px 24px; }
 .site-nav ul { display: flex; flex-wrap: wrap; gap: 4px 16px; list-style: none; margin: 0; padding: 0; }
-.site-nav a { color: var(--color-text-primary); text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; }
-.site-nav a:hover { border-bottom-color: var(--color-border-strong); }
-.site-nav a[aria-current="page"] { border-bottom-color: var(--color-accent-default); font-weight: 600; }
+.site-nav__pages { grid-column: 1 / -1; }
+/* A thin rule between the brand and the groups, so "Sterling 1.2.0" doesn't read as the first group. */
+.site-nav ul.site-nav__groups { border-left: 1px solid var(--color-border-default); padding-left: 24px; }
+.site-nav ul a { color: var(--color-text-primary); text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; }
+.site-nav ul a:hover { border-bottom-color: var(--color-border-strong); }
+.site-nav__groups a { font-weight: 600; color: var(--color-text-secondary); }
+.site-nav__groups a[aria-current="true"] { color: var(--color-text-primary); border-bottom-color: var(--color-accent-default); }
+.site-nav__pages a[aria-current="page"] { border-bottom-color: var(--color-accent-default); font-weight: 600; }
 .theme { display: flex; gap: 4px; margin-left: auto; }
 .theme button { font: inherit; font-size: 12px; padding: 4px 10px; border-radius: var(--radius-sm); border: 1px solid var(--color-border-strong); background: var(--color-surface-panel); color: var(--color-text-primary); cursor: pointer; }
 .theme button[aria-pressed="true"] { background: var(--color-accent-default); color: var(--color-text-inverse); border-color: transparent; }
@@ -55,34 +62,72 @@ thead th { border-top: 0; color: var(--color-text-secondary); font-weight: 600; 
 .site-footer__inner { max-width: 1120px; margin: 0 auto; padding: 16px 16px 32px; color: var(--color-text-secondary); font-size: 12px; display: flex; flex-wrap: wrap; gap: 4px 16px; }
 @media (max-width: 640px) {
   .panel { padding: 16px; }
+  .site-nav { gap: 8px 16px; }
+  .site-nav ul { gap: 4px 12px; }
+  .site-nav ul.site-nav__groups { padding-left: 16px; }
   h1 { font-size: 24px; line-height: 32px; }
 }
 `);
 
-// Sets the color mode, and tells the page (a "themechange" event on document) so a page can follow it.
+// The color mode a visitor chose (light or dark), kept in localStorage under this key; nothing saved means System.
+// Storage can be unavailable (private windows, blocked site data), so every access is wrapped and System is the fallback.
+const THEME_KEY = "sterling-color-mode";
+
+// In the head, before first paint: applies a saved choice, so a page never flashes in the other mode.
+const THEME_HEAD_JS = `try{var t=localStorage.getItem(${JSON.stringify(THEME_KEY)});if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}`;
+
+// Sets the color mode, and tells the page (a "themechange" event on document) so a page can follow it. The switch
+// starts from the saved choice (applied in the head) and saves each new one.
 const THEME_JS = `
 (() => {
   const root = document.documentElement;
   const buttons = document.querySelectorAll(".theme button");
-  function setTheme(t) {
+  const key = ${JSON.stringify(THEME_KEY)};
+  function setTheme(t, save) {
     if (t === "system") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", t);
     buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.theme === t)));
+    if (save) {
+      try {
+        if (t === "system") localStorage.removeItem(key); else localStorage.setItem(key, t);
+      } catch (e) {}
+    }
     document.dispatchEvent(new CustomEvent("themechange", { detail: t }));
   }
-  buttons.forEach((b) => b.addEventListener("click", () => setTheme(b.dataset.theme)));
-  setTheme("system");
+  buttons.forEach((b) => b.addEventListener("click", () => setTheme(b.dataset.theme, true)));
+  setTheme(root.getAttribute("data-theme") || "system", false);
 })();
 `;
 
-/** The site's sections, in navigation order. `path` is relative to the site root. */
+/**
+ * The site's navigation: two groups, each with its pages in order. `path` is relative to the site root; `external`
+ * marks an item that isn't on this website (its address is passed to renderPage). A group's link opens its first page.
+ * The header shows both groups, then the pages of the current page's group.
+ */
 export const NAV = [
-  { id: "start", label: "Start here", path: "" },
-  { id: "install", label: "Install", path: "install/" },
-  { id: "tokens", label: "Tokens", path: "tokens/" },
-  { id: "storybook", label: "Storybook", path: "storybook/" },
-  { id: "ai-tools", label: "AI tools", path: "ai-tools/" },
-  { id: "example", label: "Example", path: "example/" },
+  {
+    id: "sterling",
+    label: "Sterling",
+    items: [
+      { id: "start", label: "Start here", path: "" },
+      { id: "install", label: "Install", path: "install/" },
+      { id: "tokens", label: "Tokens", path: "tokens/" },
+      { id: "storybook", label: "Storybook", path: "storybook/" },
+      { id: "github", label: "GitHub", external: "repository" },
+    ],
+  },
+  {
+    id: "build-with-ai",
+    label: "Build with AI",
+    items: [
+      { id: "ai-tools", label: "Set up", path: "ai-tools/" },
+      { id: "demo", label: "Watch it build", path: "demo/" },
+      { id: "example", label: "Live example", path: "example/" },
+      { id: "runs", label: "Follow-up runs", path: "runs/" },
+    ],
+  },
 ];
+/** The group a page (a NAV item id) belongs to. */
+export const navGroupOf = (current) => NAV.find((group) => group.items.some((item) => item.id === current));
 
 /**
  * The document head: title, description, Open Graph tags when `og` is given ({ url, image, imageWidth, imageHeight,
@@ -112,6 +157,7 @@ function head({ title, description, base, css, og = /** @type {any} */ (undefine
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">${ogTags}
+<script>${THEME_HEAD_JS}</script>
 <style>
 ${fontCss}
 ${buildTokenCss(tokens)}
@@ -132,17 +178,28 @@ const themeSwitch = () => `<div class="theme" role="group" aria-label="Color mod
  * down), so every link and the fonts work wherever the site is published. `current` is the NAV id.
  */
 export function renderPage({ title, description, base, current, main, css = "", script = "", version, repositoryUrl, releasesUrl, og = /** @type {any} */ (undefined) }) {
-  const nav = NAV.map((item) => {
-    const here = item.id === current ? ' aria-current="page"' : "";
-    return `<li><a href="${esc(base + item.path) || "./"}"${here}>${esc(item.label)}</a></li>`;
+  const group = navGroupOf(current);
+  if (!group) throw new Error(`renderPage: "${current}" isn't a page in NAV`);
+  const href = (item) => (item.external === "repository" ? esc(repositoryUrl) : esc(base + item.path) || "./");
+  const groups = NAV.map((g) => {
+    const here = g === group ? ' aria-current="true"' : "";
+    return `<li><a href="${href(g.items[0])}"${here}>${esc(g.label)}</a></li>`;
   }).join("");
+  const pages = group.items.map((item) => {
+    const here = item.id === current ? ' aria-current="page"' : "";
+    return `<li><a href="${href(item)}"${here}>${esc(item.label)}</a></li>`;
+  }).join("");
+  const nav = `<nav class="site-nav" aria-label="Site">
+      <a class="brand" href="${esc(base) || "./"}">Sterling<span>${esc(version)}</span></a>
+      <ul class="site-nav__groups">${groups}</ul>
+      <ul class="site-nav__pages" aria-label="${esc(group.label)}">${pages}</ul>
+    </nav>`;
   return `${head({ title, description, base, css, og })}
 <body class="${PREFIX}-text-body">
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="brand" href="${esc(base) || "./"}">Sterling<span>${esc(version)}</span></a>
-    <nav class="site-nav" aria-label="Site"><ul>${nav}<li><a href="${esc(repositoryUrl)}">GitHub</a></li></ul></nav>
+    ${nav}
     ${themeSwitch()}
   </div>
 </header>
@@ -171,15 +228,17 @@ body { display: flex; flex-direction: column; }
 .frame-bar__inner { padding: 8px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; }
 .frame-bar h1 { margin: 0; font-size: 13px; line-height: 20px; font-weight: 400; }
 .frame-bar .links { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; }
+.frame-bar .note { margin: 0; font-size: 13px; color: var(--color-text-secondary); max-width: none; flex-basis: 100%; }
 .frame-main { flex: 1 1 auto; min-height: 0; display: flex; max-width: none; margin: 0; padding: 0; }
 .frame-main iframe { flex: 1 1 auto; width: 100%; min-height: 480px; border: 0; display: block; }
 `;
 
 /**
  * A page that is one framed screen: a slim bar (the brand, a line of text, links, and the color-mode switch) above
- * an iframe that fills the rest of the window. `bar` (the page's h1, set small) and `links` are HTML; `frame` is { src, title }.
+ * an iframe that fills the rest of the window. `bar` (the page's h1, set small), `note` (an optional line under it) and
+ * `links` are HTML; `frame` is { src, title }.
  */
-export function renderFramePage({ title, description, base, bar, links, frame, css = "", script = "", version, og = /** @type {any} */ (undefined) }) {
+export function renderFramePage({ title, description, base, bar, note = "", links, frame, css = "", script = "", version, og = /** @type {any} */ (undefined) }) {
   return `${head({ title, description, base, css: FRAME_CSS + css, og })}
 <body class="${PREFIX}-text-body">
 <a class="skip" href="#main">Skip to the example</a>
@@ -189,6 +248,7 @@ export function renderFramePage({ title, description, base, bar, links, frame, c
     <h1>${bar}</h1>
     <div class="links">${links}</div>
     ${themeSwitch()}
+    ${note ? `<p class="note">${note}</p>` : ""}
   </div>
 </header>
 <main id="main" class="frame-main">

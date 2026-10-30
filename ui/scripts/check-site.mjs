@@ -11,7 +11,9 @@
 //     anchor (#…) to an element with that id;
 //   • a link or frame into Storybook names a story or docs page that the built Storybook doesn't have
 //     (storybook/index.json): renaming Examples › Pool loans would otherwise leave /example/ blank;
-//   • a page's link-preview picture (og:image) on this website isn't in site/.
+//   • a page's link-preview picture (og:image) on this website isn't in site/;
+//   • a page's menu doesn't mark its own group and itself, and only those, or doesn't list its group's pages in
+//     order (NAV in scripts/lib/page-shell.mjs). A framed page (/example/) has a slim bar instead of the menu.
 // Storybook (site/storybook/) is checked story by story by check:a11y; here only links into it are followed (and
 // axe doesn't reach into the frame on /example/, which shows a story).
 //
@@ -25,6 +27,7 @@ import { extname, join, normalize, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import WebSocket from "ws";
 import { startChrome } from "./lib/chrome.mjs";
+import { NAV } from "../../scripts/lib/page-shell.mjs";
 
 const ui = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const site = resolve(ui, "../site");
@@ -71,7 +74,7 @@ const origin = `http://127.0.0.1:${server.address().port}`;
 // ------------------------------------------------------------ the pages, and every internal link on them
 
 /** The website's own pages: every index.html outside storybook/ and ai/. */
-const PAGES = ["", "tokens/", "install/", "ai-tools/", "demo/", "example/", ...PENDING.filter((p) => existsSync(join(site, p, "index.html")))].filter((p) => existsSync(join(site, p, "index.html")));
+const PAGES = ["", "tokens/", "install/", "ai-tools/", "demo/", "example/", "runs/", ...PENDING.filter((p) => existsSync(join(site, p, "index.html")))].filter((p) => existsSync(join(site, p, "index.html")));
 const problems = [];
 const pending = new Set();
 /** Storybook's stories and docs pages, by id, as the built Storybook lists them. */
@@ -115,6 +118,30 @@ for (const page of PAGES) {
       const id = decodeURIComponent(target.hash.slice(1));
       if (!idsOf(readFileSync(file, "utf8")).has(id)) problems.push(`/${page}: "${href}" has no element with id "${id}"`);
     }
+  }
+}
+
+// The menu: each page marks its own group (aria-current="true") and itself (aria-current="page"), and lists its
+// group's pages in NAV's order.
+let menus = 0;
+const labelsOf = (html, attr) => [...html.matchAll(new RegExp(`<a [^>]*${attr}[^>]*>([^<]*)</a>`, "g"))].map((m) => m[1]);
+for (const group of NAV) {
+  for (const item of group.items) {
+    if (item.path === undefined || !PAGES.includes(item.path)) continue;
+    const html = readFileSync(join(site, item.path, "index.html"), "utf8");
+    if (html.includes('class="frame-bar"')) continue;
+    const nav = /<nav class="site-nav"[\s\S]*?<\/nav>/.exec(html)?.[0];
+    if (!nav) {
+      problems.push(`/${item.path}: has no site menu`);
+      continue;
+    }
+    menus++;
+    const marked = labelsOf(nav, 'aria-current="true"');
+    if (marked.join() !== group.label) problems.push(`/${item.path}: the menu marks the group [${marked.join(", ")}], not "${group.label}"`);
+    const here = labelsOf(nav, 'aria-current="page"');
+    if (here.join() !== item.label) problems.push(`/${item.path}: the menu marks [${here.join(", ")}], not "${item.label}"`);
+    const pages = labelsOf(/<ul class="site-nav__pages"[\s\S]*?<\/ul>/.exec(nav)?.[0] ?? "", "href");
+    if (pages.join() !== group.items.map((i) => i.label).join()) problems.push(`/${item.path}: the menu's second row is [${pages.join(", ")}]`);
   }
 }
 
@@ -249,6 +276,6 @@ for (const problem of problems) console.error(`  ✗ ${problem}`);
 const notYet = pending.size ? ` Not built yet, and allowed for now: ${[...pending].map((p) => `/${p}`).join(", ")}.` : "";
 console.log(
   `${PAGES.length} pages × ${THEMES.length} color modes (${THEMES.join(", ")}), as loaded and as without JavaScript, and phone width: ${runs} axe runs; ` +
-    `the step-throughs by keyboard; ${links} internal links followed (${stories} of them name a Storybook story or docs page) — ${problems.length} problem(s).${notYet}`
+    `the step-throughs by keyboard; the menu on ${menus} pages; ${links} internal links followed (${stories} of them name a Storybook story or docs page) — ${problems.length} problem(s).${notYet}`
 );
 process.exit(problems.length ? 1 : 0);

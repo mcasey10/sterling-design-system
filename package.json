@@ -35,6 +35,7 @@
     "check:diagrams": "node scripts/check-diagrams.mjs",
     "demo:kit": "node scripts/build-demo-kit.mjs",
     "figma:fingerprint": "node scripts/figma-fingerprint.mjs",
-    "storybook": "npm --prefix ui run storybook"
+    "storybook": "npm --prefix ui run storybook",
+    "check:decks": "npm --prefix ui run check:decks --"
   }
 }

@@ -85,6 +85,10 @@ jobs:
       - name: Sterling's addresses are written once, in definitions/site.ts
         run: npm run check:urls
         working-directory: ui
+      # Banned terms aren't checked here: the list is kept outside the repository (run it locally with --banned).
+      - name: Slide decks hold no local paths and no author or company in their metadata
+        run: npm run check:decks
+        working-directory: ui
       - name: Build the website
         run: npm run site
       - name: The website passes axe in every color mode, fits a phone's width, and has no broken links
