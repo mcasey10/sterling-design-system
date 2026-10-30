@@ -5,8 +5,8 @@ edge cases each screen was checked for: what someone using the screen sees, why 
 and how the five runs did. All five runs handled all eleven.
 
 "Scored automatically" means a script, written before the first run and used unchanged on every run, worked the screen
-in a browser. "Checked by hand" means a manual check during each run's review: the reviewer set off the state and
-looked at the screen.
+in a browser. "Checked in each run's review" means a Claude Code review session, following written steps, triggered the
+state in a browser and checked the result.
 
 ## Requested states
 
@@ -16,7 +16,8 @@ looked at the screen.
   "Loading" message, and the list is marked as busy for screen readers.
 - **Why it matters:** the headers, filters and summary stay put, so the screen doesn't jump when the loans arrive,
   and nobody mistakes a slow load for an empty pool.
-- **How tested:** checked by hand. Each run simulated a slow load; the reviewer set one off and looked.
+- **How tested:** checked in each run's review. Each run simulated a slow load; the review set one off and checked
+  the result.
 - **Result:** handled in all five runs. In runs 01 and 05 the loading text sits in the last column and is cut off
   at 1440 px wide; the check still passed.
 
@@ -35,7 +36,7 @@ looked at the screen.
 - **What you see:** when the list fails to load, it says what failed and offers Retry. The headers, filters and
   chips stay.
 - **Why it matters:** the trader keeps their filters and can try again without starting over or reloading the page.
-- **How tested:** checked by hand. Each run had its own setting to make the load fail; the reviewer used it, pressed
+- **How tested:** checked in each run's review. Each run had its own setting to make the load fail; the review used it, pressed
   Retry, and confirmed it loaded again without a page reload.
 - **Result:** handled in all five runs.
 

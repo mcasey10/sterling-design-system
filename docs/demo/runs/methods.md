@@ -138,12 +138,12 @@ with `vite preview`, and drives it in Chrome with Playwright, finding elements b
 runs axe in Light and Dark, in each density. The token check is a copy of Sterling's own CSS check, pointed at the
 run's folder.
 
-### The manual checks and owners
+### Checks beyond the scorer, and owners
 
 After each run, once its folder and transcript are out of the run's reach, a separate Claude Code session in the
-repository does the manual checks that need reading or measuring (the states the scorer can't trigger, the report,
+repository, following written steps, does the checks that need reading or measuring (the states the scorer can't trigger, the report,
 the transcript audit), and records the actual owner of every fail with a one-line reason from the transcript and the
-MCP answers: did Sterling's guidance cover it clearly, and did the run read it? Michael does the keyboard check, the
+MCP answers: did Sterling's guidance cover it clearly, and did the run read it? Michael does, by hand, the keyboard check, the
 comparison with the design, and, optionally, a screen-reader check, and reviews what the session flags.
 
 ### Calibration

@@ -40,7 +40,7 @@ export const VISUALS = {
   },
   states: {
     file: "V5-states-edge-cases.png", width: 1600, height: 1211,
-    alt: "A table of eleven items across follow-up runs 01 to 05, titled \"Every requested state, and the edge cases, in all five runs.\" Seven requested states (loading, empty (a filter with no results), error, disabled actions, selection, the bulk action bar, and sign-off) and four edge cases (long lender names, \"Any lender\", Clear all, and loans not in the sample) are marked handled in every run. Loading and error were checked by hand; the others were scored automatically, and the loans-not-in-the-sample check was recorded as a note. Run 05's cell for that item adds \"wording noted\": its empty state counted all 186 pool loans, though only the sample was filtered.",
+    alt: "A table of eleven items across follow-up runs 01 to 05, titled \"Every requested state, and the edge cases, in all five runs.\" Seven requested states (loading, empty (a filter with no results), error, disabled actions, selection, the bulk action bar, and sign-off) and four edge cases (long lender names, \"Any lender\", Clear all, and loans not in the sample) are marked handled in every run. Loading and error were checked in review; the others were scored automatically, and the loans-not-in-the-sample check was recorded as a note. Run 05's cell for that item adds \"wording noted\": its empty state counted all 186 pool loans, though only the sample was filtered.",
   },
   mockup: {
     file: "V3-mockup-vs-request.png", width: 1600, height: 1163,
