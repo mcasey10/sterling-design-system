@@ -17,7 +17,8 @@ All notable changes to Sterling are recorded here. The format follows
   the page is drawn), including the live example and its screen; System clears it. Storybook keeps its own Theme.
 - **Five follow-up runs** (`/runs/`): the demo's build repeated five times from scratch after the three fixes, with
   what held, what varied, and the full record.
-- **States and edge cases** on `/runs/`: every requested state and edge case, in all five runs.
+- **States and edge cases** on `/runs/`: every requested state and edge case, in all five runs. Each is explained in plain
+  language in `docs/demo/runs/states-and-edge-cases.md`, linked from the page and the deck.
 - **Slide decks at `/decks/`**: the site publishes each deck's PDF; no page links to them. The first is "Five
   follow-up runs" (`docs/decks/sterling-follow-up-runs/`).
 - **Two builds** (`/#two-builds`), a new section of Start here: building Sterling, and building a screen with it.

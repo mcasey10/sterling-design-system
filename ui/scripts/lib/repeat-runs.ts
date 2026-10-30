@@ -2,7 +2,7 @@
 // The pictures are in docs/demo/runs/images/ (made outside the repository from the runs' captures; each is 1600 px
 // wide at 2x), copied into site/ by build-pages.ts. The alt texts were written with the pictures.
 
-import { AI_PAGE_URL, DEMO_PAGE_URL, EXAMPLE_PAGE_URL, RUNS_PAGE_URL, TWO_BUILDS_URL, repositoryFolderUrl } from "../../../definitions/site";
+import { AI_PAGE_URL, DEMO_PAGE_URL, EXAMPLE_PAGE_URL, RUNS_PAGE_URL, TWO_BUILDS_URL, repositoryFileUrl, repositoryFolderUrl } from "../../../definitions/site";
 import { esc } from "../../../scripts/lib/page-shell.mjs";
 
 /** Where the pictures are kept in the repository. */
@@ -39,8 +39,8 @@ export const VISUALS = {
     alt: "Thumbnails of the opening screen from follow-up runs 01 to 05, all showing the same Harbor Point loans view, with build times between 10 minutes 6 seconds and 13 minutes 32 seconds. A shared line says every run had all figures correct, all requested states built, and no automated accessibility violations, checked with axe in Light and Dark in every density.",
   },
   states: {
-    file: "V5-states-edge-cases.png", width: 1600, height: 1274,
-    alt: "A table of twelve items across follow-up runs 01 to 05, titled \"Every requested state, and the edge cases, in all five runs.\" Seven requested states (loading, empty, error, disabled actions, selection, the bulk action bar, and sign-off) and five edge cases (long lender names, a filter with no results, \"Any lender\", Clear all, and loans not in the sample) are marked handled in every run. Loading and error were checked by hand; the others were scored automatically, and the loans-not-in-the-sample check was recorded as a note. Run 05's cell for that item adds \"wording noted\": its empty state counted all 186 pool loans, though only the sample was filtered.",
+    file: "V5-states-edge-cases.png", width: 1600, height: 1211,
+    alt: "A table of eleven items across follow-up runs 01 to 05, titled \"Every requested state, and the edge cases, in all five runs.\" Seven requested states (loading, empty (a filter with no results), error, disabled actions, selection, the bulk action bar, and sign-off) and four edge cases (long lender names, \"Any lender\", Clear all, and loans not in the sample) are marked handled in every run. Loading and error were checked by hand; the others were scored automatically, and the loans-not-in-the-sample check was recorded as a note. Run 05's cell for that item adds \"wording noted\": its empty state counted all 186 pool loans, though only the sample was filtered.",
   },
   mockup: {
     file: "V3-mockup-vs-request.png", width: 1600, height: 1163,
@@ -132,7 +132,8 @@ the handoff or to gaps in Sterling's guidance. (What â€œbuilding with Sterlingâ€
 <section class="panel" aria-labelledby="states-title">
   <h2 id="states-title">Every state and edge case, in every run</h2>
   ${visual(VISUALS.states, VISUALS.states.file)}
-  <p>All five runs built every requested state and handled each edge case; the only note is run 05's empty-state wording.</p>
+  <p>All five runs built every requested state and handled each edge case. Run 05's empty-state wording is noted.</p>
+  <p>${link(repositoryFileUrl("docs/demo/runs/states-and-edge-cases.md"), "What each state and edge case means")}</p>
 </section>
 
 <section class="panel" aria-labelledby="mockup-title">
